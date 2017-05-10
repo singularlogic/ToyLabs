@@ -11,6 +11,12 @@
     <body>
         <div class="ui middle aligned center aligned grid">
             <div class="column">
+                <div class="row">
+                    <h1 class="ui orange image header">
+                        <a href="/" title="Home"><img src="/images/toylabs_logo_big_flat.svg" class="image" /></a>
+                    </h1>
+                </div>
+
                 @yield('content')
             </div>
         </div>

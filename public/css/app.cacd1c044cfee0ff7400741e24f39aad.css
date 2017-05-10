@@ -1,12 +1,25 @@
 /* Full-height */
 body > .grid {
-  height: 100%;
+  height: 80%;
 }
 .image {
   margin-top: -100px;
 }
+.column > .row > .image img {
+  width: 8em!important;
+}
 .column {
-  max-width: 450px;
+  max-width: 650px;
+}
+.v-divider {
+  position: relative;
+  padding: 0 !important;
+}
+.column > button.fluid {
+  margin: 0 0 1em;
+}
+.column > .link {
+  padding: 15px;
 }
 /* Navbar */
 .hidden.menu {
