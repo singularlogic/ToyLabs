@@ -1,4 +1,4 @@
-@extends('layouts.homepage')
+@extends('layouts.default', ['class' => 'hidden'])
 
 @section('title', 'Home')
 
