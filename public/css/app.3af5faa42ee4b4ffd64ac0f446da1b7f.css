@@ -15,7 +15,7 @@ body > .grid {
   position: relative;
   padding: 0 !important;
 }
-.column > button.fluid {
+.column > .button.fluid {
   margin: 0 0 1em;
 }
 .column > .link {

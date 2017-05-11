@@ -178,6 +178,7 @@ return [
         App\Providers\RouteServiceProvider::class,
 
         // 3rd Party Providers
+        Laravel\Socialite\SocialiteServiceProvider::class,
         Spatie\Permission\PermissionServiceProvider::class,
 
     ],
@@ -229,6 +230,8 @@ return [
         'Validator'    => Illuminate\Support\Facades\Validator::class,
         'View'         => Illuminate\Support\Facades\View::class,
 
+        // 3rd-party aliases
+        'Socialite'    => Laravel\Socialite\Facades\Socialite::class,
     ],
 
 ];

@@ -19,10 +19,8 @@ Route::get('/about', function () {
     return view('about');
 });
 
-Route::get('/login', function () {
-    return view('login');
-});
-
-Route::get('/register', function () {
-    return view('register');
-});
+// Login/Register & Social Logins
+Route::get('/login', function () {return view('login');});
+Route::get('/login/{provider}', ['as' => 'social.redirect', 'uses' => 'SocialAuthController@redirect']);
+Route::get('/login/callback/{provider}', ['as' => 'social.callback', 'uses' => 'SocialAuthController@callback']);
+Route::get('/register', function () {return view('register');});

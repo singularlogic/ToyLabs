@@ -27,8 +27,8 @@
                             <div class="ui vertical divider">Or</div>
                         </div>
                         <div class="center aligned column" style="padding-top: 22px;">
-                            <button class="ui fluid facebook button"><i class="facebook icon"></i>Facebook</button>
-                            <button class="ui fluid google plus button"><i class="google plus icon"></i>Google</button>
+                            <a class="ui fluid facebook button" href="/login/facebook"><i class="facebook icon"></i>Facebook</a>
+                            <a class="ui fluid google plus button" href="/login/google"><i class="google plus icon"></i>Google</a>
                             <div class="center aligned link">
                                 New user? <a href="/register">Register now</a>!
                             </div>
