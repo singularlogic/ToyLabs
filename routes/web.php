@@ -24,3 +24,7 @@ Route::get('/login', function () {return view('login');});
 Route::get('/login/{provider}', ['as' => 'social.redirect', 'uses' => 'SocialAuthController@redirect']);
 Route::get('/login/callback/{provider}', ['as' => 'social.callback', 'uses' => 'SocialAuthController@callback']);
 Route::get('/register', function () {return view('register');});
+Route::get('/logout', function () {
+    Auth::logout();
+    return redirect()->to('/');
+});

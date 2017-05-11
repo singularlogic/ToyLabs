@@ -178,6 +178,7 @@ return [
         App\Providers\RouteServiceProvider::class,
 
         // 3rd Party Providers
+        Creativeorange\Gravatar\GravatarServiceProvider::class,
         Laravel\Socialite\SocialiteServiceProvider::class,
         Spatie\Permission\PermissionServiceProvider::class,
 
@@ -231,6 +232,7 @@ return [
         'View'         => Illuminate\Support\Facades\View::class,
 
         // 3rd-party aliases
+        'Gravatar'     => Creativeorange\Gravatar\Facades\Gravatar::class,
         'Socialite'    => Laravel\Socialite\Facades\Socialite::class,
     ],
 

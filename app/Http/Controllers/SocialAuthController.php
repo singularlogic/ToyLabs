@@ -17,6 +17,12 @@ class SocialAuthController extends Controller
             ->first();
 
         if ($account) {
+            // Check if avatar changed, and update it
+            if ($account->user()->avatar !== $providerUser->getAvatar()) {
+                $account->user()->avatar = $providerUser->getAvatar();
+                $account->user()->save();
+            }
+
             // If user used this social account before, return the user
             return $account->user;
         } else {
@@ -33,6 +39,11 @@ class SocialAuthController extends Controller
                 ]);
 
                 $user->assignRole('end_user');
+            }
+
+            if ($user->avatar !== $providerUser->getAvatar()) {
+                $user->avatar = $providerUser->getAvatar();
+                $user->save();
             }
 
             $account->user()->associate($user);

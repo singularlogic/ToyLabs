@@ -85,6 +85,9 @@ $(document).ready(function () {
             $('.fixed.menu').transition('fade out');
         }
     });
+
+    // Initialize dropdown menu
+    $('.ui.dropdown').dropdown();
 });
 
 /***/ }),
