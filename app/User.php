@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Creativeorange\Gravatar\Facades\Gravatar;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
@@ -28,4 +29,9 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    public function getImageAttribute()
+    {
+        return $this->avatar ?: Gravatar::get($this->email, ['size' => 80, 'fallback' => 'mm']);
+    }
 }

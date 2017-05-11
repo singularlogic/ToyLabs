@@ -6,7 +6,7 @@
                 <div class="right menu">
 @if(Auth::check())
                     <div class="ui dropdown item">
-                        <img class="ui avatar image" src="{{ Auth::user()->avatar }}" />
+                        <img class="ui avatar image" src="{{ Auth::user()->image }}" />
                         {{{ isset(Auth::user()->name) ? Auth::user()->name : Auth::user()->email }}}
                         <i class="dropdown icon"></i>
                         <div class="menu">

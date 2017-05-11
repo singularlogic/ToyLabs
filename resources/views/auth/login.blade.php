@@ -5,23 +5,34 @@
 @section('content')
 <!-- Login -->
                 <div class="row">
+@if ($errors->all())
+                    <div class="ui error message" style="text-align: left; margin-bottom: 30px;">
+                        <div class="header">Login Failed</div>
+                        <ul class="list">
+@foreach($errors->all() as $error)
+                            <li>{{ $error }}</li>
+@endforeach
+                        </ul>
+                    </div>
+@endif
                     <div class="ui two column top aligned relaxed stackable grid">
                         <div class="column" style="padding-top: 22px;">
-                            <div class="ui form left aligned">
-                                <div class="field">
+                            <form class="ui form left aligned" method="POST" action="{{ route('login.post') }}">
+                                {{ csrf_field() }}
+                                <div class="field{{ $errors->has('email') ? ' error' : '' }}">
                                     <div class="ui left icon input">
-                                        <input type="text" placeholder="Email" />
+                                        <input type="email" id="email" name="email" placeholder="Email" value="{{ old('email') }}" required autofocus />
                                         <i class="mail icon"></i>
                                     </div>
                                 </div>
-                                <div class="field">
+                                <div class="field{{ $errors->has('password') ? ' has-error' : '' }}">
                                     <div class="ui left icon input">
-                                        <input type="password" placeholder="Password" />
+                                        <input type="password" id="password" name="password" placeholder="Password" required />
                                         <i class="lock icon"></i>
                                     </div>
                                 </div>
-                                <div class="ui orange submit button">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Login&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
-                            </div>
+                                <button class="ui orange submit button" type="submit">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Login&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</button>
+                            </form>
                         </div>
                         <div class="v-divider">
                             <div class="ui vertical divider">Or</div>
