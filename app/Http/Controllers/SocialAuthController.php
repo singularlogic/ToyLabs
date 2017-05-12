@@ -18,9 +18,9 @@ class SocialAuthController extends Controller
 
         if ($account) {
             // Check if avatar changed, and update it
-            if ($account->user()->avatar !== $providerUser->getAvatar()) {
-                $account->user()->avatar = $providerUser->getAvatar();
-                $account->user()->save();
+            if ($account->user->avatar !== $providerUser->getAvatar()) {
+                $account->user->avatar = $providerUser->getAvatar();
+                $account->user->save();
             }
 
             // If user used this social account before, return the user
