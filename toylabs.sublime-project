@@ -3,6 +3,9 @@
 	[
 		{
 			"path": "."
+		},
+		{
+			"path": "/Users/finik/Sites/tmp"
 		}
 	]
 }
