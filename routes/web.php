@@ -34,3 +34,10 @@ Route::get('/password/reset/{token}', ['as' => 'password.reset', 'uses' => 'Auth
 
 Route::get('/login/{provider}', ['as' => 'social.redirect', 'uses' => 'SocialAuthController@redirect']);
 Route::get('/login/callback/{provider}', ['as' => 'social.callback', 'uses' => 'SocialAuthController@callback']);
+
+// Routes for logged users
+Route::group(['middleware' => 'auth'], function () {
+    // Profile Creation
+    Route::get('/profile/edit', ['as' => 'profile.edit', 'uses' => 'ProfileController@showPersonalProfile']);
+    Route::post('/profile/edit', ['as' => 'profile.edit.post', 'uses' => 'ProfileController@savePersonalProfile']);
+});

@@ -1,3 +1,8 @@
+import Vue from 'vue';
+
+// Import VueJS Components
+import Profile from './components/Profile.vue';
+
 /**
  * Navbar transition for the homepage
  */
@@ -13,6 +18,20 @@ $(document).ready(function() {
         }
     });
 
-    // Initialize dropdown menu
+    // Initialize UI components
     $('.ui.dropdown').dropdown();
+});
+
+window.Vue = Vue;
+
+const app = new Vue({
+    el: '#app',
+    data() {
+        return {
+            crsf: document.querySelector('#token').getAttribute('value')
+        };
+    },
+    components: {
+        Profile
+    }
 });

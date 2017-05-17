@@ -34,4 +34,14 @@ class User extends Authenticatable
     {
         return $this->avatar ?: Gravatar::get($this->email, ['size' => 80, 'fallback' => 'mm']);
     }
+
+    public function profile()
+    {
+        return $this->hasOne(Profile::class);
+    }
+
+    public function organizations()
+    {
+        return $this->hasMany(Organization::class);
+    }
 }
