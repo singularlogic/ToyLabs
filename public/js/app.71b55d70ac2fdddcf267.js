@@ -10481,6 +10481,9 @@ $(document).ready(function () {
 
     // Initialize UI components
     $('.ui.dropdown').dropdown();
+    $('.message .close').on('click', function () {
+        $(this).closest('.message').transition('fade');
+    });
 });
 
 window.Vue = __WEBPACK_IMPORTED_MODULE_0_vue___default.a;

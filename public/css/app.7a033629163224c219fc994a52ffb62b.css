@@ -5,8 +5,12 @@ body > .grid {
 .main {
   margin-top: 7em!important;
 }
-.image {
-  margin-top: -100px;
+.ui.image.logo {
+  border-left: 0!important;
+  padding-left: 0;
+}
+.ui.image.logo img {
+  width: 120px!important;
 }
 .column > .row > .image img {
   width: 8em!important;
@@ -117,4 +121,9 @@ body > .grid {
 }
 .link a {
   font-weight: 700;
+}
+/* Inline Search */
+.ui.right.floated.search {
+  float: right;
+  margin-left: 10px;
 }

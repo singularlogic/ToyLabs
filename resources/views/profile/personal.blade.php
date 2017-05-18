@@ -5,7 +5,7 @@
 @section('content')
         <div class="ui main container" id="app">
             <!-- Profile / General -->
-            <h1>Edit Profile</h1>
+            <h1 class="ui header">Edit Profile</h1>
             <div class="ui divider"></div>
 
             <profile

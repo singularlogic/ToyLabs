@@ -97,14 +97,46 @@ class ProfileController extends Controller
             $user->assignRole($input['role']);
         }
 
-        if (isset($input['hasOrganization'])) {
-            if (isset($input['state']) && $input['state'] === 'new') {
-                // TODO: Redirect to Organization Creation Page
-            } else {
-                // TODO: Ask to join the Organization
+        if (isset($input['has_organization'])) {
+            if (isset($input['state'])) {
+                if ($input['state'] === 'new') {
+                    return redirect()->route('organization.edit', ['id' => 0])->with('info', 'Personal profile updated.');
+                } else {
+                    return redirect('dashboard')->with('warning', 'Check function!');
+                    // TODO: Ask to join the Organization
+                }
             }
         }
 
-        // TODO: Redirect to dashboard
+        return redirect('dashboard')->with('success', 'Profile updated!');
+    }
+
+    public function showMyOrganizationProfile()
+    {
+        $user = Auth::user();
+        if ($user->organization) {
+            return $this->showOrganizationProfile($user->organization->id);
+        }
+
+        return $this->showOrganizationProfile(0);
+    }
+
+    public function showOrganizationProfile($id)
+    {
+        if ($id > 0) {
+            $data = [];
+            // TODO: Load profile from the database
+        } else {
+            $data = [
+                'pagetitle' => 'New Organization',
+            ];
+        }
+
+        return view('profile.organization', $data);
+    }
+
+    public function saveOrganizationProfile(Request $request, $id)
+    {
+
     }
 }

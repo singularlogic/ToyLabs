@@ -1,8 +1,14 @@
         <!-- Hidden Menu -->
         <div class="ui large top fixed {{ $class or '' }} menu">
             <div class="ui container">
-                <a class="item{{ Request::is('/') ? ' active' : '' }}" href="/">Home</a>
-                <a class="item{{ Request::is('about') ? ' active' : '' }}" href="/about">About</a>
+                <a class="ui item image logo" href="{{ route('home') }}">
+                    <img src="/images/toylabs_header_logo.svg" />
+                </a>
+                {{-- <a class="item{{ Request::is('/') ? ' active' : '' }}" href="{{ route('home') }}">Home</a> --}}
+@if(Auth::check())
+                <a class="item{{ Request::is('dashboard') ? ' active' : '' }}" href="{{ route('dashboard') }}">My Projects</a>
+@endif
+                <a class="item{{ Request::is('about') ? ' active' : '' }}" href="{{ route('about') }}">About</a>
                 <div class="right menu">
 @if(Auth::check())
                     <div class="ui dropdown item">
@@ -11,7 +17,7 @@
                         <i class="dropdown icon"></i>
                         <div class="menu">
                             <a class="item" href="/profile/edit"><i class="user icon"></i> Edit Profile</a>
-                            <a class="item" href="#"><i class="users icon"></i> Edit Organization</a>
+                            <a class="item" href="/organization/edit"><i class="users icon"></i> Edit Organization</a>
                             <div class="divider"></div>
                             <a class="item" href="/logout"><i class="power icon"></i> Logout</a>
                         </div>

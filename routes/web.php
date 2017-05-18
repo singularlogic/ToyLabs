@@ -11,13 +11,8 @@
 |
  */
 
-Route::get('/', function () {
-    return view('home');
-});
-
-Route::get('/about', function () {
-    return view('about');
-});
+Route::get('/', function () {return view('home');})->name('home');
+Route::get('/about', function () {return view('about');})->name('about');
 
 // Login/Register & Social Logins
 Route::get('/login', ['as' => 'login', 'uses' => 'Auth\\LoginController@showLoginForm']);
@@ -37,7 +32,13 @@ Route::get('/login/callback/{provider}', ['as' => 'social.callback', 'uses' => '
 
 // Routes for logged users
 Route::group(['middleware' => 'auth'], function () {
-    // Profile Creation
+    // Dashboard
+    Route::get('/dashboard', function () {return view('dashboard');})->name('dashboard');
+    // Personal Profile
     Route::get('/profile/edit', ['as' => 'profile.edit', 'uses' => 'ProfileController@showPersonalProfile']);
     Route::post('/profile/edit', ['as' => 'profile.edit.post', 'uses' => 'ProfileController@savePersonalProfile']);
+    // Organization Profile
+    Route::get('/organization/edit', ['as' => 'organization.edit.mine', 'uses' => 'ProfileController@showMyOrganizationProfile']);
+    Route::get('/organization/{id}/edit', ['as' => 'organization.edit', 'uses' => 'ProfileController@showOrganizationProfile']);
+    Route::post('/organization/{id}/edit', ['as' => 'organization.edit.post', 'uses' => 'ProfileController@saveOrganizationProfile']);
 });
