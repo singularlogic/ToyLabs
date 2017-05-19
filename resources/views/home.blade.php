@@ -10,8 +10,11 @@
                     @include('partials.menu')
 
                     <div class="ui text container">
-                         <h1 class="ui inverted header">Welcome to ToyLabs</h1>
-                         <h2>New methodology to accelerate innovation in the player sector</h2>
+                         <h1 class="ui inverted header">
+                            <img class="ui image" src="/images/toylabs_logo_big_flat.svg" />
+                            <div class="content">Welcome to ToyLabs</div>
+                            <div class="sub header">New methodology to accelerate innovation in the player sector</div>
+                        </h1>
                     </div>
                 </div>
 
