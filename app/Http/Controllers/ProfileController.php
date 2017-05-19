@@ -100,7 +100,7 @@ class ProfileController extends Controller
         if (isset($input['has_organization'])) {
             if (isset($input['state'])) {
                 if ($input['state'] === 'new') {
-                    return redirect()->route('organization.edit', ['id' => 0])->with('info', 'Personal profile updated.');
+                    return redirect()->route('organization.edit', ['id' => 0])->with('info', 'Personal profile updated successfully.');
                 } else {
                     return redirect('dashboard')->with('warning', 'Check function!');
                     // TODO: Ask to join the Organization
@@ -108,7 +108,7 @@ class ProfileController extends Controller
             }
         }
 
-        return redirect('dashboard')->with('success', 'Profile updated!');
+        return redirect('dashboard')->with('success', 'Personal profile updated successfully.');
     }
 
     public function showMyOrganizationProfile()

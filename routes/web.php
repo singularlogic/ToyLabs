@@ -33,7 +33,7 @@ Route::get('/login/callback/{provider}', ['as' => 'social.callback', 'uses' => '
 // Routes for logged users
 Route::group(['middleware' => 'auth'], function () {
     // Dashboard
-    Route::get('/dashboard', function () {return view('dashboard');})->name('dashboard');
+    Route::get('/dashboard', ['as' => 'dashboard', 'uses' => 'DashboardController@show']);
     // Personal Profile
     Route::get('/profile/edit', ['as' => 'profile.edit', 'uses' => 'ProfileController@showPersonalProfile']);
     Route::post('/profile/edit', ['as' => 'profile.edit.post', 'uses' => 'ProfileController@savePersonalProfile']);

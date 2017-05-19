@@ -44,4 +44,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Organization::class);
     }
+
+    public function getRoleAttribute()
+    {
+        return $this->roles()->pluck('name')[0];
+    }
 }
