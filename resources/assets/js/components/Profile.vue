@@ -3,7 +3,7 @@
             <form class="ui form" method="POST">
                 <input type="hidden" name="_token" :value="$parent.crsf" />
 
-                <h3>Personal</h3>
+                <h3 class="ui header">Personal</h3>
                 <div class="ui divider"></div>
                 <div class="fields">
                     <div class="eight wide field">
@@ -37,7 +37,7 @@
                     </div>
                 </div>
 
-                <h3>Professional</h3>
+                <h3 class="ui header">Professional</h3>
                 <div class="ui divider"></div>
 
                 <div class="inline fields">
@@ -107,7 +107,7 @@
                 </div>
 
                 <div style="display: none;" v-show="organizationState === 'existing' && isProfessional">
-                    <h3>Organization</h3>
+                    <h3 class="ui header">Organization</h3>
                     <div class="ui divider"></div>
 
                     <div class="field">
