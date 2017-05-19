@@ -62,6 +62,6 @@ class SocialAuthController extends Controller
         $user = $this->getOrCreateUser($provider, Socialite::driver($provider)->user());
         auth()->login($user);
 
-        return redirect()->to('/'); // TODO: Redirect to dashboard
+        return redirect()->to('/dashboard');
     }
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 class RegisterController extends Controller
@@ -27,7 +28,7 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/';
+    protected $redirectTo = '/dashboard';
 
     /**
      * Create a new controller instance.
@@ -67,5 +68,17 @@ class RegisterController extends Controller
             'email'    => $data['email'],
             'password' => bcrypt($data['password']),
         ]);
+    }
+
+    /**
+     * The user has been registered.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  mixed  $user
+     * @return mixed
+     */
+    protected function registered(Request $request, $user)
+    {
+        $user->assignRole('end_user');
     }
 }
