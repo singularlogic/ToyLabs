@@ -38,6 +38,8 @@ class ProfileController extends Controller
         'Zambia', 'Zimbabwe',
     ];
 
+    protected $legalForms = [];
+
     public function showPersonalProfile()
     {
         $organizations = Organization::orderBy('name', 'ASC')->pluck('id', 'name');
@@ -129,11 +131,16 @@ class ProfileController extends Controller
     public function showOrganizationProfile($id)
     {
         if ($id > 0) {
-            $data = [];
+            $data = [
+                'countries'  => $this->countries,
+                'legalForms' => $this->legalForms,
+            ];
             // TODO: Load profile from the database
         } else {
             $data = [
-                'pagetitle' => 'New Organization',
+                'countries'  => $this->countries,
+                'legalForms' => $this->legalForms,
+                'pagetitle'  => 'New Organization',
             ];
         }
 

@@ -2,6 +2,7 @@ import Vue from 'vue';
 
 // Import VueJS Components
 import Profile from './components/Profile.vue';
+import Organization from './components/Organization.vue';
 
 /**
  * Navbar transition for the homepage
@@ -35,6 +36,7 @@ const app = new Vue({
         };
     },
     components: {
-        Profile
+        Profile,
+        Organization
     }
 });

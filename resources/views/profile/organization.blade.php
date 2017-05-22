@@ -1,6 +1,8 @@
 @extends('layouts.default', ['class' => ''])
 
-@section('title', $pagetitle or 'Edit Organization')
+@section('title')
+    {{ $pagetitle or 'EditOrganization' }}
+@endsection
 
 @section('content')
         <!-- Organization -->
@@ -9,5 +11,10 @@
             <div class="ui divider"></div>
 
             @include('partials.status')
+
+            <Organization
+                :_countries="{{ json_encode($countries) }}"
+                :_legal-forms="{{ json_encode($legalForms) }}"
+            ></Organization>
         </div>
 @endsection
