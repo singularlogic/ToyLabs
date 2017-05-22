@@ -30,6 +30,8 @@ Route::get('/password/reset/{token}', ['as' => 'password.reset', 'uses' => 'Auth
 Route::get('/login/{provider}', ['as' => 'social.redirect', 'uses' => 'SocialAuthController@redirect']);
 Route::get('/login/callback/{provider}', ['as' => 'social.callback', 'uses' => 'SocialAuthController@callback']);
 
+Route::get('/project/{id}', ['as' => 'project.guestview', 'uses' => 'ProjectController@guestview']);
+
 // Routes for logged users
 Route::group(['middleware' => 'auth'], function () {
     // Dashboard

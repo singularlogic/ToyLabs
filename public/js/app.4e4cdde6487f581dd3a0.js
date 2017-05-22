@@ -11038,6 +11038,7 @@ $(document).ready(function () {
     $('.message .close').on('click', function () {
         $(this).closest('.message').transition('fade');
     });
+    $('.ui.rating').rating();
 });
 
 window.Vue = __WEBPACK_IMPORTED_MODULE_0_vue___default.a;

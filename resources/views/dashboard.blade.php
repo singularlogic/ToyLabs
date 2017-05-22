@@ -21,5 +21,43 @@
 
             <div class="ui clearing divider"></div>
             @include('partials.status')
+
+            <div class="ui ordered six mini steps">
+                <a class="completed step">
+                    <div class="content">
+                        <div class="title">Analysing</div>
+                    </div>
+                </a>
+                <a class="completed step">
+                    <div class="content">
+                        <div class="title">Partner Matching</div>
+                        <div class="description"></div>
+                    </div>
+                </a>
+                <a class="active step">
+                    <div class="content">
+                        <div class="title">Designing</div>
+                        <div class="description"></div>
+                    </div>
+                </a>
+                <a class="disabled step">
+                    <div class="content">
+                        <div class="title">Prototyping</div>
+                        <div class="description"></div>
+                    </div>
+                </a>
+                <a class="disabled step">
+                    <div class="content">
+                        <div class="title">Certifying</div>
+                        <div class="description"></div>
+                    </div>
+                </a>
+                <a class="disabled step">
+                    <div class="content">
+                        <div class="title">Release</div>
+                        <div class="description"></div>
+                    </div>
+                </a>
+            </div>
         </div>
 @endsection
