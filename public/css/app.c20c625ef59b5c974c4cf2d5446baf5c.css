@@ -18,6 +18,9 @@ body > .grid {
 .column {
   max-width: 650px;
 }
+.pusher .column {
+  max-width: 1155px;
+}
 .v-divider {
   position: relative;
   padding: 0 !important;
@@ -53,7 +56,7 @@ body > .grid {
   font-weight: normal;
 }
 .ui.vertical.stripe {
-  padding: 8em 0em;
+  padding: 4em 0em;
 }
 .ui.vertical.stripe h3 {
   font-size: 2em;

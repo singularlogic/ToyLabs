@@ -17,7 +17,32 @@
                         </h1>
                     </div>
                 </div>
+            </div>
 
+            <div class="ui vertical stripe segment container">
+                <h1 class="ui header">Projects</h1>
+                <div class="ui divider"></div>
+
+                <div class="ui three column grid">
+@for ($i = 0; $i < 6; $i++)
+                    <div class="column">
+                        <div class="ui fluid card">
+                            <div class="image">
+                                <img src="http://lorempixel.com/300/150/" />
+                            </div>
+                            <div class="content">
+                                <div class="header">Lorem Ipsum</div>
+                                <div class="meta"><a href="javascript:void(0)">Dolls</a></div>
+                                <div class="description">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</div>
+                            </div>
+                            <div class="extra content">
+                                <span class="right floated"><i class="heart icon"></i> 13 Likes</span>
+                                <span><i class="comments icon"></i>7 Comments</span>
+                            </div>
+                        </div>
+                    </div>
+@endfor
+                </div>
             </div>
         </div>
 @endsection
