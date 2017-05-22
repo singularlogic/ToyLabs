@@ -342,7 +342,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             return this.professional.role !== 'end_user';
         },
         submitText: function submitText() {
-            if (this.organizationState === 'new' && this.isProfessional) {
+            if (this.organizationState === 'new' && this.isProfessional && this.hasOrganization === 'true') {
                 return 'Save and Create Organization';
             }
 

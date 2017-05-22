@@ -142,7 +142,7 @@ export default {
     computed: {
         isProfessional() { return this.professional.role !== 'end_user'; },
         submitText() {
-            if (this.organizationState === 'new' && this.isProfessional) {
+            if (this.organizationState === 'new' && this.isProfessional && this.hasOrganization === 'true') {
                 return 'Save and Create Organization';
             }
 
