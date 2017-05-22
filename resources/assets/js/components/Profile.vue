@@ -5,10 +5,15 @@
 
                 <h3 class="ui header">Personal</h3>
                 <div class="ui divider"></div>
+
+                <div class="field">
+                    <label>Name</label>
+                    <input type="text" name="name" placeholder="Name" v-model="personal.name" autofocus />
+                </div>
                 <div class="fields">
                     <div class="eight wide field">
                         <label>Address</label>
-                        <input type="text" name="address" placeholder="Address" v-model="personal.address" autofocus />
+                        <input type="text" name="address" placeholder="Address" v-model="personal.address" />
                     </div>
                     <div class="four wide field">
                         <label>Country</label>

@@ -44,7 +44,8 @@ class ProfileController extends Controller
         $user          = Auth::user();
 
         if ($user->profile) {
-            $data = [
+            $user->profile['name'] = $user->name;
+            $data                  = [
                 'countries'     => $this->countries,
                 'organizations' => $organizations,
                 'personal'      => $user->profile,
@@ -58,6 +59,7 @@ class ProfileController extends Controller
                 'countries'     => $this->countries,
                 'organizations' => $organizations,
                 'personal'      => [
+                    'name'      => $user->name,
                     'isNew'     => true,
                     'about'     => '',
                     'address'   => '',
@@ -96,6 +98,9 @@ class ProfileController extends Controller
             $user->removeRole('end_user');
             $user->assignRole($input['role']);
         }
+
+        $user->name = $input['name'];
+        $user->save();
 
         if (isset($input['has_organization'])) {
             if (isset($input['state'])) {

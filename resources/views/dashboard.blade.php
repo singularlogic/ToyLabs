@@ -14,7 +14,7 @@
                     </div>
                     <div class="results"></div>
                 </div>
-                <button class="circular ui right floated icon orange button" title="Create new project...">
+                <button class="circular ui right floated icon orange button" data-tooltip="Create a new Project" data-position="left center" data-inverted>
                     <i class="icon plus"></i>
                 </button>
             </div>
