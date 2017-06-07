@@ -42,11 +42,16 @@ class User extends Authenticatable
 
     public function organizations()
     {
-        return $this->hasMany(Organization::class);
+        return $this->hasMany(Organization::class, 'owner_id');
     }
 
     public function getRoleAttribute()
     {
         return $this->roles()->pluck('name')[0];
+    }
+
+    public function getHasOrganizationAttribute()
+    {
+        return $this->organizations()->count() > 0;
     }
 }

@@ -17,7 +17,9 @@
                         <i class="dropdown icon"></i>
                         <div class="menu">
                             <a class="item" href="/profile/edit"><i class="user icon"></i> Edit Profile</a>
+@if(Auth::user()->hasOrganization)
                             <a class="item" href="/organization/edit"><i class="users icon"></i> Edit Organization</a>
+@endif
                             <div class="divider"></div>
                             <a class="item" href="/logout"><i class="power icon"></i> Logout</a>
                         </div>

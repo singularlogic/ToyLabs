@@ -7,10 +7,12 @@
     "require": {
         "php": ">=5.6.4",
         "creativeorange/gravatar": "^1.0",
+        "cviebrock/eloquent-sluggable": "^4.2",
         "laravel/framework": "5.4.*",
         "laravel/socialite": "^3.0",
         "laravel/tinker": "~1.0",
-        "spatie/laravel-permission": "^2.1"
+        "spatie/laravel-permission": "^2.1",
+        "vinkla/gitlab": "^2.6"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

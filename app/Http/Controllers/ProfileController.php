@@ -3,9 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Organization;
+use App\OrganizationType;
 use App\Profile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
+use Vinkla\GitLab\Facades\GitLab;
 
 class ProfileController extends Controller
 {
@@ -38,7 +41,9 @@ class ProfileController extends Controller
         'Zambia', 'Zimbabwe',
     ];
 
-    protected $legalForms = [];
+    protected $legalForms = [
+        'Freelancer', 'Sole Trader', 'Trading Partnership', 'Limited Company (LTD)', 'Economic Association', 'Société Anonyme (S.A)',
+    ];
 
     public function showPersonalProfile()
     {
@@ -107,7 +112,7 @@ class ProfileController extends Controller
         if (isset($input['has_organization'])) {
             if (isset($input['state'])) {
                 if ($input['state'] === 'new') {
-                    return redirect()->route('organization.edit', ['id' => 0])->with('info', 'Personal profile updated successfully.');
+                    return redirect()->route('organization.edit.mine')->with('info', 'Personal profile updated successfully.');
                 } else {
                     return redirect('dashboard')->with('warning', 'Check function!');
                     // TODO: Ask to join the Organization
@@ -121,8 +126,9 @@ class ProfileController extends Controller
     public function showMyOrganizationProfile()
     {
         $user = Auth::user();
-        if ($user->organization) {
-            return $this->showOrganizationProfile($user->organization->id);
+
+        if ($user->organizations) {
+            return $this->showOrganizationProfile($user->organizations[0]->id);
         }
 
         return $this->showOrganizationProfile(0);
@@ -130,25 +136,45 @@ class ProfileController extends Controller
 
     public function showOrganizationProfile($id)
     {
+        $user = Auth::user();
+        $data = [
+            'countries'    => $this->countries,
+            'legalForms'   => $this->legalForms,
+            'id'           => $id,
+            'organization' => Organization::where('id', $id)->first(),
+        ];
+
         if ($id > 0) {
-            $data = [
-                'countries'  => $this->countries,
-                'legalForms' => $this->legalForms,
-            ];
             // TODO: Load profile from the database
         } else {
-            $data = [
-                'countries'  => $this->countries,
-                'legalForms' => $this->legalForms,
-                'pagetitle'  => 'New Organization',
-            ];
+            $data['pagetitle'] = 'New Organization';
         }
 
         return view('profile.organization', $data);
     }
 
-    public function saveOrganizationProfile(Request $request, $id)
+    public function saveOrganizationProfile(Request $request)
     {
+        $input                         = $request->all();
+        $id                            = $input['id'];
+        $user                          = Auth::user();
+        $input['owner_id']             = $user->id;
+        $input['organization_type_id'] = OrganizationType::where('role_id', $user->roles()->pluck('id')[0])->first()->id;
+        unset($input['_token']);
 
+        if ($id > 0) {
+            // Update
+            Organization::where('id', $id)->update($input);
+            return redirect('dashboard')->with('success', 'Organization updated successfully');
+        } else {
+            // Create
+            $org                  = Organization::create($input);
+            $path                 = Str::slug($input['name'], '-');
+            $gitOrg               = Gitlab::api('groups')->create($input['name'], $path);
+            $org->gitlab_group_id = $gitOrg['id'];
+            $org->save();
+            // TODO: Redirect to organization facilities profile creation
+            return redirect('dashboard')->with('success', 'Organization created successfully');
+        }
     }
 }

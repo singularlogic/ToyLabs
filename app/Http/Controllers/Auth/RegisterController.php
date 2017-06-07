@@ -7,6 +7,7 @@ use App\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Vinkla\GitLab\Facades\GitLab;
 
 class RegisterController extends Controller
 {
@@ -80,5 +81,14 @@ class RegisterController extends Controller
     protected function registered(Request $request, $user)
     {
         $user->assignRole('end_user');
+        $gitUser = Gitlab::api('users')->create($user->email, str_random(12), [
+            'name'     => $user->name,
+            'username' => str_replace('@', '.', $user->email),
+            'password' => str_random(12),
+            'confirm'  => false,
+        ]);
+
+        $user->gitlab_id = $gitUser['id'];
+        $user->save();
     }
 }

@@ -181,6 +181,7 @@ return [
         Creativeorange\Gravatar\GravatarServiceProvider::class,
         Laravel\Socialite\SocialiteServiceProvider::class,
         Spatie\Permission\PermissionServiceProvider::class,
+        Vinkla\GitLab\GitLabServiceProvider::class,
 
     ],
 
@@ -232,6 +233,7 @@ return [
         'View'         => Illuminate\Support\Facades\View::class,
 
         // 3rd-party aliases
+        'GitLab'       => Vinkla\GitLab\Facades\GitLab::class,
         'Gravatar'     => Creativeorange\Gravatar\Facades\Gravatar::class,
         'Socialite'    => Laravel\Socialite\Facades\Socialite::class,
     ],

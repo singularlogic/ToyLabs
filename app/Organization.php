@@ -6,7 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Organization extends Model
 {
-    protected $fillable = ['name', 'description', 'owner_id', 'organization_type_id'];
+    protected $fillable = [
+        'name', 'legal_name', 'reg_country', 'reg_number', 'legal_form', 'vat_number', 'address', 'po_box', 'postal_code', 'city',
+        'phone', 'fax', 'website_url', 'description', 'owner_id', 'organization_type_id', 'gitlab_group_id',
+    ];
 
     public function owner()
     {

@@ -164,28 +164,43 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    props: ['_countries', '_legalForms'],
+    props: ['_countries', '_legalForms', '_id', '_organization'],
     data: function data() {
+        if (this._organization === null) {
+            return {
+                organization: {
+                    name: '',
+                    description: '',
+                    legal_name: '',
+                    reg_country: '',
+                    reg_number: '',
+                    legal_form: '',
+                    vat_number: '',
+                    address: '',
+                    po_box: '',
+                    postal_code: '',
+                    city: '',
+                    phone: '',
+                    fax: '',
+                    website_url: ''
+                }
+            };
+        }
+
         return {
-            legal_name: '',
-            legal_status: '',
-            reg_country: '',
-            reg_number: '',
-            legal_form: '',
-            vat_number: '',
-            address: '',
-            po_box: '',
-            postal_code: '',
-            city: '',
-            phone: '',
-            fax: '',
-            website_url: ''
+            organization: this._organization
         };
     },
 
-    computed: {}
+    computed: {
+        submitText: function submitText() {
+            return this._id === 0 ? 'Create' : 'Update';
+        }
+    }
 });
 
 /***/ }),
@@ -418,7 +433,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   return _c('form', {
     staticClass: "ui form",
     attrs: {
-      "method": "POST"
+      "method": "POST",
+      "action": "/organization/edit"
     }
   }, [_c('input', {
     attrs: {
@@ -433,83 +449,57 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_vm._v("General")]), _vm._v(" "), _c('div', {
     staticClass: "ui divider"
   }), _vm._v(" "), _c('div', {
+    staticClass: "equal width fields"
+  }, [_c('div', {
+    staticClass: "field"
+  }, [_c('label', [_vm._v("Name")]), _vm._v(" "), _c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.organization.name),
+      expression: "organization.name"
+    }],
+    attrs: {
+      "type": "text",
+      "name": "name",
+      "placeholder": "Name",
+      "autofocus": "",
+      "required": ""
+    },
+    domProps: {
+      "value": (_vm.organization.name)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.organization.name = $event.target.value
+      }
+    }
+  })]), _vm._v(" "), _c('div', {
     staticClass: "field"
   }, [_c('label', [_vm._v("Legal Name")]), _vm._v(" "), _c('input', {
     directives: [{
       name: "model",
       rawName: "v-model",
-      value: (_vm.legal_name),
-      expression: "legal_name"
+      value: (_vm.organization.legal_name),
+      expression: "organization.legal_name"
     }],
     attrs: {
       "type": "text",
       "name": "legal_name",
       "placeholder": "Legal name",
-      "autofocus": "",
       "required": ""
     },
     domProps: {
-      "value": (_vm.legal_name)
+      "value": (_vm.organization.legal_name)
     },
     on: {
       "input": function($event) {
         if ($event.target.composing) { return; }
-        _vm.legal_name = $event.target.value
+        _vm.organization.legal_name = $event.target.value
       }
     }
-  })]), _vm._v(" "), _c('div', {
-    staticClass: "inline fields"
-  }, [_c('label', [_vm._v("Legal Status")]), _vm._v(" "), _c('div', {
-    staticClass: "field"
-  }, [_c('div', {
-    staticClass: "ui radio checkbox"
-  }, [_c('input', {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: (_vm.legal_status),
-      expression: "legal_status"
-    }],
-    attrs: {
-      "type": "radio",
-      "name": "legal_status",
-      "value": "natural_person",
-      "required": ""
-    },
-    domProps: {
-      "checked": _vm._q(_vm.legal_status, "natural_person")
-    },
-    on: {
-      "__c": function($event) {
-        _vm.legal_status = "natural_person"
-      }
-    }
-  }), _vm._v(" "), _c('label', [_vm._v("A Natural Person")])])]), _vm._v(" "), _c('div', {
-    staticClass: "field"
-  }, [_c('div', {
-    staticClass: "ui radio checkbox"
-  }, [_c('input', {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: (_vm.legal_status),
-      expression: "legal_status"
-    }],
-    attrs: {
-      "type": "radio",
-      "name": "legal_status",
-      "value": "legal_person",
-      "required": ""
-    },
-    domProps: {
-      "checked": _vm._q(_vm.legal_status, "legal_person")
-    },
-    on: {
-      "__c": function($event) {
-        _vm.legal_status = "legal_person"
-      }
-    }
-  }), _vm._v(" "), _c('label', [_vm._v("A Legal Person")])])])]), _vm._v(" "), _c('div', {
+  })])]), _vm._v(" "), _c('div', {
     staticClass: "equal width fields"
   }, [_c('div', {
     staticClass: "field"
@@ -517,8 +507,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     directives: [{
       name: "model",
       rawName: "v-model",
-      value: (_vm.reg_country),
-      expression: "reg_country"
+      value: (_vm.organization.reg_country),
+      expression: "organization.reg_country"
     }],
     staticClass: "ui search dropdown",
     attrs: {
@@ -532,7 +522,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
           var val = "_value" in o ? o._value : o.value;
           return val
         });
-        _vm.reg_country = $event.target.multiple ? $$selectedVal : $$selectedVal[0]
+        _vm.organization.reg_country = $event.target.multiple ? $$selectedVal : $$selectedVal[0]
       }
     }
   }, [_c('option', {
@@ -551,8 +541,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     directives: [{
       name: "model",
       rawName: "v-model",
-      value: (_vm.reg_number),
-      expression: "reg_number"
+      value: (_vm.organization.reg_number),
+      expression: "organization.reg_number"
     }],
     attrs: {
       "type": "text",
@@ -560,12 +550,12 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "placeholder": "#########"
     },
     domProps: {
-      "value": (_vm.reg_number)
+      "value": (_vm.organization.reg_number)
     },
     on: {
       "input": function($event) {
         if ($event.target.composing) { return; }
-        _vm.reg_number = $event.target.value
+        _vm.organization.reg_number = $event.target.value
       }
     }
   })]), _vm._v(" "), _c('div', {
@@ -574,8 +564,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     directives: [{
       name: "model",
       rawName: "v-model",
-      value: (_vm.legal_form),
-      expression: "legal_form"
+      value: (_vm.organization.legal_form),
+      expression: "organization.legal_form"
     }],
     staticClass: "ui search dropdown",
     attrs: {
@@ -589,7 +579,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
           var val = "_value" in o ? o._value : o.value;
           return val
         });
-        _vm.legal_form = $event.target.multiple ? $$selectedVal : $$selectedVal[0]
+        _vm.organization.legal_form = $event.target.multiple ? $$selectedVal : $$selectedVal[0]
       }
     }
   }, [_c('option', {
@@ -608,8 +598,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     directives: [{
       name: "model",
       rawName: "v-model",
-      value: (_vm.vat_number),
-      expression: "vat_number"
+      value: (_vm.organization.vat_number),
+      expression: "organization.vat_number"
     }],
     attrs: {
       "type": "text",
@@ -617,15 +607,36 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "placeholder": "########"
     },
     domProps: {
-      "value": (_vm.vat_number)
+      "value": (_vm.organization.vat_number)
     },
     on: {
       "input": function($event) {
         if ($event.target.composing) { return; }
-        _vm.vat_number = $event.target.value
+        _vm.organization.vat_number = $event.target.value
       }
     }
-  })])]), _vm._v(" "), _c('h3', {
+  })])]), _vm._v(" "), _c('div', {
+    staticClass: "field"
+  }, [_c('label', [_vm._v("Description")]), _vm._v(" "), _c('textarea', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.organization.description),
+      expression: "organization.description"
+    }],
+    attrs: {
+      "name": "description"
+    },
+    domProps: {
+      "value": (_vm.organization.description)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.organization.description = $event.target.value
+      }
+    }
+  })]), _vm._v(" "), _c('h3', {
     staticClass: "ui header"
   }, [_vm._v("Address")]), _vm._v(" "), _c('div', {
     staticClass: "ui divider"
@@ -635,8 +646,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     directives: [{
       name: "model",
       rawName: "v-model",
-      value: (_vm.address),
-      expression: "address"
+      value: (_vm.organization.address),
+      expression: "organization.address"
     }],
     attrs: {
       "type": "text",
@@ -644,12 +655,12 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "placeholder": "Street Name and Number"
     },
     domProps: {
-      "value": (_vm.address)
+      "value": (_vm.organization.address)
     },
     on: {
       "input": function($event) {
         if ($event.target.composing) { return; }
-        _vm.address = $event.target.value
+        _vm.organization.address = $event.target.value
       }
     }
   })]), _vm._v(" "), _c('div', {
@@ -660,8 +671,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     directives: [{
       name: "model",
       rawName: "v-model",
-      value: (_vm.po_box),
-      expression: "po_box"
+      value: (_vm.organization.po_box),
+      expression: "organization.po_box"
     }],
     attrs: {
       "type": "text",
@@ -669,12 +680,12 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "placeholder": "P.O. Box"
     },
     domProps: {
-      "value": (_vm.po_box)
+      "value": (_vm.organization.po_box)
     },
     on: {
       "input": function($event) {
         if ($event.target.composing) { return; }
-        _vm.po_box = $event.target.value
+        _vm.organization.po_box = $event.target.value
       }
     }
   })]), _vm._v(" "), _c('div', {
@@ -683,8 +694,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     directives: [{
       name: "model",
       rawName: "v-model",
-      value: (_vm.postal_code),
-      expression: "postal_code"
+      value: (_vm.organization.postal_code),
+      expression: "organization.postal_code"
     }],
     attrs: {
       "type": "text",
@@ -692,12 +703,12 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "placeholder": "Postal Code"
     },
     domProps: {
-      "value": (_vm.postal_code)
+      "value": (_vm.organization.postal_code)
     },
     on: {
       "input": function($event) {
         if ($event.target.composing) { return; }
-        _vm.postal_code = $event.target.value
+        _vm.organization.postal_code = $event.target.value
       }
     }
   })]), _vm._v(" "), _c('div', {
@@ -706,8 +717,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     directives: [{
       name: "model",
       rawName: "v-model",
-      value: (_vm.city),
-      expression: "city"
+      value: (_vm.organization.city),
+      expression: "organization.city"
     }],
     attrs: {
       "type": "text",
@@ -715,12 +726,12 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "placeholder": "City"
     },
     domProps: {
-      "value": (_vm.city)
+      "value": (_vm.organization.city)
     },
     on: {
       "input": function($event) {
         if ($event.target.composing) { return; }
-        _vm.city = $event.target.value
+        _vm.organization.city = $event.target.value
       }
     }
   })])]), _vm._v(" "), _c('div', {
@@ -731,8 +742,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     directives: [{
       name: "model",
       rawName: "v-model",
-      value: (_vm.phone),
-      expression: "phone"
+      value: (_vm.organization.phone),
+      expression: "organization.phone"
     }],
     attrs: {
       "type": "text",
@@ -740,12 +751,12 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "placeholder": "Phone"
     },
     domProps: {
-      "value": (_vm.phone)
+      "value": (_vm.organization.phone)
     },
     on: {
       "input": function($event) {
         if ($event.target.composing) { return; }
-        _vm.phone = $event.target.value
+        _vm.organization.phone = $event.target.value
       }
     }
   })]), _vm._v(" "), _c('div', {
@@ -754,8 +765,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     directives: [{
       name: "model",
       rawName: "v-model",
-      value: (_vm.fax),
-      expression: "fax"
+      value: (_vm.organization.fax),
+      expression: "organization.fax"
     }],
     attrs: {
       "type": "text",
@@ -763,12 +774,12 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "placeholder": "Fax Number"
     },
     domProps: {
-      "value": (_vm.fax)
+      "value": (_vm.organization.fax)
     },
     on: {
       "input": function($event) {
         if ($event.target.composing) { return; }
-        _vm.fax = $event.target.value
+        _vm.organization.fax = $event.target.value
       }
     }
   })]), _vm._v(" "), _c('div', {
@@ -777,8 +788,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     directives: [{
       name: "model",
       rawName: "v-model",
-      value: (_vm.website_url),
-      expression: "website_url"
+      value: (_vm.organization.website_url),
+      expression: "organization.website_url"
     }],
     attrs: {
       "type": "text",
@@ -786,15 +797,35 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "placeholder": "Website URL"
     },
     domProps: {
-      "value": (_vm.website_url)
+      "value": (_vm.organization.website_url)
     },
     on: {
       "input": function($event) {
         if ($event.target.composing) { return; }
-        _vm.website_url = $event.target.value
+        _vm.organization.website_url = $event.target.value
       }
     }
-  })])])])
+  })])]), _vm._v(" "), _c('div', {
+    staticClass: "ui divider"
+  }), _vm._v(" "), _c('input', {
+    attrs: {
+      "type": "hidden",
+      "name": "id"
+    },
+    domProps: {
+      "value": _vm._id
+    }
+  }), _vm._v(" "), _c('button', {
+    staticClass: "ui orange submit right floated button",
+    attrs: {
+      "type": "submit"
+    }
+  }, [_vm._v(_vm._s(_vm.submitText))]), _vm._v(" "), _c('a', {
+    staticClass: "ui default right floated button",
+    attrs: {
+      "href": "/dashboard"
+    }
+  }, [_vm._v("Cancel")])])
 },staticRenderFns: []}
 module.exports.render._withStripped = true
 if (false) {
@@ -1011,12 +1042,12 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }), _vm._v(" "), _c('div', {
     staticClass: "inline fields"
   }, [_c('label', [_vm._v("What's the role you have in ToyLabs?")]), _vm._v(" "), _c('div', {
-    staticClass: "field"
-  }, [_c('div', {
-    staticClass: "ui radio checkbox",
+    staticClass: "field",
     class: {
       disabled: !_vm.personal.isNew
     }
+  }, [_c('div', {
+    staticClass: "ui radio checkbox"
   }, [_c('input', {
     directives: [{
       name: "model",
