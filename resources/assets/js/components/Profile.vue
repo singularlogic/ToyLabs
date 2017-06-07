@@ -47,8 +47,8 @@
 
                 <div class="inline fields">
                     <label>What's the role you have in ToyLabs?</label>
-                    <div class="field">
-                        <div class="ui radio checkbox" :class="{ disabled: !personal.isNew }">
+                    <div class="field" :class="{ disabled: !personal.isNew }">
+                        <div class="ui radio checkbox">
                             <input type="radio" name="role" id="manufacturer" value="manufacturer" v-model="professional.role" />
                             <label for="manufacturer">Manufacturer</label>
                         </div>
