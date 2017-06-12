@@ -7,8 +7,6 @@ use App\OrganizationType;
 use App\Profile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Str;
-use Vinkla\GitLab\Facades\GitLab;
 
 class ProfileController extends Controller
 {
@@ -168,11 +166,7 @@ class ProfileController extends Controller
             return redirect('dashboard')->with('success', 'Organization updated successfully');
         } else {
             // Create
-            $org                  = Organization::create($input);
-            $path                 = Str::slug($input['name'], '-');
-            $gitOrg               = Gitlab::api('groups')->create($input['name'], $path);
-            $org->gitlab_group_id = $gitOrg['id'];
-            $org->save();
+            $org = Organization::create($input);
             // TODO: Redirect to organization facilities profile creation
             return redirect('dashboard')->with('success', 'Organization created successfully');
         }

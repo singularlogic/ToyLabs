@@ -19,7 +19,6 @@ class CreateUsersTable extends Migration
             $table->string('email')->unique()->nullable();
             $table->string('password')->nullable();
             $table->text('avatar')->nullable();
-            $table->integer('gitlab_id')->unsigned()->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

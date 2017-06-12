@@ -40,7 +40,6 @@ class CreateOrganizationsTable extends Migration
             $table->text('description')->nullable();
             $table->integer('owner_id')->unsigned();
             $table->integer('organization_type_id')->unsigned();
-            $table->integer('gitlab_group_id')->unsigned()->nullable();
             $table->timestamps();
 
             $table->foreign('owner_id')->references('id')->on('users');

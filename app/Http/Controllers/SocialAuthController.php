@@ -6,7 +6,6 @@ use App\SocialAccount;
 use App\User;
 use Laravel\Socialite\Contracts\User as ProviderUser;
 use Laravel\Socialite\Facades\Socialite;
-use Vinkla\GitLab\Facades\GitLab;
 
 class SocialAuthController extends Controller
 {
@@ -62,15 +61,6 @@ class SocialAuthController extends Controller
     {
         $user = $this->getOrCreateUser($provider, Socialite::driver($provider)->user());
         auth()->login($user);
-
-        $gitUser = Gitlab::api('users')->create($user->email, str_random(12), [
-            'name'     => $user->name,
-            'username' => str_replace('@', '.', $user->email),
-            'password' => str_random(12),
-            'confirm'  => false,
-        ]);
-        $user->gitlab_id = $gitUser['id'];
-        $user->save();
 
         return redirect()->to('/dashboard');
     }
