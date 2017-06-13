@@ -13,6 +13,7 @@
                 :_organizations="{{ json_encode($organizations) }}"
                 :_personal="{{ json_encode($personal) }}"
                 :_professional="{{ json_encode($professional) }}"
+                :_types="{{ json_encode($org_types) }}"
             ></profile>
         </div>
 @endsection

@@ -45,7 +45,7 @@ class ProfileController extends Controller
 
     public function showPersonalProfile()
     {
-        $organizations = Organization::orderBy('name', 'ASC')->pluck('id', 'name');
+        $organizations = Organization::orderBy('name', 'ASC')->get();
         $user          = Auth::user();
 
         if ($user->profile) {
@@ -53,16 +53,18 @@ class ProfileController extends Controller
             $data                  = [
                 'countries'     => $this->countries,
                 'organizations' => $organizations,
+                'org_types'     => OrganizationType::orderBy('id', 'ASC')->get(),
                 'personal'      => $user->profile,
                 'professional'  => [
-                    'role'         => $user->roles()->pluck('name')[0],
-                    'organization' => $user->organization ? $user->organizations[0]->id : -1,
+                    'role'          => $user->roles()->pluck('name')[0],
+                    'organizations' => $user->organizations,
                 ],
             ];
         } else {
             $data = [
                 'countries'     => $this->countries,
                 'organizations' => $organizations,
+                'org_types'     => OrganizationType::orderBy('id', 'ASC')->get(),
                 'personal'      => [
                     'name'      => $user->name,
                     'isNew'     => true,
@@ -75,8 +77,8 @@ class ProfileController extends Controller
                     'linkedin'  => '',
                 ],
                 'professional'  => [
-                    'role'         => $user->roles()->pluck('name')[0],
-                    'organization' => -1, // Users with no personal profile don't belong to an Organization
+                    'role'          => $user->roles()->pluck('name')[0],
+                    'organizations' => null, // Users with no personal profile don't belong to an Organization
                 ],
             ];
         }
@@ -92,14 +94,14 @@ class ProfileController extends Controller
         $profile = Profile::updateOrCreate([
             'user_id' => $user->id,
         ], [
-            'address'   => $input['address'],
-            'country'   => $input['country'],
-            'telephone' => $input['telephone'],
-            'facebook'  => $input['facebook'],
-            'twitter'   => $input['twitter'],
-            'linkedin'  => $input['linkedin'],
+            'address'   => isset($input['address']) ?: null,
+            'country'   => isset($input['country']) ?: null,
+            'telephone' => isset($input['telephone']) ?: null,
+            'facebook'  => isset($input['facebook']) ?: null,
+            'twitter'   => isset($input['twitter']) ?: null,
+            'linkedin'  => isset($input['linkedin']) ?: null,
         ]);
-        if (!$user->hasRole($input['role'])) {
+        if (isset($input['role']) && !$user->hasRole($input['role'])) {
             $user->removeRole('end_user');
             $user->assignRole($input['role']);
         }
@@ -107,13 +109,14 @@ class ProfileController extends Controller
         $user->name = $input['name'];
         $user->save();
 
+        if ($input['createOrganization'] == true) {
+            return redirect()->route('organization.edit.mine');
+        }
+
         if (isset($input['has_organization'])) {
             if (isset($input['state'])) {
                 if ($input['state'] === 'new') {
                     return redirect()->route('organization.edit.mine')->with('info', 'Personal profile updated successfully.');
-                } else {
-                    return redirect('dashboard')->with('warning', 'Check function!');
-                    // TODO: Ask to join the Organization
                 }
             }
         }
@@ -125,7 +128,7 @@ class ProfileController extends Controller
     {
         $user = Auth::user();
 
-        if ($user->organizations) {
+        if (count($user->organizations) > 0) {
             return $this->showOrganizationProfile($user->organizations[0]->id);
         }
 

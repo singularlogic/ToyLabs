@@ -42,101 +42,143 @@
                     </div>
                 </div>
 
-                <h3 class="ui header">Professional</h3>
-                <div class="ui divider"></div>
-
-                <div class="inline fields">
-                    <label>What's the role you have in ToyLabs?</label>
-                    <div class="field" :class="{ disabled: !personal.isNew }">
-                        <div class="ui radio checkbox">
-                            <input type="radio" name="role" id="manufacturer" value="manufacturer" v-model="professional.role" />
-                            <label for="manufacturer">Manufacturer</label>
-                        </div>
-                    </div>
-                    <div class="field" :class="{ disabled: !personal.isNew }">
-                        <div class="ui radio checkbox">
-                            <input type="radio" name="role" id="fablab" value="fablab" v-model="professional.role" />
-                            <label for="fablab">FabLab</label>
-                        </div>
-                    </div>
-                    <div class="field" :class="{ disabled: !personal.isNew }">
-                        <div class="ui radio checkbox">
-                            <input type="radio" name="role" id="safety_expert" value="safety_expert" v-model="professional.role" />
-                            <label for="safety_expert">Safety Expert</label>
-                        </div>
-                    </div>
-                    <div class="field" :class="{ disabled: !personal.isNew }">
-                        <div class="ui radio checkbox">
-                            <input type="radio" name="role" id="child_expert" value="child_expert" v-model="professional.role" />
-                            <label for="child_expert">Childhood Expert</label>
-                        </div>
-                    </div>
-                    <div class="field" :class="{ disabled: !personal.isNew }">
-                        <div class="ui radio checkbox">
-                            <input type="radio" name="role" id="end_user" value="end_user" v-model="professional.role" />
-                            <label for="end_user">Just a User!</label>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="inline fields" v-if="isProfessional">
-                    <label>Are you a member of an organization?</label>
-                    <div class="field">
-                        <div class="ui radio checkbox">
-                            <input type="radio" name="has_organization" value="true" v-model="hasOrganization" />
-                            <label>Yes</label>
-                        </div>
-                    </div>
-                    <div class="field">
-                        <div class="ui radio checkbox">
-                            <input type="radio" name="has_organization" value="false" v-model="hasOrganization" />
-                            <label>No, I work alone</label>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="inline fields" v-if="hasOrganization == 'true' && isProfessional">
-                    <label>Is your organization already in ToyLabs?</label>
-                    <div class="field">
-                        <div class="ui radio checkbox">
-                            <input type="radio" name="state" value="existing" v-model="organizationState" />
-                            <label>Yes. I want to join</label>
-                        </div>
-                    </div>
-                    <div class="field">
-                        <div class="ui radio checkbox">
-                            <input type="radio" name="state" value="new" v-model="organizationState" />
-                            <label>No. I want to create a new one</label>
-                        </div>
-                    </div>
-                </div>
-
-                <div style="display: none;" v-show="organizationState === 'existing' && isProfessional">
-                    <h3 class="ui header">Organization</h3>
+                <div v-if="personal.isNew">
+                    <h3 class="ui header">Professional</h3>
                     <div class="ui divider"></div>
 
-                    <div class="field">
-                        <select class="ui search dropdown" v-model="professional.organization">
-                            <option value="">Select Organization</option>
-                            <option v-for="o in _organizations" v-bind:value="o.id">{{ o.name }}</option>
-                        </select>
+                    <div class="inline fields">
+                        <label>What's the role you have in ToyLabs?</label>
+                        <div class="field" :class="{ disabled: !personal.isNew }">
+                            <div class="ui radio checkbox">
+                                <input type="radio" name="role" id="manufacturer" value="manufacturer" v-model="professional.role" />
+                                <label for="manufacturer">Manufacturer</label>
+                            </div>
+                        </div>
+                        <div class="field" :class="{ disabled: !personal.isNew }">
+                            <div class="ui radio checkbox">
+                                <input type="radio" name="role" id="fablab" value="fablab" v-model="professional.role" />
+                                <label for="fablab">FabLab</label>
+                            </div>
+                        </div>
+                        <div class="field" :class="{ disabled: !personal.isNew }">
+                            <div class="ui radio checkbox">
+                                <input type="radio" name="role" id="safety_expert" value="safety_expert" v-model="professional.role" />
+                                <label for="safety_expert">Safety Expert</label>
+                            </div>
+                        </div>
+                        <div class="field" :class="{ disabled: !personal.isNew }">
+                            <div class="ui radio checkbox">
+                                <input type="radio" name="role" id="child_expert" value="child_expert" v-model="professional.role" />
+                                <label for="child_expert">Childhood Expert</label>
+                            </div>
+                        </div>
+                        <div class="field" :class="{ disabled: !personal.isNew }">
+                            <div class="ui radio checkbox">
+                                <input type="radio" name="role" id="end_user" value="end_user" v-model="professional.role" />
+                                <label for="end_user">Just a User!</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="inline fields" v-if="isProfessional">
+                        <label>Are you a member of an organization?</label>
+                        <div class="field">
+                            <div class="ui radio checkbox">
+                                <input type="radio" name="has_organization" value="true" v-model="hasOrganization" />
+                                <label>Yes</label>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <div class="ui radio checkbox">
+                                <input type="radio" name="has_organization" value="false" v-model="hasOrganization" />
+                                <label>No, I work alone</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="inline fields" v-if="hasOrganization == 'true' && isProfessional">
+                        <label>Has organization already joined ToyLabs?</label>
+                        <div class="field">
+                            <div class="ui radio checkbox">
+                                <input type="radio" name="state" value="existing" v-model="organizationState" />
+                                <label>Yes, and I want to join</label>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <div class="ui radio checkbox">
+                                <input type="radio" name="state" value="new" v-model="organizationState" />
+                                <label>Not yet. I want to create it myself</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="display: none;" v-show="organizationState === 'existing' && isProfessional">
+                        <h3 class="ui header">Organization</h3>
+                        <div class="ui divider"></div>
+
+                        <div class="field">
+                            <select class="ui search dropdown" v-model="joinOrg">
+                                <option value="" ref="selectOrg">Select Organization</option>
+                                <option v-for="o in organizations" :value="o.id">{{ o.name }}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div v-if="!personal.isNew">
+                    <h3 class="ui header" style="margin-top: 20px;">
+                        Professional
+                        <span class="ui basic blue label">{{ myRole }}</span>
+                    </h3>
+                    <div class="ui divider"></div>
+
+                    <h4 class="ui header">Organization<span v-if="professional.organizations.length > 1">s</span>:</h4>
+                    <div class="ui middle aligned divided list" style="padding-left: 50px;">
+                        <div class="item" v-for="o in professional.organizations">
+                            <div class="right floated content">
+                                <button class="ui negative mini button" v-if="o.owner_id != personal.id">Leave</button>
+                                <div class="ui basic green label" v-if="o.owner_id == personal.id">Owner</div>
+                            </div>
+                            <img class="ui avatar image" src="/images/avatar/small/elliot.jpg" />
+                            <div class="content">
+                                <div class="header" v-if="o.owner_id !== personal.id">{{ o.name }}</div>
+                                <a class="header" v-if="o.owner_id == personal.id" :href="`/organization/${o.id}/edit`">{{ o.name }}</a>
+                            </div>
+                        </div>
+                        <div class="item" style="margin-top: 20px;" v-if="professional.organizations.length == 0">
+                            <div class="right floated content">
+                                <a class="ui blue mini button" @click="joinOrganization()">
+                                    <i class="plus icon"></i>Join
+                                </a>
+                                <a class="ui black mini button" @click="createOrganization()">
+                                    <i class="write icon"></i>Create
+                                </a>
+                            </div>
+                            <div class="content" v-if="professional.organizations.length == 0">
+                                <em>You haven't joined any organization yet.</em>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
                 <div class="ui divider"></div>
 
-                <button type="submit" class="ui orange submit right floated button">{{ submitText }}</button>
+                <input type="hidden" name="createOrganization" ref="createOrganization" />
+
+                <button type="submit" class="ui orange submit right floated button" ref="submitButton">{{ submitText }}</button>
+                <a href="/dashboard" class="ui default right floated button">Cancel</a>
             </form>
 </template>
 <script>
 export default {
-    props: ['_countries', '_organizations', '_personal', '_professional'],
+    props: ['_countries', '_organizations', '_personal', '_professional', '_types'],
     data () {
         return {
-            hasOrganization: '',
+            hasOrganization: !!this._professional.organizations,
             organizationState: '',
             personal: this._personal,
-            professional: this._professional
+            professional: this._professional,
+            joinOrg: '',
         };
     },
     computed: {
@@ -147,6 +189,29 @@ export default {
             }
 
             return 'Update';
+        },
+        organizations() {
+            return this._organizations.filter(org => org.typeSlug === this.professional.role);
+        },
+        myRole() {
+            return this._types.find(type => type.slug === this.professional.role).name;
+        }
+    },
+    methods: {
+        createOrganization: function() {
+            // Save changes and redirect to create organization page. Might be better if we prompt user to save changes
+            this.$refs.createOrganization.value = true;
+            this.$refs.submitButton.click();
+        },
+        joinOrganization: function() {
+            console.log('NYI: joinOrganization');
+        }
+    },
+    watch: {
+        'professional.role': function(val, oldValue) {
+            this.hasOrganization = null;
+            this.organizationState = null;
+            this.joinOrg = '';
         }
     }
 };

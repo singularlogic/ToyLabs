@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\OrganizationType;
 use Illuminate\Database\Eloquent\Model;
 
 class Organization extends Model
@@ -10,14 +11,20 @@ class Organization extends Model
         'name', 'legal_name', 'reg_country', 'reg_number', 'legal_form', 'vat_number', 'address', 'po_box', 'postal_code', 'city',
         'phone', 'fax', 'website_url', 'description', 'owner_id', 'organization_type_id',
     ];
+    protected $appends = ['typeSlug'];
 
     public function owner()
     {
-        return $this->hasOne(User::class, 'owner_id');
+        return $this->belongsTo(User::class, 'owner_id');
     }
 
-    public function type()
+    public function organizationType()
     {
-        return $this->hasOne(OrganizationType::class);
+        return $this->belongsTo(OrganizationType::class, 'organization_type_id');
+    }
+
+    public function getTypeSlugAttribute()
+    {
+        return $this->organizationType->slug;
     }
 }

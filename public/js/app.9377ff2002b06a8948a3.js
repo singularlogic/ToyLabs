@@ -340,15 +340,57 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    props: ['_countries', '_organizations', '_personal', '_professional'],
+    props: ['_countries', '_organizations', '_personal', '_professional', '_types'],
     data: function data() {
         return {
-            hasOrganization: '',
+            hasOrganization: !!this._professional.organizations,
             organizationState: '',
             personal: this._personal,
-            professional: this._professional
+            professional: this._professional,
+            joinOrg: ''
         };
     },
 
@@ -362,6 +404,37 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }
 
             return 'Update';
+        },
+        organizations: function organizations() {
+            var _this = this;
+
+            return this._organizations.filter(function (org) {
+                return org.typeSlug === _this.professional.role;
+            });
+        },
+        myRole: function myRole() {
+            var _this2 = this;
+
+            return this._types.find(function (type) {
+                return type.slug === _this2.professional.role;
+            }).name;
+        }
+    },
+    methods: {
+        createOrganization: function createOrganization() {
+            // Save changes and redirect to create organization page. Might be better if we prompt user to save changes
+            this.$refs.createOrganization.value = true;
+            this.$refs.submitButton.click();
+        },
+        joinOrganization: function joinOrganization() {
+            console.log('NYI: joinOrganization');
+        }
+    },
+    watch: {
+        'professional.role': function professionalRole(val, oldValue) {
+            this.hasOrganization = null;
+            this.organizationState = null;
+            this.joinOrg = '';
         }
     }
 });
@@ -1035,7 +1108,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         _vm.personal.linkedin = $event.target.value
       }
     }
-  })])]), _vm._v(" "), _c('h3', {
+  })])]), _vm._v(" "), (_vm.personal.isNew) ? _c('div', [_c('h3', {
     staticClass: "ui header"
   }, [_vm._v("Professional")]), _vm._v(" "), _c('div', {
     staticClass: "ui divider"
@@ -1253,7 +1326,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }), _vm._v(" "), _c('label', [_vm._v("No, I work alone")])])])]) : _vm._e(), _vm._v(" "), (_vm.hasOrganization == 'true' && _vm.isProfessional) ? _c('div', {
     staticClass: "inline fields"
-  }, [_c('label', [_vm._v("Is your organization already in ToyLabs?")]), _vm._v(" "), _c('div', {
+  }, [_c('label', [_vm._v("Has organization already joined ToyLabs?")]), _vm._v(" "), _c('div', {
     staticClass: "field"
   }, [_c('div', {
     staticClass: "ui radio checkbox"
@@ -1277,7 +1350,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         _vm.organizationState = "existing"
       }
     }
-  }), _vm._v(" "), _c('label', [_vm._v("Yes. I want to join")])])]), _vm._v(" "), _c('div', {
+  }), _vm._v(" "), _c('label', [_vm._v("Yes, and I want to join")])])]), _vm._v(" "), _c('div', {
     staticClass: "field"
   }, [_c('div', {
     staticClass: "ui radio checkbox"
@@ -1301,7 +1374,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         _vm.organizationState = "new"
       }
     }
-  }), _vm._v(" "), _c('label', [_vm._v("No. I want to create a new one")])])])]) : _vm._e(), _vm._v(" "), _c('div', {
+  }), _vm._v(" "), _c('label', [_vm._v("Not yet. I want to create it myself")])])])]) : _vm._e(), _vm._v(" "), _c('div', {
     directives: [{
       name: "show",
       rawName: "v-show",
@@ -1321,8 +1394,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     directives: [{
       name: "model",
       rawName: "v-model",
-      value: (_vm.professional.organization),
-      expression: "professional.organization"
+      value: (_vm.joinOrg),
+      expression: "joinOrg"
     }],
     staticClass: "ui search dropdown",
     on: {
@@ -1333,27 +1406,107 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
           var val = "_value" in o ? o._value : o.value;
           return val
         });
-        _vm.professional.organization = $event.target.multiple ? $$selectedVal : $$selectedVal[0]
+        _vm.joinOrg = $event.target.multiple ? $$selectedVal : $$selectedVal[0]
       }
     }
   }, [_c('option', {
+    ref: "selectOrg",
     attrs: {
       "value": ""
     }
-  }, [_vm._v("Select Organization")]), _vm._v(" "), _vm._l((_vm._organizations), function(o) {
+  }, [_vm._v("Select Organization")]), _vm._v(" "), _vm._l((_vm.organizations), function(o) {
     return _c('option', {
       domProps: {
         "value": o.id
       }
     }, [_vm._v(_vm._s(o.name))])
-  })], 2)])]), _vm._v(" "), _c('div', {
+  })], 2)])])]) : _vm._e(), _vm._v(" "), (!_vm.personal.isNew) ? _c('div', [_c('h3', {
+    staticClass: "ui header",
+    staticStyle: {
+      "margin-top": "20px"
+    }
+  }, [_vm._v("\n            Professional\n            "), _c('span', {
+    staticClass: "ui basic blue label"
+  }, [_vm._v(_vm._s(_vm.myRole))])]), _vm._v(" "), _c('div', {
     staticClass: "ui divider"
+  }), _vm._v(" "), _c('h4', {
+    staticClass: "ui header"
+  }, [_vm._v("Organization"), (_vm.professional.organizations.length > 1) ? _c('span', [_vm._v("s")]) : _vm._e(), _vm._v(":")]), _vm._v(" "), _c('div', {
+    staticClass: "ui middle aligned divided list",
+    staticStyle: {
+      "padding-left": "50px"
+    }
+  }, [_vm._l((_vm.professional.organizations), function(o) {
+    return _c('div', {
+      staticClass: "item"
+    }, [_c('div', {
+      staticClass: "right floated content"
+    }, [(o.owner_id != _vm.personal.id) ? _c('button', {
+      staticClass: "ui negative mini button"
+    }, [_vm._v("Leave")]) : _vm._e(), _vm._v(" "), (o.owner_id == _vm.personal.id) ? _c('div', {
+      staticClass: "ui basic green label"
+    }, [_vm._v("Owner")]) : _vm._e()]), _vm._v(" "), _c('img', {
+      staticClass: "ui avatar image",
+      attrs: {
+        "src": "/images/avatar/small/elliot.jpg"
+      }
+    }), _vm._v(" "), _c('div', {
+      staticClass: "content"
+    }, [(o.owner_id !== _vm.personal.id) ? _c('div', {
+      staticClass: "header"
+    }, [_vm._v(_vm._s(o.name))]) : _vm._e(), _vm._v(" "), (o.owner_id == _vm.personal.id) ? _c('a', {
+      staticClass: "header",
+      attrs: {
+        "href": ("/organization/" + (o.id) + "/edit")
+      }
+    }, [_vm._v(_vm._s(o.name))]) : _vm._e()])])
+  }), _vm._v(" "), (_vm.professional.organizations.length == 0) ? _c('div', {
+    staticClass: "item",
+    staticStyle: {
+      "margin-top": "20px"
+    }
+  }, [_c('div', {
+    staticClass: "right floated content"
+  }, [_c('a', {
+    staticClass: "ui blue mini button",
+    on: {
+      "click": function($event) {
+        _vm.joinOrganization()
+      }
+    }
+  }, [_c('i', {
+    staticClass: "plus icon"
+  }), _vm._v("Join\n                    ")]), _vm._v(" "), _c('a', {
+    staticClass: "ui black mini button",
+    on: {
+      "click": function($event) {
+        _vm.createOrganization()
+      }
+    }
+  }, [_c('i', {
+    staticClass: "write icon"
+  }), _vm._v("Create\n                    ")])]), _vm._v(" "), (_vm.professional.organizations.length == 0) ? _c('div', {
+    staticClass: "content"
+  }, [_c('em', [_vm._v("You haven't joined any organization yet.")])]) : _vm._e()]) : _vm._e()], 2)]) : _vm._e(), _vm._v(" "), _c('div', {
+    staticClass: "ui divider"
+  }), _vm._v(" "), _c('input', {
+    ref: "createOrganization",
+    attrs: {
+      "type": "hidden",
+      "name": "createOrganization"
+    }
   }), _vm._v(" "), _c('button', {
+    ref: "submitButton",
     staticClass: "ui orange submit right floated button",
     attrs: {
       "type": "submit"
     }
-  }, [_vm._v(_vm._s(_vm.submitText))])])
+  }, [_vm._v(_vm._s(_vm.submitText))]), _vm._v(" "), _c('a', {
+    staticClass: "ui default right floated button",
+    attrs: {
+      "href": "/dashboard"
+    }
+  }, [_vm._v("Cancel")])])
 },staticRenderFns: []}
 module.exports.render._withStripped = true
 if (false) {
