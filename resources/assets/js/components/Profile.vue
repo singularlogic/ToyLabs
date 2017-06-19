@@ -1,4 +1,5 @@
 <template>
+        <div>
             <!-- Profile -->
             <form class="ui form" method="POST">
                 <input type="hidden" name="_token" :value="$parent.crsf" />
@@ -136,7 +137,7 @@
                     <div class="ui middle aligned divided list" style="padding-left: 50px;">
                         <div class="item" v-for="o in professional.organizations">
                             <div class="right floated content">
-                                <button class="ui negative mini button" v-if="o.owner_id != personal.id">Leave</button>
+                                <button class="ui negative mini button" v-if="o.owner_id != personal.id" @click="leaveGroup(o)">Leave</button>
                                 <div class="ui basic green label" v-if="o.owner_id == personal.id">Owner</div>
                             </div>
                             <img class="ui avatar image" src="/images/avatar/small/elliot.jpg" />
@@ -164,10 +165,34 @@
                 <div class="ui divider"></div>
 
                 <input type="hidden" name="createOrganization" ref="createOrganization" />
+                <input type="hidden" name="newOrganizations" ref="newOrganizations" />
 
                 <button type="submit" class="ui orange submit right floated button" ref="submitButton">{{ submitText }}</button>
                 <a href="/dashboard" class="ui default right floated button">Cancel</a>
             </form>
+
+<!--             <organizations-modal
+                :organizations="organizations"
+                :my-organizations="professional.organizations"
+            ></organizations-modal>
+ -->
+            <div class="ui modal">
+                <div class="header">Join Organization</div>
+                <div class="content ui form">
+                    <div class="field">
+                        <input type="text" style="position: fixed; left: -10000000px;" disabled />
+                        <select class="ui search dropdown" v-model="joinOrg">
+                            <option value="" ref="selectOrg">Select Organization to join</option>
+                            <option v-for="o in organizations" :value="o.id">{{ o.name }}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="actions">
+                    <div class="ui cancel button">Cancel</div>
+                    <button class="ui orange ok button" :disabled="joinOrg === ''">Request to Join</button>
+                </div>
+            </div>
+        </div>
 </template>
 <script>
 export default {
@@ -204,7 +229,23 @@ export default {
             this.$refs.submitButton.click();
         },
         joinOrganization: function() {
-            console.log('NYI: joinOrganization');
+            $('.ui.modal').modal({
+                transition: 'scale',
+                closable: false,
+                onApprove: () => {
+                    const org = this._organizations.find(org => org.id = this.joinOrg);
+                    this.professional.organizations.push(org);
+                    let orgs = [];
+                    for (let o of this.professional.organizations) {
+                        orgs.push(o.id);
+                    }
+                    this.$refs.newOrganizations.value = JSON.stringify(orgs);
+                }
+            }).modal('show');
+        },
+        leaveGroup(org) {
+            const idx = this.professional.organizations.indexOf(org);
+            this.professional.organizations.splice(idx, 1);
         }
     },
     watch: {

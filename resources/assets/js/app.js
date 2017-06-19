@@ -25,6 +25,7 @@ $(document).ready(function() {
         $(this).closest('.message').transition('fade');
     });
     $('.ui.rating').rating();
+    // $('.ui.modal').modal();
 });
 
 window.Vue = Vue;

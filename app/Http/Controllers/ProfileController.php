@@ -109,6 +109,14 @@ class ProfileController extends Controller
         $user->name = $input['name'];
         $user->save();
 
+        if ($input['newOrganizations'] !== null) {
+            $newOrgs = json_decode($input['newOrganizations']);
+            $orgs    = Organization::whereIn('id', $newOrgs)->get();
+            foreach ($orgs as $o) {
+                $user->organizations()->save($o);
+            }
+        }
+
         if ($input['createOrganization'] == true) {
             return redirect()->route('organization.edit.mine');
         }

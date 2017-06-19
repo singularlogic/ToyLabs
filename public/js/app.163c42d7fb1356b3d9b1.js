@@ -381,6 +381,31 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: ['_countries', '_organizations', '_personal', '_professional', '_types'],
@@ -427,7 +452,49 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.$refs.submitButton.click();
         },
         joinOrganization: function joinOrganization() {
-            console.log('NYI: joinOrganization');
+            var _this3 = this;
+
+            $('.ui.modal').modal({
+                transition: 'scale',
+                closable: false,
+                onApprove: function onApprove() {
+                    var org = _this3._organizations.find(function (org) {
+                        return org.id = _this3.joinOrg;
+                    });
+                    _this3.professional.organizations.push(org);
+                    var orgs = [];
+                    var _iteratorNormalCompletion = true;
+                    var _didIteratorError = false;
+                    var _iteratorError = undefined;
+
+                    try {
+                        for (var _iterator = _this3.professional.organizations[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+                            var o = _step.value;
+
+                            orgs.push(o.id);
+                        }
+                    } catch (err) {
+                        _didIteratorError = true;
+                        _iteratorError = err;
+                    } finally {
+                        try {
+                            if (!_iteratorNormalCompletion && _iterator.return) {
+                                _iterator.return();
+                            }
+                        } finally {
+                            if (_didIteratorError) {
+                                throw _iteratorError;
+                            }
+                        }
+                    }
+
+                    _this3.$refs.newOrganizations.value = JSON.stringify(orgs);
+                }
+            }).modal('show');
+        },
+        leaveGroup: function leaveGroup(org) {
+            var idx = this.professional.organizations.indexOf(org);
+            this.professional.organizations.splice(idx, 1);
         }
     },
     watch: {
@@ -914,7 +981,7 @@ if (false) {
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('form', {
+  return _c('div', [_c('form', {
     staticClass: "ui form",
     attrs: {
       "method": "POST"
@@ -1425,7 +1492,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticStyle: {
       "margin-top": "20px"
     }
-  }, [_vm._v("\n            Professional\n            "), _c('span', {
+  }, [_vm._v("\n                        Professional\n                        "), _c('span', {
     staticClass: "ui basic blue label"
   }, [_vm._v(_vm._s(_vm.myRole))])]), _vm._v(" "), _c('div', {
     staticClass: "ui divider"
@@ -1442,7 +1509,12 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }, [_c('div', {
       staticClass: "right floated content"
     }, [(o.owner_id != _vm.personal.id) ? _c('button', {
-      staticClass: "ui negative mini button"
+      staticClass: "ui negative mini button",
+      on: {
+        "click": function($event) {
+          _vm.leaveGroup(o)
+        }
+      }
     }, [_vm._v("Leave")]) : _vm._e(), _vm._v(" "), (o.owner_id == _vm.personal.id) ? _c('div', {
       staticClass: "ui basic green label"
     }, [_vm._v("Owner")]) : _vm._e()]), _vm._v(" "), _c('img', {
@@ -1476,7 +1548,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [_c('i', {
     staticClass: "plus icon"
-  }), _vm._v("Join\n                    ")]), _vm._v(" "), _c('a', {
+  }), _vm._v("Join\n                                ")]), _vm._v(" "), _c('a', {
     staticClass: "ui black mini button",
     on: {
       "click": function($event) {
@@ -1485,7 +1557,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [_c('i', {
     staticClass: "write icon"
-  }), _vm._v("Create\n                    ")])]), _vm._v(" "), (_vm.professional.organizations.length == 0) ? _c('div', {
+  }), _vm._v("Create\n                                ")])]), _vm._v(" "), (_vm.professional.organizations.length == 0) ? _c('div', {
     staticClass: "content"
   }, [_c('em', [_vm._v("You haven't joined any organization yet.")])]) : _vm._e()]) : _vm._e()], 2)]) : _vm._e(), _vm._v(" "), _c('div', {
     staticClass: "ui divider"
@@ -1494,6 +1566,12 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "type": "hidden",
       "name": "createOrganization"
+    }
+  }), _vm._v(" "), _c('input', {
+    ref: "newOrganizations",
+    attrs: {
+      "type": "hidden",
+      "name": "newOrganizations"
     }
   }), _vm._v(" "), _c('button', {
     ref: "submitButton",
@@ -1506,7 +1584,63 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "href": "/dashboard"
     }
-  }, [_vm._v("Cancel")])])
+  }, [_vm._v("Cancel")])]), _vm._v(" "), _c('div', {
+    staticClass: "ui modal"
+  }, [_c('div', {
+    staticClass: "header"
+  }, [_vm._v("Join Organization")]), _vm._v(" "), _c('div', {
+    staticClass: "content ui form"
+  }, [_c('div', {
+    staticClass: "field"
+  }, [_c('input', {
+    staticStyle: {
+      "position": "fixed",
+      "left": "-10000000px"
+    },
+    attrs: {
+      "type": "text",
+      "disabled": ""
+    }
+  }), _vm._v(" "), _c('select', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.joinOrg),
+      expression: "joinOrg"
+    }],
+    staticClass: "ui search dropdown",
+    on: {
+      "change": function($event) {
+        var $$selectedVal = Array.prototype.filter.call($event.target.options, function(o) {
+          return o.selected
+        }).map(function(o) {
+          var val = "_value" in o ? o._value : o.value;
+          return val
+        });
+        _vm.joinOrg = $event.target.multiple ? $$selectedVal : $$selectedVal[0]
+      }
+    }
+  }, [_c('option', {
+    ref: "selectOrg",
+    attrs: {
+      "value": ""
+    }
+  }, [_vm._v("Select Organization to join")]), _vm._v(" "), _vm._l((_vm.organizations), function(o) {
+    return _c('option', {
+      domProps: {
+        "value": o.id
+      }
+    }, [_vm._v(_vm._s(o.name))])
+  })], 2)])]), _vm._v(" "), _c('div', {
+    staticClass: "actions"
+  }, [_c('div', {
+    staticClass: "ui cancel button"
+  }, [_vm._v("Cancel")]), _vm._v(" "), _c('button', {
+    staticClass: "ui orange ok button",
+    attrs: {
+      "disabled": _vm.joinOrg === ''
+    }
+  }, [_vm._v("Request to Join")])])])])
 },staticRenderFns: []}
 module.exports.render._withStripped = true
 if (false) {
@@ -11223,6 +11357,7 @@ $(document).ready(function () {
         $(this).closest('.message').transition('fade');
     });
     $('.ui.rating').rating();
+    // $('.ui.modal').modal();
 });
 
 window.Vue = __WEBPACK_IMPORTED_MODULE_0_vue___default.a;
