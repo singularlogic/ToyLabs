@@ -1,3 +1,4 @@
+import './bootstrap';
 import Vue from 'vue';
 
 // Import VueJS Components
@@ -27,8 +28,6 @@ $(document).ready(function() {
     $('.ui.rating').rating();
     // $('.ui.modal').modal();
 });
-
-window.Vue = Vue;
 
 const app = new Vue({
     el: '#app',

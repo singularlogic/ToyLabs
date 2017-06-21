@@ -4,7 +4,7 @@
 
 @section('content')
         <!-- Dashboard -->
-        <div class="ui main container" id="app">
+        <div class="ui main container">
             <div class="ui clearing">
                 <h1 class="ui left floated header">My Projects</h1>
                 <div class="ui right floated search">

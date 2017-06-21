@@ -4,7 +4,7 @@
 
 @section('content')
         <!-- About -->
-        <div class="ui main container" id="app">
+        <div class="ui main container">
 
         </div>
 @endsection

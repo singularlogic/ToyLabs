@@ -4,7 +4,7 @@
 
 @section('content')
         <!-- Home -->
-        <div class="pusher" id="app">
+        <div class="pusher">
             <div class="ui inverted vertical masthead center aligned segment">
                 <div class="ui container">
                     @include('partials.menu')
