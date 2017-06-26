@@ -44,3 +44,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/organization/{id}/edit', ['as' => 'organization.edit', 'uses' => 'ProfileController@showOrganizationProfile']);
     Route::post('/organization/edit', ['as' => 'organization.edit.post', 'uses' => 'ProfileController@saveOrganizationProfile']);
 });
+
+// Notifications
+Route::get('notifications', 'NotificationController@index');
+Route::patch('notifications/{id}/read', 'NotificationController@markAsRead');
+Route::post('notifications/mark-all-read', 'NotificationController@markAllRead');
+Route::post('notifications/{id}/dismiss', 'NotificationController@dismiss');

@@ -18,6 +18,7 @@ if (key) {
         broadcaster: 'pusher',
         key: key,
         cluster: cluster,
+        encrypted: true,
     });
 
     axios.interceptors.request.use(

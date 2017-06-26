@@ -4,6 +4,7 @@ import Vue from 'vue';
 // Import VueJS Components
 import Profile from './components/Profile.vue';
 import Organization from './components/Organization.vue';
+import NotificationArea from './components/NotificationArea.vue';
 
 /**
  * Navbar transition for the homepage
@@ -26,7 +27,12 @@ $(document).ready(function() {
         $(this).closest('.message').transition('fade');
     });
     $('.ui.rating').rating();
-    // $('.ui.modal').modal();
+    $('#notificationsIcon').popup({
+        popup: $('#notificationsPopup'),
+        on: 'click',
+        position: 'bottom center',
+        variation: 'very wide',
+    });
 });
 
 const app = new Vue({
@@ -38,6 +44,7 @@ const app = new Vue({
     },
     components: {
         Profile,
-        Organization
+        Organization,
+        NotificationArea,
     }
 });

@@ -11,6 +11,7 @@
                 <a class="item{{ Request::is('about') ? ' active' : '' }}" href="{{ route('about') }}">About</a>
                 <div class="right menu">
 @if(Auth::check())
+                    <notification-area></notification-area>
                     <div class="ui dropdown item">
                         <img class="ui avatar image" src="{{ Auth::user()->image }}" />
                         {{{ isset(Auth::user()->name) ? Auth::user()->name : Auth::user()->email }}}
