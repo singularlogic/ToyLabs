@@ -19,6 +19,17 @@ class NotificationController extends Controller
     }
 
     /**
+     * Get User's feed page
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @return view to the feeds page
+     */
+    public function feed(Request $request, $tab = 'notifications')
+    {
+        return view('feed', []);
+    }
+
+    /**
      * Get user's notifications.
      *
      * @param  \Illuminate\Http\Request $request

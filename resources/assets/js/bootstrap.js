@@ -1,4 +1,5 @@
 import Vue from 'vue';
+import VueRouter from 'vue-router';
 import axios from 'axios';
 import Echo from 'laravel-echo';
 import VueTimeago from 'vue-timeago';
@@ -8,8 +9,10 @@ Vue.use(VueTimeago, {
     locale: 'en-US',
     locales: { 'en-US': require('json-loader!vue-timeago/locales/en-US.json') }
 });
+Vue.use(VueRouter);
 
 window.Vue = Vue;
+window.VueRouter = VueRouter;
 
 // Configure Laravel Echo
 const { key, cluster } = window.Laravel.pusher;

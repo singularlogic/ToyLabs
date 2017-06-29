@@ -13,6 +13,7 @@
 
 Route::get('/', 'HomeController@index')->name('home');
 Route::get('/about', function () {return view('about');})->name('about');
+Route::get('/feed/{tab?}', ['as' => 'feed', 'uses' => 'NotificationController@feed']);
 
 // Login/Register & Social Logins
 Route::get('/login', ['as' => 'login', 'uses' => 'Auth\\LoginController@showLoginForm']);
@@ -46,7 +47,7 @@ Route::group(['middleware' => 'auth'], function () {
 });
 
 // Notifications
-Route::get('notifications', 'NotificationController@index');
-Route::patch('notifications/{id}/read', 'NotificationController@markAsRead');
-Route::post('notifications/mark-all-read', 'NotificationController@markAllRead');
-Route::post('notifications/{id}/dismiss', 'NotificationController@dismiss');
+Route::get('/notifications', 'NotificationController@index');
+Route::patch('/notifications/{id}/read', 'NotificationController@markAsRead');
+Route::post('/notifications/mark-all-read', 'NotificationController@markAllRead');
+Route::post('/notifications/{id}/dismiss', 'NotificationController@dismiss');

@@ -44,6 +44,7 @@ class UserWantsToJoinOrganization extends Notification
     public function toArray($notifiable)
     {
         return [
+            'id'       => $this->id,
             'type'     => 'organization.userwantstojoin',
             'sender'   => [
                 'id'     => $this->user->id,
@@ -55,24 +56,26 @@ class UserWantsToJoinOrganization extends Notification
                 'name' => $this->organization->name,
             ],
             'message'  => $this->user->name . ' wants to join ' . $this->organization->name . '.',
+            'created'  => Carbon::now()->toIso8601String(),
         ];
     }
 
     public function toBroadcast($notifiable)
     {
         return new BroadcastMessage([
-            'type'       => 'organization.userwantstojoin',
-            'sender'     => [
+            'id'       => $this->id,
+            'type'     => 'organization.userwantstojoin',
+            'sender'   => [
                 'id'     => $this->user->id,
                 'name'   => $this->user->name,
                 'avatar' => $this->user->avatar,
             ],
-            'receiver'   => [
+            'receiver' => [
                 'id'   => $this->organization->id,
                 'name' => $this->organization->name,
             ],
-            'message'    => $this->user->name . ' wants to join ' . $this->organization->name . '.',
-            'created_at' => Carbon::now()->toIso8601String(),
+            'message'  => $this->user->name . ' wants to join ' . $this->organization->name . '.',
+            'created'  => Carbon::now()->toIso8601String(),
         ]);
     }
 }
