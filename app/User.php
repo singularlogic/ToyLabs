@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Cmgmyr\Messenger\Traits\Messagable;
 use Creativeorange\Gravatar\Facades\Gravatar;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -9,8 +10,7 @@ use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
-    use HasRoles;
-    use Notifiable;
+    use HasRoles, Notifiable, Messagable;
 
     /**
      * The attributes that are mass assignable.
@@ -19,6 +19,15 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name', 'email', 'password',
+    ];
+
+    /**
+     * The attributes that are appended on retrieval
+     *
+     * @var array
+     */
+    protected $appends = [
+        'image',
     ];
 
     /**

@@ -1,8 +1,12 @@
+import './bootstrap';
 import Vue from 'vue';
+import store from './store';
 
 // Import VueJS Components
 import Profile from './components/Profile.vue';
 import Organization from './components/Organization.vue';
+import NotificationArea from './components/NotificationArea.vue';
+import NotificationsPage from './components/NotificationsPage.vue';
 
 /**
  * Navbar transition for the homepage
@@ -25,12 +29,23 @@ $(document).ready(function() {
         $(this).closest('.message').transition('fade');
     });
     $('.ui.rating').rating();
-    // $('.ui.modal').modal();
+    $('#notificationsIcon').popup({
+        popup: $('#notificationsPopup'),
+        on: 'click',
+        position: 'bottom center',
+        variation: 'very wide',
+    });
 });
 
-window.Vue = Vue;
+const router = new VueRouter({
+    mode: 'history',
+    linkActiveClass: 'active',
+    routes: [],
+});
 
 const app = new Vue({
+    store,
+    router,
     el: '#app',
     data() {
         return {
@@ -39,6 +54,8 @@ const app = new Vue({
     },
     components: {
         Profile,
-        Organization
+        Organization,
+        NotificationArea,
+        NotificationsPage,
     }
 });

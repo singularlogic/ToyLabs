@@ -13,6 +13,7 @@
 
 Route::get('/', 'HomeController@index')->name('home');
 Route::get('/about', function () {return view('about');})->name('about');
+Route::get('/feed/{tab?}', ['as' => 'feed', 'uses' => 'NotificationController@feed']);
 
 // Login/Register & Social Logins
 Route::get('/login', ['as' => 'login', 'uses' => 'Auth\\LoginController@showLoginForm']);
@@ -43,4 +44,22 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/organization/edit', ['as' => 'organization.edit.mine', 'uses' => 'ProfileController@showMyOrganizationProfile']);
     Route::get('/organization/{id}/edit', ['as' => 'organization.edit', 'uses' => 'ProfileController@showOrganizationProfile']);
     Route::post('/organization/edit', ['as' => 'organization.edit.post', 'uses' => 'ProfileController@saveOrganizationProfile']);
+});
+
+// Notifications
+Route::group(['prefix' => 'notifications'], function () {
+    Route::get('/', ['as' => 'notifications', 'uses' => 'NotificationController@index']);
+    Route::patch('/{id}/read', ['as' => 'notifications.markasread', 'uses' => 'NotificationController@markAsRead']);
+    Route::post('/mark-all-read', ['as' => 'notifications.markallread', 'uses' => 'NotificationController@markAllRead']);
+});
+
+// Messages
+Route::get('/feed/message/{id}', ['as' => 'message.view', 'uses' => 'NotificationController@feed']);
+Route::group(['prefix' => 'messages'], function () {
+    Route::get('/', ['as' => 'messages', 'uses' => 'MessagesController@index']);
+    Route::get('users', ['as' => 'messages.users', 'uses' => 'MessagesController@users']);
+    Route::get('unread', ['as' => 'messages.unread', 'uses' => 'MessagesController@unread']);
+    Route::post('/', ['as' => 'messages.store', 'uses' => 'MessagesController@store']);
+    Route::get('{id}', ['as' => 'messages.show', 'uses' => 'MessagesController@show']);
+    Route::put('{id}', ['as' => 'messages.update', 'uses' => 'MessagesController@update']);
 });

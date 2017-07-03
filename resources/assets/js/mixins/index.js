@@ -1,0 +1,1 @@
+export { default as NotificationsMixin } from './notifications';

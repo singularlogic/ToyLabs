@@ -1,10 +1,10 @@
 @extends('layouts.default', ['class' => ''])
 
-@section('title', 'About')
+@section('title', 'Feed')
 
 @section('content')
-        <!-- About -->
+        <!-- Feed -->
         <div class="ui main container">
-
+            <notifications-page></notifications-page>
         </div>
 @endsection

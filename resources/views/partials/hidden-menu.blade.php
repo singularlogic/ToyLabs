@@ -6,11 +6,12 @@
                 </a>
                 {{-- <a class="item{{ Request::is('/') ? ' active' : '' }}" href="{{ route('home') }}">Home</a> --}}
 @if(Auth::check())
-                <a class="item{{ Request::is('dashboard') ? ' active' : '' }}" href="{{ route('dashboard') }}">My Projects</a>
+                <a class="item{{ Request::is('dashboard') ? ' active' : '' }}" href="{{ route('dashboard') }}">Projects</a>
 @endif
                 <a class="item{{ Request::is('about') ? ' active' : '' }}" href="{{ route('about') }}">About</a>
                 <div class="right menu">
 @if(Auth::check())
+                    <notification-area></notification-area>
                     <div class="ui dropdown item">
                         <img class="ui avatar image" src="{{ Auth::user()->image }}" />
                         {{{ isset(Auth::user()->name) ? Auth::user()->name : Auth::user()->email }}}
