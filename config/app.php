@@ -181,6 +181,7 @@ return [
         Cmgmyr\Messenger\MessengerServiceProvider::class,
         Creativeorange\Gravatar\GravatarServiceProvider::class,
         Laravel\Socialite\SocialiteServiceProvider::class,
+        Spatie\MediaLibrary\MediaLibraryServiceProvider::class,
         Spatie\Permission\PermissionServiceProvider::class,
 
     ],
