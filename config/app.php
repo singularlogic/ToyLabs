@@ -178,6 +178,7 @@ return [
         App\Providers\RouteServiceProvider::class,
 
         // 3rd Party Providers
+        Cmgmyr\Messenger\MessengerServiceProvider::class,
         Creativeorange\Gravatar\GravatarServiceProvider::class,
         Laravel\Socialite\SocialiteServiceProvider::class,
         Spatie\Permission\PermissionServiceProvider::class,

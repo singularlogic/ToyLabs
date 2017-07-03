@@ -7,6 +7,8 @@ import * as mutations from './mutations';
 const state = {
     messages: [],
     notifications: [],
+    unreadMessagesCounter: 0,
+    activeThread: null,
 };
 
 const store = new Vuex.Store({

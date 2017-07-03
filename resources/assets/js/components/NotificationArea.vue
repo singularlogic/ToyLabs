@@ -2,7 +2,7 @@
     <div class="right menu">
         <a class="ui item" href="/feed/messages" style="padding-right: 12px;" ref="messages">
             <i class="large mail outline icon" style="margin-right: 0.1em;"></i>
-            <div class="floating circular ui red label" style="position: relative; left: 10%;" v-if="totalMessages > 0">{{ totalMessages }}</div>
+            <div class="floating circular ui red label" style="position: relative; left: 10%;" v-if="unreadMessages > 0">{{ unreadMessages }}</div>
         </a>
         <a class="ui item" style="padding-right: 12px;" ref="notifications" id="notificationsIcon">
             <i class="large bell outline icon" style="margin-right: 0.1em;"></i>
@@ -49,7 +49,7 @@ export default {
     computed: {
         ...mapGetters([
             'totalNotifications',
-            'totalMessages',
+            'unreadMessages',
         ]),
         ...mapGetters({
             notifications: 'notificationsArray',

@@ -4,6 +4,10 @@ export default {
             if (this.$store.state.notifications.length === 0) {
                 this.$store.dispatch('fetchNotifications');
             }
+
+            if (this.$store.state.messages.length === 0) {
+                this.$store.dispatch('fetchMessages');
+            }
         },
         listen() {
             window.Echo.private(`App.User.${window.Laravel.user.id}`)
@@ -15,6 +19,9 @@ export default {
                 })
                 .listen('NotificationReadAll', () => {
                     this.$store.commit('clearNotifications');
+                })
+                .listen('NewMessage', () => {
+                    this.$store.commit('messageArrived');
                 });
         },
         markAsRead(notification) {

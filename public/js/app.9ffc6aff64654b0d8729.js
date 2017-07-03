@@ -1618,6 +1618,102 @@ module.exports = {
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js?cacheDirectory!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/MessageThread.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+exports.default = {
+    props: ['thread'],
+    data: function data() {
+        return {};
+    },
+
+    computed: {
+        hasReplies: function hasReplies() {
+            return this.thread.replies > 0;
+        },
+        hasManyReplies: function hasManyReplies() {
+            return this.thread.replies > 4;
+        }
+    },
+    filters: {
+        formatReplies: function formatReplies(value) {
+            if (value == 1) {
+                return value + ' Message';
+            } else {
+                return value + ' Messages';
+            }
+        }
+    }
+};
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?cacheDirectory!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/MessageView.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+exports.default = {
+    props: ['message'],
+    computed: {
+        isMine: function isMine() {
+            return this.message.user.id === window.Laravel.user.id;
+        }
+    },
+    methods: {
+        formatMessage: function formatMessage(value) {
+            var breakTag = '<br />';
+            return (value + '').replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, '$1' + breakTag + '$2');
+        }
+    }
+};
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js?cacheDirectory!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/MessagesTab.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -1636,13 +1732,158 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+var _NewMessageModal = __webpack_require__("./resources/assets/js/components/NewMessageModal.vue");
+
+var _NewMessageModal2 = _interopRequireDefault(_NewMessageModal);
+
+var _MessageThread = __webpack_require__("./resources/assets/js/components/MessageThread.vue");
+
+var _MessageThread2 = _interopRequireDefault(_MessageThread);
 
 var _vuex = __webpack_require__("./node_modules/vuex/dist/vuex.esm.js");
 
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
 exports.default = {
+    components: { MessageThread: _MessageThread2.default, NewMessageModal: _NewMessageModal2.default },
+    data: function data() {
+        return {
+            users: [],
+            message: {}
+        };
+    },
+    created: function created() {
+        this.clearMessageModal();
+    },
+
     computed: _extends({}, (0, _vuex.mapGetters)({
         messages: 'messagesArray'
-    }))
+    })),
+    methods: {
+        loadUsers: function loadUsers() {
+            var _this = this;
+
+            axios.get('/messages/users').then(function (response) {
+                var _users;
+
+                _this.users.splice(0);
+                (_users = _this.users).push.apply(_users, _toConsumableArray(response.data.users));
+            });
+        },
+        clearMessageModal: function clearMessageModal() {
+            this.message = {
+                subject: '',
+                recipients: [],
+                body: ''
+            };
+        },
+        sendMessage: function sendMessage() {
+            var _this2 = this;
+
+            axios.post('/messages', this.message).then(function () {
+                _this2.clearMessageModal();
+            });
+        },
+        newMessage: function newMessage() {
+            var _this3 = this;
+
+            this.loadUsers();
+            $('.ui.modal').modal({
+                closable: false,
+                onDeny: function onDeny() {
+                    _this3.clearMessageModal();
+                },
+                onApprove: function onApprove() {
+                    _this3.sendMessage();
+                }
+            }).modal('show');
+        }
+    }
+};
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?cacheDirectory!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/NewMessageModal.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+exports.default = {
+    props: ['message', 'users'],
+    data: function data() {
+        return {
+            errors: {}
+        };
+    },
+
+    computed: {
+        hasErrors: function hasErrors() {
+            return this.message.subject === '' || this.message.body === '' || this.message.recipients.length === 0;
+        }
+    },
+    methods: {
+        submit: function submit() {
+            this.$emit('update:message', this.message);
+        }
+    }
 };
 
 /***/ }),
@@ -1766,7 +2007,7 @@ exports.default = {
         }
     },
 
-    computed: _extends({}, (0, _vuex.mapGetters)(['totalNotifications', 'totalMessages']), (0, _vuex.mapGetters)({
+    computed: _extends({}, (0, _vuex.mapGetters)(['totalNotifications', 'unreadMessages']), (0, _vuex.mapGetters)({
         notifications: 'notificationsArray',
         popupNotifications: 'latestNotifications'
     }))
@@ -1801,6 +2042,9 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 //
 //
 //
+//
+//
+//
 
 var _NotificationsTab = __webpack_require__("./resources/assets/js/components/NotificationsTab.vue");
 
@@ -1814,6 +2058,10 @@ var _RequestsTab = __webpack_require__("./resources/assets/js/components/Request
 
 var _RequestsTab2 = _interopRequireDefault(_RequestsTab);
 
+var _ThreadView = __webpack_require__("./resources/assets/js/components/ThreadView.vue");
+
+var _ThreadView2 = _interopRequireDefault(_ThreadView);
+
 var _vuex = __webpack_require__("./node_modules/vuex/dist/vuex.esm.js");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -1821,13 +2069,13 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 exports.default = {
     created: function created() {
         // Initialize router
-        var routes = [{ path: '/feed', beforeEnter: function beforeEnter(to, from, next) {
+        var routes = [{ name: 'feed', path: '/feed', beforeEnter: function beforeEnter(to, from, next) {
                 return next('/feed/notifications');
-            } }, { path: '/feed/notifications', component: _NotificationsTab2.default }, { path: '/feed/messages', component: _MessagesTab2.default }];
+            } }, { name: 'notifications', path: '/feed/notifications', component: _NotificationsTab2.default }, { name: 'messages', path: '/feed/messages', component: _MessagesTab2.default }, { name: 'messageview', path: '/feed/message/:id', component: _ThreadView2.default }];
         this.$router.addRoutes(routes);
     },
 
-    computed: _extends({}, (0, _vuex.mapGetters)(['totalNotifications', 'totalMessages']), (0, _vuex.mapGetters)({
+    computed: _extends({}, (0, _vuex.mapGetters)(['totalNotifications', 'unreadMessages', 'activeThread']), (0, _vuex.mapGetters)({
         notifications: 'notificationsArray',
         popupNotifications: 'latestNotifications'
     }))
@@ -2357,11 +2605,115 @@ exports.default = {
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js?cacheDirectory!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/ThreadView.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _MessageView = __webpack_require__("./resources/assets/js/components/MessageView.vue");
+
+var _MessageView2 = _interopRequireDefault(_MessageView);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = {
+    components: { MessageView: _MessageView2.default },
+    data: function data() {
+        return {
+            thread: {
+                subject: ''
+            },
+            messages: [],
+            reply: '',
+            users: [],
+            error: null
+        };
+    },
+    created: function created() {
+        var _this = this;
+
+        // TODO: Get messages
+        var id = this.$route.params.id;
+        axios.get('/messages/' + id).then(function (response) {
+            if (response.status === 200) {
+                if (response.data.error) {
+                    _this.error = response.data.error;
+                } else {
+                    _this.thread = response.data.thread;
+                    _this.messages = response.data.messages;
+                    _this.users = response.data.users;
+                    _this.$store.commit('setActiveThread', { thread: _this.thread });
+                }
+            } else {
+                _this.error = 'An error occured';
+            }
+        });
+    },
+
+    methods: {
+        sendReply: function sendReply() {
+            var _this2 = this;
+
+            var id = this.$route.params.id;
+            axios.put('/messages/' + id, {
+                message: this.reply
+            }).then(function (response) {
+                if (response.status === 200) {
+                    _this2.messages.push(response.data.message);
+                    _this2.reply = '';
+                }
+            });
+        }
+    },
+    destroyed: function destroyed() {
+        this.$store.commit('setActiveThread', { thread: null });
+    }
+}; //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/***/ }),
+
 /***/ "./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"id\":\"data-v-1278f4a4\",\"scoped\":false,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/components/NotificationArea.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/css-base.js")();
 exports.push([module.i, "\n.item .content {\n    padding: 8px 0;\n}\n", ""]);
+
+/***/ }),
+
+/***/ "./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"id\":\"data-v-22002d20\",\"scoped\":false,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/components/MessageView.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/css-base.js")();
+exports.push([module.i, "\n.comment.segment {\n    padding: 8px!important;\n    border: 1px solid #F3F4F5!important;\n}\n.comment.segment.secondary {\n    border: 1px solid #dcddde!important;\n    background-color: #F3F4F5!important;\n}\n", ""]);
 
 /***/ }),
 
@@ -7677,13 +8029,13 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticStyle: {
       "margin-right": "0.1em"
     }
-  }), _vm._v(" "), (_vm.totalMessages > 0) ? _c('div', {
+  }), _vm._v(" "), (_vm.unreadMessages > 0) ? _c('div', {
     staticClass: "floating circular ui red label",
     staticStyle: {
       "position": "relative",
       "left": "10%"
     }
-  }, [_vm._v(_vm._s(_vm.totalMessages))]) : _vm._e()]), _vm._v(" "), _c('a', {
+  }, [_vm._v(_vm._s(_vm.unreadMessages))]) : _vm._e()]), _vm._v(" "), _c('a', {
     ref: "notifications",
     staticClass: "ui item",
     staticStyle: {
@@ -8168,6 +8520,51 @@ if (false) {
 
 /***/ }),
 
+/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-22002d20\"}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/MessageView.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    staticClass: "ui comment segment",
+    class: {
+      secondary: _vm.isMine
+    }
+  }, [_c('div', {
+    staticClass: "avatar"
+  }, [_c('img', {
+    attrs: {
+      "src": _vm.message.user.image
+    }
+  })]), _vm._v(" "), _c('div', {
+    staticClass: "content"
+  }, [_c('span', {
+    staticClass: "author"
+  }, [_vm._v(_vm._s(_vm.message.user.name))]), _vm._v(" "), _c('div', {
+    staticClass: "metadata"
+  }, [_c('span', {
+    staticClass: "date"
+  }, [_c('timeago', {
+    attrs: {
+      "since": _vm.message.created_at,
+      "auto-update": 30
+    }
+  })], 1)]), _vm._v(" "), _c('div', {
+    staticClass: "text",
+    domProps: {
+      "innerHTML": _vm._s(_vm.formatMessage(_vm.message.body))
+    }
+  })])])
+},staticRenderFns: []}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-22002d20", module.exports)
+  }
+}
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-22b37b99\"}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/NotificationsTab.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -8270,13 +8667,157 @@ if (false) {
 
 /***/ }),
 
+/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-2ca937ca\"}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/NewMessageModal.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    staticClass: "ui modal"
+  }, [_c('div', {
+    staticClass: "header"
+  }, [_vm._v("New Message")]), _vm._v(" "), _c('div', {
+    staticClass: "content"
+  }, [_c('div', {
+    staticClass: "description"
+  }, [_c('form', {
+    staticClass: "ui form"
+  }, [_c('div', {
+    staticClass: "field"
+  }, [_c('label', [_vm._v("Subject")]), _vm._v(" "), _c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.message.subject),
+      expression: "message.subject"
+    }],
+    attrs: {
+      "type": "text",
+      "name": "subject",
+      "placeholder": "Subject",
+      "required": ""
+    },
+    domProps: {
+      "value": (_vm.message.subject)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.message.subject = $event.target.value
+      }
+    }
+  })]), _vm._v(" "), _c('div', {
+    staticClass: "field"
+  }, [_c('label', [_vm._v("To")]), _vm._v(" "), _c('select', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.message.recipients),
+      expression: "message.recipients"
+    }],
+    staticClass: "ui dropdown",
+    attrs: {
+      "multiple": ""
+    },
+    on: {
+      "change": function($event) {
+        var $$selectedVal = Array.prototype.filter.call($event.target.options, function(o) {
+          return o.selected
+        }).map(function(o) {
+          var val = "_value" in o ? o._value : o.value;
+          return val
+        });
+        _vm.message.recipients = $event.target.multiple ? $$selectedVal : $$selectedVal[0]
+      }
+    }
+  }, _vm._l((_vm.users), function(u) {
+    return _c('option', {
+      domProps: {
+        "value": u.id
+      }
+    }, [_vm._v(_vm._s(u.name))])
+  }))]), _vm._v(" "), _c('div', {
+    staticClass: "field"
+  }, [_c('label', [_vm._v("Message")]), _vm._v(" "), _c('textarea', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.message.body),
+      expression: "message.body"
+    }],
+    attrs: {
+      "required": ""
+    },
+    domProps: {
+      "value": (_vm.message.body)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.message.body = $event.target.value
+      }
+    }
+  })])])])]), _vm._v(" "), _c('div', {
+    staticClass: "actions"
+  }, [_c('button', {
+    staticClass: "ui cancel button"
+  }, [_vm._v("Cancel")]), _vm._v(" "), _c('button', {
+    staticClass: "ui orange approve left labeled icon button",
+    attrs: {
+      "disabled": _vm.hasErrors
+    },
+    on: {
+      "click": _vm.submit
+    }
+  }, [_c('i', {
+    staticClass: "send icon"
+  }), _vm._v(" Send\n        ")])])])
+},staticRenderFns: []}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-2ca937ca", module.exports)
+  }
+}
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-54a3d24d\"}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/MessagesTab.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', [(_vm.messages.length === 0) ? _c('div', {
+  return _c('div', [_c('button', {
+    ref: "newMessageButton",
+    staticClass: "ui primary right floated labeled icon button",
+    on: {
+      "click": _vm.newMessage
+    }
+  }, [_c('i', {
+    staticClass: "icon edit"
+  }), _vm._v(" New Message\n    ")]), _vm._v(" "), _c('div', {
+    staticClass: "ui hidden clearing divider"
+  }), _vm._v(" "), _c('div', {
+    staticClass: "ui comments"
+  }, _vm._l((_vm.messages), function(m) {
+    return _c('message-thread', {
+      key: m.id,
+      attrs: {
+        "thread": m
+      }
+    })
+  })), _vm._v(" "), (_vm.messages.length === 0) ? _c('div', {
     staticClass: "ui info message"
-  }, [_c('p', [_vm._v("Your inbox is empty!")])]) : _vm._e()])
+  }, [_c('p', [_vm._v("Your inbox is empty!")])]) : _vm._e(), _vm._v(" "), _c('new-message-modal', {
+    attrs: {
+      "message": _vm.message,
+      "users": _vm.users
+    },
+    on: {
+      "update:message": function($event) {
+        _vm.message = $event
+      }
+    }
+  })], 1)
 },staticRenderFns: []}
 module.exports.render._withStripped = true
 if (false) {
@@ -8301,6 +8842,62 @@ if (false) {
   module.hot.accept()
   if (module.hot.data) {
      require("vue-hot-reload-api").rerender("data-v-815e8656", module.exports)
+  }
+}
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-929de04a\"}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/ThreadView.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {}, [(_vm.error) ? _c('div', {
+    staticClass: "ui error message"
+  }, [_c('div', {
+    staticClass: "content"
+  }, [_c('p', [_vm._v(_vm._s(_vm.error))])])]) : _vm._e(), _vm._v(" "), _c('div', {
+    staticClass: "ui threaded comments"
+  }, _vm._l((_vm.messages), function(m) {
+    return _c('message-view', {
+      key: m.id,
+      attrs: {
+        "message": m
+      }
+    })
+  })), _vm._v(" "), (_vm.messages.length > 0) ? _c('form', {
+    staticClass: "ui reply form"
+  }, [_c('div', {
+    staticClass: "field"
+  }, [_c('textarea', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.reply),
+      expression: "reply"
+    }],
+    domProps: {
+      "value": (_vm.reply)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.reply = $event.target.value
+      }
+    }
+  })]), _vm._v(" "), _c('div', {
+    staticClass: "ui orange labeled icon right floated button",
+    on: {
+      "click": _vm.sendReply
+    }
+  }, [_c('i', {
+    staticClass: "icon edit"
+  }), _vm._v(" Add Reply\n        ")])]) : _vm._e()])
+},staticRenderFns: []}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-929de04a", module.exports)
   }
 }
 
@@ -9007,9 +9604,21 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [_c('i', {
     staticClass: "icon mail"
-  }), _vm._v(" Messages\n            "), (_vm.totalMessages > 0) ? _c('div', {
+  }), _vm._v(" Messages\n            "), (_vm.unreadMessages > 0) ? _c('div', {
     staticClass: "ui orange label"
-  }, [_vm._v(_vm._s(_vm.totalMessages))]) : _vm._e()])], 1), _vm._v(" "), _c('router-view', {
+  }, [_vm._v(_vm._s(_vm.unreadMessages))]) : _vm._e()]), _vm._v(" "), (_vm.activeThread) ? _c('router-link', {
+    staticClass: "item",
+    attrs: {
+      "to": {
+        name: 'messageview',
+        params: {
+          id: _vm.activeThread.id
+        }
+      }
+    }
+  }, [_c('i', {
+    staticClass: "icon mail outline"
+  }), _vm._v(" " + _vm._s(_vm.activeThread.subject) + "\n        ")]) : _vm._e()], 1), _vm._v(" "), _c('router-view', {
     attrs: {
       "keep-alive": ""
     }
@@ -9020,6 +9629,55 @@ if (false) {
   module.hot.accept()
   if (module.hot.data) {
      require("vue-hot-reload-api").rerender("data-v-c0b4518a", module.exports)
+  }
+}
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-d406bcd6\"}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/MessageThread.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    staticClass: "ui segment"
+  }, [_c('router-link', {
+    staticClass: "comment",
+    attrs: {
+      "to": {
+        name: 'messageview',
+        params: {
+          id: _vm.thread.id
+        }
+      }
+    }
+  }, [_c('span', {
+    staticClass: "avatar"
+  }, [_c('img', {
+    attrs: {
+      "src": _vm.thread.creator.image
+    }
+  })]), _vm._v(" "), _c('div', {
+    staticClass: "content"
+  }, [_c('span', {
+    staticClass: "author"
+  }, [_vm._v(_vm._s(_vm.thread.creator.name))]), _vm._v(" "), _c('div', {
+    staticClass: "metadata"
+  }, [_c('div', {
+    staticClass: "date"
+  }, [_c('timeago', {
+    attrs: {
+      "since": _vm.thread.created_at,
+      "auto-update": 30
+    }
+  })], 1)]), _vm._v(" "), _c('div', {
+    staticClass: "text"
+  }, [_vm._v(_vm._s(_vm.thread.subject))])])])], 1)
+},staticRenderFns: []}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-d406bcd6", module.exports)
   }
 }
 
@@ -11551,6 +12209,33 @@ if(false) {
  if(!content.locals) {
    module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"id\":\"data-v-1278f4a4\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./NotificationArea.vue", function() {
      var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"id\":\"data-v-1278f4a4\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./NotificationArea.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+
+/***/ "./node_modules/vue-style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"id\":\"data-v-22002d20\",\"scoped\":false,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/components/MessageView.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__("./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"id\":\"data-v-22002d20\",\"scoped\":false,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/components/MessageView.vue");
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__("./node_modules/vue-style-loader/lib/addStylesClient.js")("4c4846be", content, false);
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"id\":\"data-v-22002d20\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./MessageView.vue", function() {
+     var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"id\":\"data-v-22002d20\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./MessageView.vue");
      if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
      update(newContent);
    });
@@ -22633,6 +23318,80 @@ window.axios = _axios2.default;
 
 /***/ }),
 
+/***/ "./resources/assets/js/components/MessageThread.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var Component = __webpack_require__("./node_modules/vue-loader/lib/component-normalizer.js")(
+  /* script */
+  __webpack_require__("./node_modules/babel-loader/lib/index.js?cacheDirectory!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/MessageThread.vue"),
+  /* template */
+  __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-d406bcd6\"}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/MessageThread.vue"),
+  /* scopeId */
+  null,
+  /* cssModules */
+  null
+)
+Component.options.__file = "/Users/finik/Sites/toylabs/resources/assets/js/components/MessageThread.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] MessageThread.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-d406bcd6", Component.options)
+  } else {
+    hotAPI.reload("data-v-d406bcd6", Component.options)
+  }
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+
+/***/ "./resources/assets/js/components/MessageView.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+
+/* styles */
+__webpack_require__("./node_modules/vue-style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"id\":\"data-v-22002d20\",\"scoped\":false,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/components/MessageView.vue")
+
+var Component = __webpack_require__("./node_modules/vue-loader/lib/component-normalizer.js")(
+  /* script */
+  __webpack_require__("./node_modules/babel-loader/lib/index.js?cacheDirectory!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/MessageView.vue"),
+  /* template */
+  __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-22002d20\"}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/MessageView.vue"),
+  /* scopeId */
+  null,
+  /* cssModules */
+  null
+)
+Component.options.__file = "/Users/finik/Sites/toylabs/resources/assets/js/components/MessageView.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] MessageView.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-22002d20", Component.options)
+  } else {
+    hotAPI.reload("data-v-22002d20", Component.options)
+  }
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+
 /***/ "./resources/assets/js/components/MessagesTab.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -22660,6 +23419,41 @@ if (false) {(function () {
     hotAPI.createRecord("data-v-54a3d24d", Component.options)
   } else {
     hotAPI.reload("data-v-54a3d24d", Component.options)
+  }
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+
+/***/ "./resources/assets/js/components/NewMessageModal.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var Component = __webpack_require__("./node_modules/vue-loader/lib/component-normalizer.js")(
+  /* script */
+  __webpack_require__("./node_modules/babel-loader/lib/index.js?cacheDirectory!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/NewMessageModal.vue"),
+  /* template */
+  __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-2ca937ca\"}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/NewMessageModal.vue"),
+  /* scopeId */
+  null,
+  /* cssModules */
+  null
+)
+Component.options.__file = "/Users/finik/Sites/toylabs/resources/assets/js/components/NewMessageModal.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] NewMessageModal.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-2ca937ca", Component.options)
+  } else {
+    hotAPI.reload("data-v-2ca937ca", Component.options)
   }
 })()}
 
@@ -22921,6 +23715,41 @@ module.exports = Component.exports
 
 /***/ }),
 
+/***/ "./resources/assets/js/components/ThreadView.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var Component = __webpack_require__("./node_modules/vue-loader/lib/component-normalizer.js")(
+  /* script */
+  __webpack_require__("./node_modules/babel-loader/lib/index.js?cacheDirectory!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/ThreadView.vue"),
+  /* template */
+  __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-929de04a\"}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/ThreadView.vue"),
+  /* scopeId */
+  null,
+  /* cssModules */
+  null
+)
+Component.options.__file = "/Users/finik/Sites/toylabs/resources/assets/js/components/ThreadView.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] ThreadView.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-929de04a", Component.options)
+  } else {
+    hotAPI.reload("data-v-929de04a", Component.options)
+  }
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+
 /***/ "./resources/assets/js/mixins/index.js":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -22959,6 +23788,10 @@ exports.default = {
             if (this.$store.state.notifications.length === 0) {
                 this.$store.dispatch('fetchNotifications');
             }
+
+            if (this.$store.state.messages.length === 0) {
+                this.$store.dispatch('fetchMessages');
+            }
         },
         listen: function listen() {
             var _this = this;
@@ -22971,6 +23804,8 @@ exports.default = {
                 _this.$store.commit('removeNotification', { notificationId: notificationId });
             }).listen('NotificationReadAll', function () {
                 _this.$store.commit('clearNotifications');
+            }).listen('NewMessage', function () {
+                _this.$store.commit('messageArrived');
             });
         },
         markAsRead: function markAsRead(notification) {
@@ -23033,8 +23868,24 @@ var fetchNotifications = exports.fetchNotifications = function fetchNotification
     });
 };
 
-var markNotificationAsRead = exports.markNotificationAsRead = function markNotificationAsRead(_ref2, notification) {
+var getUnreadMessageCount = exports.getUnreadMessageCount = function getUnreadMessageCount(_ref2) {
     var commit = _ref2.commit;
+
+    axios.get('/messages/unread').then(function (response) {
+        commit('setUnreadMessages', response.data.counter);
+    });
+};
+
+var fetchMessages = exports.fetchMessages = function fetchMessages(_ref3) {
+    var commit = _ref3.commit;
+
+    axios.get('/messages').then(function (response) {
+        commit('loadMessages', { list: response.data });
+    });
+};
+
+var markNotificationAsRead = exports.markNotificationAsRead = function markNotificationAsRead(_ref4, notification) {
+    var commit = _ref4.commit;
 
     axios.patch('/notifications/' + notification.id + '/read');
     commit('removeNotification', { notificationId: notification.id });
@@ -23066,8 +23917,15 @@ var latestNotifications = exports.latestNotifications = function latestNotificat
 var messagesArray = exports.messagesArray = function messagesArray(state) {
   return state.messages;
 };
+var unreadMessages = exports.unreadMessages = function unreadMessages(state) {
+  return state.unreadMessagesCounter;
+};
 var totalMessages = exports.totalMessages = function totalMessages(state) {
   return state.messages.length;
+};
+
+var activeThread = exports.activeThread = function activeThread(state) {
+  return state.activeThread;
 };
 
 /***/ }),
@@ -23108,7 +23966,9 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var state = {
     messages: [],
-    notifications: []
+    notifications: [],
+    unreadMessagesCounter: 0,
+    activeThread: null
 };
 
 var store = new _vuex2.default.Store({
@@ -23144,18 +24004,35 @@ var loadNotifications = exports.loadNotifications = function loadNotifications(s
     (_state$notifications = state.notifications).push.apply(_state$notifications, _toConsumableArray(list));
 };
 
+var loadMessages = exports.loadMessages = function loadMessages(state, _ref2) {
+    var _state$messages;
+
+    var list = _ref2.list;
+
+    state.messages.splice(0);
+    (_state$messages = state.messages).push.apply(_state$messages, _toConsumableArray(list));
+};
+
+var setUnreadMessages = exports.setUnreadMessages = function setUnreadMessages(state, count) {
+    state.unreadMessagesCounter = count;
+};
+
+var messageArrived = exports.messageArrived = function messageArrived(state) {
+    state.unreadMessagesCounter++;
+};
+
 var clearNotifications = exports.clearNotifications = function clearNotifications(state) {
     state.notifications.splice(0);
 };
 
-var addNotification = exports.addNotification = function addNotification(state, _ref2) {
-    var notification = _ref2.notification;
+var addNotification = exports.addNotification = function addNotification(state, _ref3) {
+    var notification = _ref3.notification;
 
     state.notifications.unshift(notification);
 };
 
-var removeNotification = exports.removeNotification = function removeNotification(state, _ref3) {
-    var notificationId = _ref3.notificationId;
+var removeNotification = exports.removeNotification = function removeNotification(state, _ref4) {
+    var notificationId = _ref4.notificationId;
 
     var index = state.notifications.findIndex(function (n) {
         return n.id === notificationId;
@@ -23163,6 +24040,12 @@ var removeNotification = exports.removeNotification = function removeNotificatio
     if (index > -1) {
         state.notifications.splice(index, 1);
     }
+};
+
+var setActiveThread = exports.setActiveThread = function setActiveThread(state, _ref5) {
+    var thread = _ref5.thread;
+
+    state.activeThread = thread;
 };
 
 /***/ }),

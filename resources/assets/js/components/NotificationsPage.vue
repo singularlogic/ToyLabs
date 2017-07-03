@@ -7,7 +7,10 @@
             </router-link>
             <router-link to="/feed/messages" class="item">
                 <i class="icon mail"></i> Messages
-                <div class="ui orange label" v-if="totalMessages > 0">{{ totalMessages }}</div>
+                <div class="ui orange label" v-if="unreadMessages > 0">{{ unreadMessages }}</div>
+            </router-link>
+            <router-link :to="{ name: 'messageview', params: { id: activeThread.id } }" class="item" v-if="activeThread">
+                <i class="icon mail outline"></i> {{ activeThread.subject }}
             </router-link>
         </div>
 
@@ -19,22 +22,25 @@
 import NotificationsTab from './NotificationsTab.vue';
 import MessagesTab from './MessagesTab.vue';
 import RequestsTab from './RequestsTab.vue';
+import ThreadView from './ThreadView.vue';
 import { mapGetters } from 'vuex';
 
 export default {
     created() {
         // Initialize router
         const routes = [
-            { path: '/feed', beforeEnter: (to, from, next) => next('/feed/notifications') },
-            { path: '/feed/notifications', component: NotificationsTab },
-            { path: '/feed/messages', component: MessagesTab },
+            { name: 'feed', path: '/feed', beforeEnter: (to, from, next) => next('/feed/notifications') },
+            { name: 'notifications', path: '/feed/notifications', component: NotificationsTab },
+            { name: 'messages', path: '/feed/messages', component: MessagesTab },
+            { name: 'messageview', path: '/feed/message/:id', component: ThreadView },
         ];
         this.$router.addRoutes(routes);
     },
     computed: {
         ...mapGetters([
             'totalNotifications',
-            'totalMessages',
+            'unreadMessages',
+            'activeThread',
         ]),
         ...mapGetters({
             notifications: 'notificationsArray',

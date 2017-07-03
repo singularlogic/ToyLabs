@@ -47,7 +47,19 @@ Route::group(['middleware' => 'auth'], function () {
 });
 
 // Notifications
-Route::get('/notifications', 'NotificationController@index');
-Route::patch('/notifications/{id}/read', 'NotificationController@markAsRead');
-Route::post('/notifications/mark-all-read', 'NotificationController@markAllRead');
-Route::post('/notifications/{id}/dismiss', 'NotificationController@dismiss');
+Route::group(['prefix' => 'notifications'], function () {
+    Route::get('/', ['as' => 'notifications', 'uses' => 'NotificationController@index']);
+    Route::patch('/{id}/read', ['as' => 'notifications.markasread', 'uses' => 'NotificationController@markAsRead']);
+    Route::post('/mark-all-read', ['as' => 'notifications.markallread', 'uses' => 'NotificationController@markAllRead']);
+});
+
+// Messages
+Route::get('/feed/message/{id}', ['as' => 'message.view', 'uses' => 'NotificationController@feed']);
+Route::group(['prefix' => 'messages'], function () {
+    Route::get('/', ['as' => 'messages', 'uses' => 'MessagesController@index']);
+    Route::get('users', ['as' => 'messages.users', 'uses' => 'MessagesController@users']);
+    Route::get('unread', ['as' => 'messages.unread', 'uses' => 'MessagesController@unread']);
+    Route::post('/', ['as' => 'messages.store', 'uses' => 'MessagesController@store']);
+    Route::get('{id}', ['as' => 'messages.show', 'uses' => 'MessagesController@show']);
+    Route::put('{id}', ['as' => 'messages.update', 'uses' => 'MessagesController@update']);
+});
