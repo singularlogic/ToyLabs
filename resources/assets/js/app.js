@@ -7,6 +7,7 @@ import Profile from './components/Profile.vue';
 import Organization from './components/Organization.vue';
 import NotificationArea from './components/NotificationArea.vue';
 import NotificationsPage from './components/NotificationsPage.vue';
+import ProductsGrid from './components/PRoductsGrid.vue';
 
 /**
  * Navbar transition for the homepage
@@ -57,5 +58,6 @@ const app = new Vue({
         Organization,
         NotificationArea,
         NotificationsPage,
+        ProductsGrid,
     }
 });

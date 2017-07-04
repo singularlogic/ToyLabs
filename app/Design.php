@@ -10,9 +10,8 @@ class Design extends Model
 {
     use HasMediaTrait, HasComments;
 
-    protected $fillable = [
-        'title', 'description', 'is_public', 'parent_id', 'version',
-    ];
+    protected $fillable = ['title', 'description', 'is_public', 'parent_id', 'version'];
+    protected $appends  = ['image', 'type'];
 
     public function parent()
     {
@@ -27,5 +26,20 @@ class Design extends Model
     public function prototype()
     {
         return $this->hasOne(Prototype::class);
+    }
+
+    public function getImageAttribute()
+    {
+        $covers = $this->getMedia('cover');
+        if ($covers) {
+            return $covers[0]->getUrl();
+        }
+
+        return '/images/placeholder.jpg';
+    }
+
+    public function getTypeAttribute()
+    {
+        return 'design';
     }
 }

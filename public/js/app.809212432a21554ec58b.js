@@ -2271,6 +2271,152 @@ exports.default = {
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js?cacheDirectory!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/PRoductsGrid.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _Product = __webpack_require__("./resources/assets/js/components/Product.vue");
+
+var _Product2 = _interopRequireDefault(_Product);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = {
+    components: { Product: _Product2.default },
+    data: function data() {
+        return {
+            products: [{
+                id: 1,
+                type: 'product',
+                title: 'Product Title',
+                description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+                comments: 3,
+                likes: 8,
+                image: '/images/placeholder.jpg'
+            }, {
+                id: 2,
+                type: 'prototype',
+                title: 'Prototype Title',
+                description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+                comments: 8,
+                likes: 2,
+                image: '/images/placeholder.jpg'
+            }, {
+                id: 3,
+                type: 'design',
+                title: 'Design Title',
+                description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+                comments: 13,
+                likes: 0,
+                image: '/images/placeholder.jpg'
+            }, {
+                id: 4,
+                type: 'design',
+                title: 'Design Title 2',
+                description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+                comments: 2,
+                likes: 0,
+                image: '/images/placeholder.jpg'
+            }, {
+                id: 5,
+                type: 'design',
+                title: 'Design Title 3',
+                description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+                comments: 1,
+                likes: 1,
+                image: '/images/placeholder.jpg'
+            }, {
+                id: 6,
+                type: 'prototype',
+                title: 'Prototype Title 4',
+                description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+                comments: 0,
+                likes: 0,
+                image: '/images/placeholder.jpg'
+            }]
+        };
+    },
+    created: function created() {
+        // TODO: Get products/designs/prototypes from backend
+    }
+}; //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?cacheDirectory!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/Product.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+exports.default = {
+    props: ['product'],
+    data: function data() {
+        return {};
+    },
+
+    computed: {
+        getClass: function getClass() {
+            switch (this.product.type) {
+                case 'design':
+                    return 'yellow';
+                case 'prototype':
+                    return 'orange';
+                default:
+                    return 'blue';
+            }
+        },
+        url: function url() {
+            return '/' + this.product.type + '/' + this.product.id;
+        },
+        comments: function comments() {
+            return this.product.comments === 1 ? this.product.comments + ' Comment' : this.product.comments + ' Comments';
+        },
+        likes: function likes() {
+            return this.product.likes === 1 ? this.product.likes + ' Like' : this.product.likes + ' Likes';
+        }
+    }
+};
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js?cacheDirectory!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/Profile.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -2722,6 +2868,14 @@ exports.push([module.i, "\n.comment.segment {\n    padding: 8px!important;\n    
 
 exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/css-base.js")();
 exports.push([module.i, "\n.ui.list>.item>.image+.content {\n    padding: 0.5em;\n}\n", ""]);
+
+/***/ }),
+
+/***/ "./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"id\":\"data-v-4c167f93\",\"scoped\":false,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/components/Product.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/css-base.js")();
+exports.push([module.i, "\n.ui.ribbon.label {\n    text-transform: capitalize!important;\n}\n", ""]);
 
 /***/ }),
 
@@ -8782,6 +8936,51 @@ if (false) {
 
 /***/ }),
 
+/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-4c167f93\"}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/Product.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    staticClass: "card"
+  }, [_c('div', {
+    staticClass: "ui fluid image"
+  }, [_c('img', {
+    attrs: {
+      "src": _vm.product.image
+    }
+  }), _vm._v(" "), _c('span', {
+    staticClass: "ui right ribbon label",
+    class: _vm.getClass
+  }, [_vm._v(_vm._s(_vm.product.type))])]), _vm._v(" "), _c('div', {
+    staticClass: "content"
+  }, [_c('div', {
+    staticClass: "header"
+  }, [_c('a', {
+    attrs: {
+      "href": _vm.url
+    }
+  }, [_vm._v(_vm._s(_vm.product.title))])]), _vm._v(" "), _c('div', {
+    staticClass: "description"
+  }, [_vm._v(_vm._s(_vm.product.description))])]), _vm._v(" "), _c('div', {
+    staticClass: "extra content"
+  }, [_c('span', {
+    staticClass: "right floated"
+  }, [_c('i', {
+    staticClass: "heart icon"
+  }), _vm._v(" " + _vm._s(_vm.likes))]), _vm._v(" "), _c('span', [_c('i', {
+    staticClass: "comments icon"
+  }), _vm._v(" " + _vm._s(_vm.comments))])])])
+},staticRenderFns: []}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-4c167f93", module.exports)
+  }
+}
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-54a3d24d\"}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/MessagesTab.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -9629,6 +9828,33 @@ if (false) {
   module.hot.accept()
   if (module.hot.data) {
      require("vue-hot-reload-api").rerender("data-v-c0b4518a", module.exports)
+  }
+}
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-cb418794\"}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/PRoductsGrid.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    staticClass: "ui vertical stripe segment container"
+  }, [_c('div', {
+    staticClass: "ui three cards"
+  }, _vm._l((_vm.products), function(p) {
+    return _c('Product', {
+      key: p.id,
+      attrs: {
+        "product": p
+      }
+    })
+  }))])
+},staticRenderFns: []}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-cb418794", module.exports)
   }
 }
 
@@ -12263,6 +12489,33 @@ if(false) {
  if(!content.locals) {
    module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"id\":\"data-v-26f6d412\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Notification.vue", function() {
      var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"id\":\"data-v-26f6d412\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Notification.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+
+/***/ "./node_modules/vue-style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"id\":\"data-v-4c167f93\",\"scoped\":false,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/components/Product.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__("./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"id\":\"data-v-4c167f93\",\"scoped\":false,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/components/Product.vue");
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__("./node_modules/vue-style-loader/lib/addStylesClient.js")("51b5a188", content, false);
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"id\":\"data-v-4c167f93\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Product.vue", function() {
+     var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"id\":\"data-v-4c167f93\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Product.vue");
      if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
      update(newContent);
    });
@@ -23192,14 +23445,15 @@ var _NotificationsPage = __webpack_require__("./resources/assets/js/components/N
 
 var _NotificationsPage2 = _interopRequireDefault(_NotificationsPage);
 
+var _PRoductsGrid = __webpack_require__("./resources/assets/js/components/PRoductsGrid.vue");
+
+var _PRoductsGrid2 = _interopRequireDefault(_PRoductsGrid);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /**
  * Navbar transition for the homepage
  */
-
-
-// Import VueJS Components
 $(document).ready(function () {
     // fix menu when passed
     $('.masthead').visibility({
@@ -23226,6 +23480,9 @@ $(document).ready(function () {
     });
 });
 
+// Import VueJS Components
+
+
 var router = new VueRouter({
     mode: 'history',
     linkActiveClass: 'active',
@@ -23246,7 +23503,8 @@ var app = new _vue2.default({
         Profile: _Profile2.default,
         Organization: _Organization2.default,
         NotificationArea: _NotificationArea2.default,
-        NotificationsPage: _NotificationsPage2.default
+        NotificationsPage: _NotificationsPage2.default,
+        ProductsGrid: _PRoductsGrid2.default
     }
 });
 
@@ -23637,6 +23895,80 @@ if (false) {(function () {
     hotAPI.createRecord("data-v-1f73963f", Component.options)
   } else {
     hotAPI.reload("data-v-1f73963f", Component.options)
+  }
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+
+/***/ "./resources/assets/js/components/PRoductsGrid.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var Component = __webpack_require__("./node_modules/vue-loader/lib/component-normalizer.js")(
+  /* script */
+  __webpack_require__("./node_modules/babel-loader/lib/index.js?cacheDirectory!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/PRoductsGrid.vue"),
+  /* template */
+  __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-cb418794\"}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/PRoductsGrid.vue"),
+  /* scopeId */
+  null,
+  /* cssModules */
+  null
+)
+Component.options.__file = "/Users/finik/Sites/toylabs/resources/assets/js/components/PRoductsGrid.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] PRoductsGrid.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-cb418794", Component.options)
+  } else {
+    hotAPI.reload("data-v-cb418794", Component.options)
+  }
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+
+/***/ "./resources/assets/js/components/Product.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+
+/* styles */
+__webpack_require__("./node_modules/vue-style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"id\":\"data-v-4c167f93\",\"scoped\":false,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/components/Product.vue")
+
+var Component = __webpack_require__("./node_modules/vue-loader/lib/component-normalizer.js")(
+  /* script */
+  __webpack_require__("./node_modules/babel-loader/lib/index.js?cacheDirectory!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/Product.vue"),
+  /* template */
+  __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-4c167f93\"}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/Product.vue"),
+  /* scopeId */
+  null,
+  /* cssModules */
+  null
+)
+Component.options.__file = "/Users/finik/Sites/toylabs/resources/assets/js/components/Product.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] Product.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-4c167f93", Component.options)
+  } else {
+    hotAPI.reload("data-v-4c167f93", Component.options)
   }
 })()}
 
