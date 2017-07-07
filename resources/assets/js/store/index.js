@@ -5,6 +5,7 @@ import * as actions from './actions';
 import * as mutations from './mutations';
 
 const state = {
+    user: window.Laravel.user,
     messages: [],
     notifications: [],
     unreadMessagesCounter: 0,

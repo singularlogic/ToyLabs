@@ -1,23 +1,23 @@
 <template>
-    <div class="card">
+    <a class="card" :href="url">
         <div class="ui fluid image">
             <img :src="product.image" />
-            <span class="ui right ribbon label" :class="getClass">{{ product.type }}</span>
+            <span class="ui right ribbon label" :class="getClass" v-if="detailed">{{ product.type }}</span>
         </div>
         <div class="content">
-            <div class="header"><a :href="url">{{ product.title }}</a></div>
-            <div class="description">{{ product.description }}</div>
+            <div class="header">{{ product.title }}</div>
+            <div class="description" v-if="detailed">{{ product.description | truncate }}</div>
         </div>
-        <div class="extra content">
+        <div class="extra">
             <span class="right floated"><i class="heart icon"></i> {{ likes }}</span>
             <span><i class="comments icon"></i> {{ comments }}</span>
         </div>
-    </div>
+    </a>
 </template>
 
 <script>
 export default {
-    props: ['product'],
+    props: ['product', 'detailed'],
     data() {
         return {};
     },
@@ -36,12 +36,33 @@ export default {
             return `/${this.product.type}/${this.product.id}`;
         },
         comments() {
-            return this.product.comments === 1 ? `${this.product.comments} Comment` : `${this.product.comments} Comments`;
+            return this.product.commentCount === 1 ? `${this.product.commentCount} Comment` : `${this.product.commentCount} Comments`;
         },
         likes() {
-            return this.product.likes === 1 ? `${this.product.likes} Like` : `${this.product.likes} Likes`;
+            return this.product.likeCount === 1 ? `${this.product.likeCount} Like` : `${this.product.likeCount} Likes`;
         }
     },
+    filters: {
+        truncate(text, l) {
+            const length = l || 200;
+
+            if (text.length <= length) {
+                return text;
+            }
+
+            let tcText = text.slice(0, length - 3);
+            let last = tcText.length - 1;
+
+            while (last > 0 && tcText[last] !== ' ' && tcText[last] !== '.') {
+                last -= 1;
+            }
+
+            last = last || length - 3;
+            tcText =  tcText.slice(0, last);
+
+            return tcText + '...';
+        }
+    }
 }
 </script>
 

@@ -1,5 +1,7 @@
 const recent_limit = 5;
 
+export const userID = (state) => state.user ? state.user.id : -1;
+
 export const notificationsArray = (state) => state.notifications;
 export const totalNotifications = (state) => state.notifications.length;
 export const latestNotifications = (state) => state.notifications.slice(0, recent_limit);

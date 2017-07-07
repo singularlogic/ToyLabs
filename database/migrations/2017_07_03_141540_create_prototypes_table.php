@@ -18,7 +18,8 @@ class CreatePrototypesTable extends Migration
             $table->string('title');
             $table->text('description')->nullable();
             $table->boolean('is_public')->default(false);
-            $table->integer('design_id')->nullable();
+            $table->integer('product_id')->unsigned();
+            $table->integer('design_id')->unsigned()->nullable();
             $table->timestamps();
         });
     }

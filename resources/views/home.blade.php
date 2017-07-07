@@ -19,6 +19,10 @@
                 </div>
             </div>
 
-            <products-grid></products-grid>
+            <products-grid class="stripe"
+                size="three"
+                :detailed="true"
+                :products="{{ json_encode($products) }}"
+            ></products-grid>
         </div>
 @endsection

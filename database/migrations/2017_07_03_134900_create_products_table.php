@@ -17,6 +17,8 @@ class CreateProductsTable extends Migration
             $table->increments('id');
             $table->string('title');
             $table->text('description');
+            $table->string('ages')->nullable();
+            $table->enum('status', ['concept', 'research', 'design', 'prototype', 'production'])->default('concept');
             $table->morphs('owner');
             $table->boolean('is_public')->default(false);
             $table->timestamps();

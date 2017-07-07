@@ -18,7 +18,8 @@ class CreateDesignsTable extends Migration
             $table->string('title');
             $table->text('description')->nullable();
             $table->boolean('is_public')->default(false);
-            $table->integer('parent_id')->nullable();
+            $table->integer('parent_id')->unsigned()->nullable();
+            $table->integer('product_id')->unsigned();
             $table->integer('version')->default(1);
             $table->timestamps();
         });

@@ -63,3 +63,10 @@ Route::group(['prefix' => 'messages'], function () {
     Route::get('{id}', ['as' => 'messages.show', 'uses' => 'MessagesController@show']);
     Route::put('{id}', ['as' => 'messages.update', 'uses' => 'MessagesController@update']);
 });
+
+Route::get('/user/likes', ['as' => 'user.likes', 'uses' => 'UserController@getLikes']);
+Route::put('/user/like/{type}/{id}', ['as' => 'user.like', 'uses' => 'UserController@like']);
+Route::put('/user/unlike/{type}/{id}', ['as' => 'user.like', 'uses' => 'UserController@unlike']);
+
+// Product/Design/Prototype Details
+Route::get('/product/{id}', ['as' => 'product.details', 'uses' => 'ProductController@showProduct']);
