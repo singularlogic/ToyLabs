@@ -42,6 +42,7 @@ class ProductController extends Controller
     public function showProduct($id)
     {
         $product = Product::with(['designs', 'prototypes', 'comments'])->find($id);
+        // TODO: Return 404 if product does not exist
 
         $comments = [
             [
@@ -74,4 +75,31 @@ class ProductController extends Controller
 
         return view('product.details', $data);
     }
+
+    public function showDesign($id)
+    {
+        $design = Design::with(['prototypes', 'comments'])->find($id);
+        // TODO: Return 404 if design does not exist
+
+        $data = [
+            'title'  => $design->title,
+            'design' => $design,
+        ];
+
+        return view('product.design', $data);
+    }
+
+    public function showPrototype($id)
+    {
+        $prototype = Prototype::with(['comments'])->find($id);
+        // TODO: Return 404 if prototype does not exist
+
+        $data = [
+            'title'     => $prototype->title,
+            'prototype' => $prototype,
+        ];
+
+        return view('product.prototype', $data);
+    }
+
 }

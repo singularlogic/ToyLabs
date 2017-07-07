@@ -13,7 +13,7 @@ class Design extends Model implements HasMedia
     use HasMediaTrait, HasComments, LikeableTrait;
 
     protected $fillable = ['title', 'description', 'is_public', 'parent_id', 'version', 'product_id'];
-    protected $appends  = ['image', 'type', 'likeCount', 'commentCount'];
+    protected $appends  = ['image', 'type', 'likeCount', 'commentCount', 'liked'];
 
     public function parent()
     {
@@ -25,9 +25,9 @@ class Design extends Model implements HasMedia
         return $this->hasMany(Design::class, 'id', 'parent_id');
     }
 
-    public function prototype()
+    public function prototypes()
     {
-        return $this->hasOne(Prototype::class);
+        return $this->hasMany(Prototype::class);
     }
 
     public function getImageAttribute()
@@ -43,6 +43,11 @@ class Design extends Model implements HasMedia
     public function getTypeAttribute()
     {
         return 'design';
+    }
+
+    public function getLikedAttribute()
+    {
+        return $this->liked();
     }
 
     public function getCommentCountAttribute()

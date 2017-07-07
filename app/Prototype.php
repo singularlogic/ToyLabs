@@ -13,7 +13,7 @@ class Prototype extends Model implements HasMedia
     use HasMediaTrait, HasComments, LikeableTrait;
 
     protected $fillable = ['title', 'description', 'is_public', 'design_id', 'product_id'];
-    protected $appends  = ['image', 'type', 'likeCount', 'commentCount'];
+    protected $appends  = ['image', 'type', 'likeCount', 'commentCount', 'liked'];
 
     public function design()
     {
@@ -33,6 +33,11 @@ class Prototype extends Model implements HasMedia
     public function getTypeAttribute()
     {
         return 'prototype';
+    }
+
+    public function getLikedAttribute()
+    {
+        return $this->liked();
     }
 
     public function getCommentCountAttribute()

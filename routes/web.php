@@ -70,3 +70,5 @@ Route::put('/user/unlike/{type}/{id}', ['as' => 'user.like', 'uses' => 'UserCont
 
 // Product/Design/Prototype Details
 Route::get('/product/{id}', ['as' => 'product.details', 'uses' => 'ProductController@showProduct']);
+Route::get('/design/{id}', ['as' => 'design.details', 'uses' => 'ProductController@showDesign']);
+Route::get('/prototype/{id}', ['as' => 'prototype.details', 'uses' => 'ProductController@showPrototype']);
