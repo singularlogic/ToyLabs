@@ -1627,6 +1627,8 @@ module.exports = {
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; //
 //
 //
 //
@@ -1651,17 +1653,70 @@ Object.defineProperty(exports, "__esModule", {
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+var _ReplyForm = __webpack_require__("./resources/assets/js/components/ReplyForm.vue");
+
+var _ReplyForm2 = _interopRequireDefault(_ReplyForm);
+
+var _vuex = __webpack_require__("./node_modules/vuex/dist/vuex.esm.js");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.default = {
     name: 'comment',
-    props: ['comment'],
+    components: { ReplyForm: _ReplyForm2.default },
+    props: ['comments', 'comment', 'model'],
     data: function data() {
-        return {};
+        return {
+            newComment: {
+                title: '',
+                body: '',
+                parent_id: this.comment.id
+            },
+            showReply: false
+        };
     },
 
+    computed: _extends({}, (0, _vuex.mapGetters)(['isGuest', 'isLogged', 'userID']), {
+        children: function children() {
+            var _this = this;
+
+            return this.comments.filter(function (c) {
+                return c.parent_id === _this.comment.id;
+            });
+        }
+    }),
     methods: {
+        cancel: function cancel() {
+            this.showReply = false;
+            this.newComment = {
+                title: '',
+                body: '',
+                parent_id: this.comment.id
+            };
+        },
         reply: function reply() {
-            console.log('NYI: reply');
+            this.showReply = true;
+        },
+        deleteComment: function deleteComment(comment) {
+            this.$emit('delete', comment);
+        },
+        sendReply: function sendReply(comment) {
+            this.$emit('reply', comment);
+        },
+        addReply: function addReply() {
+            this.sendReply(this.newComment);
+            this.cancel();
         }
     }
 };
@@ -1682,15 +1737,131 @@ var _Comment = __webpack_require__("./resources/assets/js/components/Comment.vue
 
 var _Comment2 = _interopRequireDefault(_Comment);
 
+var _ConfirmDialog = __webpack_require__("./resources/assets/js/components/ConfirmDialog.vue");
+
+var _ConfirmDialog2 = _interopRequireDefault(_ConfirmDialog);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
 exports.default = {
-    props: ['comments'],
-    components: { Comment: _Comment2.default },
+    props: ['comments', 'model'],
+    components: { Comment: _Comment2.default, ConfirmDialog: _ConfirmDialog2.default },
     data: function data() {
-        return {};
+        return {
+            localComments: this.comments,
+            displayForm: this.comments.length === 0,
+            newComment: {
+                title: '',
+                body: '',
+                parent_id: null
+            }
+        };
+    },
+
+    computed: {
+        children: function children() {
+            return this.localComments.filter(function (c) {
+                return c.parent_id === null;
+            });
+        }
+    },
+    methods: {
+        addComment: function addComment(comment) {
+            this.saveComment(comment);
+        },
+        saveComment: function saveComment(comment) {
+            var _this = this;
+
+            axios.post('/user/comment', {
+                model: this.model,
+                comment: comment,
+                parent_id: comment.parent_id
+            }).then(function (response) {
+                if (response.status === 200) {
+                    var c = response.data;
+                    _this.localComments.push(c);
+                }
+            });
+        },
+        cancel: function cancel() {
+            this.newComment.title = '';
+            this.newComment.body = '';
+        },
+        newReply: function newReply() {
+            this.saveComment({
+                body: this.newComment.body,
+                title: this.newComment.title,
+                parent_id: null
+            });
+            this.cancel();
+        },
+        deleteComment: function deleteComment(comment) {
+            var _this2 = this;
+
+            $('#commentDelete').modal({
+                closable: false,
+                onApprove: function onApprove() {
+                    axios.delete('/user/comment/' + comment.id).then(function (response) {
+                        var index = _this2.localComments.indexOf(comment);
+                        if (~index) {
+                            _this2.localComments.splice(index, 1);
+                        }
+                    });
+                }
+            }).modal('show');
+        }
     }
-}; //
+};
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?cacheDirectory!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/ConfirmDialog.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
 //
 //
 //
@@ -1701,6 +1872,19 @@ exports.default = {
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+exports.default = {
+    props: ['title', 'body', 'icon']
+};
 
 /***/ }),
 
@@ -2835,6 +3019,47 @@ exports.default = {
             this.hasOrganization = null;
             this.organizationState = null;
             this.joinOrg = '';
+        }
+    }
+};
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?cacheDirectory!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/ReplyForm.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+exports.default = {
+    props: ['comment'],
+    data: function data() {
+        return {};
+    },
+
+    methods: {
+        cancel: function cancel() {
+            this.$emit('cancel');
+        },
+        sendReply: function sendReply() {
+            this.$emit('update:comment', this.comment); // Sync newComment with parent
+            this.$emit('reply'); // Notify parent to process reply
         }
     }
 };
@@ -8846,13 +9071,13 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "avatar"
   }, [_c('img', {
     attrs: {
-      "src": _vm.comment.author.image
+      "src": _vm.comment.creator.image
     }
   })]), _vm._v(" "), _c('div', {
     staticClass: "content"
   }, [_c('a', {
     staticClass: "author"
-  }, [_vm._v(_vm._s(_vm.comment.author.name))]), _vm._v(" "), _c('div', {
+  }, [_vm._v(_vm._s(_vm.comment.creator.name))]), _vm._v(" "), _c('div', {
     staticClass: "metadata"
   }, [_c('timeago', {
     staticClass: "date",
@@ -8864,18 +9089,42 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "text"
   }, [_vm._v(_vm._s(_vm.comment.body))]), _vm._v(" "), _c('div', {
     staticClass: "actions"
-  }, [_c('a', {
+  }, [(_vm.isLogged) ? _c('a', {
     staticClass: "reply",
     on: {
       "click": _vm.reply
     }
-  }, [_vm._v("Reply")])])]), _vm._v(" "), (_vm.comment.comments.length > 0) ? _c('div', {
+  }, [_vm._v("Reply")]) : _vm._e(), _vm._v(" "), (_vm.comment.creator_id === _vm.userID) ? _c('a', {
+    staticClass: "delete",
+    on: {
+      "click": function($event) {
+        _vm.deleteComment(_vm.comment)
+      }
+    }
+  }, [_vm._v("Delete")]) : _vm._e()]), _vm._v(" "), (_vm.showReply) ? _c('reply-form', {
+    attrs: {
+      "comment": _vm.newComment
+    },
+    on: {
+      "update:comment": function($event) {
+        _vm.newComment = $event
+      },
+      "reply": _vm.addReply,
+      "cancel": _vm.cancel
+    }
+  }) : _vm._e()], 1), _vm._v(" "), (_vm.children.length > 0) ? _c('div', {
     staticClass: "comments"
-  }, _vm._l((_vm.comment.comments), function(c) {
+  }, _vm._l((_vm.children), function(c) {
     return _c('comment', {
       key: c.id,
       attrs: {
+        "model": _vm.model,
+        "comments": _vm.comments,
         "comment": c
+      },
+      on: {
+        "reply": _vm.sendReply,
+        "delete": _vm.deleteComment
       }
     })
   })) : _vm._e()])
@@ -9148,23 +9397,120 @@ if (false) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
-    staticClass: "ui stripe vertical segment"
+    staticClass: "ui basic segment"
+  }, [_c('h3', {
+    staticClass: "ui dividing header"
+  }, [_vm._v("Comments (" + _vm._s(_vm.localComments.length) + ")")]), _vm._v(" "), _c('div', {
+    staticClass: "ui vertical segment"
   }, [_c('div', {
     staticClass: "ui threaded comments"
-  }, _vm._l((_vm.comments), function(c) {
+  }, _vm._l((_vm.children), function(c) {
     return _c('comment', {
       key: c.id,
       attrs: {
+        "model": _vm.model,
+        "comments": _vm.localComments,
         "comment": c
+      },
+      on: {
+        "reply": _vm.addComment,
+        "delete": _vm.deleteComment
       }
     })
-  }))])
+  })), _vm._v(" "), _c('div', {
+    staticClass: "ui clearing hidden divider"
+  }), _vm._v(" "), _c('form', {
+    staticClass: "ui reply form"
+  }, [_c('div', {
+    staticClass: "field"
+  }, [_c('textarea', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.newComment.body),
+      expression: "newComment.body"
+    }],
+    attrs: {
+      "rows": "5"
+    },
+    domProps: {
+      "value": (_vm.newComment.body)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.newComment.body = $event.target.value
+      }
+    }
+  })]), _vm._v(" "), _c('div', {
+    staticClass: "ui orange labeled icon right floated button",
+    on: {
+      "click": _vm.newReply
+    }
+  }, [_c('i', {
+    staticClass: "icon edit"
+  }), _vm._v(" Add Comment\n            ")])])]), _vm._v(" "), _c('confirm-dialog', {
+    attrs: {
+      "id": "commentDelete",
+      "icon": "trash",
+      "title": "Comment Delete",
+      "body": "Are you sure you want to delete this comment and all its replies?"
+    }
+  })], 1)
 },staticRenderFns: []}
 module.exports.render._withStripped = true
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
      require("vue-hot-reload-api").rerender("data-v-2d585880", module.exports)
+  }
+}
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-482106f2\"}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/ReplyForm.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('form', {
+    staticClass: "ui reply form"
+  }, [_c('div', {
+    staticClass: "field"
+  }, [_c('textarea', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.comment.body),
+      expression: "comment.body"
+    }],
+    domProps: {
+      "value": (_vm.comment.body)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.comment.body = $event.target.value
+      }
+    }
+  })]), _vm._v(" "), _c('div', {
+    staticClass: "ui primary submit labeled right floated icon button",
+    on: {
+      "click": _vm.sendReply
+    }
+  }, [_c('i', {
+    staticClass: "icon edit"
+  }), _vm._v(" Add Reply\n    ")]), _vm._v(" "), _c('div', {
+    staticClass: "ui right floated button",
+    on: {
+      "click": _vm.cancel
+    }
+  }, [_vm._v("Cancel")])])
+},staticRenderFns: []}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-482106f2", module.exports)
   }
 }
 
@@ -9285,6 +9631,43 @@ if (false) {
   module.hot.accept()
   if (module.hot.data) {
      require("vue-hot-reload-api").rerender("data-v-54a3d24d", module.exports)
+  }
+}
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-6973554c\"}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/ConfirmDialog.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    staticClass: "ui basic modal"
+  }, [_c('div', {
+    staticClass: "ui icon header"
+  }, [_c('i', {
+    staticClass: "icon",
+    class: _vm.icon
+  }), _vm._v(" " + _vm._s(_vm.title) + "\n    ")]), _vm._v(" "), _c('div', {
+    staticClass: "content"
+  }, [_c('p', [_vm._v(_vm._s(_vm.body))])]), _vm._v(" "), _vm._m(0)])
+},staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    staticClass: "actions"
+  }, [_c('div', {
+    staticClass: "ui red basic cancel inverted button"
+  }, [_c('i', {
+    staticClass: "remove icon"
+  }), _vm._v(" No\n        ")]), _vm._v(" "), _c('div', {
+    staticClass: "ui green ok inverted button"
+  }, [_c('i', {
+    staticClass: "checkmark icon"
+  }), _vm._v(" Yes\n        ")])])
+}]}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-6973554c", module.exports)
   }
 }
 
@@ -23891,6 +24274,41 @@ module.exports = Component.exports
 
 /***/ }),
 
+/***/ "./resources/assets/js/components/ConfirmDialog.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var Component = __webpack_require__("./node_modules/vue-loader/lib/component-normalizer.js")(
+  /* script */
+  __webpack_require__("./node_modules/babel-loader/lib/index.js?cacheDirectory!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/ConfirmDialog.vue"),
+  /* template */
+  __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-6973554c\"}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/ConfirmDialog.vue"),
+  /* scopeId */
+  null,
+  /* cssModules */
+  null
+)
+Component.options.__file = "/Users/finik/Sites/toylabs/resources/assets/js/components/ConfirmDialog.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] ConfirmDialog.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-6973554c", Component.options)
+  } else {
+    hotAPI.reload("data-v-6973554c", Component.options)
+  }
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+
 /***/ "./resources/assets/js/components/Likes.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -24362,6 +24780,41 @@ module.exports = Component.exports
 
 /***/ }),
 
+/***/ "./resources/assets/js/components/ReplyForm.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var Component = __webpack_require__("./node_modules/vue-loader/lib/component-normalizer.js")(
+  /* script */
+  __webpack_require__("./node_modules/babel-loader/lib/index.js?cacheDirectory!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/ReplyForm.vue"),
+  /* template */
+  __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-482106f2\"}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/ReplyForm.vue"),
+  /* scopeId */
+  null,
+  /* cssModules */
+  null
+)
+Component.options.__file = "/Users/finik/Sites/toylabs/resources/assets/js/components/ReplyForm.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] ReplyForm.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-482106f2", Component.options)
+  } else {
+    hotAPI.reload("data-v-482106f2", Component.options)
+  }
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+
 /***/ "./resources/assets/js/components/RequestsTab.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -24588,6 +25041,12 @@ var recent_limit = 5;
 
 var userID = exports.userID = function userID(state) {
   return state.user ? state.user.id : -1;
+};
+var isLogged = exports.isLogged = function isLogged(state) {
+  return state.user !== null;
+};
+var isGuest = exports.isGuest = function isGuest(state) {
+  return state.user === null;
 };
 
 var notificationsArray = exports.notificationsArray = function notificationsArray(state) {

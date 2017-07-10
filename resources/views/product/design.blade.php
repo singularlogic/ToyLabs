@@ -32,10 +32,11 @@
             ></products-grid>
 @endif
 
-            <h3 class="ui dividing header">Comments ({{ count($design['totalComments']) }})</h3>
+            <h3 class="ui dividing header">Comments ({{ count($design['comments']) }})</h3>
 
             <comments
                 :comments="{{ json_encode($design['comments']) }}"
+                :model="{{ json_encode($model) }}"
             ></comments>
         </div>
 @endsection

@@ -54,4 +54,9 @@ class Product extends Model implements HasMedia
     {
         return $this->hasMany(Prototype::class);
     }
+
+    public function detailedComments()
+    {
+        return $this->comments()->with('creator');
+    }
 }

@@ -41,36 +41,16 @@ class ProductController extends Controller
 
     public function showProduct($id)
     {
-        $product = Product::with(['designs', 'prototypes', 'comments'])->find($id);
+        $product = Product::with(['designs', 'prototypes', 'comments.creator'])->find($id);
         // TODO: Return 404 if product does not exist
-
-        $comments = [
-            [
-                'id'         => 1,
-                'author'     => [
-                    'name'  => 'Elliot Jones',
-                    'image' => '/images/avatar/small/elliot.jpg',
-                ],
-                'body'       => 'Lorem Ipsum',
-                'created_at' => '2017-07-03 23:35',
-                'comments'   => [
-                    [
-                        'id'         => 2,
-                        'author'     => [
-                            'name'  => 'Jenny Doe',
-                            'image' => '/images/avatar/small/jenny.jpg',
-                        ],
-                        'body'       => 'Lorem Ipsum indeed',
-                        'created_at' => '2017-07-05 09:28',
-                        'comments'   => [],
-                    ],
-                ],
-            ],
-        ];
 
         $data = [
             'title'   => $product->title,
             'product' => $product,
+            'model'   => [
+                'type' => $product->type,
+                'id'   => $product->id,
+            ],
         ];
 
         return view('product.details', $data);
@@ -78,12 +58,16 @@ class ProductController extends Controller
 
     public function showDesign($id)
     {
-        $design = Design::with(['prototypes', 'comments'])->find($id);
+        $design = Design::with(['prototypes', 'comments.creator'])->find($id);
         // TODO: Return 404 if design does not exist
 
         $data = [
             'title'  => $design->title,
             'design' => $design,
+            'model'  => [
+                'type' => $design->type,
+                'id'   => $design->id,
+            ],
         ];
 
         return view('product.design', $data);
@@ -91,12 +75,16 @@ class ProductController extends Controller
 
     public function showPrototype($id)
     {
-        $prototype = Prototype::with(['comments'])->find($id);
+        $prototype = Prototype::with(['comments.creator'])->find($id);
         // TODO: Return 404 if prototype does not exist
 
         $data = [
             'title'     => $prototype->title,
             'prototype' => $prototype,
+            'model'     => [
+                'type' => $prototype->type,
+                'id'   => $prototype->id,
+            ],
         ];
 
         return view('product.prototype', $data);

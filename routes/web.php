@@ -67,6 +67,8 @@ Route::group(['prefix' => 'messages'], function () {
 Route::get('/user/likes', ['as' => 'user.likes', 'uses' => 'UserController@getLikes']);
 Route::put('/user/like/{type}/{id}', ['as' => 'user.like', 'uses' => 'UserController@like']);
 Route::put('/user/unlike/{type}/{id}', ['as' => 'user.like', 'uses' => 'UserController@unlike']);
+Route::post('/user/comment', ['as' => 'user.comment.post', 'uses' => 'UserController@postComment']);
+Route::delete('/user/comment/{id}', ['as' => 'user.comment.delete', 'uses' => 'UserController@deleteComment']);
 
 // Product/Design/Prototype Details
 Route::get('/product/{id}', ['as' => 'product.details', 'uses' => 'ProductController@showProduct']);

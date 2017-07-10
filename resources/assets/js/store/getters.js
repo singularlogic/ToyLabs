@@ -1,6 +1,8 @@
 const recent_limit = 5;
 
 export const userID = (state) => state.user ? state.user.id : -1;
+export const isLogged = (state) => state.user !== null;
+export const isGuest = (state) => state.user === null;
 
 export const notificationsArray = (state) => state.notifications;
 export const totalNotifications = (state) => state.notifications.length;

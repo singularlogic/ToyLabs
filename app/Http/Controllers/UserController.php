@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Design;
 use App\Product;
 use App\Prototype;
+use BrianFaust\Commentable\Comment;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
@@ -43,7 +45,6 @@ class UserController extends Controller
                 'error' => 'Resource not found',
             ], 404);
         }
-
     }
 
     public function unlike(Request $request, $type, $id)
@@ -70,7 +71,39 @@ class UserController extends Controller
                 'error' => 'Resource not found',
             ], 404);
         }
-
     }
 
+    public function postComment(Request $request)
+    {
+        $input = $request->all();
+        $user  = Auth::user();
+        $model = null;
+
+        switch ($input['model']['type']) {
+            case 'product':
+                $model = Product::find($input['model']['id']);
+                break;
+            case 'design':
+                $model = Design::find($input['model']['id']);
+                break;
+            case 'prototype':
+                $model = Prototype::find($input['model']['id']);
+                break;
+            default:
+                break;
+        }
+
+        if ($model) {
+            $parent  = Comment::find($input['parent_id']);
+            $comment = $model->comment($input['comment'], $user, $parent);
+
+            return Comment::with('creator')->find($comment->id);
+        }
+    }
+
+    public function deleteComment(Request $request, $id)
+    {
+        $comment = Comment::find($id);
+        $comment->deleteComment($id);
+    }
 }

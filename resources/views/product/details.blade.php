@@ -54,10 +54,9 @@
             ></products-grid>
 @endif
 
-            <h3 class="ui dividing header">Comments ({{ count($product['totalComments']) }})</h3>
-
             <comments
                 :comments="{{ json_encode($product['comments']) }}"
+                :model="{{ json_encode($model) }}"
             ></comments>
         </div>
 @endsection

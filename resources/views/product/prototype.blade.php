@@ -3,7 +3,7 @@
 @section('title', $title)
 
 @section('content')
-        <!-- Product / Design -->
+        <!-- Product / Prototype -->
         <div class="ui main container">
             <h2 class="ui left floated header">{{ $title }}</h2>
             <likes class="ui right floated"
@@ -22,10 +22,11 @@
 
             <div class="ui hidden clearing divider"></div>
 
-            <h3 class="ui dividing header">Comments ({{ count($prototype['totalComments']) }})</h3>
+            <h3 class="ui dividing header">Comments ({{ count($prototype['comments']) }})</h3>
 
             <comments
                 :comments="{{ json_encode($prototype['comments']) }}"
+                :model="{{ json_encode($model) }}"
             ></comments>
         </div>
 @endsection
