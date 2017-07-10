@@ -10,6 +10,7 @@ import NotificationsPage from './components/NotificationsPage.vue';
 import ProductsGrid from './components/ProductsGrid.vue';
 import Comments from './components/Comments.vue';
 import Likes from './components/Likes.vue';
+import ProductList from './components/ProductList.vue';
 
 /**
  * Navbar transition for the homepage
@@ -63,5 +64,6 @@ const app = new Vue({
         ProductsGrid,
         Comments,
         Likes,
+        ProductList,
     }
 });

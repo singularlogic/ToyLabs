@@ -13,7 +13,7 @@ class Product extends Model implements HasMedia
     use HasComments, HasMediaTrait, LikeableTrait;
 
     protected $fillable = ['title', 'description', 'owner_id', 'owner_type', 'ages', 'status'];
-    protected $appends  = ['image', 'type', 'likeCount', 'commentCount', 'liked'];
+    protected $appends  = ['image', 'type', 'likeCount', 'commentCount', 'liked', 'paragraphedDescription'];
 
     public function owner()
     {
@@ -28,6 +28,13 @@ class Product extends Model implements HasMedia
         }
 
         return '/images/placeholder.jpg';
+    }
+
+    public function getParagraphedDescriptionAttribute()
+    {
+        $paragraphs = explode("\n", $this->description);
+
+        return '<p>' . implode('</p><p>', $paragraphs) . '</p>';
     }
 
     public function getTypeAttribute()
