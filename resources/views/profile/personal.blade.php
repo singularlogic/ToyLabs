@@ -3,7 +3,7 @@
 @section('title', 'Edit Profile')
 
 @section('content')
-        <div class="ui main container" id="app">
+        <div class="ui main container">
             <!-- Profile / General -->
             <h1 class="ui header">Edit Profile</h1>
             <div class="ui divider"></div>

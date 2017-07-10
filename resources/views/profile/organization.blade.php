@@ -6,7 +6,7 @@
 
 @section('content')
         <!-- Organization -->
-        <div class="ui main container" id="app">
+        <div class="ui main container">
             <h1 class="ui header">{{ $pagetitle or 'Edit Organization' }}</h1>
             <div class="ui divider"></div>
 
