@@ -19,7 +19,10 @@
                     <strong>Ages</strong>: {{ $product['ages'] }}
                 </div>
                 <div class="item">
-                    <strong>Manufacturer</strong>: {{ $product['manufacturer']['name'] }}
+                    <strong>Category</strong>: {{ $product['category']['title'] }}
+                </div>
+                <div class="item">
+                    <strong>Product Owner</strong>: {{ $product['owner']['name'] }}
                 </div>
                 <div class="item">
                     <strong>Status</strong>: {{ ucfirst($product['status']) }}

@@ -59,6 +59,11 @@ class User extends Authenticatable
         return $this->roles()->pluck('name')[0];
     }
 
+    public function getOrganizationAttribute()
+    {
+        return $this->organizations()->count() ? $this->organizations[0]->id : -1;
+    }
+
     public function getHasOrganizationAttribute()
     {
         return $this->organizations()->count() > 0;

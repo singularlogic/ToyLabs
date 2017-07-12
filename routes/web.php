@@ -50,6 +50,8 @@ Route::group(['middleware' => 'auth'], function () {
     // Products/Designs/Prototypes
     Route::get('/product/create', ['as' => 'product.create', 'uses' => 'ProductController@create']);
     Route::post('/product/create', ['as' => 'product.create.post', 'uses' => 'ProductController@doCreate']);
+    Route::get('/product/{id}/edit', ['as' => 'product.edit', 'uses' => 'ProductController@edit']);
+    Route::post('/product/{id}/edit', ['as' => 'product.edit.post', 'uses' => 'ProductController@doEdit']);
 });
 
 // Notifications

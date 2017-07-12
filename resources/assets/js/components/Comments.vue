@@ -102,3 +102,9 @@ export default {
     }
 }
 </script>
+
+<style>
+.ui.vertical.segment {
+    border-bottom: none;
+}
+</style>

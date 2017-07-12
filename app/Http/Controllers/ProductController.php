@@ -7,6 +7,7 @@ use App\Product;
 use App\Prototype;
 use App\ToyCategory;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ProductController extends Controller
 {
@@ -102,9 +103,11 @@ class ProductController extends Controller
             'product'       => [
                 'title'       => '',
                 'description' => '',
-                'is_public'   => false,
+                'is_public'   => 0,
                 'status'      => 'concept',
                 'owner'       => $user,
+                'owner_id'    => $user->id,
+                'owner_type'  => 'App\\User',
                 'ages'        => '',
                 'category_id' => -1,
             ],
@@ -122,10 +125,69 @@ class ProductController extends Controller
             'description' => $input['description'],
             'ages'        => $input['ages'],
             'is_public'   => $input['is_public'],
+            'category_id' => $input['category_id'],
             'owner_id'    => $input['owner_id'],
             'owner_type'  => $input['owner_type'],
         ]);
 
         return redirect('dashboard')->with('success', 'Product created successfully.');
+    }
+
+    public function edit($id)
+    {
+        $product = Product::with('owner')->find($id);
+
+        if (!$product) {
+            return redirect('dashboard')->with('error', 'Product not found!');
+        }
+
+        $user = Auth::user();
+        $data = [
+            'title'         => 'Edit Product',
+            'user'          => $user,
+            'organizations' => $user->organizations,
+            'categories'    => ToyCategory::all(),
+            'product'       => $product,
+        ];
+
+        if ($this->canEdit($user, $product)) {
+            return view('product.create', $data);
+        }
+
+        return redirect('dashboard')->with('error', 'You are not permitted to edit this product!');
+    }
+
+    public function doEdit(Request $request, $id)
+    {
+        $input   = $request->all();
+        $product = Product::find($id);
+        $user    = Auth::user();
+
+        if ($product && $this->canEdit($user, $product)) {
+            Product::where('id', $id)->update([
+                'title'       => $input['title'],
+                'description' => $input['description'],
+                'ages'        => $input['ages'],
+                'is_public'   => $input['is_public'],
+                'category_id' => $input['category_id'],
+                'owner_id'    => $input['owner_id'],
+                'owner_type'  => $input['owner_type'],
+            ]);
+
+            return redirect('dashboard')->with('success', 'Product updated successfully!');
+        }
+
+        return redirect('dashboard')->with('error', 'You are not permitted to edit this product!');
+    }
+
+    protected function canEdit($user, $product)
+    {
+        if (is_a($product->owner, 'App\User') && $product->owner->id === $user->id) {
+            return true;
+        } else if (is_a($product->owner, 'App\Organization') && $user->organizations->where('id', $product->owner->id)) {
+            return true;
+        }
+
+        return false;
     }
 }

@@ -1,6 +1,20 @@
 <template>
     <div class="item">
-        <h3 class="header"><a :href="`/product/${product.id}`">{{ product.title }}</a></h3>
+        <h3 class="ui left floated header">
+            <a :href="`/product/${product.id}`">{{ product.title }}</a>
+            <div class="ui label" :class="{ blue: owner !== 'Personal', orange: owner === 'Personal' }">{{ owner }}</div>
+        </h3>
+        <div class="ui right floated">
+            <a class="ui compact basic blue icon button" :href="`/product/${product.id}/edit`" data-tooltip="Edit Product..." data-position="left center" data-inverted>
+                <i class="settings icon"></i>
+            </a>
+            <button type="button" class="ui compact basic red icon button" @click="deleteProduct" data-tooltip="Delete Product" data-position="right center" data-inverted>
+                <i class="trash icon"></i>
+            </button>
+        </div>
+
+        <div class="ui hidden clearing divider"></div>
+
         <div class="content">
             <div class="ui five mini steps">
                 <a class="step" :class="getClass('concept')">
@@ -74,6 +88,14 @@ export default {
             }
 
             return 'disabled';
+        },
+        deleteProduct() {
+            this.$emit('delete', this.product);
+        }
+    },
+    computed: {
+        owner() {
+            return this.product.owner_type === 'App\\User' ? 'Personal' : this.product.owner.name;
         }
     }
 }
@@ -86,5 +108,9 @@ export default {
 
 .ui.steps .step {
     padding: 0.2em 2em!important;
+}
+
+.ui.hidden.divider {
+    margin: 1px 0!important;
 }
 </style>

@@ -1,5 +1,5 @@
 <template>
-    <form class="ui form" method="POST" action="/product/create">
+    <form class="ui form" method="POST">
         <input type="hidden" name="_token" :value="$parent.crsf" />
 
         <h4 class="ui dividing header">General</h4>
@@ -30,13 +30,13 @@
             <label for="owner">Who will be the legal owner of this product?</label>
             <div class="field">
                 <div class="ui radio checkbox">
-                    <input type="radio" name="owner" id="me" :value="_user" v-model="product.owner" />
+                    <input type="radio" name="owner" id="me" value="me" v-model="owner" />
                     <label for="me">Myself</label>
                 </div>
             </div>
             <div class="field" :class="{ disabled: _organizations.length === 0 }">
                 <div class="ui radio checkbox">
-                    <input type="radio" name="owner" id="org" :value="organization" v-model="product.owner" />
+                    <input type="radio" name="owner" id="org" value="org" v-model="owner" />
                     <label for="org">
                         My Organization
                         <span v-if="_organizations.length > 0">(<em>{{ _organizations[0].name }}</em>)</span>
@@ -51,13 +51,13 @@
             </label>
             <div class="field">
                 <div class="ui radio checkbox">
-                    <input type="radio" name="is_public" id="false" value="false" v-model="product.is_public" />
+                    <input type="radio" name="is_public" id="false" value="0" v-model="product.is_public" />
                     <label for="false">No</label>
                 </div>
             </div>
             <div class="field">
                 <div class="ui radio checkbox">
-                    <input type="radio" name="is_public" id="true" value="true" v-model="product.is_public" />
+                    <input type="radio" name="is_public" id="true" value="1" v-model="product.is_public" />
                     <label for="true">Yes</label>
                 </div>
             </div>
@@ -81,14 +81,15 @@ export default {
             submitText: this._product.id ? 'Update' : 'Create',
             product: this._product,
             organization: this._organizations.length > 0 ? this._organizations[0] : null,
+            owner: this._product.owner_type === 'App\\User' ? 'me' : 'org',
         };
     },
     computed: {
         owner_id() {
-            return this.product.owner.id;
+            return this.owner === 'me' ? this._user.id : this.organization.id;
         },
         owner_type() {
-            return this.product.owner === this.organization ? 'App\\Organization' : 'App\\User';
+            return this.owner === 'me' ? 'App\\User' : 'App\\Organization';
         }
     }
 }

@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Organization;
 use App\Product;
+use App\User;
 use Illuminate\Support\Facades\Auth;
 
 // use Illuminate\Http\Request;
@@ -17,8 +19,14 @@ class DashboardController extends Controller
             session()->flash('warning', 'Please edit your <a href="/profile/edit">profile</a> to use the full functionality of ToyLabs.');
         }
 
-        $products = Product::where('owner_id', $user->id)->get();
-        $data     = [
+        $products = Product::with('owner')->where([
+            'owner_id'   => $user->id,
+            'owner_type' => User::class,
+        ])->orWhere([
+            'owner_id'   => $user->organization,
+            'owner_type' => Organization::class,
+        ])->get();
+        $data = [
             'products' => $products,
         ];
 

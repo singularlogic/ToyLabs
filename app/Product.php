@@ -12,7 +12,7 @@ class Product extends Model implements HasMedia
 {
     use HasComments, HasMediaTrait, LikeableTrait;
 
-    protected $fillable = ['title', 'description', 'owner_id', 'owner_type', 'ages', 'status'];
+    protected $fillable = ['title', 'description', 'owner_id', 'owner_type', 'ages', 'status', 'category_id'];
     protected $appends  = ['image', 'type', 'likeCount', 'commentCount', 'liked', 'paragraphedDescription'];
 
     public function owner()
