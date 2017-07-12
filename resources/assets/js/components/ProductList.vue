@@ -3,7 +3,6 @@
         <product-progress v-for="product of products"
             :product="product"
             :key="product.id"
-            v-on:delete="deleteProduct"
         ></product-progress>
     </div>
 </template>
@@ -17,10 +16,5 @@ export default {
     data() {
         return {};
     },
-    methods: {
-        deleteProduct(product) {
-            console.log(product);
-        }
-    }
 }
 </script>

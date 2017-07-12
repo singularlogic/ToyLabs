@@ -25,7 +25,7 @@ class DashboardController extends Controller
         ])->orWhere([
             'owner_id'   => $user->organization,
             'owner_type' => Organization::class,
-        ])->get();
+        ])->orderBy('updated_at', 'DESC')->get();
         $data = [
             'products' => $products,
         ];

@@ -2762,6 +2762,8 @@ Object.defineProperty(exports, "__esModule", {
 //
 //
 //
+//
+//
 
 exports.default = {
     props: ['_product', '_user', '_organizations', '_categories'],
@@ -2770,8 +2772,18 @@ exports.default = {
             submitText: this._product.id ? 'Update' : 'Create',
             product: this._product,
             organization: this._organizations.length > 0 ? this._organizations[0] : null,
-            owner: this._product.owner_type === 'App\\User' ? 'me' : 'org'
+            owner: this._product.owner_type === 'App\\User' ? 'me' : 'org',
+            editLegal: this._product.id ? false : true
         };
+    },
+    mounted: function mounted() {
+        if (this.owner === 'me') {
+            this.editLegal = true;
+        } else if (this.owner === 'org' && this.organization.owner_id === this._user.id) {
+            this.editLegal = true;
+        } else {
+            this.editLegal = false;
+        }
     },
 
     computed: {
@@ -2807,15 +2819,8 @@ exports.default = {
     props: ['products'],
     data: function data() {
         return {};
-    },
-
-    methods: {
-        deleteProduct: function deleteProduct(product) {
-            console.log(product);
-        }
     }
 }; //
-//
 //
 //
 //
@@ -2836,9 +2841,6 @@ exports.default = {
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-//
-//
-//
 //
 //
 //
@@ -2927,9 +2929,6 @@ exports.default = {
             }
 
             return 'disabled';
-        },
-        deleteProduct: function deleteProduct() {
-            this.$emit('delete', this.product);
         }
     },
     computed: {
@@ -8813,19 +8812,6 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [_c('i', {
     staticClass: "settings icon"
-  })]), _vm._v(" "), _c('button', {
-    staticClass: "ui compact basic red icon button",
-    attrs: {
-      "type": "button",
-      "data-tooltip": "Delete Product",
-      "data-position": "right center",
-      "data-inverted": ""
-    },
-    on: {
-      "click": _vm.deleteProduct
-    }
-  }, [_c('i', {
-    staticClass: "trash icon"
   })])]), _vm._v(" "), _c('div', {
     staticClass: "ui hidden clearing divider"
   }), _vm._v(" "), _c('div', {
@@ -10000,7 +9986,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         _vm.product.ages = $event.target.value
       }
     }
-  })])]), _vm._v(" "), _c('h4', {
+  })])]), _vm._v(" "), (_vm.editLegal) ? _c('div', [_c('h4', {
     staticClass: "ui dividing header"
   }, [_vm._v("Legal")]), _vm._v(" "), _c('div', {
     staticClass: "inline fields"
@@ -10069,7 +10055,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "for": "org"
     }
-  }, [_vm._v("\n                    My Organization\n                    "), (_vm._organizations.length > 0) ? _c('span', [_vm._v("("), _c('em', [_vm._v(_vm._s(_vm._organizations[0].name))]), _vm._v(")")]) : _vm._e()])])])]), _vm._v(" "), _c('div', {
+  }, [_vm._v("\n                        My Organization\n                        "), (_vm._organizations.length > 0) ? _c('span', [_vm._v("("), _c('em', [_vm._v(_vm._s(_vm._organizations[0].name))]), _vm._v(")")]) : _vm._e()])])])]), _vm._v(" "), _c('div', {
     staticClass: "inline fields"
   }, [_vm._m(0), _vm._v(" "), _c('div', {
     staticClass: "field"
@@ -10129,7 +10115,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "for": "true"
     }
-  }, [_vm._v("Yes")])])])]), _vm._v(" "), _c('input', {
+  }, [_vm._v("Yes")])])])])]) : _vm._e(), _vm._v(" "), _c('input', {
     attrs: {
       "type": "hidden",
       "name": "owner_id"
@@ -10166,7 +10152,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [_c('i', {
     staticClass: "red warning icon"
-  }), _vm._v("\n            Do you want to make your product public (can be seen by everyone)?\n        ")])
+  }), _vm._v("\n                Do you want to make your product public (can be seen by everyone)?\n            ")])
 }]}
 module.exports.render._withStripped = true
 if (false) {
@@ -10357,9 +10343,6 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       key: product.id,
       attrs: {
         "product": product
-      },
-      on: {
-        "delete": _vm.deleteProduct
       }
     })
   }))

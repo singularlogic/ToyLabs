@@ -8,9 +8,6 @@
             <a class="ui compact basic blue icon button" :href="`/product/${product.id}/edit`" data-tooltip="Edit Product..." data-position="left center" data-inverted>
                 <i class="settings icon"></i>
             </a>
-            <button type="button" class="ui compact basic red icon button" @click="deleteProduct" data-tooltip="Delete Product" data-position="right center" data-inverted>
-                <i class="trash icon"></i>
-            </button>
         </div>
 
         <div class="ui hidden clearing divider"></div>
@@ -89,9 +86,6 @@ export default {
 
             return 'disabled';
         },
-        deleteProduct() {
-            this.$emit('delete', this.product);
-        }
     },
     computed: {
         owner() {

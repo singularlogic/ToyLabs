@@ -25,40 +25,42 @@
             </div>
         </div>
 
-        <h4 class="ui dividing header">Legal</h4>
-        <div class="inline fields">
-            <label for="owner">Who will be the legal owner of this product?</label>
-            <div class="field">
-                <div class="ui radio checkbox">
-                    <input type="radio" name="owner" id="me" value="me" v-model="owner" />
-                    <label for="me">Myself</label>
+        <div v-if="editLegal">
+            <h4 class="ui dividing header">Legal</h4>
+            <div class="inline fields">
+                <label for="owner">Who will be the legal owner of this product?</label>
+                <div class="field">
+                    <div class="ui radio checkbox">
+                        <input type="radio" name="owner" id="me" value="me" v-model="owner" />
+                        <label for="me">Myself</label>
+                    </div>
+                </div>
+                <div class="field" :class="{ disabled: _organizations.length === 0 }">
+                    <div class="ui radio checkbox">
+                        <input type="radio" name="owner" id="org" value="org" v-model="owner" />
+                        <label for="org">
+                            My Organization
+                            <span v-if="_organizations.length > 0">(<em>{{ _organizations[0].name }}</em>)</span>
+                        </label>
+                    </div>
                 </div>
             </div>
-            <div class="field" :class="{ disabled: _organizations.length === 0 }">
-                <div class="ui radio checkbox">
-                    <input type="radio" name="owner" id="org" value="org" v-model="owner" />
-                    <label for="org">
-                        My Organization
-                        <span v-if="_organizations.length > 0">(<em>{{ _organizations[0].name }}</em>)</span>
-                    </label>
+            <div class="inline fields">
+                <label for="public">
+                    <i class="red warning icon"></i>
+                    Do you want to make your product public (can be seen by everyone)?
+                </label>
+                <div class="field">
+                    <div class="ui radio checkbox">
+                        <input type="radio" name="is_public" id="false" value="0" v-model="product.is_public" />
+                        <label for="false">No</label>
+                    </div>
                 </div>
-            </div>
-        </div>
-        <div class="inline fields">
-            <label for="public">
-                <i class="red warning icon"></i>
-                Do you want to make your product public (can be seen by everyone)?
-            </label>
-            <div class="field">
-                <div class="ui radio checkbox">
-                    <input type="radio" name="is_public" id="false" value="0" v-model="product.is_public" />
-                    <label for="false">No</label>
-                </div>
-            </div>
-            <div class="field">
-                <div class="ui radio checkbox">
-                    <input type="radio" name="is_public" id="true" value="1" v-model="product.is_public" />
-                    <label for="true">Yes</label>
+                <div class="field">
+                    <div class="ui radio checkbox">
+                        <input type="radio" name="is_public" id="true" value="1" v-model="product.is_public" />
+                        <label for="true">Yes</label>
+                    </div>
                 </div>
             </div>
         </div>
@@ -82,7 +84,17 @@ export default {
             product: this._product,
             organization: this._organizations.length > 0 ? this._organizations[0] : null,
             owner: this._product.owner_type === 'App\\User' ? 'me' : 'org',
+            editLegal: this._product.id ? false : true,
         };
+    },
+    mounted() {
+        if (this.owner === 'me') {
+            this.editLegal = true;
+        } else if (this.owner === 'org' && this.organization.owner_id === this._user.id) {
+            this.editLegal = true;
+        } else {
+            this.editLegal = false;
+        }
     },
     computed: {
         owner_id() {
