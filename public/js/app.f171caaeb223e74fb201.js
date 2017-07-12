@@ -2678,6 +2678,113 @@ exports.default = {
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js?cacheDirectory!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/ProductCreate.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+exports.default = {
+    props: ['_product', '_user', '_organizations', '_categories'],
+    data: function data() {
+        return {
+            submitText: this._product.id ? 'Update' : 'Create',
+            product: this._product,
+            organization: this._organizations.length > 0 ? this._organizations[0] : null
+        };
+    },
+
+    computed: {
+        owner_id: function owner_id() {
+            return this.product.owner.id;
+        },
+        owner_type: function owner_type() {
+            return this.product.owner === this.organization ? 'App\\Organization' : 'App\\User';
+        }
+    }
+};
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js?cacheDirectory!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/ProductList.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -9690,6 +9797,313 @@ if (false) {
   module.hot.accept()
   if (module.hot.data) {
      require("vue-hot-reload-api").rerender("data-v-2d585880", module.exports)
+  }
+}
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-2e10366f\"}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/ProductCreate.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('form', {
+    staticClass: "ui form",
+    attrs: {
+      "method": "POST",
+      "action": "/product/create"
+    }
+  }, [_c('input', {
+    attrs: {
+      "type": "hidden",
+      "name": "_token"
+    },
+    domProps: {
+      "value": _vm.$parent.crsf
+    }
+  }), _vm._v(" "), _c('h4', {
+    staticClass: "ui dividing header"
+  }, [_vm._v("General")]), _vm._v(" "), _c('div', {
+    staticClass: "field"
+  }, [_c('label', [_vm._v("Title")]), _vm._v(" "), _c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.product.title),
+      expression: "product.title"
+    }],
+    attrs: {
+      "type": "text",
+      "name": "title",
+      "placeholder": "Enter a descriptive title for your product",
+      "required": ""
+    },
+    domProps: {
+      "value": (_vm.product.title)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.product.title = $event.target.value
+      }
+    }
+  })]), _vm._v(" "), _c('div', {
+    staticClass: "field"
+  }, [_c('label', [_vm._v("Description")]), _vm._v(" "), _c('textarea', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.product.description),
+      expression: "product.description"
+    }],
+    attrs: {
+      "name": "description",
+      "required": ""
+    },
+    domProps: {
+      "value": (_vm.product.description)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.product.description = $event.target.value
+      }
+    }
+  })]), _vm._v(" "), _c('div', {
+    staticClass: "fields"
+  }, [_c('div', {
+    staticClass: "twelve wide field"
+  }, [_c('label', [_vm._v("Category")]), _vm._v(" "), _c('select', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.product.category_id),
+      expression: "product.category_id"
+    }],
+    staticClass: "ui search dropdown",
+    attrs: {
+      "name": "category_id"
+    },
+    on: {
+      "change": function($event) {
+        var $$selectedVal = Array.prototype.filter.call($event.target.options, function(o) {
+          return o.selected
+        }).map(function(o) {
+          var val = "_value" in o ? o._value : o.value;
+          return val
+        });
+        _vm.product.category_id = $event.target.multiple ? $$selectedVal : $$selectedVal[0]
+      }
+    }
+  }, [_c('option', {
+    attrs: {
+      "value": ""
+    }
+  }, [_vm._v("Select Product Category")]), _vm._v(" "), _vm._l((_vm._categories), function(c) {
+    return _c('option', {
+      domProps: {
+        "value": c.id
+      }
+    }, [_vm._v(_vm._s(c.title))])
+  })], 2)]), _vm._v(" "), _c('div', {
+    staticClass: "four wide field",
+    attrs: {
+      "required": ""
+    }
+  }, [_c('label', [_vm._v("Ages")]), _vm._v(" "), _c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.product.ages),
+      expression: "product.ages"
+    }],
+    attrs: {
+      "type": "text",
+      "name": "ages",
+      "placeholder": "Target ages",
+      "required": ""
+    },
+    domProps: {
+      "value": (_vm.product.ages)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.product.ages = $event.target.value
+      }
+    }
+  })])]), _vm._v(" "), _c('h4', {
+    staticClass: "ui dividing header"
+  }, [_vm._v("Legal")]), _vm._v(" "), _c('div', {
+    staticClass: "inline fields"
+  }, [_c('label', {
+    attrs: {
+      "for": "owner"
+    }
+  }, [_vm._v("Who will be the legal owner of this product?")]), _vm._v(" "), _c('div', {
+    staticClass: "field"
+  }, [_c('div', {
+    staticClass: "ui radio checkbox"
+  }, [_c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.product.owner),
+      expression: "product.owner"
+    }],
+    attrs: {
+      "type": "radio",
+      "name": "owner",
+      "id": "me"
+    },
+    domProps: {
+      "value": _vm._user,
+      "checked": _vm._q(_vm.product.owner, _vm._user)
+    },
+    on: {
+      "__c": function($event) {
+        _vm.product.owner = _vm._user
+      }
+    }
+  }), _vm._v(" "), _c('label', {
+    attrs: {
+      "for": "me"
+    }
+  }, [_vm._v("Myself")])])]), _vm._v(" "), _c('div', {
+    staticClass: "field",
+    class: {
+      disabled: _vm._organizations.length === 0
+    }
+  }, [_c('div', {
+    staticClass: "ui radio checkbox"
+  }, [_c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.product.owner),
+      expression: "product.owner"
+    }],
+    attrs: {
+      "type": "radio",
+      "name": "owner",
+      "id": "org"
+    },
+    domProps: {
+      "value": _vm.organization,
+      "checked": _vm._q(_vm.product.owner, _vm.organization)
+    },
+    on: {
+      "__c": function($event) {
+        _vm.product.owner = _vm.organization
+      }
+    }
+  }), _vm._v(" "), _c('label', {
+    attrs: {
+      "for": "org"
+    }
+  }, [_vm._v("\n                    My Organization\n                    "), (_vm._organizations.length > 0) ? _c('span', [_vm._v("("), _c('em', [_vm._v(_vm._s(_vm._organizations[0].name))]), _vm._v(")")]) : _vm._e()])])])]), _vm._v(" "), _c('div', {
+    staticClass: "inline fields"
+  }, [_vm._m(0), _vm._v(" "), _c('div', {
+    staticClass: "field"
+  }, [_c('div', {
+    staticClass: "ui radio checkbox"
+  }, [_c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.product.is_public),
+      expression: "product.is_public"
+    }],
+    attrs: {
+      "type": "radio",
+      "name": "is_public",
+      "id": "false",
+      "value": "false"
+    },
+    domProps: {
+      "checked": _vm._q(_vm.product.is_public, "false")
+    },
+    on: {
+      "__c": function($event) {
+        _vm.product.is_public = "false"
+      }
+    }
+  }), _vm._v(" "), _c('label', {
+    attrs: {
+      "for": "false"
+    }
+  }, [_vm._v("No")])])]), _vm._v(" "), _c('div', {
+    staticClass: "field"
+  }, [_c('div', {
+    staticClass: "ui radio checkbox"
+  }, [_c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.product.is_public),
+      expression: "product.is_public"
+    }],
+    attrs: {
+      "type": "radio",
+      "name": "is_public",
+      "id": "true",
+      "value": "true"
+    },
+    domProps: {
+      "checked": _vm._q(_vm.product.is_public, "true")
+    },
+    on: {
+      "__c": function($event) {
+        _vm.product.is_public = "true"
+      }
+    }
+  }), _vm._v(" "), _c('label', {
+    attrs: {
+      "for": "true"
+    }
+  }, [_vm._v("Yes")])])])]), _vm._v(" "), _c('input', {
+    attrs: {
+      "type": "hidden",
+      "name": "owner_id"
+    },
+    domProps: {
+      "value": _vm.owner_id
+    }
+  }), _vm._v(" "), _c('input', {
+    attrs: {
+      "type": "hidden",
+      "name": "owner_type"
+    },
+    domProps: {
+      "value": _vm.owner_type
+    }
+  }), _vm._v(" "), _c('button', {
+    ref: "submitButton",
+    staticClass: "ui orange submit right floated labeled icon button",
+    attrs: {
+      "type": "submit"
+    }
+  }, [_c('i', {
+    staticClass: "edit icon"
+  }), _vm._v(" " + _vm._s(_vm.submitText) + "\n    ")]), _vm._v(" "), _c('a', {
+    staticClass: "ui default right floated button",
+    attrs: {
+      "href": "/dashboard"
+    }
+  }, [_vm._v("Cancel")])])
+},staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('label', {
+    attrs: {
+      "for": "public"
+    }
+  }, [_c('i', {
+    staticClass: "red warning icon"
+  }), _vm._v("\n            Do you want to make your product public (can be seen by everyone)?\n        ")])
+}]}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-2e10366f", module.exports)
   }
 }
 
@@ -24358,14 +24772,15 @@ var _ProductList = __webpack_require__("./resources/assets/js/components/Product
 
 var _ProductList2 = _interopRequireDefault(_ProductList);
 
+var _ProductCreate = __webpack_require__("./resources/assets/js/components/ProductCreate.vue");
+
+var _ProductCreate2 = _interopRequireDefault(_ProductCreate);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /**
  * Navbar transition for the homepage
  */
-
-
-// Import VueJS Components
 $(document).ready(function () {
     // fix menu when passed
     $('.masthead').visibility({
@@ -24392,6 +24807,9 @@ $(document).ready(function () {
     });
 });
 
+// Import VueJS Components
+
+
 var router = new VueRouter({
     mode: 'history',
     linkActiveClass: 'active',
@@ -24416,7 +24834,8 @@ var app = new _vue2.default({
         ProductsGrid: _ProductsGrid2.default,
         Comments: _Comments2.default,
         Likes: _Likes2.default,
-        ProductList: _ProductList2.default
+        ProductList: _ProductList2.default,
+        ProductCreate: _ProductCreate2.default
     }
 });
 
@@ -24986,6 +25405,41 @@ if (false) {(function () {
     hotAPI.createRecord("data-v-4c167f93", Component.options)
   } else {
     hotAPI.reload("data-v-4c167f93", Component.options)
+  }
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+
+/***/ "./resources/assets/js/components/ProductCreate.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var Component = __webpack_require__("./node_modules/vue-loader/lib/component-normalizer.js")(
+  /* script */
+  __webpack_require__("./node_modules/babel-loader/lib/index.js?cacheDirectory!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/ProductCreate.vue"),
+  /* template */
+  __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-2e10366f\"}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/ProductCreate.vue"),
+  /* scopeId */
+  null,
+  /* cssModules */
+  null
+)
+Component.options.__file = "/Users/finik/Sites/toylabs/resources/assets/js/components/ProductCreate.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] ProductCreate.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-2e10366f", Component.options)
+  } else {
+    hotAPI.reload("data-v-2e10366f", Component.options)
   }
 })()}
 

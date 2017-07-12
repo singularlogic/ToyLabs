@@ -37,6 +37,11 @@ class Product extends Model implements HasMedia
         return '<p>' . implode('</p><p>', $paragraphs) . '</p>';
     }
 
+    public function category()
+    {
+        return $this->belongsTo(ToyCategory::class, 'category_id');
+    }
+
     public function getTypeAttribute()
     {
         return 'product';

@@ -5,8 +5,8 @@ namespace App\Http\Controllers;
 use App\Design;
 use App\Product;
 use App\Prototype;
-
-// use Illuminate\Http\Request;
+use App\ToyCategory;
+use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
@@ -90,4 +90,42 @@ class ProductController extends Controller
         return view('product.prototype', $data);
     }
 
+    public function create()
+    {
+        $user = \Auth::user();
+
+        $data = [
+            'title'         => 'New Product',
+            'user'          => $user,
+            'organizations' => $user->organizations,
+            'categories'    => ToyCategory::all(),
+            'product'       => [
+                'title'       => '',
+                'description' => '',
+                'is_public'   => false,
+                'status'      => 'concept',
+                'owner'       => $user,
+                'ages'        => '',
+                'category_id' => -1,
+            ],
+        ];
+
+        return view('product.create', $data);
+    }
+
+    public function doCreate(Request $request)
+    {
+        $input = $request->all();
+
+        Product::create([
+            'title'       => $input['title'],
+            'description' => $input['description'],
+            'ages'        => $input['ages'],
+            'is_public'   => $input['is_public'],
+            'owner_id'    => $input['owner_id'],
+            'owner_type'  => $input['owner_type'],
+        ]);
+
+        return redirect('dashboard')->with('success', 'Product created successfully.');
+    }
 }

@@ -14,9 +14,9 @@
                     </div>
                     <div class="results"></div>
                 </div>
-                <button class="circular ui right floated icon orange button" data-tooltip="Create a new Product" data-position="left center" data-inverted>
+                <a class="circular ui right floated icon orange button" data-tooltip="Create a new Product" data-position="left center" data-inverted href="/product/create">
                     <i class="icon plus"></i>
-                </button>
+                </a>
             </div>
 
             <div class="ui clearing divider"></div>

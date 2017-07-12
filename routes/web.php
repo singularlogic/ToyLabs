@@ -37,13 +37,19 @@ Route::get('/project/{id}', ['as' => 'project.guestview', 'uses' => 'ProjectCont
 Route::group(['middleware' => 'auth'], function () {
     // Dashboard
     Route::get('/dashboard', ['as' => 'dashboard', 'uses' => 'DashboardController@show']);
+
     // Personal Profile
     Route::get('/profile/edit', ['as' => 'profile.edit', 'uses' => 'ProfileController@showPersonalProfile']);
     Route::post('/profile/edit', ['as' => 'profile.edit.post', 'uses' => 'ProfileController@savePersonalProfile']);
+
     // Organization Profile
     Route::get('/organization/edit', ['as' => 'organization.edit.mine', 'uses' => 'ProfileController@showMyOrganizationProfile']);
     Route::get('/organization/{id}/edit', ['as' => 'organization.edit', 'uses' => 'ProfileController@showOrganizationProfile']);
     Route::post('/organization/edit', ['as' => 'organization.edit.post', 'uses' => 'ProfileController@saveOrganizationProfile']);
+
+    // Products/Designs/Prototypes
+    Route::get('/product/create', ['as' => 'product.create', 'uses' => 'ProductController@create']);
+    Route::post('/product/create', ['as' => 'product.create.post', 'uses' => 'ProductController@doCreate']);
 });
 
 // Notifications
