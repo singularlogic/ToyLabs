@@ -32,6 +32,7 @@ Route::get('/login/{provider}', ['as' => 'social.redirect', 'uses' => 'SocialAut
 Route::get('/login/callback/{provider}', ['as' => 'social.callback', 'uses' => 'SocialAuthController@callback']);
 
 Route::get('/project/{id}', ['as' => 'project.guestview', 'uses' => 'ProjectController@guestview']);
+Route::get('/file/{id}', ['as' => 'file', 'uses' => 'FileController@get']);
 
 // Routes for logged users
 Route::group(['middleware' => 'auth'], function () {
@@ -52,6 +53,11 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/product/create', ['as' => 'product.create.post', 'uses' => 'ProductController@doCreate']);
     Route::get('/product/{id}/edit', ['as' => 'product.edit', 'uses' => 'ProductController@edit']);
     Route::post('/product/{id}/edit', ['as' => 'product.edit.post', 'uses' => 'ProductController@doEdit']);
+
+    // Files
+    Route::post('/file/upload', ['as' => 'file.upload', 'uses' => 'FileController@upload']);
+    Route::delete('/file/delete', ['as' => 'file.delete', 'uses' => 'FileController@delete']);
+    Route::delete('/attachment/remove', ['as' => 'attachment.delete', 'uses' => 'FileController@remove']);
 });
 
 // Notifications

@@ -42,7 +42,7 @@ class ProductController extends Controller
 
     public function showProduct($id)
     {
-        $product = Product::with(['designs', 'prototypes', 'comments.creator'])->find($id);
+        $product = Product::with(['designs', 'prototypes', 'comments.creator', 'media'])->find($id);
         // TODO: Return 404 if product does not exist
 
         $data = [
@@ -120,7 +120,7 @@ class ProductController extends Controller
     {
         $input = $request->all();
 
-        Product::create([
+        $product = Product::create([
             'title'       => $input['title'],
             'description' => $input['description'],
             'ages'        => $input['ages'],
@@ -129,6 +129,11 @@ class ProductController extends Controller
             'owner_id'    => $input['owner_id'],
             'owner_type'  => $input['owner_type'],
         ]);
+
+        foreach ($files as $file) {
+            $path = storage_path('/app/' . $file['path']);
+            $product->addMedia($path)->usingName($file['name'])->toMediaCollection('images');
+        }
 
         return redirect('dashboard')->with('success', 'Product created successfully.');
     }
@@ -162,6 +167,7 @@ class ProductController extends Controller
         $input   = $request->all();
         $product = Product::find($id);
         $user    = Auth::user();
+        $files   = json_decode($input['files'], true);
 
         if ($product && $this->canEdit($user, $product)) {
             Product::where('id', $id)->update([
@@ -173,6 +179,11 @@ class ProductController extends Controller
                 'owner_id'    => $input['owner_id'],
                 'owner_type'  => $input['owner_type'],
             ]);
+
+            foreach ($files as $file) {
+                $path = storage_path('/app/' . $file['path']);
+                $product->addMedia($path)->usingName($file['name'])->toMediaCollection('images');
+            }
 
             return redirect('dashboard')->with('success', 'Product updated successfully!');
         }

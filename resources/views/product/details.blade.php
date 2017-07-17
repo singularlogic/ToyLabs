@@ -30,7 +30,7 @@
             </div>
 
             <div class="ui basic segment">
-                <img class="ui large left bordered floated image" src="/images/placeholder.jpg" />
+                <img class="ui large left bordered floated image" src="{{ $product['image'] }}" />
 
                 {!! nl2br(e($product['description'])) !!}
             </div>

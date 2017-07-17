@@ -65,8 +65,37 @@
             </div>
         </div>
 
+        <h3 class="ui dividing header">Images</h3>
+
+        <div class="ui relaxed horizontal divided list" v-if="product.media" style="margin-bottom: 10px;">
+            <div class="item" v-for="image of product.media">
+                <img :src="`/file/${image.id}`" class="ui mini image"  />
+                <div class="content">
+                    <span class="header">
+                        {{ image.name }}
+                        <a href="javascript:void(0)" @click="deleteMedia(image.id)"><i class="grey delete icon"></i></a>
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <dropzone id="images"
+            url="/file/upload"
+            :useFontAwesome="true"
+            :showRemoveLink="true"
+            paramName="image"
+            acceptedFileTypes="image/*"
+            v-on:vdropzone-success="fileAdded"
+            v-on:vdropzone-removed-file="fileRemoved"
+        >
+            <input type="hidden" name="_token" :value="$parent.crsf" />
+        </dropzone>
+
+        <div class="ui divider"></div>
+
         <input type="hidden" name="owner_id" :value="owner_id" />
         <input type="hidden" name="owner_type" :value="owner_type" />
+        <input type="hidden" name="files" :value="files" />
 
         <button type="submit" class="ui orange submit right floated labeled icon button" ref="submitButton">
             <i class="edit icon"></i> {{ submitText }}
@@ -76,7 +105,10 @@
 </template>
 
 <script>
+import Dropzone from 'vue2-dropzone';
+
 export default {
+    components: { Dropzone },
     props: ['_product', '_user', '_organizations', '_categories'],
     data() {
         return {
@@ -85,6 +117,7 @@ export default {
             organization: this._organizations.length > 0 ? this._organizations[0] : null,
             owner: this._product.owner_type === 'App\\User' ? 'me' : 'org',
             editLegal: this._product.id ? false : true,
+            images: [],
         };
     },
     mounted() {
@@ -102,7 +135,58 @@ export default {
         },
         owner_type() {
             return this.owner === 'me' ? 'App\\User' : 'App\\Organization';
+        },
+        files() {
+            return JSON.stringify(this.images);
+        }
+    },
+    methods: {
+        fileAdded(file) {
+            this.images.push({
+                name: file.name,
+                path: JSON.parse(file.xhr.response).path,
+            });
+        },
+        fileRemoved(file, error, xhr) {
+            const path = JSON.parse(file.xhr.response).path;
+            const f = this.images.find((o) => o.path === path);
+            const idx = this.images.indexOf(f);
+            if (~idx) {
+                axios.delete('/file/delete', {
+                    data: { path },
+                }).then((response) => {
+                    this.images.splice(idx, 1);
+                });
+            }
+        },
+        deleteMedia(id) {
+            const media = this.product.media.find((o) => o.id == id);
+            const idx = this.product.media.indexOf(media);
+            if (~idx) {
+                // TODO: Confirm dialog to remove media and then...
+                axios.delete('/attachment/remove', {
+                    data: { id },
+                }).then((response) => {
+                    if (response.status === 200) {
+                        this.product.media.splice(idx, 1);
+                    } else {
+                        console.log(response);
+                    }
+                });
+            }
+            console.log(`NYI: deleteMedia ${id}`);
         }
     }
 }
 </script>
+
+<style>
+    .vue-dropzone {
+        border: 1px dashed rgba(34,36,38,.15)!important;
+        font-family: inherit!important;
+    }
+
+    .dropzone {
+        padding: 10px!important;
+    }
+</style>
