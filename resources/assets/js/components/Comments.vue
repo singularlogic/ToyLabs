@@ -16,7 +16,7 @@
 
         <div class="ui clearing hidden divider"></div>
 
-        <form class="ui reply form">
+        <form class="ui reply form" v-if="isLogged">
             <div class="field">
                 <textarea rows="5" v-model="newComment.body"></textarea>
             </div>
@@ -38,6 +38,7 @@
 <script>
 import Comment from './Comment.vue';
 import ConfirmDialog from './ConfirmDialog.vue';
+import { mapGetters } from 'vuex';
 
 export default {
     props: ['comments', 'model'],
@@ -57,6 +58,9 @@ export default {
         children() {
             return this.localComments.filter((c) => c.parent_id === null);
         },
+        ...mapGetters([
+            'isLogged'
+        ]),
     },
     methods: {
         addComment(comment) {

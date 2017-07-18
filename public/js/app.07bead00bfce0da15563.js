@@ -1733,6 +1733,44 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
 var _Comment = __webpack_require__("./resources/assets/js/components/Comment.vue");
 
 var _Comment2 = _interopRequireDefault(_Comment);
@@ -1741,45 +1779,9 @@ var _ConfirmDialog = __webpack_require__("./resources/assets/js/components/Confi
 
 var _ConfirmDialog2 = _interopRequireDefault(_ConfirmDialog);
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+var _vuex = __webpack_require__("./node_modules/vuex/dist/vuex.esm.js");
 
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.default = {
     props: ['comments', 'model'],
@@ -1796,13 +1798,13 @@ exports.default = {
         };
     },
 
-    computed: {
+    computed: _extends({
         children: function children() {
             return this.localComments.filter(function (c) {
                 return c.parent_id === null;
             });
         }
-    },
+    }, (0, _vuex.mapGetters)(['isLogged'])),
     methods: {
         addComment: function addComment(comment) {
             this.saveComment(comment);
@@ -9901,7 +9903,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     })
   })), _vm._v(" "), _c('div', {
     staticClass: "ui clearing hidden divider"
-  }), _vm._v(" "), _c('form', {
+  }), _vm._v(" "), (_vm.isLogged) ? _c('form', {
     staticClass: "ui reply form"
   }, [_c('div', {
     staticClass: "field"
@@ -9931,7 +9933,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [_c('i', {
     staticClass: "icon edit"
-  }), _vm._v(" Add Comment\n            ")])])]), _vm._v(" "), _c('confirm-dialog', {
+  }), _vm._v(" Add Comment\n            ")])]) : _vm._e()]), _vm._v(" "), _c('confirm-dialog', {
     attrs: {
       "id": "commentDelete",
       "icon": "trash",
