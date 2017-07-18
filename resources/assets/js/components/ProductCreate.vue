@@ -101,14 +101,22 @@
             <i class="edit icon"></i> {{ submitText }}
         </button>
         <a href="/dashboard" class="ui default right floated button">Cancel</a>
+
+        <confirm-dialog
+            id="imageDelete"
+            icon="trash"
+            title="Delete Image?"
+            body="Are you sure you want to delete this file? This action cannot be undone!"
+        ></confirm-dialog>
     </form>
 </template>
 
 <script>
+import ConfirmDialog from './ConfirmDialog.vue';
 import Dropzone from 'vue2-dropzone';
 
 export default {
-    components: { Dropzone },
+    components: { Dropzone, ConfirmDialog },
     props: ['_product', '_user', '_organizations', '_categories'],
     data() {
         return {
@@ -160,21 +168,22 @@ export default {
             }
         },
         deleteMedia(id) {
-            const media = this.product.media.find((o) => o.id == id);
-            const idx = this.product.media.indexOf(media);
-            if (~idx) {
-                // TODO: Confirm dialog to remove media and then...
-                axios.delete('/attachment/remove', {
-                    data: { id },
-                }).then((response) => {
-                    if (response.status === 200) {
-                        this.product.media.splice(idx, 1);
-                    } else {
-                        console.log(response);
+            $('#imageDelete').modal({
+                closable: false,
+                onApprove: () => {
+                    const media = this.product.media.find((o) => o.id == id);
+                    const idx = this.product.media.indexOf(media);
+                    if (~idx) {
+                        axios.delete('/attachment/remove', {
+                            data: { id },
+                        }).then((response) => {
+                            if (response.status === 200) {
+                                this.product.media.splice(idx, 1);
+                            }
+                        });
                     }
-                });
-            }
-            console.log(`NYI: deleteMedia ${id}`);
+                },
+            }).modal('show');
         }
     }
 }

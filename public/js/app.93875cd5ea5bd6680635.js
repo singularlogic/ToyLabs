@@ -2690,14 +2690,132 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
+var _ConfirmDialog = __webpack_require__("./resources/assets/js/components/ConfirmDialog.vue");
+
+var _ConfirmDialog2 = _interopRequireDefault(_ConfirmDialog);
+
 var _vue2Dropzone = __webpack_require__("./node_modules/vue2-dropzone/dist/vue2-dropzone.js");
 
 var _vue2Dropzone2 = _interopRequireDefault(_vue2Dropzone);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
 exports.default = {
-    components: { Dropzone: _vue2Dropzone2.default },
+    components: { Dropzone: _vue2Dropzone2.default, ConfirmDialog: _ConfirmDialog2.default },
     props: ['_product', '_user', '_organizations', '_categories'],
     data: function data() {
         return {
@@ -2756,131 +2874,27 @@ exports.default = {
         deleteMedia: function deleteMedia(id) {
             var _this2 = this;
 
-            var media = this.product.media.find(function (o) {
-                return o.id == id;
-            });
-            var idx = this.product.media.indexOf(media);
-            if (~idx) {
-                // TODO: Confirm dialog to remove media and then...
-                axios.delete('/attachment/remove', {
-                    data: { id: id }
-                }).then(function (response) {
-                    if (response.status === 200) {
-                        _this2.product.media.splice(idx, 1);
-                    } else {
-                        console.log(response);
+            $('#imageDelete').modal({
+                closable: false,
+                onApprove: function onApprove() {
+                    var media = _this2.product.media.find(function (o) {
+                        return o.id == id;
+                    });
+                    var idx = _this2.product.media.indexOf(media);
+                    if (~idx) {
+                        axios.delete('/attachment/remove', {
+                            data: { id: id }
+                        }).then(function (response) {
+                            if (response.status === 200) {
+                                _this2.product.media.splice(idx, 1);
+                            }
+                        });
                     }
-                });
-            }
-            console.log('NYI: deleteMedia ' + id);
+                }
+            }).modal('show');
         }
     }
-}; //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
+};
 
 /***/ }),
 
@@ -10300,7 +10314,14 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "href": "/dashboard"
     }
-  }, [_vm._v("Cancel")])], 1)
+  }, [_vm._v("Cancel")]), _vm._v(" "), _c('confirm-dialog', {
+    attrs: {
+      "id": "imageDelete",
+      "icon": "trash",
+      "title": "Delete Image?",
+      "body": "Are you sure you want to delete this file? This action cannot be undone!"
+    }
+  })], 1)
 },staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('label', {
     attrs: {
