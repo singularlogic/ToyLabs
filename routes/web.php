@@ -32,18 +32,32 @@ Route::get('/login/{provider}', ['as' => 'social.redirect', 'uses' => 'SocialAut
 Route::get('/login/callback/{provider}', ['as' => 'social.callback', 'uses' => 'SocialAuthController@callback']);
 
 Route::get('/project/{id}', ['as' => 'project.guestview', 'uses' => 'ProjectController@guestview']);
+Route::get('/file/{id}', ['as' => 'file', 'uses' => 'FileController@get']);
 
 // Routes for logged users
 Route::group(['middleware' => 'auth'], function () {
     // Dashboard
     Route::get('/dashboard', ['as' => 'dashboard', 'uses' => 'DashboardController@show']);
+
     // Personal Profile
     Route::get('/profile/edit', ['as' => 'profile.edit', 'uses' => 'ProfileController@showPersonalProfile']);
     Route::post('/profile/edit', ['as' => 'profile.edit.post', 'uses' => 'ProfileController@savePersonalProfile']);
+
     // Organization Profile
     Route::get('/organization/edit', ['as' => 'organization.edit.mine', 'uses' => 'ProfileController@showMyOrganizationProfile']);
     Route::get('/organization/{id}/edit', ['as' => 'organization.edit', 'uses' => 'ProfileController@showOrganizationProfile']);
     Route::post('/organization/edit', ['as' => 'organization.edit.post', 'uses' => 'ProfileController@saveOrganizationProfile']);
+
+    // Products/Designs/Prototypes
+    Route::get('/product/create', ['as' => 'product.create', 'uses' => 'ProductController@create']);
+    Route::post('/product/create', ['as' => 'product.create.post', 'uses' => 'ProductController@doCreate']);
+    Route::get('/product/{id}/edit', ['as' => 'product.edit', 'uses' => 'ProductController@edit']);
+    Route::post('/product/{id}/edit', ['as' => 'product.edit.post', 'uses' => 'ProductController@doEdit']);
+
+    // Files
+    Route::post('/file/upload', ['as' => 'file.upload', 'uses' => 'FileController@upload']);
+    Route::delete('/file/delete', ['as' => 'file.delete', 'uses' => 'FileController@delete']);
+    Route::delete('/attachment/remove', ['as' => 'attachment.delete', 'uses' => 'FileController@remove']);
 });
 
 // Notifications
@@ -63,3 +77,14 @@ Route::group(['prefix' => 'messages'], function () {
     Route::get('{id}', ['as' => 'messages.show', 'uses' => 'MessagesController@show']);
     Route::put('{id}', ['as' => 'messages.update', 'uses' => 'MessagesController@update']);
 });
+
+Route::get('/user/likes', ['as' => 'user.likes', 'uses' => 'UserController@getLikes']);
+Route::put('/user/like/{type}/{id}', ['as' => 'user.like', 'uses' => 'UserController@like']);
+Route::put('/user/unlike/{type}/{id}', ['as' => 'user.like', 'uses' => 'UserController@unlike']);
+Route::post('/user/comment', ['as' => 'user.comment.post', 'uses' => 'UserController@postComment']);
+Route::delete('/user/comment/{id}', ['as' => 'user.comment.delete', 'uses' => 'UserController@deleteComment']);
+
+// Product/Design/Prototype Details
+Route::get('/product/{id}', ['as' => 'product.details', 'uses' => 'ProductController@showProduct']);
+Route::get('/design/{id}', ['as' => 'design.details', 'uses' => 'ProductController@showDesign']);
+Route::get('/prototype/{id}', ['as' => 'prototype.details', 'uses' => 'ProductController@showPrototype']);

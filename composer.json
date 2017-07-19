@@ -9,10 +9,13 @@
         "cmgmyr/messenger": "^2.14",
         "creativeorange/gravatar": "^1.0",
         "cviebrock/eloquent-sluggable": "^4.2",
+        "faustbrian/laravel-commentable": "^2.1",
         "laravel/framework": "5.4.*",
         "laravel/socialite": "^3.0",
         "laravel/tinker": "~1.0",
         "pusher/pusher-php-server": "~2.0",
+        "rtconner/laravel-likeable": "~1.2",
+        "spatie/laravel-medialibrary": "^5.0.0",
         "spatie/laravel-permission": "^2.1"
     },
     "require-dev": {

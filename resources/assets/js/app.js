@@ -7,6 +7,11 @@ import Profile from './components/Profile.vue';
 import Organization from './components/Organization.vue';
 import NotificationArea from './components/NotificationArea.vue';
 import NotificationsPage from './components/NotificationsPage.vue';
+import ProductsGrid from './components/ProductsGrid.vue';
+import Comments from './components/Comments.vue';
+import Likes from './components/Likes.vue';
+import ProductList from './components/ProductList.vue';
+import ProductCreate from './components/ProductCreate.vue';
 
 /**
  * Navbar transition for the homepage
@@ -57,5 +62,10 @@ const app = new Vue({
         Organization,
         NotificationArea,
         NotificationsPage,
+        ProductsGrid,
+        Comments,
+        Likes,
+        ProductList,
+        ProductCreate,
     }
 });

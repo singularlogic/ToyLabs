@@ -4,7 +4,7 @@
                         </a>
                         <a class="item{{ Request::is('/') ? ' active' : '' }}" href="{{ route('home') }}">Home</a>
 @if(Auth::check())
-                        <a class="item{{ Request::is('dashboard') ? ' active' : '' }}" href="{{ route('dashboard') }}">Projects</a>
+                        <a class="item{{ Request::is('dashboard') ? ' active' : '' }}" href="{{ route('dashboard') }}">Products</a>
 @endif
                         <a class="item{{ Request::is('about') ? ' active' : '' }}" href="{{ route('about') }}">About</a>
 @if(Auth::check())

@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Organization;
+use App\Product;
+use App\User;
 use Illuminate\Support\Facades\Auth;
 
 // use Illuminate\Http\Request;
@@ -16,13 +19,17 @@ class DashboardController extends Controller
             session()->flash('warning', 'Please edit your <a href="/profile/edit">profile</a> to use the full functionality of ToyLabs.');
         }
 
-        switch ($user->role) {
-            case 'manufacturer':
-            case 'fablab':
-            case 'child_expert':
-            case 'safety_expert':
-            default: // end_user
-                return view('dashboard');
-        }
+        $products = Product::with('owner')->where([
+            'owner_id'   => $user->id,
+            'owner_type' => User::class,
+        ])->orWhere([
+            'owner_id'   => $user->organization,
+            'owner_type' => Organization::class,
+        ])->orderBy('updated_at', 'DESC')->get();
+        $data = [
+            'products' => $products,
+        ];
+
+        return view('dashboard', $data);
     }
 }

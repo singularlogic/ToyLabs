@@ -4,9 +4,12 @@ namespace App;
 
 use App\OrganizationType;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
 
 class Organization extends Model
 {
+    use HasMediaTrait;
+
     protected $fillable = [
         'name', 'legal_name', 'reg_country', 'reg_number', 'legal_form', 'vat_number', 'address', 'po_box', 'postal_code', 'city',
         'phone', 'fax', 'website_url', 'description', 'owner_id', 'organization_type_id',

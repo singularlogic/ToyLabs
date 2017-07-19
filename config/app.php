@@ -179,8 +179,10 @@ return [
 
         // 3rd Party Providers
         Cmgmyr\Messenger\MessengerServiceProvider::class,
+        Conner\Likeable\LikeableServiceProvider::class,
         Creativeorange\Gravatar\GravatarServiceProvider::class,
         Laravel\Socialite\SocialiteServiceProvider::class,
+        Spatie\MediaLibrary\MediaLibraryServiceProvider::class,
         Spatie\Permission\PermissionServiceProvider::class,
 
     ],
