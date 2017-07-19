@@ -15,7 +15,7 @@ class HomeController extends Controller
         $prototypes = Prototype::where('is_public', true)->get();
         $products   = $products->merge($designs);
         $products   = $products->merge($prototypes);
-        $products   = $products->shuffle();
+        $products->sortByDesc('updated_at');
 
         $data = [
             'products' => $products,
