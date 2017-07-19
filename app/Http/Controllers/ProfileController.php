@@ -6,6 +6,7 @@ use App\Organization;
 use App\OrganizationType;
 use App\Profile;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 
 class ProfileController extends Controller
@@ -57,7 +58,8 @@ class ProfileController extends Controller
                 'personal'      => $user->profile,
                 'professional'  => [
                     'role'          => $user->roles()->pluck('name')[0],
-                    'organizations' => $user->organizations,
+                    'organizations' => $user->memberships,
+                    'pending'       => $user->pendingMemberships,
                 ],
             ];
         } else {
@@ -78,7 +80,8 @@ class ProfileController extends Controller
                 ],
                 'professional'  => [
                     'role'          => $user->roles()->pluck('name')[0],
-                    'organizations' => null, // Users with no personal profile don't belong to an Organization
+                    'organizations' => [], // Users with no personal profile don't belong to an Organization
+                    'pending'       => [], // neither have pending requests
                 ],
             ];
         }
@@ -109,13 +112,13 @@ class ProfileController extends Controller
         $user->name = $input['name'];
         $user->save();
 
-        if ($input['newOrganizations'] !== null) {
-            $newOrgs = json_decode($input['newOrganizations']);
-            $orgs    = Organization::whereIn('id', $newOrgs)->get();
-            foreach ($orgs as $o) {
-                $user->organizations()->save($o);
-            }
-        }
+        // if ($input['newOrganizations'] !== null) {
+        //     $newOrgs = json_decode($input['newOrganizations']);
+        //     $orgs    = Organization::whereIn('id', $newOrgs)->get();
+        //     foreach ($orgs as $o) {
+        //         $user->organizations()->save($o);
+        //     }
+        // }
 
         if ($input['createOrganization'] == true) {
             return redirect()->route('organization.edit.mine');
@@ -176,10 +179,41 @@ class ProfileController extends Controller
             Organization::where('id', $id)->update($input);
             return redirect('dashboard')->with('success', 'Organization updated successfully');
         } else {
-            // Create
+            // Create Group
             $org = Organization::create($input);
+
+            // Ask to join the group and then approve request
+            $user->befriend($org);
+            $org->acceptacceptFriendRequest($user);
+
             // TODO: Redirect to organization facilities profile creation
             return redirect('dashboard')->with('success', 'Organization created successfully');
         }
+    }
+
+    public function joinOrganization(Request $request, $id)
+    {
+        $user = Auth::user();
+        $org  = Organization::find($id);
+
+        if ($org) {
+            $user->befriend($org);
+            return response()->json([])->setStatusCode(Response::HTTP_OK);
+        }
+
+        return response()->json(['error' => 'Organization not found!'])->setStatusCode(Response::HTTP_NOT_FOUND);
+    }
+
+    public function leaveOrganization(Request $request, $id)
+    {
+        $user = Auth::user();
+        $org  = Organization::find($id);
+
+        if ($org) {
+            $user->unfriend($org);
+            return response()->json([])->setStatusCode(Response::HTTP_OK);
+        }
+
+        return response()->json(['error' => 'Organization not found!'])->setStatusCode(Response::HTTP_NOT_FOUND);
     }
 }

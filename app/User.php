@@ -2,15 +2,18 @@
 
 namespace App;
 
+use App\Organization;
 use Cmgmyr\Messenger\Traits\Messagable;
 use Creativeorange\Gravatar\Facades\Gravatar;
+use Hootlex\Friendships\Status;
+use Hootlex\Friendships\Traits\Friendable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
-    use HasRoles, Notifiable, Messagable;
+    use HasRoles, Notifiable, Messagable, Friendable;
 
     /**
      * The attributes that are mass assignable.
@@ -57,6 +60,24 @@ class User extends Authenticatable
     public function getRoleAttribute()
     {
         return $this->roles()->pluck('name')[0];
+    }
+
+    public function getMembershipsAttribute()
+    {
+        $friendships = $this->findFriendships(Status::ACCEPTED)->get();
+        $recipients  = $friendships->pluck('recipient_id')->all();
+        $senders     = $friendships->pluck('sender_id')->all();
+
+        return Organization::whereIn('id', array_merge($recipients, $senders))->get();
+    }
+
+    public function getPendingMembershipsAttribute()
+    {
+        $friendships = $this->findFriendships(Status::PENDING)->get();
+        $recipients  = $friendships->pluck('recipient_id')->all();
+        $senders     = $friendships->pluck('sender_id')->all();
+
+        return Organization::whereIn('id', array_merge($recipients, $senders))->get();
     }
 
     public function getOrganizationAttribute()
