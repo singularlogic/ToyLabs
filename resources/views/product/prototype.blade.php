@@ -22,8 +22,6 @@
 
             <div class="ui hidden clearing divider"></div>
 
-            <h3 class="ui dividing header">Comments ({{ count($prototype['comments']) }})</h3>
-
             <comments
                 :comments="{{ json_encode($prototype['comments']) }}"
                 :model="{{ json_encode($model) }}"
