@@ -204,8 +204,12 @@ class ProfileController extends Controller
         $org  = Organization::find($id);
 
         if ($org) {
-            $owner = User::find($org->owner_id);
+            // Leave Organization
             $user->unfriend($org);
+            $user->organizations()->detach($org);
+
+            // Notify Organization owner
+            $owner = User::find($org->owner_id);
             $owner->notify(new UserLeftOrganization($user, $org));
             return response()->json([])->setStatusCode(Response::HTTP_OK);
         }

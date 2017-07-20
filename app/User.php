@@ -87,6 +87,10 @@ class User extends Authenticatable
 
     public function getOrganizationAttribute()
     {
+        if ($this->myOrganizations()->count()) {
+            return $this->myOrganizations[0]->id;
+        }
+
         return $this->organizations()->count() ? $this->organizations[0]->id : -1;
     }
 
