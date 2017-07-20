@@ -5,7 +5,7 @@
             <button class="ui small basic red icon button" @click.prevent="decline()" v-if="needsResponse"><i class="remove icon"></i></button>
             <a class="ui" @click.prevent="markAsRead()" v-if="!needsResponse"><i class="close grey icon"></i></a>
         </div>
-        <img class="ui avatar image" :src="notification.sender.avatar" />
+        <img class="ui avatar image" :src="notification.sender.avatar" v-if="notification.sender.avatar" />
         <div class="content">
             {{ notification.message }}
             <div class="description">
@@ -22,7 +22,14 @@ export default {
     props: ['notification'],
     computed: {
         needsResponse() {
-            return true;
+            switch (this.notification.type) {
+                case 'organization.userwantstojoin':
+                case 'App\\Notifications\\UserWantsToJoinOrganization':
+                    return true;
+                default:
+                    console.log(this.notification.type);
+                    return false;
+            }
         }
     },
     methods: {

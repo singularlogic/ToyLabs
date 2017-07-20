@@ -3,12 +3,13 @@
 namespace App;
 
 use App\OrganizationType;
+use Hootlex\Friendships\Traits\Friendable;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
 
 class Organization extends Model
 {
-    use HasMediaTrait;
+    use HasMediaTrait, Friendable;
 
     protected $fillable = [
         'name', 'legal_name', 'reg_country', 'reg_number', 'legal_form', 'vat_number', 'address', 'po_box', 'postal_code', 'city',
@@ -19,6 +20,11 @@ class Organization extends Model
     public function owner()
     {
         return $this->belongsTo(User::class, 'owner_id');
+    }
+
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 'organization_user');
     }
 
     public function organizationType()

@@ -47,6 +47,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/organization/edit', ['as' => 'organization.edit.mine', 'uses' => 'ProfileController@showMyOrganizationProfile']);
     Route::get('/organization/{id}/edit', ['as' => 'organization.edit', 'uses' => 'ProfileController@showOrganizationProfile']);
     Route::post('/organization/edit', ['as' => 'organization.edit.post', 'uses' => 'ProfileController@saveOrganizationProfile']);
+    Route::put('/organization/{id}/join', ['as' => 'organization.join', 'uses' => 'ProfileController@joinOrganization']);
+    Route::put('/organization/{id}/leave', ['as' => 'organization.leave', 'uses' => 'ProfileController@leaveOrganization']);
 
     // Products/Designs/Prototypes
     Route::get('/product/create', ['as' => 'product.create', 'uses' => 'ProductController@create']);
@@ -65,6 +67,8 @@ Route::group(['prefix' => 'notifications'], function () {
     Route::get('/', ['as' => 'notifications', 'uses' => 'NotificationController@index']);
     Route::patch('/{id}/read', ['as' => 'notifications.markasread', 'uses' => 'NotificationController@markAsRead']);
     Route::post('/mark-all-read', ['as' => 'notifications.markallread', 'uses' => 'NotificationController@markAllRead']);
+    Route::patch('/{id}/accept', ['as' => 'notifications.accept', 'uses' => 'NotificationController@accept']);
+    Route::patch('/{id}/decline', ['as' => 'notifications.decline', 'uses' => 'NotificationController@decline']);
 });
 
 // Messages

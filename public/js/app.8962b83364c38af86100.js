@@ -2251,7 +2251,14 @@ exports.default = {
     props: ['notification'],
     computed: {
         needsResponse: function needsResponse() {
-            return true;
+            switch (this.notification.type) {
+                case 'organization.userwantstojoin':
+                case 'App\\Notifications\\UserWantsToJoinOrganization':
+                    return true;
+                default:
+                    console.log(this.notification.type);
+                    return false;
+            }
         }
     },
     methods: {
@@ -3089,204 +3096,15 @@ exports.default = {
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
+
+var _ConfirmDialog = __webpack_require__("./resources/assets/js/components/ConfirmDialog.vue");
+
+var _ConfirmDialog2 = _interopRequireDefault(_ConfirmDialog);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.default = {
+    components: { ConfirmDialog: _ConfirmDialog2.default },
     props: ['_countries', '_organizations', '_personal', '_professional', '_types'],
     data: function data() {
         return {
@@ -3322,6 +3140,9 @@ exports.default = {
             return this._types.find(function (type) {
                 return type.slug === _this2.professional.role;
             }).name;
+        },
+        orgCount: function orgCount() {
+            return parseInt(this.professional.organizations.length) + parseInt(this.professional.pending.length);
         }
     },
     methods: {
@@ -3333,47 +3154,51 @@ exports.default = {
         joinOrganization: function joinOrganization() {
             var _this3 = this;
 
-            $('.ui.modal').modal({
+            $('#joinGroup').modal({
                 transition: 'scale',
                 closable: false,
                 onApprove: function onApprove() {
-                    var org = _this3._organizations.find(function (org) {
-                        return org.id = _this3.joinOrg;
+                    axios.put('/organization/' + _this3.joinOrg + '/join').then(function (response) {
+                        if (response.status === 200) {
+                            var org = _this3._organizations.find(function (org) {
+                                return org.id = _this3.joinOrg;
+                            });
+                            _this3.professional.pending.push(org);
+                        }
                     });
-                    _this3.professional.organizations.push(org);
-                    var orgs = [];
-                    var _iteratorNormalCompletion = true;
-                    var _didIteratorError = false;
-                    var _iteratorError = undefined;
-
-                    try {
-                        for (var _iterator = _this3.professional.organizations[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-                            var o = _step.value;
-
-                            orgs.push(o.id);
-                        }
-                    } catch (err) {
-                        _didIteratorError = true;
-                        _iteratorError = err;
-                    } finally {
-                        try {
-                            if (!_iteratorNormalCompletion && _iterator.return) {
-                                _iterator.return();
-                            }
-                        } finally {
-                            if (_didIteratorError) {
-                                throw _iteratorError;
-                            }
-                        }
-                    }
-
-                    _this3.$refs.newOrganizations.value = JSON.stringify(orgs);
                 }
             }).modal('show');
         },
-        leaveGroup: function leaveGroup(org) {
-            var idx = this.professional.organizations.indexOf(org);
-            this.professional.organizations.splice(idx, 1);
+        leaveGroup: function leaveGroup(org, pending) {
+            var _this4 = this;
+
+            $('#leaveGroup').modal({
+                closable: false,
+                onApprove: function onApprove() {
+                    var idx = -1;
+                    if (pending) {
+                        idx = _this4.professional.pending.find(function (o) {
+                            return o.id == org.id;
+                        });
+                    } else {
+                        idx = _this4.professional.organizations.find(function (o) {
+                            return o.id == org.id;
+                        });
+                    }
+
+                    if (~idx) {
+                        axios.put('/organization/' + org.id + '/leave').then(function (response) {
+                            if (response.status === 200) {
+                                if (pending) {
+                                    _this4.professional.pending.splice(idx, 1);
+                                } else {
+                                    _this4.professional.organizations.splice(idx, 1);
+                                }
+                            }
+                        });
+                    }
+                }
+            }).modal('show');
         }
     },
     watch: {
@@ -3383,7 +3208,216 @@ exports.default = {
             this.joinOrg = '';
         }
     }
-};
+}; //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /***/ }),
 
@@ -9711,12 +9745,12 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [_c('i', {
     staticClass: "close grey icon"
-  })]) : _vm._e()]), _vm._v(" "), _c('img', {
+  })]) : _vm._e()]), _vm._v(" "), (_vm.notification.sender.avatar) ? _c('img', {
     staticClass: "ui avatar image",
     attrs: {
       "src": _vm.notification.sender.avatar
     }
-  }), _vm._v(" "), _c('div', {
+  }) : _vm._e(), _vm._v(" "), _c('div', {
     staticClass: "content"
   }, [_vm._v("\n        " + _vm._s(_vm.notification.message) + "\n        "), _c('div', {
     staticClass: "description"
@@ -11160,13 +11194,13 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticStyle: {
       "margin-top": "20px"
     }
-  }, [_vm._v("\n                        Professional\n                        "), _c('span', {
+  }, [_vm._v("\n                Professional\n                "), _c('span', {
     staticClass: "ui basic blue label"
   }, [_vm._v(_vm._s(_vm.myRole))])]), _vm._v(" "), _c('div', {
     staticClass: "ui divider"
   }), _vm._v(" "), _c('h4', {
     staticClass: "ui header"
-  }, [_vm._v("Organization"), (_vm.professional.organizations.length > 1) ? _c('span', [_vm._v("s")]) : _vm._e(), _vm._v(":")]), _vm._v(" "), _c('div', {
+  }, [_vm._v("Organization"), (_vm.orgCount > 1) ? _c('span', [_vm._v("s")]) : _vm._e(), _vm._v(":")]), _vm._v(" "), _c('div', {
     staticClass: "ui middle aligned divided list",
     staticStyle: {
       "padding-left": "50px"
@@ -11176,11 +11210,11 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       staticClass: "item"
     }, [_c('div', {
       staticClass: "right floated content"
-    }, [(o.owner_id != _vm.personal.id) ? _c('button', {
+    }, [(o.owner_id != _vm.personal.id) ? _c('a', {
       staticClass: "ui negative mini button",
       on: {
         "click": function($event) {
-          _vm.leaveGroup(o)
+          _vm.leaveGroup(o, false)
         }
       }
     }, [_vm._v("Leave")]) : _vm._e(), _vm._v(" "), (o.owner_id == _vm.personal.id) ? _c('div', {
@@ -11200,7 +11234,36 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         "href": ("/organization/" + (o.id) + "/edit")
       }
     }, [_vm._v(_vm._s(o.name))]) : _vm._e()])])
-  }), _vm._v(" "), (_vm.professional.organizations.length == 0) ? _c('div', {
+  }), _vm._v(" "), _vm._l((_vm.professional.pending), function(o) {
+    return _c('div', {
+      staticClass: "item"
+    }, [_c('div', {
+      staticClass: "right floated content"
+    }, [_c('div', {
+      staticClass: "ui basic black label"
+    }, [_vm._v("Pending")]), _vm._v(" "), (o.owner_id != _vm.personal.id) ? _c('a', {
+      staticClass: "ui negative mini button",
+      on: {
+        "click": function($event) {
+          _vm.leaveGroup(o, true)
+        }
+      }
+    }, [_vm._v("Cancel")]) : _vm._e()]), _vm._v(" "), _c('img', {
+      staticClass: "ui avatar image",
+      attrs: {
+        "src": "/images/avatar/small/elliot.jpg"
+      }
+    }), _vm._v(" "), _c('div', {
+      staticClass: "content"
+    }, [(o.owner_id !== _vm.personal.id) ? _c('div', {
+      staticClass: "header"
+    }, [_vm._v(_vm._s(o.name))]) : _vm._e(), _vm._v(" "), (o.owner_id == _vm.personal.id) ? _c('a', {
+      staticClass: "header",
+      attrs: {
+        "href": ("/organization/" + (o.id) + "/edit")
+      }
+    }, [_vm._v(_vm._s(o.name))]) : _vm._e()])])
+  }), _vm._v(" "), (_vm.orgCount == 0) ? _c('div', {
     staticClass: "item",
     staticStyle: {
       "margin-top": "20px"
@@ -11216,7 +11279,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [_c('i', {
     staticClass: "plus icon"
-  }), _vm._v("Join\n                                ")]), _vm._v(" "), _c('a', {
+  }), _vm._v("Join\n                        ")]), _vm._v(" "), _c('a', {
     staticClass: "ui black mini button",
     on: {
       "click": function($event) {
@@ -11225,7 +11288,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [_c('i', {
     staticClass: "write icon"
-  }), _vm._v("Create\n                                ")])]), _vm._v(" "), (_vm.professional.organizations.length == 0) ? _c('div', {
+  }), _vm._v("Create\n                        ")])]), _vm._v(" "), (_vm.orgCount == 0) ? _c('div', {
     staticClass: "content"
   }, [_c('em', [_vm._v("You haven't joined any organization yet.")])]) : _vm._e()]) : _vm._e()], 2)]) : _vm._e(), _vm._v(" "), _c('div', {
     staticClass: "ui divider"
@@ -11234,12 +11297,6 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "type": "hidden",
       "name": "createOrganization"
-    }
-  }), _vm._v(" "), _c('input', {
-    ref: "newOrganizations",
-    attrs: {
-      "type": "hidden",
-      "name": "newOrganizations"
     }
   }), _vm._v(" "), _c('button', {
     ref: "submitButton",
@@ -11253,7 +11310,10 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "href": "/dashboard"
     }
   }, [_vm._v("Cancel")])]), _vm._v(" "), _c('div', {
-    staticClass: "ui modal"
+    staticClass: "ui modal",
+    attrs: {
+      "id": "joinGroup"
+    }
   }, [_c('div', {
     staticClass: "header"
   }, [_vm._v("Join Organization")]), _vm._v(" "), _c('div', {
@@ -11308,7 +11368,14 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "disabled": _vm.joinOrg === ''
     }
-  }, [_vm._v("Request to Join")])])])])
+  }, [_vm._v("Request to Join")])])]), _vm._v(" "), _c('confirm-dialog', {
+    attrs: {
+      "id": "leaveGroup",
+      "icon": "trash",
+      "title": "Leave Organization?",
+      "body": "Are you sure you want to leave this organization? The owner will have to approve your request, if you decide you want to join again"
+    }
+  })], 1)
 },staticRenderFns: []}
 module.exports.render._withStripped = true
 if (false) {
@@ -26061,13 +26128,10 @@ exports.default = {
             this.$store.dispatch('markNotificationAsRead', notification);
         },
         acceptRequest: function acceptRequest(notification) {
-            console.log('NYI: acceptRequest');
-            // TODO: Accept the request
+            this.$store.dispatch('acceptRequest', notification);
         },
         declineRequest: function declineRequest(notification) {
-            console.log('NYI: declineRequest');
-            this.markAsRead(notification);
-            // TODO: Decline the request
+            this.$store.dispatch('declineRequest', notification);
         }
     }
 };
@@ -26137,6 +26201,20 @@ var markNotificationAsRead = exports.markNotificationAsRead = function markNotif
     var commit = _ref4.commit;
 
     axios.patch('/notifications/' + notification.id + '/read');
+    commit('removeNotification', { notificationId: notification.id });
+};
+
+var acceptRequest = exports.acceptRequest = function acceptRequest(_ref5, notification) {
+    var commit = _ref5.commit;
+
+    axios.patch('/notifications/' + notification.id + '/accept');
+    commit('removeNotification', { notificationId: notification.id });
+};
+
+var declineRequest = exports.declineRequest = function declineRequest(_ref6, notification) {
+    var commit = _ref6.commit;
+
+    axios.patch('/notifications/' + notification.id + '/decline');
     commit('removeNotification', { notificationId: notification.id });
 };
 

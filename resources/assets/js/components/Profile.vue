@@ -133,11 +133,11 @@
                     </h3>
                     <div class="ui divider"></div>
 
-                    <h4 class="ui header">Organization<span v-if="professional.organizations.length > 1">s</span>:</h4>
+                    <h4 class="ui header">Organization<span v-if="orgCount > 1">s</span>:</h4>
                     <div class="ui middle aligned divided list" style="padding-left: 50px;">
                         <div class="item" v-for="o in professional.organizations">
                             <div class="right floated content">
-                                <button class="ui negative mini button" v-if="o.owner_id != personal.id" @click="leaveGroup(o)">Leave</button>
+                                <a class="ui negative mini button" v-if="o.owner_id != personal.id" @click="leaveGroup(o, false)">Leave</a>
                                 <div class="ui basic green label" v-if="o.owner_id == personal.id">Owner</div>
                             </div>
                             <img class="ui avatar image" src="/images/avatar/small/elliot.jpg" />
@@ -146,7 +146,18 @@
                                 <a class="header" v-if="o.owner_id == personal.id" :href="`/organization/${o.id}/edit`">{{ o.name }}</a>
                             </div>
                         </div>
-                        <div class="item" style="margin-top: 20px;" v-if="professional.organizations.length == 0">
+                        <div class="item" v-for="o in professional.pending">
+                            <div class="right floated content">
+                                <div class="ui basic black label">Pending</div>
+                                <a class="ui negative mini button" v-if="o.owner_id != personal.id" @click="leaveGroup(o, true)">Cancel</a>
+                            </div>
+                            <img class="ui avatar image" src="/images/avatar/small/elliot.jpg" />
+                            <div class="content">
+                                <div class="header" v-if="o.owner_id !== personal.id">{{ o.name }}</div>
+                                <a class="header" v-if="o.owner_id == personal.id" :href="`/organization/${o.id}/edit`">{{ o.name }}</a>
+                            </div>
+                        </div>
+                        <div class="item" style="margin-top: 20px;" v-if="orgCount == 0">
                             <div class="right floated content">
                                 <a class="ui blue mini button" @click="joinOrganization()">
                                     <i class="plus icon"></i>Join
@@ -155,7 +166,7 @@
                                     <i class="write icon"></i>Create
                                 </a>
                             </div>
-                            <div class="content" v-if="professional.organizations.length == 0">
+                            <div class="content" v-if="orgCount == 0">
                                 <em>You haven't joined any organization yet.</em>
                             </div>
                         </div>
@@ -165,18 +176,13 @@
                 <div class="ui divider"></div>
 
                 <input type="hidden" name="createOrganization" ref="createOrganization" />
-                <input type="hidden" name="newOrganizations" ref="newOrganizations" />
+                <!-- <input type="hidden" name="newOrganizations" ref="newOrganizations" /> -->
 
                 <button type="submit" class="ui orange submit right floated button" ref="submitButton">{{ submitText }}</button>
                 <a href="/dashboard" class="ui default right floated button">Cancel</a>
             </form>
 
-<!--             <organizations-modal
-                :organizations="organizations"
-                :my-organizations="professional.organizations"
-            ></organizations-modal>
- -->
-            <div class="ui modal">
+            <div class="ui modal" id="joinGroup">
                 <div class="header">Join Organization</div>
                 <div class="content ui form">
                     <div class="field">
@@ -192,10 +198,21 @@
                     <button class="ui orange ok button" :disabled="joinOrg === ''">Request to Join</button>
                 </div>
             </div>
+
+            <confirm-dialog
+                id="leaveGroup"
+                icon="trash"
+                title="Leave Organization?"
+                body="Are you sure you want to leave this organization? The owner will have to approve your request, if you decide you want to join again"
+            ></confirm-dialog>
+
         </div>
 </template>
 <script>
+import ConfirmDialog from './ConfirmDialog.vue';
+
 export default {
+    components: { ConfirmDialog },
     props: ['_countries', '_organizations', '_personal', '_professional', '_types'],
     data () {
         return {
@@ -220,6 +237,9 @@ export default {
         },
         myRole() {
             return this._types.find(type => type.slug === this.professional.role).name;
+        },
+        orgCount() {
+            return parseInt(this.professional.organizations.length) + parseInt(this.professional.pending.length);
         }
     },
     methods: {
@@ -229,23 +249,43 @@ export default {
             this.$refs.submitButton.click();
         },
         joinOrganization: function() {
-            $('.ui.modal').modal({
+            $('#joinGroup').modal({
                 transition: 'scale',
                 closable: false,
                 onApprove: () => {
-                    const org = this._organizations.find(org => org.id = this.joinOrg);
-                    this.professional.organizations.push(org);
-                    let orgs = [];
-                    for (let o of this.professional.organizations) {
-                        orgs.push(o.id);
-                    }
-                    this.$refs.newOrganizations.value = JSON.stringify(orgs);
+                    axios.put(`/organization/${this.joinOrg}/join`).then((response) => {
+                        if (response.status === 200) {
+                            const org = this._organizations.find(org => org.id = this.joinOrg);
+                            this.professional.pending.push(org);
+                        }
+                    });
                 }
             }).modal('show');
         },
-        leaveGroup(org) {
-            const idx = this.professional.organizations.indexOf(org);
-            this.professional.organizations.splice(idx, 1);
+        leaveGroup(org, pending) {
+            $('#leaveGroup').modal({
+                closable: false,
+                onApprove: () => {
+                    let idx = -1;
+                    if (pending) {
+                        idx = this.professional.pending.find(o => o.id == org.id);
+                    } else {
+                        idx = this.professional.organizations.find(o => o.id == org.id);
+                    }
+
+                    if (~idx) {
+                        axios.put(`/organization/${org.id}/leave`).then((response) => {
+                            if (response.status === 200) {
+                                if (pending) {
+                                    this.professional.pending.splice(idx, 1);
+                                } else {
+                                    this.professional.organizations.splice(idx, 1);
+                                }
+                            }
+                        });
+                    }
+                },
+            }).modal('show');
         }
     },
     watch: {
