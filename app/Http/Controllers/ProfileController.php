@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Notifications\UserLeftOrganization;
 use App\Organization;
 use App\OrganizationType;
 use App\Profile;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
@@ -202,7 +204,9 @@ class ProfileController extends Controller
         $org  = Organization::find($id);
 
         if ($org) {
+            $owner = User::find($org->owner_id);
             $user->unfriend($org);
+            $owner->notify(new UserLeftOrganization($user, $org));
             return response()->json([])->setStatusCode(Response::HTTP_OK);
         }
 
