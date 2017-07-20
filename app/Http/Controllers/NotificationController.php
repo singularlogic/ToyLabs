@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Events\NotificationRead;
 use App\Events\NotificationReadAll;
+use App\Organization;
+use App\User;
 use Illuminate\Http\Request;
 
 class NotificationController extends Controller
@@ -85,5 +87,59 @@ class NotificationController extends Controller
         });
 
         event(new NotificationReadAll($request->user()->id));
+    }
+
+    /**
+     * Accepts the quest following a notification, including all appropriate actions
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function accept(Request $request, $id)
+    {
+        $notification = $request->user()->unreadNotifications()->where('id', $id)->first();
+
+        if ($notification) {
+            switch ($notification->type) {
+                case 'App\Notifications\UserWantsToJoinOrganization':
+                    // Get payload and accept request
+                    $payload  = $notification->data;
+                    $sender   = User::find($payload['sender']['id']);
+                    $receiver = Organization::find($payload['receiver']['id']);
+                    $receiver->acceptFriendRequest($sender);
+
+                    // Mark notification as read
+                    $notification->markAsRead();
+                    event(new NotificationRead($request->user()->id, $id));
+                    return;
+            }
+        }
+    }
+
+    /**
+     * Declines the quest following a notification, including all appropriate actions
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function decline(Request $request, $id)
+    {
+        $notification = $request->user()->unreadNotifications()->where('id', $id)->first();
+
+        if ($notification) {
+            switch ($notification->type) {
+                case 'App\Notifications\UserWantsToJoinOrganization':
+                    // Get payload and accept request
+                    $payload  = $notification->data;
+                    $sender   = User::find($payload['sender']['id']);
+                    $receiver = Organization::find($payload['receiver']['id']);
+                    $receiver->denyFriendRequest($sender);
+
+                    // Mark notification as read
+                    $notification->markAsRead();
+                    event(new NotificationRead($request->user()->id, $id));
+                    return;
+            }
+        }
     }
 }

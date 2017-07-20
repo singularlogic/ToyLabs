@@ -112,14 +112,6 @@ class ProfileController extends Controller
         $user->name = $input['name'];
         $user->save();
 
-        // if ($input['newOrganizations'] !== null) {
-        //     $newOrgs = json_decode($input['newOrganizations']);
-        //     $orgs    = Organization::whereIn('id', $newOrgs)->get();
-        //     foreach ($orgs as $o) {
-        //         $user->organizations()->save($o);
-        //     }
-        // }
-
         if ($input['createOrganization'] == true) {
             return redirect()->route('organization.edit.mine');
         }
@@ -139,8 +131,8 @@ class ProfileController extends Controller
     {
         $user = Auth::user();
 
-        if (count($user->organizations) > 0) {
-            return $this->showOrganizationProfile($user->organizations[0]->id);
+        if (count($user->myOrganizations) > 0) {
+            return $this->showOrganizationProfile($user->myOrganizations[0]->id);
         }
 
         return $this->showOrganizationProfile(0);

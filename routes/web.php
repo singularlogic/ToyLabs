@@ -67,6 +67,8 @@ Route::group(['prefix' => 'notifications'], function () {
     Route::get('/', ['as' => 'notifications', 'uses' => 'NotificationController@index']);
     Route::patch('/{id}/read', ['as' => 'notifications.markasread', 'uses' => 'NotificationController@markAsRead']);
     Route::post('/mark-all-read', ['as' => 'notifications.markallread', 'uses' => 'NotificationController@markAllRead']);
+    Route::patch('/{id}/accept', ['as' => 'notifications.accept', 'uses' => 'NotificationController@accept']);
+    Route::patch('/{id}/decline', ['as' => 'notifications.decline', 'uses' => 'NotificationController@decline']);
 });
 
 // Messages

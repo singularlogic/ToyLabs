@@ -2,35 +2,40 @@
 
 namespace App\Listeners;
 
+use App\Notifications\UserDeclinedAccess;
+use App\Notifications\UserJoinedOrganization;
 use App\Notifications\UserWantsToJoinOrganization;
 use App\User;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
 class MembershipEventSubscriber implements ShouldQueue
 {
-    public function sent($user, $organization)
+    public function sent($sender, $recipient)
     {
-        $recipient = User::find($organization->owner_id);
-        $recipient->notify(new UserWantsToJoinOrganization($user, $organization));
+        $owner = User::find($recipient->owner_id);
+        $owner->notify(new UserWantsToJoinOrganization($sender, $recipient));
     }
 
-    public function accepted($user, $organization)
+    public function accepted($sender, $recipient)
+    {
+        $sender->users()->save($recipient);
+        $recipient->notify(new UserJoinedOrganization($sender, $recipient));
+    }
+
+    public function denied($sender, $recipient)
+    {
+        $recipient->notify(new UserDeclinedAccess($sender, $recipient));
+    }
+
+    public function blocked($sender, $recipient)
     {
     }
 
-    public function denied($user, $organization)
+    public function unblocked($sender, $recipient)
     {
     }
 
-    public function blocked($user, $organization)
-    {
-    }
-
-    public function unblocked($user, $organization)
-    {
-    }
-
-    public function cancelled($user, $organization)
+    public function cancelled($sender, $recipient)
     {
     }
 

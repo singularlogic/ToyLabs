@@ -2251,7 +2251,14 @@ exports.default = {
     props: ['notification'],
     computed: {
         needsResponse: function needsResponse() {
-            return true;
+            switch (this.notification.type) {
+                case 'organization.userwantstojoin':
+                case 'App\\Notifications\\UserWantsToJoinOrganization':
+                    return true;
+                default:
+                    console.log(this.notification.type);
+                    return false;
+            }
         }
     },
     methods: {
@@ -9738,12 +9745,12 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [_c('i', {
     staticClass: "close grey icon"
-  })]) : _vm._e()]), _vm._v(" "), _c('img', {
+  })]) : _vm._e()]), _vm._v(" "), (_vm.notification.sender.avatar) ? _c('img', {
     staticClass: "ui avatar image",
     attrs: {
       "src": _vm.notification.sender.avatar
     }
-  }), _vm._v(" "), _c('div', {
+  }) : _vm._e(), _vm._v(" "), _c('div', {
     staticClass: "content"
   }, [_vm._v("\n        " + _vm._s(_vm.notification.message) + "\n        "), _c('div', {
     staticClass: "description"
@@ -26121,13 +26128,10 @@ exports.default = {
             this.$store.dispatch('markNotificationAsRead', notification);
         },
         acceptRequest: function acceptRequest(notification) {
-            console.log('NYI: acceptRequest');
-            // TODO: Accept the request
+            this.$store.dispatch('acceptRequest', notification);
         },
         declineRequest: function declineRequest(notification) {
-            console.log('NYI: declineRequest');
-            this.markAsRead(notification);
-            // TODO: Decline the request
+            this.$store.dispatch('declineRequest', notification);
         }
     }
 };
@@ -26197,6 +26201,20 @@ var markNotificationAsRead = exports.markNotificationAsRead = function markNotif
     var commit = _ref4.commit;
 
     axios.patch('/notifications/' + notification.id + '/read');
+    commit('removeNotification', { notificationId: notification.id });
+};
+
+var acceptRequest = exports.acceptRequest = function acceptRequest(_ref5, notification) {
+    var commit = _ref5.commit;
+
+    axios.patch('/notifications/' + notification.id + '/accept');
+    commit('removeNotification', { notificationId: notification.id });
+};
+
+var declineRequest = exports.declineRequest = function declineRequest(_ref6, notification) {
+    var commit = _ref6.commit;
+
+    axios.patch('/notifications/' + notification.id + '/decline');
     commit('removeNotification', { notificationId: notification.id });
 };
 

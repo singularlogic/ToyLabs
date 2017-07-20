@@ -24,3 +24,13 @@ export const markNotificationAsRead = ({ commit }, notification) => {
     axios.patch(`/notifications/${notification.id}/read`);
     commit('removeNotification', { notificationId: notification.id });
 };
+
+export const acceptRequest = ({ commit }, notification) => {
+    axios.patch(`/notifications/${notification.id}/accept`);
+    commit('removeNotification', { notificationId: notification.id });
+};
+
+export const declineRequest = ({ commit }, notification) => {
+    axios.patch(`/notifications/${notification.id}/decline`);
+    commit('removeNotification', { notificationId: notification.id });
+};

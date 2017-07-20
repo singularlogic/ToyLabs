@@ -54,6 +54,11 @@ class User extends Authenticatable
 
     public function organizations()
     {
+        return $this->belongsToMany(Organization::class, 'organization_user');
+    }
+
+    public function myOrganizations()
+    {
         return $this->hasMany(Organization::class, 'owner_id');
     }
 
@@ -87,6 +92,6 @@ class User extends Authenticatable
 
     public function getHasOrganizationAttribute()
     {
-        return $this->organizations()->count() > 0;
+        return $this->myOrganizations()->count() > 0;
     }
 }

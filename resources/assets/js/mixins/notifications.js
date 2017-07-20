@@ -28,13 +28,10 @@ export default {
             this.$store.dispatch('markNotificationAsRead', notification);
         },
         acceptRequest(notification) {
-            console.log('NYI: acceptRequest');
-            // TODO: Accept the request
+            this.$store.dispatch('acceptRequest', notification);
         },
         declineRequest(notification) {
-            console.log('NYI: declineRequest');
-            this.markAsRead(notification);
-            // TODO: Decline the request
+            this.$store.dispatch('declineRequest', notification);
         }
     },
 }
