@@ -98,4 +98,21 @@ class User extends Authenticatable
     {
         return $this->myOrganizations()->count() > 0;
     }
+
+    public function personalProducts()
+    {
+        return $this->morphMany(Product::class, 'owner');
+    }
+
+    public function getProductsAttribute()
+    {
+        $products = $this->personalProducts;
+        $orgs     = $this->organizations;
+
+        foreach ($orgs as $org) {
+            $products = $products->merge($org->products);
+        }
+
+        return $products;
+    }
 }

@@ -1890,6 +1890,51 @@ exports.default = {
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js?cacheDirectory!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/DesignCreate.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+exports.default = {
+    props: ['_design'],
+    data: function data() {
+        return {
+            submitText: this._design.id ? 'Update' : 'Create',
+            design: this._design
+        };
+    }
+};
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js?cacheDirectory!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/Likes.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -10370,6 +10415,98 @@ if (false) {
   module.hot.accept()
   if (module.hot.data) {
      require("vue-hot-reload-api").rerender("data-v-2e10366f", module.exports)
+  }
+}
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-428e45e6\"}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/DesignCreate.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('form', {
+    staticClass: "ui form",
+    attrs: {
+      "method": "POST"
+    }
+  }, [_c('input', {
+    attrs: {
+      "type": "hidden",
+      "name": "_token"
+    },
+    domProps: {
+      "value": _vm.$parent.crsf
+    }
+  }), _vm._v(" "), _c('h4', {
+    staticClass: "ui dividing header"
+  }, [_vm._v("General")]), _vm._v(" "), _c('div', {
+    staticClass: "field"
+  }, [_c('label', [_vm._v("Title")]), _vm._v(" "), _c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.design.title),
+      expression: "design.title"
+    }],
+    attrs: {
+      "type": "text",
+      "name": "title",
+      "placeholder": "Enter a descriptive title for your design",
+      "required": ""
+    },
+    domProps: {
+      "value": (_vm.design.title)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.design.title = $event.target.value
+      }
+    }
+  })]), _vm._v(" "), _c('div', {
+    staticClass: "field"
+  }, [_c('label', [_vm._v("Description")]), _vm._v(" "), _c('textarea', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.design.description),
+      expression: "design.description"
+    }],
+    attrs: {
+      "name": "description",
+      "required": ""
+    },
+    domProps: {
+      "value": (_vm.design.description)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.design.description = $event.target.value
+      }
+    }
+  })]), _vm._v(" "), _c('div', {
+    staticClass: "ui divider"
+  }), _vm._v(" "), _c('button', {
+    ref: "submitButton",
+    staticClass: "ui orange submit right floated labeled icon button",
+    attrs: {
+      "type": "submit"
+    }
+  }, [_c('i', {
+    staticClass: "edit icon"
+  }), _vm._v(" " + _vm._s(_vm.submitText) + "\n    ")]), _vm._v(" "), _c('a', {
+    staticClass: "ui default right floated button",
+    attrs: {
+      "href": "/dashboard"
+    }
+  }, [_vm._v("Cancel")])])
+},staticRenderFns: []}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-428e45e6", module.exports)
   }
 }
 
@@ -25137,11 +25274,18 @@ var _ProductCreate = __webpack_require__("./resources/assets/js/components/Produ
 
 var _ProductCreate2 = _interopRequireDefault(_ProductCreate);
 
+var _DesignCreate = __webpack_require__("./resources/assets/js/components/DesignCreate.vue");
+
+var _DesignCreate2 = _interopRequireDefault(_DesignCreate);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /**
  * Navbar transition for the homepage
  */
+
+
+// Import VueJS Components
 $(document).ready(function () {
     // fix menu when passed
     $('.masthead').visibility({
@@ -25168,9 +25312,6 @@ $(document).ready(function () {
     });
 });
 
-// Import VueJS Components
-
-
 var router = new VueRouter({
     mode: 'history',
     linkActiveClass: 'active',
@@ -25196,7 +25337,8 @@ var app = new _vue2.default({
         Comments: _Comments2.default,
         Likes: _Likes2.default,
         ProductList: _ProductList2.default,
-        ProductCreate: _ProductCreate2.default
+        ProductCreate: _ProductCreate2.default,
+        DesignCreate: _DesignCreate2.default
     }
 });
 
@@ -25369,6 +25511,41 @@ if (false) {(function () {
     hotAPI.createRecord("data-v-6973554c", Component.options)
   } else {
     hotAPI.reload("data-v-6973554c", Component.options)
+  }
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+
+/***/ "./resources/assets/js/components/DesignCreate.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var Component = __webpack_require__("./node_modules/vue-loader/lib/component-normalizer.js")(
+  /* script */
+  __webpack_require__("./node_modules/babel-loader/lib/index.js?cacheDirectory!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/DesignCreate.vue"),
+  /* template */
+  __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-428e45e6\"}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/DesignCreate.vue"),
+  /* scopeId */
+  null,
+  /* cssModules */
+  null
+)
+Component.options.__file = "/Users/finik/Sites/toylabs/resources/assets/js/components/DesignCreate.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] DesignCreate.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-428e45e6", Component.options)
+  } else {
+    hotAPI.reload("data-v-428e45e6", Component.options)
   }
 })()}
 

@@ -12,6 +12,7 @@ import Comments from './components/Comments.vue';
 import Likes from './components/Likes.vue';
 import ProductList from './components/ProductList.vue';
 import ProductCreate from './components/ProductCreate.vue';
+import DesignCreate from './components/DesignCreate.vue';
 
 /**
  * Navbar transition for the homepage
@@ -67,5 +68,6 @@ const app = new Vue({
         Likes,
         ProductList,
         ProductCreate,
+        DesignCreate,
     }
 });

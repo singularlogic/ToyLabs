@@ -24,7 +24,7 @@ class Organization extends Model
 
     public function users()
     {
-        return $this->belongsToMany(User::class, 'organization_user');
+        return $this->hasMany(User::class, 'organization_user');
     }
 
     public function organizationType()
@@ -35,5 +35,10 @@ class Organization extends Model
     public function getTypeSlugAttribute()
     {
         return $this->organizationType->slug;
+    }
+
+    public function products()
+    {
+        return $this->morphMany(Product::class, 'owner');
     }
 }
