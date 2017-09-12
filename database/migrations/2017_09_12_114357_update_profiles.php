@@ -14,8 +14,8 @@ class UpdateProfiles extends Migration
     public function up()
     {
         Schema::table('profiles', function (Blueprint $table) {
-            $this->dropColumn('country');
-            $this->integer('country_id')->nullable();
+            $table->dropColumn('country');
+            $table->integer('country_id')->nullable();
         });
     }
 
@@ -26,7 +26,7 @@ class UpdateProfiles extends Migration
      */
     public function down()
     {
-        $this->dropColumn('country_id');
-        $this->string('country')->nullable();
+        $table->dropColumn('country_id');
+        $table->string('country')->nullable();
     }
 }

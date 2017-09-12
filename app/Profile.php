@@ -12,11 +12,16 @@ class Profile extends Model
      * @var array
      */
     protected $fillable = [
-        'user_id', 'about', 'address', 'country', 'telephone', 'facebook', 'twitter', 'linkedin',
+        'user_id', 'about', 'address', 'country_id', 'telephone', 'facebook', 'twitter', 'linkedin',
     ];
 
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function country()
+    {
+        return $this->hasOne(Country::class);
     }
 }

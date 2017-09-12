@@ -18,9 +18,9 @@
                     </div>
                     <div class="four wide field">
                         <label>Country</label>
-                        <select class="ui search dropdown" name="country" v-model="personal.country">
+                        <select class="ui search dropdown" name="country_id" v-model="personal.country_id">
                             <option value="">Select Country</option>
-                            <option v-for="c in _countries" v-bind:value="c">{{ c }}</option>
+                            <option v-for="c in _countries" v-bind:value="c.id">{{ c.name }}</option>
                         </select>
                     </div>
                     <div class="four wide field">
