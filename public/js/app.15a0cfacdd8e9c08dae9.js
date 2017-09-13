@@ -2476,127 +2476,52 @@ exports.default = {
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
+
+var _organizations = __webpack_require__("./resources/assets/js/components/organizations/index.js");
 
 exports.default = {
     props: ['_countries', '_legalForms', '_id', '_organization'],
+    components: {
+        GeneralTab: _organizations.GeneralTab, FacilitiesTab: _organizations.FacilitiesTab, ServicesTab: _organizations.ServicesTab, TechnicalTab: _organizations.TechnicalTab, CertificationsTab: _organizations.CertificationsTab, AwardsTab: _organizations.AwardsTab
+    },
     data: function data() {
+        var organization = void 0;
+
         if (this._organization === null) {
-            return {
-                organization: {
-                    name: '',
-                    description: '',
-                    legal_name: '',
-                    reg_country: '',
-                    reg_number: '',
-                    legal_form: '',
-                    vat_number: '',
-                    address: '',
-                    po_box: '',
-                    postal_code: '',
-                    city: '',
-                    phone: '',
-                    fax: '',
-                    website_url: ''
-                }
+            organization = {
+                name: '',
+                legal_name: '',
+                legal_form: '',
+                description: '',
+                address: '',
+                postal_code: '',
+                city: '',
+                country: '',
+                po_box: '',
+                phone: '',
+                fax: '',
+                website_url: '',
+                instagram: '',
+                facebook: '',
+                twitter: ''
             };
+        } else {
+            organization = this._organization;
         }
 
         return {
-            organization: this._organization
+            organization: organization,
+            facilities: [],
+            services: {},
+            technical: {},
+            certifications: [],
+            awards: []
         };
+    },
+    mounted: function mounted() {
+        this.$nextTick(function () {
+            $('.menu .item').tab();
+        });
     },
 
     computed: {
@@ -2604,7 +2529,55 @@ exports.default = {
             return this._id === 0 ? 'Create' : 'Update';
         }
     }
-};
+}; //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /***/ }),
 
@@ -3582,6 +3555,231 @@ exports.default = {
 //
 //
 //
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?cacheDirectory!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/organizations/Awards.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+//
+//
+//
+//
+//
+//
+
+exports.default = {
+    props: ['awards'],
+    data: function data() {
+        return {};
+    }
+};
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?cacheDirectory!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/organizations/Certifications.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+//
+//
+//
+//
+//
+//
+
+exports.default = {
+    props: ['certifications'],
+    data: function data() {
+        return {};
+    }
+};
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?cacheDirectory!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/organizations/Facilities.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+//
+//
+//
+//
+//
+//
+
+exports.default = {
+    props: ['facilities'],
+    data: function data() {
+        return {};
+    }
+};
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?cacheDirectory!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/organizations/General.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+exports.default = {
+    props: ['organization', 'countries', 'legalForms']
+};
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?cacheDirectory!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/organizations/Services.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+//
+//
+//
+//
+//
+//
+
+exports.default = {
+    props: ['services'],
+    data: function data() {
+        return {};
+    }
+};
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?cacheDirectory!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/organizations/Technical.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+//
+//
+//
+//
+//
+//
+
+exports.default = {
+    props: ['technical'],
+    data: function data() {
+        return {};
+    }
+};
 
 /***/ }),
 
@@ -8925,6 +9123,24 @@ module.exports = function normalizeComponent (
 
 /***/ }),
 
+/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-08cb20d2\"}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/organizations/Technical.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    staticClass: "ui bottom attached tab"
+  })
+},staticRenderFns: []}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-08cb20d2", module.exports)
+  }
+}
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-0de6e740\"}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/ProductProgress.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -9155,368 +9371,40 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     domProps: {
       "value": _vm.$parent.crsf
     }
-  }), _vm._v(" "), _c('h3', {
-    staticClass: "ui header"
-  }, [_vm._v("General")]), _vm._v(" "), _c('div', {
-    staticClass: "ui divider"
+  }), _vm._v(" "), _vm._m(0), _vm._v(" "), _c('general-tab', {
+    staticClass: "active",
+    attrs: {
+      "data-tab": "general",
+      "organization": _vm.organization,
+      "countries": _vm._countries,
+      "legalForms": _vm._legalForms
+    }
+  }), _vm._v(" "), _c('facilities-tab', {
+    attrs: {
+      "data-tab": "facilities",
+      "facilities": _vm.facilities
+    }
+  }), _vm._v(" "), _c('services-tab', {
+    attrs: {
+      "data-tab": "services",
+      "services": _vm.services
+    }
+  }), _vm._v(" "), _c('technical-tab', {
+    attrs: {
+      "data-tab": "technical",
+      "technical": _vm.technical
+    }
+  }), _vm._v(" "), _c('certifications-tab', {
+    attrs: {
+      "data-tab": "certifications",
+      "certifications": _vm.certifications
+    }
+  }), _vm._v(" "), _c('awards-tab', {
+    attrs: {
+      "data-tab": "awards",
+      "awards": _vm.awards
+    }
   }), _vm._v(" "), _c('div', {
-    staticClass: "equal width fields"
-  }, [_c('div', {
-    staticClass: "field"
-  }, [_c('label', [_vm._v("Name")]), _vm._v(" "), _c('input', {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: (_vm.organization.name),
-      expression: "organization.name"
-    }],
-    attrs: {
-      "type": "text",
-      "name": "name",
-      "placeholder": "Name",
-      "autofocus": "",
-      "required": ""
-    },
-    domProps: {
-      "value": (_vm.organization.name)
-    },
-    on: {
-      "input": function($event) {
-        if ($event.target.composing) { return; }
-        _vm.organization.name = $event.target.value
-      }
-    }
-  })]), _vm._v(" "), _c('div', {
-    staticClass: "field"
-  }, [_c('label', [_vm._v("Legal Name")]), _vm._v(" "), _c('input', {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: (_vm.organization.legal_name),
-      expression: "organization.legal_name"
-    }],
-    attrs: {
-      "type": "text",
-      "name": "legal_name",
-      "placeholder": "Legal name",
-      "required": ""
-    },
-    domProps: {
-      "value": (_vm.organization.legal_name)
-    },
-    on: {
-      "input": function($event) {
-        if ($event.target.composing) { return; }
-        _vm.organization.legal_name = $event.target.value
-      }
-    }
-  })])]), _vm._v(" "), _c('div', {
-    staticClass: "equal width fields"
-  }, [_c('div', {
-    staticClass: "field"
-  }, [_c('label', [_vm._v("Registration Country")]), _vm._v(" "), _c('select', {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: (_vm.organization.reg_country),
-      expression: "organization.reg_country"
-    }],
-    staticClass: "ui search dropdown",
-    attrs: {
-      "name": "reg_country"
-    },
-    on: {
-      "change": function($event) {
-        var $$selectedVal = Array.prototype.filter.call($event.target.options, function(o) {
-          return o.selected
-        }).map(function(o) {
-          var val = "_value" in o ? o._value : o.value;
-          return val
-        });
-        _vm.organization.reg_country = $event.target.multiple ? $$selectedVal : $$selectedVal[0]
-      }
-    }
-  }, [_c('option', {
-    attrs: {
-      "value": ""
-    }
-  }, [_vm._v("Select Country")]), _vm._v(" "), _vm._l((_vm._countries), function(c) {
-    return _c('option', {
-      domProps: {
-        "value": c
-      }
-    }, [_vm._v(_vm._s(c))])
-  })], 2)]), _vm._v(" "), _c('div', {
-    staticClass: "field"
-  }, [_c('label', [_vm._v("Registration Number")]), _vm._v(" "), _c('input', {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: (_vm.organization.reg_number),
-      expression: "organization.reg_number"
-    }],
-    attrs: {
-      "type": "text",
-      "name": "reg_number",
-      "placeholder": "#########"
-    },
-    domProps: {
-      "value": (_vm.organization.reg_number)
-    },
-    on: {
-      "input": function($event) {
-        if ($event.target.composing) { return; }
-        _vm.organization.reg_number = $event.target.value
-      }
-    }
-  })]), _vm._v(" "), _c('div', {
-    staticClass: "field"
-  }, [_c('label', [_vm._v("Legal Form")]), _vm._v(" "), _c('select', {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: (_vm.organization.legal_form),
-      expression: "organization.legal_form"
-    }],
-    staticClass: "ui search dropdown",
-    attrs: {
-      "name": "legal_form"
-    },
-    on: {
-      "change": function($event) {
-        var $$selectedVal = Array.prototype.filter.call($event.target.options, function(o) {
-          return o.selected
-        }).map(function(o) {
-          var val = "_value" in o ? o._value : o.value;
-          return val
-        });
-        _vm.organization.legal_form = $event.target.multiple ? $$selectedVal : $$selectedVal[0]
-      }
-    }
-  }, [_c('option', {
-    attrs: {
-      "value": ""
-    }
-  }, [_vm._v("Select One")]), _vm._v(" "), _vm._l((_vm._legalForms), function(l) {
-    return _c('option', {
-      domProps: {
-        "value": l
-      }
-    }, [_vm._v(_vm._s(l))])
-  })], 2)]), _vm._v(" "), _c('div', {
-    staticClass: "field"
-  }, [_c('label', [_vm._v("VAT Number")]), _vm._v(" "), _c('input', {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: (_vm.organization.vat_number),
-      expression: "organization.vat_number"
-    }],
-    attrs: {
-      "type": "text",
-      "name": "vat_number",
-      "placeholder": "########"
-    },
-    domProps: {
-      "value": (_vm.organization.vat_number)
-    },
-    on: {
-      "input": function($event) {
-        if ($event.target.composing) { return; }
-        _vm.organization.vat_number = $event.target.value
-      }
-    }
-  })])]), _vm._v(" "), _c('div', {
-    staticClass: "field"
-  }, [_c('label', [_vm._v("Description")]), _vm._v(" "), _c('textarea', {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: (_vm.organization.description),
-      expression: "organization.description"
-    }],
-    attrs: {
-      "name": "description"
-    },
-    domProps: {
-      "value": (_vm.organization.description)
-    },
-    on: {
-      "input": function($event) {
-        if ($event.target.composing) { return; }
-        _vm.organization.description = $event.target.value
-      }
-    }
-  })]), _vm._v(" "), _c('h3', {
-    staticClass: "ui header"
-  }, [_vm._v("Address")]), _vm._v(" "), _c('div', {
-    staticClass: "ui divider"
-  }), _vm._v(" "), _c('div', {
-    staticClass: "field"
-  }, [_c('label', [_vm._v("Street Name & Number")]), _vm._v(" "), _c('input', {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: (_vm.organization.address),
-      expression: "organization.address"
-    }],
-    attrs: {
-      "type": "text",
-      "name": "address",
-      "placeholder": "Street Name and Number"
-    },
-    domProps: {
-      "value": (_vm.organization.address)
-    },
-    on: {
-      "input": function($event) {
-        if ($event.target.composing) { return; }
-        _vm.organization.address = $event.target.value
-      }
-    }
-  })]), _vm._v(" "), _c('div', {
-    staticClass: "equal width fields"
-  }, [_c('div', {
-    staticClass: "field"
-  }, [_c('label', [_vm._v("P.O. Box")]), _vm._v(" "), _c('input', {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: (_vm.organization.po_box),
-      expression: "organization.po_box"
-    }],
-    attrs: {
-      "type": "text",
-      "name": "po_box",
-      "placeholder": "P.O. Box"
-    },
-    domProps: {
-      "value": (_vm.organization.po_box)
-    },
-    on: {
-      "input": function($event) {
-        if ($event.target.composing) { return; }
-        _vm.organization.po_box = $event.target.value
-      }
-    }
-  })]), _vm._v(" "), _c('div', {
-    staticClass: "field"
-  }, [_c('label', [_vm._v("Postal Code")]), _vm._v(" "), _c('input', {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: (_vm.organization.postal_code),
-      expression: "organization.postal_code"
-    }],
-    attrs: {
-      "type": "text",
-      "name": "postal_code",
-      "placeholder": "Postal Code"
-    },
-    domProps: {
-      "value": (_vm.organization.postal_code)
-    },
-    on: {
-      "input": function($event) {
-        if ($event.target.composing) { return; }
-        _vm.organization.postal_code = $event.target.value
-      }
-    }
-  })]), _vm._v(" "), _c('div', {
-    staticClass: "field"
-  }, [_c('label', [_vm._v("City")]), _vm._v(" "), _c('input', {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: (_vm.organization.city),
-      expression: "organization.city"
-    }],
-    attrs: {
-      "type": "text",
-      "name": "city",
-      "placeholder": "City"
-    },
-    domProps: {
-      "value": (_vm.organization.city)
-    },
-    on: {
-      "input": function($event) {
-        if ($event.target.composing) { return; }
-        _vm.organization.city = $event.target.value
-      }
-    }
-  })])]), _vm._v(" "), _c('div', {
-    staticClass: "fields"
-  }, [_c('div', {
-    staticClass: "four wide field"
-  }, [_c('label', [_vm._v("Phone")]), _vm._v(" "), _c('input', {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: (_vm.organization.phone),
-      expression: "organization.phone"
-    }],
-    attrs: {
-      "type": "text",
-      "name": "phone",
-      "placeholder": "Phone"
-    },
-    domProps: {
-      "value": (_vm.organization.phone)
-    },
-    on: {
-      "input": function($event) {
-        if ($event.target.composing) { return; }
-        _vm.organization.phone = $event.target.value
-      }
-    }
-  })]), _vm._v(" "), _c('div', {
-    staticClass: "four wide field"
-  }, [_c('label', [_vm._v("Fax Number")]), _vm._v(" "), _c('input', {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: (_vm.organization.fax),
-      expression: "organization.fax"
-    }],
-    attrs: {
-      "type": "text",
-      "name": "fax",
-      "placeholder": "Fax Number"
-    },
-    domProps: {
-      "value": (_vm.organization.fax)
-    },
-    on: {
-      "input": function($event) {
-        if ($event.target.composing) { return; }
-        _vm.organization.fax = $event.target.value
-      }
-    }
-  })]), _vm._v(" "), _c('div', {
-    staticClass: "eight wide field"
-  }, [_c('label', [_vm._v("Website URL")]), _vm._v(" "), _c('input', {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: (_vm.organization.website_url),
-      expression: "organization.website_url"
-    }],
-    attrs: {
-      "type": "text",
-      "name": "website_url",
-      "placeholder": "Website URL"
-    },
-    domProps: {
-      "value": (_vm.organization.website_url)
-    },
-    on: {
-      "input": function($event) {
-        if ($event.target.composing) { return; }
-        _vm.organization.website_url = $event.target.value
-      }
-    }
-  })])]), _vm._v(" "), _c('div', {
     staticClass: "ui divider"
   }), _vm._v(" "), _c('input', {
     attrs: {
@@ -9536,8 +9424,42 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "href": "/dashboard"
     }
-  }, [_vm._v("Cancel")])])
-},staticRenderFns: []}
+  }, [_vm._v("Cancel")])], 1)
+},staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    staticClass: "ui pointing secondary menu"
+  }, [_c('a', {
+    staticClass: "item orange active",
+    attrs: {
+      "data-tab": "general"
+    }
+  }, [_vm._v("General")]), _vm._v(" "), _c('a', {
+    staticClass: "item orange",
+    attrs: {
+      "data-tab": "facilities"
+    }
+  }, [_vm._v("Facilities")]), _vm._v(" "), _c('a', {
+    staticClass: "item orange",
+    attrs: {
+      "data-tab": "services"
+    }
+  }, [_vm._v("Services & Prices")]), _vm._v(" "), _c('a', {
+    staticClass: "item orange",
+    attrs: {
+      "data-tab": "technical"
+    }
+  }, [_vm._v("Technical")]), _vm._v(" "), _c('a', {
+    staticClass: "item orange",
+    attrs: {
+      "data-tab": "certifications"
+    }
+  }, [_vm._v("Certifications")]), _vm._v(" "), _c('a', {
+    staticClass: "item orange",
+    attrs: {
+      "data-tab": "awards"
+    }
+  }, [_vm._v("Awards")])])
+}]}
 module.exports.render._withStripped = true
 if (false) {
   module.hot.accept()
@@ -9702,6 +9624,24 @@ if (false) {
   module.hot.accept()
   if (module.hot.data) {
      require("vue-hot-reload-api").rerender("data-v-22b37b99", module.exports)
+  }
+}
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-24239ef9\"}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/organizations/Services.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    staticClass: "ui bottom attached tab"
+  })
+},staticRenderFns: []}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-24239ef9", module.exports)
   }
 }
 
@@ -9995,6 +9935,24 @@ if (false) {
   module.hot.accept()
   if (module.hot.data) {
      require("vue-hot-reload-api").rerender("data-v-2d585880", module.exports)
+  }
+}
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-2d9d32dc\"}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/organizations/Facilities.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    staticClass: "ui bottom attached tab"
+  })
+},staticRenderFns: []}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-2d9d32dc", module.exports)
   }
 }
 
@@ -10370,6 +10328,42 @@ if (false) {
   module.hot.accept()
   if (module.hot.data) {
      require("vue-hot-reload-api").rerender("data-v-2e10366f", module.exports)
+  }
+}
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-3f850458\"}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/organizations/Certifications.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    staticClass: "ui bottom attached tab"
+  })
+},staticRenderFns: []}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-3f850458", module.exports)
+  }
+}
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-43c7d911\"}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/organizations/Awards.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    staticClass: "ui bottom attached tab"
+  })
+},staticRenderFns: []}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-43c7d911", module.exports)
   }
 }
 
@@ -11487,6 +11481,402 @@ if (false) {
   module.hot.accept()
   if (module.hot.data) {
      require("vue-hot-reload-api").rerender("data-v-d406bcd6", module.exports)
+  }
+}
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-e0ce3fc6\"}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/organizations/General.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    staticClass: "ui bottom attached tab"
+  }, [_c('div', {
+    staticClass: "fields"
+  }, [_c('div', {
+    staticClass: "six wide field"
+  }, [_c('label', [_vm._v("Name")]), _vm._v(" "), _c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.organization.name),
+      expression: "organization.name"
+    }],
+    attrs: {
+      "type": "text",
+      "name": "name",
+      "placeholder": "Name",
+      "autofocus": "",
+      "required": ""
+    },
+    domProps: {
+      "value": (_vm.organization.name)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.organization.name = $event.target.value
+      }
+    }
+  })]), _vm._v(" "), _c('div', {
+    staticClass: "six wide field"
+  }, [_c('label', [_vm._v("Legal Name")]), _vm._v(" "), _c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.organization.legal_name),
+      expression: "organization.legal_name"
+    }],
+    attrs: {
+      "type": "text",
+      "name": "legal_name",
+      "placeholder": "Legal name",
+      "required": ""
+    },
+    domProps: {
+      "value": (_vm.organization.legal_name)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.organization.legal_name = $event.target.value
+      }
+    }
+  })]), _vm._v(" "), _c('div', {
+    staticClass: "four wide field"
+  }, [_c('label', [_vm._v("Legal Form")]), _vm._v(" "), _c('select', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.organization.legal_form),
+      expression: "organization.legal_form"
+    }],
+    staticClass: "ui search dropdown",
+    attrs: {
+      "name": "legal_form"
+    },
+    on: {
+      "change": function($event) {
+        var $$selectedVal = Array.prototype.filter.call($event.target.options, function(o) {
+          return o.selected
+        }).map(function(o) {
+          var val = "_value" in o ? o._value : o.value;
+          return val
+        });
+        _vm.organization.legal_form = $event.target.multiple ? $$selectedVal : $$selectedVal[0]
+      }
+    }
+  }, [_c('option', {
+    attrs: {
+      "value": ""
+    }
+  }, [_vm._v("Select One")]), _vm._v(" "), _vm._l((_vm.legalForms), function(l) {
+    return _c('option', {
+      domProps: {
+        "value": l
+      }
+    }, [_vm._v(_vm._s(l))])
+  })], 2)])]), _vm._v(" "), _c('div', {
+    staticClass: "field"
+  }, [_c('label', [_vm._v("Description")]), _vm._v(" "), _c('textarea', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.organization.description),
+      expression: "organization.description"
+    }],
+    attrs: {
+      "name": "description"
+    },
+    domProps: {
+      "value": (_vm.organization.description)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.organization.description = $event.target.value
+      }
+    }
+  })]), _vm._v(" "), _c('div', {
+    staticClass: "field"
+  }, [_c('label', [_vm._v("Address")]), _vm._v(" "), _c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.organization.address),
+      expression: "organization.address"
+    }],
+    attrs: {
+      "type": "text",
+      "name": "address",
+      "placeholder": "Street Name and Number"
+    },
+    domProps: {
+      "value": (_vm.organization.address)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.organization.address = $event.target.value
+      }
+    }
+  })]), _vm._v(" "), _c('div', {
+    staticClass: "equal width fields"
+  }, [_c('div', {
+    staticClass: "field"
+  }, [_c('label', [_vm._v("Postal Code")]), _vm._v(" "), _c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.organization.postal_code),
+      expression: "organization.postal_code"
+    }],
+    attrs: {
+      "type": "text",
+      "name": "postal_code",
+      "placeholder": "Postal Code"
+    },
+    domProps: {
+      "value": (_vm.organization.postal_code)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.organization.postal_code = $event.target.value
+      }
+    }
+  })]), _vm._v(" "), _c('div', {
+    staticClass: "field"
+  }, [_c('label', [_vm._v("City")]), _vm._v(" "), _c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.organization.city),
+      expression: "organization.city"
+    }],
+    attrs: {
+      "type": "text",
+      "name": "city",
+      "placeholder": "City"
+    },
+    domProps: {
+      "value": (_vm.organization.city)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.organization.city = $event.target.value
+      }
+    }
+  })]), _vm._v(" "), _c('div', {
+    staticClass: "field"
+  }, [_c('label', [_vm._v("Country")]), _vm._v(" "), _c('select', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.organization.country_id),
+      expression: "organization.country_id"
+    }],
+    staticClass: "ui search dropdown",
+    attrs: {
+      "name": "country_id"
+    },
+    on: {
+      "change": function($event) {
+        var $$selectedVal = Array.prototype.filter.call($event.target.options, function(o) {
+          return o.selected
+        }).map(function(o) {
+          var val = "_value" in o ? o._value : o.value;
+          return val
+        });
+        _vm.organization.country_id = $event.target.multiple ? $$selectedVal : $$selectedVal[0]
+      }
+    }
+  }, [_c('option', {
+    attrs: {
+      "value": ""
+    }
+  }, [_vm._v("Select Country")]), _vm._v(" "), _vm._l((_vm.countries), function(c) {
+    return _c('option', {
+      domProps: {
+        "value": c.id
+      }
+    }, [_vm._v(_vm._s(c.name))])
+  })], 2)])]), _vm._v(" "), _c('div', {
+    staticClass: "equal width fields"
+  }, [_c('div', {
+    staticClass: "field"
+  }, [_c('label', [_vm._v("P.O. Box")]), _vm._v(" "), _c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.organization.po_box),
+      expression: "organization.po_box"
+    }],
+    attrs: {
+      "type": "text",
+      "name": "po_box",
+      "placeholder": "P.O. Box"
+    },
+    domProps: {
+      "value": (_vm.organization.po_box)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.organization.po_box = $event.target.value
+      }
+    }
+  })]), _vm._v(" "), _c('div', {
+    staticClass: "field"
+  }, [_c('label', [_vm._v("Phone")]), _vm._v(" "), _c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.organization.phone),
+      expression: "organization.phone"
+    }],
+    attrs: {
+      "type": "text",
+      "name": "phone",
+      "placeholder": "Phone"
+    },
+    domProps: {
+      "value": (_vm.organization.phone)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.organization.phone = $event.target.value
+      }
+    }
+  })]), _vm._v(" "), _c('div', {
+    staticClass: "field"
+  }, [_c('label', [_vm._v("Fax Number")]), _vm._v(" "), _c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.organization.fax),
+      expression: "organization.fax"
+    }],
+    attrs: {
+      "type": "text",
+      "name": "fax",
+      "placeholder": "Fax Number"
+    },
+    domProps: {
+      "value": (_vm.organization.fax)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.organization.fax = $event.target.value
+      }
+    }
+  })])]), _vm._v(" "), _c('div', {
+    staticClass: "equal width fields"
+  }, [_c('div', {
+    staticClass: "field"
+  }, [_c('label', [_vm._v("Website URL")]), _vm._v(" "), _c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.organization.website_url),
+      expression: "organization.website_url"
+    }],
+    attrs: {
+      "type": "text",
+      "name": "website_url",
+      "placeholder": "http://..."
+    },
+    domProps: {
+      "value": (_vm.organization.website_url)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.organization.website_url = $event.target.value
+      }
+    }
+  })]), _vm._v(" "), _c('div', {
+    staticClass: "field"
+  }, [_c('label', [_vm._v("Instagram")]), _vm._v(" "), _c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.organization.instagram),
+      expression: "organization.instagram"
+    }],
+    attrs: {
+      "type": "text",
+      "name": "instagram",
+      "placeholder": "https://www.instagram.com/..."
+    },
+    domProps: {
+      "value": (_vm.organization.instagram)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.organization.instagram = $event.target.value
+      }
+    }
+  })])]), _vm._v(" "), _c('div', {
+    staticClass: "equal width fields"
+  }, [_c('div', {
+    staticClass: "field"
+  }, [_c('label', [_vm._v("Facebook Page")]), _vm._v(" "), _c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.organization.facebook),
+      expression: "organization.facebook"
+    }],
+    attrs: {
+      "type": "text",
+      "name": "facebook",
+      "placeholder": "https://www.facebook.com/..."
+    },
+    domProps: {
+      "value": (_vm.organization.facebook)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.organization.facebook = $event.target.value
+      }
+    }
+  })]), _vm._v(" "), _c('div', {
+    staticClass: "field"
+  }, [_c('label', [_vm._v("Twitter Account")]), _vm._v(" "), _c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.organization.twitter),
+      expression: "organization.twitter"
+    }],
+    attrs: {
+      "type": "text",
+      "name": "twitter",
+      "placeholder": "https://www.twitter.com/..."
+    },
+    domProps: {
+      "value": (_vm.organization.twitter)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.organization.twitter = $event.target.value
+      }
+    }
+  })])])])
+},staticRenderFns: []}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-e0ce3fc6", module.exports)
   }
 }
 
@@ -26065,6 +26455,234 @@ if (false) {(function () {
 
 module.exports = Component.exports
 
+
+/***/ }),
+
+/***/ "./resources/assets/js/components/organizations/Awards.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var Component = __webpack_require__("./node_modules/vue-loader/lib/component-normalizer.js")(
+  /* script */
+  __webpack_require__("./node_modules/babel-loader/lib/index.js?cacheDirectory!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/organizations/Awards.vue"),
+  /* template */
+  __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-43c7d911\"}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/organizations/Awards.vue"),
+  /* scopeId */
+  null,
+  /* cssModules */
+  null
+)
+Component.options.__file = "/Users/finik/Sites/toylabs/resources/assets/js/components/organizations/Awards.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] Awards.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-43c7d911", Component.options)
+  } else {
+    hotAPI.reload("data-v-43c7d911", Component.options)
+  }
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+
+/***/ "./resources/assets/js/components/organizations/Certifications.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var Component = __webpack_require__("./node_modules/vue-loader/lib/component-normalizer.js")(
+  /* script */
+  __webpack_require__("./node_modules/babel-loader/lib/index.js?cacheDirectory!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/organizations/Certifications.vue"),
+  /* template */
+  __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-3f850458\"}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/organizations/Certifications.vue"),
+  /* scopeId */
+  null,
+  /* cssModules */
+  null
+)
+Component.options.__file = "/Users/finik/Sites/toylabs/resources/assets/js/components/organizations/Certifications.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] Certifications.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-3f850458", Component.options)
+  } else {
+    hotAPI.reload("data-v-3f850458", Component.options)
+  }
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+
+/***/ "./resources/assets/js/components/organizations/Facilities.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var Component = __webpack_require__("./node_modules/vue-loader/lib/component-normalizer.js")(
+  /* script */
+  __webpack_require__("./node_modules/babel-loader/lib/index.js?cacheDirectory!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/organizations/Facilities.vue"),
+  /* template */
+  __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-2d9d32dc\"}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/organizations/Facilities.vue"),
+  /* scopeId */
+  null,
+  /* cssModules */
+  null
+)
+Component.options.__file = "/Users/finik/Sites/toylabs/resources/assets/js/components/organizations/Facilities.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] Facilities.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-2d9d32dc", Component.options)
+  } else {
+    hotAPI.reload("data-v-2d9d32dc", Component.options)
+  }
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+
+/***/ "./resources/assets/js/components/organizations/General.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var Component = __webpack_require__("./node_modules/vue-loader/lib/component-normalizer.js")(
+  /* script */
+  __webpack_require__("./node_modules/babel-loader/lib/index.js?cacheDirectory!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/organizations/General.vue"),
+  /* template */
+  __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-e0ce3fc6\"}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/organizations/General.vue"),
+  /* scopeId */
+  null,
+  /* cssModules */
+  null
+)
+Component.options.__file = "/Users/finik/Sites/toylabs/resources/assets/js/components/organizations/General.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] General.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-e0ce3fc6", Component.options)
+  } else {
+    hotAPI.reload("data-v-e0ce3fc6", Component.options)
+  }
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+
+/***/ "./resources/assets/js/components/organizations/Services.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var Component = __webpack_require__("./node_modules/vue-loader/lib/component-normalizer.js")(
+  /* script */
+  __webpack_require__("./node_modules/babel-loader/lib/index.js?cacheDirectory!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/organizations/Services.vue"),
+  /* template */
+  __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-24239ef9\"}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/organizations/Services.vue"),
+  /* scopeId */
+  null,
+  /* cssModules */
+  null
+)
+Component.options.__file = "/Users/finik/Sites/toylabs/resources/assets/js/components/organizations/Services.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] Services.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-24239ef9", Component.options)
+  } else {
+    hotAPI.reload("data-v-24239ef9", Component.options)
+  }
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+
+/***/ "./resources/assets/js/components/organizations/Technical.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var Component = __webpack_require__("./node_modules/vue-loader/lib/component-normalizer.js")(
+  /* script */
+  __webpack_require__("./node_modules/babel-loader/lib/index.js?cacheDirectory!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/organizations/Technical.vue"),
+  /* template */
+  __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-08cb20d2\"}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/organizations/Technical.vue"),
+  /* scopeId */
+  null,
+  /* cssModules */
+  null
+)
+Component.options.__file = "/Users/finik/Sites/toylabs/resources/assets/js/components/organizations/Technical.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] Technical.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-08cb20d2", Component.options)
+  } else {
+    hotAPI.reload("data-v-08cb20d2", Component.options)
+  }
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+
+/***/ "./resources/assets/js/components/organizations/index.js":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var AwardsTab = exports.AwardsTab = __webpack_require__("./resources/assets/js/components/organizations/Awards.vue");
+var CertificationsTab = exports.CertificationsTab = __webpack_require__("./resources/assets/js/components/organizations/Certifications.vue");
+var FacilitiesTab = exports.FacilitiesTab = __webpack_require__("./resources/assets/js/components/organizations/Facilities.vue");
+var GeneralTab = exports.GeneralTab = __webpack_require__("./resources/assets/js/components/organizations/General.vue");
+var ServicesTab = exports.ServicesTab = __webpack_require__("./resources/assets/js/components/organizations/Services.vue");
+var TechnicalTab = exports.TechnicalTab = __webpack_require__("./resources/assets/js/components/organizations/Technical.vue");
 
 /***/ }),
 

@@ -7,7 +7,7 @@
 @section('content')
         <!-- Organization -->
         <div class="ui main container">
-            <h1 class="ui header">{{ $pagetitle or 'Edit Organization' }}</h1>
+            <h1 class="ui header">{{ $pagetitle or 'Edit Organization Profile' }}</h1>
             <div class="ui divider"></div>
 
             @include('partials.status')

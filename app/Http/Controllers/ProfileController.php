@@ -125,7 +125,7 @@ class ProfileController extends Controller
         if ($id > 0) {
             // TODO: Load profile from the database
         } else {
-            $data['pagetitle'] = 'New Organization';
+            $data['pagetitle'] = 'Create Organization Profile';
         }
 
         return view('profile.organization', $data);
@@ -143,7 +143,7 @@ class ProfileController extends Controller
         if ($id > 0) {
             // Update
             Organization::where('id', $id)->update($input);
-            return redirect('dashboard')->with('success', 'Organization updated successfully');
+            return redirect('dashboard')->with('success', 'Organization profile updated successfully');
         } else {
             // Create Group
             $org = Organization::create($input);
@@ -153,7 +153,7 @@ class ProfileController extends Controller
             $org->acceptacceptFriendRequest($user);
 
             // TODO: Redirect to organization facilities profile creation
-            return redirect('dashboard')->with('success', 'Organization created successfully');
+            return redirect('dashboard')->with('success', 'Organization profile created successfully');
         }
     }
 

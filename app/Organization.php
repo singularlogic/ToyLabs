@@ -12,8 +12,8 @@ class Organization extends Model
     use HasMediaTrait, Friendable;
 
     protected $fillable = [
-        'name', 'legal_name', 'reg_country', 'reg_number', 'legal_form', 'vat_number', 'address', 'po_box', 'postal_code', 'city',
-        'phone', 'fax', 'website_url', 'description', 'owner_id', 'organization_type_id',
+        'name', 'legal_name', 'address', 'po_box', 'postal_code', 'country_id', 'twitter', 'facebook', 'instagram',
+        'phone', 'fax', 'website_url', 'description', 'owner_id', 'organization_type_id', 'legal_form', 'city',
     ];
     protected $appends = ['typeSlug'];
 
@@ -40,5 +40,15 @@ class Organization extends Model
     public function products()
     {
         return $this->morphMany(Product::class, 'owner');
+    }
+
+    public function facilities()
+    {
+        return $this->hasMany(Facility::class);
+    }
+
+    public function country()
+    {
+        return $this->belongsTo(Country::class);
     }
 }
