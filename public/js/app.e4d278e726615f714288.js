@@ -2480,7 +2480,7 @@ Object.defineProperty(exports, "__esModule", {
 var _organizations = __webpack_require__("./resources/assets/js/components/organizations/index.js");
 
 exports.default = {
-    props: ['_countries', '_legalForms', '_id', '_organization'],
+    props: ['_countries', '_legalForms', '_id', '_organization', '_facilities'],
     components: {
         GeneralTab: _organizations.GeneralTab, FacilitiesTab: _organizations.FacilitiesTab, ServicesTab: _organizations.ServicesTab, TechnicalTab: _organizations.TechnicalTab, CertificationsTab: _organizations.CertificationsTab, AwardsTab: _organizations.AwardsTab
     },
@@ -2511,7 +2511,7 @@ exports.default = {
 
         return {
             organization: organization,
-            facilities: [],
+            facilities: this._facilities === null ? [] : this._facilities,
             services: {},
             technical: {},
             certifications: [],
@@ -2528,8 +2528,27 @@ exports.default = {
         submitText: function submitText() {
             return this._id === 0 ? 'Create' : 'Update';
         }
+    },
+    methods: {
+        submit: function submit() {
+            this.$refs.facilities.value = JSON.stringify(this.facilities);
+            this.$refs.orgForm.submit();
+        },
+        addFacility: function addFacility(facility) {
+            this.facilities.push(facility);
+        },
+        removeFacility: function removeFacility(facility) {
+            var index = this.facilities.indexOf(facility);
+            if (~index) {
+                this.facilities.splice(index, 1);
+            }
+        }
     }
 }; //
+//
+//
+//
+//
 //
 //
 //
@@ -3623,11 +3642,132 @@ Object.defineProperty(exports, "__esModule", {
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 exports.default = {
-    props: ['facilities'],
+    props: ['facilities', 'countries'],
     data: function data() {
-        return {};
+        return {
+            newFacility: {},
+            states: [],
+            cities: [],
+            insertMode: false
+        };
+    },
+
+    computed: {
+        isValid: function isValid() {
+            return (/\S/.test(this.newFacility.name) && ~this.newFacility.city.id
+            );
+        }
+    },
+    methods: {
+        addFacility: function addFacility() {
+            this.newFacility = {
+                name: '',
+                country: {
+                    id: -1
+                },
+                state: {
+                    id: -1
+                },
+                city: {
+                    id: -1
+                }
+            };
+            this.insertMode = true;
+        },
+        removeFacility: function removeFacility(facility) {
+            this.$emit('remove', facility);
+        },
+        save: function save() {
+            this.$emit('add', this.newFacility);
+            this.newFacility = {};
+            this.insertMode = false;
+        },
+        cancel: function cancel() {
+            this.newFacility = {};
+            this.insertMode = false;
+        },
+        countryChanged: function countryChanged() {
+            var _this = this;
+
+            this.states.splice(0, this.states.length);
+            axios.get('/api/states/' + this.newFacility.country.id).then(function (response) {
+                _this.states = response.data;
+            }).catch(function (error) {
+                console.log(error);
+            });
+        },
+        stateChanged: function stateChanged() {
+            var _this2 = this;
+
+            this.cities.splice(0, this.cities.length);
+            axios.get('/api/cities/' + this.newFacility.state.id).then(function (response) {
+                _this2.cities = response.data;
+            }).catch(function (error) {
+                console.log(error);
+            });
+        }
     }
 };
 
@@ -9358,6 +9498,7 @@ if (false) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('form', {
+    ref: "orgForm",
     staticClass: "ui form",
     attrs: {
       "method": "POST",
@@ -9382,7 +9523,12 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }), _vm._v(" "), _c('facilities-tab', {
     attrs: {
       "data-tab": "facilities",
-      "facilities": _vm.facilities
+      "facilities": _vm.facilities,
+      "countries": _vm._countries
+    },
+    on: {
+      "add": _vm.addFacility,
+      "remove": _vm.removeFacility
     }
   }), _vm._v(" "), _c('services-tab', {
     attrs: {
@@ -9414,10 +9560,19 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     domProps: {
       "value": _vm._id
     }
+  }), _vm._v(" "), _c('input', {
+    ref: "facilities",
+    attrs: {
+      "type": "hidden",
+      "name": "facilities"
+    }
   }), _vm._v(" "), _c('button', {
     staticClass: "ui orange submit right floated button",
     attrs: {
-      "type": "submit"
+      "type": "button"
+    },
+    on: {
+      "click": _vm.submit
     }
   }, [_vm._v(_vm._s(_vm.submitText))]), _vm._v(" "), _c('a', {
     staticClass: "ui default right floated button",
@@ -9946,8 +10101,204 @@ if (false) {
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
     staticClass: "ui bottom attached tab"
-  })
-},staticRenderFns: []}
+  }, [_c('table', {
+    staticClass: "ui celled table"
+  }, [_vm._m(0), _vm._v(" "), _c('tbody', [(_vm.facilities.length == 0) ? _c('tr', [_c('td', {
+    staticClass: "center aligned",
+    attrs: {
+      "colspan": "5"
+    }
+  }, [_vm._v("No facilities added")])]) : _vm._e(), _vm._v(" "), _vm._l((_vm.facilities), function(facility) {
+    return _c('tr', [_c('td', [_vm._v(_vm._s(facility.name))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(facility.country.name))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(facility.state.name))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(facility.city.name))]), _vm._v(" "), _c('td', {
+      staticClass: "collapsing"
+    }, [_c('button', {
+      staticClass: "ui mini red icon button",
+      attrs: {
+        "type": "button"
+      },
+      on: {
+        "click": function($event) {
+          _vm.removeFacility(facility)
+        }
+      }
+    }, [_c('i', {
+      staticClass: "trash icon"
+    })])])])
+  })], 2), _vm._v(" "), (!_vm.insertMode) ? _c('tfoot', [_c('th', {
+    attrs: {
+      "colspan": "5"
+    }
+  }, [_c('div', {
+    staticClass: "ui right floated small primary labeled icon button",
+    on: {
+      "click": function($event) {
+        _vm.addFacility()
+      }
+    }
+  }, [_c('i', {
+    staticClass: "marker icon"
+  }), _vm._v(" Add Facility\n                ")])])]) : _vm._e(), _vm._v(" "), (_vm.insertMode) ? _c('tfoot', [_c('tr', [_c('th', [_c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.newFacility.name),
+      expression: "newFacility.name"
+    }],
+    attrs: {
+      "type": "text"
+    },
+    domProps: {
+      "value": (_vm.newFacility.name)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.newFacility.name = $event.target.value
+      }
+    }
+  })]), _vm._v(" "), _c('th', [_c('select', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.newFacility.country),
+      expression: "newFacility.country"
+    }],
+    staticClass: "ui search dropdown",
+    attrs: {
+      "name": "country_id"
+    },
+    on: {
+      "change": [function($event) {
+        var $$selectedVal = Array.prototype.filter.call($event.target.options, function(o) {
+          return o.selected
+        }).map(function(o) {
+          var val = "_value" in o ? o._value : o.value;
+          return val
+        });
+        _vm.newFacility.country = $event.target.multiple ? $$selectedVal : $$selectedVal[0]
+      }, function($event) {
+        _vm.countryChanged()
+      }]
+    }
+  }, [_c('option', {
+    attrs: {
+      "value": ""
+    }
+  }, [_vm._v("Select Country")]), _vm._v(" "), _vm._l((_vm.countries), function(c) {
+    return _c('option', {
+      domProps: {
+        "value": c
+      }
+    }, [_vm._v(_vm._s(c.name))])
+  })], 2)]), _vm._v(" "), _c('th', [(_vm.states.length > 0) ? _c('select', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.newFacility.state),
+      expression: "newFacility.state"
+    }],
+    staticClass: "ui search dropdown",
+    attrs: {
+      "name": "state_id"
+    },
+    on: {
+      "change": [function($event) {
+        var $$selectedVal = Array.prototype.filter.call($event.target.options, function(o) {
+          return o.selected
+        }).map(function(o) {
+          var val = "_value" in o ? o._value : o.value;
+          return val
+        });
+        _vm.newFacility.state = $event.target.multiple ? $$selectedVal : $$selectedVal[0]
+      }, function($event) {
+        _vm.stateChanged()
+      }]
+    }
+  }, [_c('option', {
+    attrs: {
+      "value": ""
+    }
+  }, [_vm._v("Select State")]), _vm._v(" "), _vm._l((_vm.states), function(s) {
+    return _c('option', {
+      domProps: {
+        "value": s
+      }
+    }, [_vm._v(_vm._s(s.name))])
+  })], 2) : _vm._e()]), _vm._v(" "), _c('th', [(_vm.cities.length > 0) ? _c('select', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.newFacility.city),
+      expression: "newFacility.city"
+    }],
+    staticClass: "ui search dropdown",
+    attrs: {
+      "name": "city_id"
+    },
+    on: {
+      "change": function($event) {
+        var $$selectedVal = Array.prototype.filter.call($event.target.options, function(o) {
+          return o.selected
+        }).map(function(o) {
+          var val = "_value" in o ? o._value : o.value;
+          return val
+        });
+        _vm.newFacility.city = $event.target.multiple ? $$selectedVal : $$selectedVal[0]
+      }
+    }
+  }, [_c('option', {
+    attrs: {
+      "value": ""
+    }
+  }, [_vm._v("Select City")]), _vm._v(" "), _vm._l((_vm.cities), function(c) {
+    return _c('option', {
+      domProps: {
+        "value": c
+      }
+    }, [_vm._v(_vm._s(c.name))])
+  })], 2) : _vm._e()]), _vm._v(" "), _c('th', {
+    staticClass: "collapsing"
+  }, [_c('button', {
+    staticClass: "ui mini basic green icon button",
+    attrs: {
+      "type": "button",
+      "disabled": !_vm.isValid
+    },
+    on: {
+      "click": function($event) {
+        _vm.save()
+      }
+    }
+  }, [_c('i', {
+    staticClass: "checkmark icon"
+  })]), _vm._v(" "), _c('button', {
+    staticClass: "ui mini basic red icon button",
+    attrs: {
+      "type": "button"
+    },
+    on: {
+      "click": function($event) {
+        _vm.cancel()
+      }
+    }
+  }, [_c('i', {
+    staticClass: "remove icon"
+  })])])])]) : _vm._e()], 1)])
+},staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('thead', {
+    staticClass: "full-width"
+  }, [_c('tr', [_c('th', {
+    staticClass: "four wide"
+  }, [_vm._v("Name")]), _vm._v(" "), _c('th', {
+    staticClass: "five wide"
+  }, [_vm._v("Country")]), _vm._v(" "), _c('th', {
+    staticClass: "three wide"
+  }, [_vm._v("State")]), _vm._v(" "), _c('th', {
+    staticClass: "three"
+  }, [_vm._v("City")]), _vm._v(" "), _c('th', {
+    staticClass: "one wide"
+  })])])
+}]}
 module.exports.render._withStripped = true
 if (false) {
   module.hot.accept()

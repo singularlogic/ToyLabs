@@ -17,6 +17,7 @@
                 :_legal-forms="{{ json_encode($legalForms) }}"
                 :_id="{{ $id }}"
                 :_organization="{{ json_encode($organization) }}"
+                :_facilities="{{ json_encode($facilities) }}"
             ></Organization>
         </div>
 @endsection

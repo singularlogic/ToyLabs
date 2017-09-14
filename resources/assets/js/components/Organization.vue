@@ -1,6 +1,6 @@
 <template>
     <!-- Organization -->
-    <form class="ui form" method="POST" action="/organization/edit">
+    <form class="ui form" method="POST" action="/organization/edit" ref="orgForm">
         <input type="hidden" name="_token" :value="$parent.crsf" />
 
         <div class="ui pointing secondary menu">
@@ -20,6 +20,9 @@
 
         <facilities-tab data-tab="facilities"
             :facilities="facilities"
+            :countries="_countries"
+            @add="addFacility"
+            @remove="removeFacility"
         ></facilities-tab>
 
         <services-tab data-tab="services"
@@ -42,7 +45,8 @@
         <div class="ui divider"></div>
 
         <input type="hidden" name="id" :value="_id" />
-        <button type="submit" class="ui orange submit right floated button">{{ submitText }}</button>
+        <input type="hidden" name="facilities" ref="facilities" />
+        <button type="button" class="ui orange submit right floated button" @click="submit">{{ submitText }}</button>
         <a href="/dashboard" class="ui default right floated button">Cancel</a>
     </form>
 </template>
@@ -51,7 +55,7 @@
     import { GeneralTab, FacilitiesTab, ServicesTab, TechnicalTab, CertificationsTab, AwardsTab } from './organizations';
 
     export default {
-        props: ['_countries', '_legalForms', '_id', '_organization'],
+        props: ['_countries', '_legalForms', '_id', '_organization', '_facilities'],
         components: {
             GeneralTab, FacilitiesTab, ServicesTab, TechnicalTab, CertificationsTab, AwardsTab,
         },
@@ -82,7 +86,7 @@
 
             return {
                 organization: organization,
-                facilities: [],
+                facilities: this._facilities === null ? [] : this._facilities,
                 services: {},
                 technical: {},
                 certifications: [],
@@ -97,7 +101,22 @@
         computed: {
             submitText() {
                 return this._id === 0 ? 'Create' : 'Update';
-            }
+            },
+        },
+        methods: {
+            submit() {
+                this.$refs.facilities.value = JSON.stringify(this.facilities);
+                this.$refs.orgForm.submit();
+            },
+            addFacility(facility) {
+                this.facilities.push(facility);
+            },
+            removeFacility(facility) {
+                const index = this.facilities.indexOf(facility);
+                if (~index) {
+                    this.facilities.splice(index, 1);
+                }
+            },
         }
     }
 </script>

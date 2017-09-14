@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Country;
+use App\Facility;
 use App\Notifications\UserLeftOrganization;
 use App\Organization;
 use App\OrganizationType;
@@ -115,11 +116,13 @@ class ProfileController extends Controller
     public function showOrganizationProfile($id)
     {
         $user = Auth::user();
+
         $data = [
             'countries'    => Country::orderBy('name', 'ASC')->get(),
             'legalForms'   => $this->legalForms,
             'id'           => $id,
             'organization' => Organization::where('id', $id)->first(),
+            'facilities'   => Facility::where('organization_id', $id)->get(),
         ];
 
         if ($id > 0) {
@@ -141,8 +144,21 @@ class ProfileController extends Controller
         unset($input['_token']);
 
         if ($id > 0) {
-            // Update
-            Organization::where('id', $id)->update($input);
+            // Update General information
+            $general = $request->only(['name', 'legal_name', 'legal_form', 'address', 'po_box', 'postal_code', 'country_id', 'twitter', 'facebook', 'instagram', 'phone', 'fax', 'website_url', 'description', 'city']);
+            Organization::where('id', $id)->update($general);
+
+            // Update Facilities
+            Facility::where('organization_id', $id)->delete();
+            $facilities = json_decode($input['facilities'], true);
+            foreach ($facilities as $facility) {
+                Facility::create([
+                    'name'            => $facility['name'],
+                    'city_id'         => $facility['city']['id'],
+                    'organization_id' => $id,
+                ]);
+            }
+
             return redirect('dashboard')->with('success', 'Organization profile updated successfully');
         } else {
             // Create Group
@@ -152,7 +168,15 @@ class ProfileController extends Controller
             $user->befriend($org);
             $org->acceptacceptFriendRequest($user);
 
-            // TODO: Redirect to organization facilities profile creation
+            // Add Facilities
+            foreach ($input['facilities'] as $facility) {
+                Facility::create([
+                    'name'            => $facility['name'],
+                    'city_id'         => $facility['city']['id'],
+                    'organization_id' => $org->id,
+                ]);
+            }
+
             return redirect('dashboard')->with('success', 'Organization profile created successfully');
         }
     }
