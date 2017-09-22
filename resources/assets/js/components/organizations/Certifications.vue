@@ -6,7 +6,7 @@
 
 <script>
     export default {
-        props: ['certifications'],
+        props: ['certifications', 'awards'],
         data() {
             return {};
         },
