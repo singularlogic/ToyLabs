@@ -51,4 +51,27 @@ class Organization extends Model
     {
         return $this->belongsTo(Country::class);
     }
+
+    public function competencies()
+    {
+        return $this->belongsToMany(Competency::class, 'competencies_organizations');
+    }
+
+    public function expertise()
+    {
+        return $this->belongsToMany(ToyCategory::class, 'toycategories_organizations', 'organization_id', 'category_id');
+    }
+
+    public function getServicesAttribute()
+    {
+        return [
+            'expertise'    => $this->expertise->pluck('id'),
+            'competencies' => $this->competencies->pluck('id'),
+            'markets'      => [],
+            'payments'     => [],
+            'paymentDelay' => null,
+            'scale'        => null,
+
+        ];
+    }
 }

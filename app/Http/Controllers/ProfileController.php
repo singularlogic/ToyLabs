@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Competency;
 use App\Country;
 use App\Facility;
 use App\Notifications\UserLeftOrganization;
 use App\Organization;
 use App\OrganizationType;
 use App\Profile;
+use App\ToyCategory;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -117,12 +119,18 @@ class ProfileController extends Controller
     {
         $user = Auth::user();
 
+        $org = Organization::find($id)->first();
+
         $data = [
             'countries'    => Country::orderBy('name', 'ASC')->get(),
             'legalForms'   => $this->legalForms,
             'id'           => $id,
-            'organization' => Organization::where('id', $id)->first(),
+            'organization' => $org,
             'facilities'   => Facility::where('organization_id', $id)->get(),
+            'competencies' => Competency::orderBy('name', 'ASC')->get(),
+            'markets'      => [],
+            'categories'   => ToyCategory::where('title', '<>', 'Other')->orderBy('title')->get(),
+            'services'     => $org->services,
         ];
 
         if ($id > 0) {
@@ -158,6 +166,12 @@ class ProfileController extends Controller
                     'organization_id' => $id,
                 ]);
             }
+
+            // Update Services
+            $services = json_decode($input['services'], true);
+            $org      = Organization::find($id);
+            $org->competencies()->sync($services['competencies']);
+            $org->expertise()->sync($services['expertise']);
 
             return redirect('dashboard')->with('success', 'Organization profile updated successfully');
         } else {

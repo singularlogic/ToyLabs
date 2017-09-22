@@ -2480,9 +2480,9 @@ Object.defineProperty(exports, "__esModule", {
 var _organizations = __webpack_require__("./resources/assets/js/components/organizations/index.js");
 
 exports.default = {
-    props: ['_countries', '_legalForms', '_id', '_organization', '_facilities'],
+    props: ['_countries', '_legalForms', '_id', '_organization', '_facilities', '_competencies', '_markets', '_categories', '_services'],
     components: {
-        GeneralTab: _organizations.GeneralTab, FacilitiesTab: _organizations.FacilitiesTab, ServicesTab: _organizations.ServicesTab, TechnicalTab: _organizations.TechnicalTab, CertificationsTab: _organizations.CertificationsTab, AwardsTab: _organizations.AwardsTab
+        GeneralTab: _organizations.GeneralTab, FacilitiesTab: _organizations.FacilitiesTab, ServicesTab: _organizations.ServicesTab, CertificationsTab: _organizations.CertificationsTab
     },
     data: function data() {
         var organization = void 0;
@@ -2511,9 +2511,10 @@ exports.default = {
 
         return {
             organization: organization,
+            scales: [{ id: 1, name: 'Prototyping Only' }, { id: 2, name: 'Small' }, { id: 3, name: 'Medium' }, { id: 4, name: 'Large' }, { id: 5, name: 'Extra Large' }],
+            payments: [{ id: 1, name: 'Bank Transfer' }, { id: 2, name: 'Check' }, { id: 3, name: 'Credit Card' }, { id: 4, name: 'Paypal' }, { id: 5, name: 'Bitcoin' }],
             facilities: this._facilities === null ? [] : this._facilities,
-            services: {},
-            technical: {},
+            services: this._services,
             certifications: [],
             awards: []
         };
@@ -2531,6 +2532,7 @@ exports.default = {
     },
     methods: {
         submit: function submit() {
+            this.$refs.services.value = JSON.stringify(this.services);
             this.$refs.facilities.value = JSON.stringify(this.facilities);
             this.$refs.orgForm.submit();
         },
@@ -2545,9 +2547,6 @@ exports.default = {
         }
     }
 }; //
-//
-//
-//
 //
 //
 //
@@ -3577,31 +3576,6 @@ exports.default = {
 
 /***/ }),
 
-/***/ "./node_modules/babel-loader/lib/index.js?cacheDirectory!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/organizations/Awards.vue":
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-//
-//
-//
-//
-//
-//
-
-exports.default = {
-    props: ['awards'],
-    data: function data() {
-        return {};
-    }
-};
-
-/***/ }),
-
 /***/ "./node_modules/babel-loader/lib/index.js?cacheDirectory!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/organizations/Certifications.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -3619,7 +3593,7 @@ Object.defineProperty(exports, "__esModule", {
 //
 
 exports.default = {
-    props: ['certifications'],
+    props: ['certifications', 'awards'],
     data: function data() {
         return {};
     }
@@ -3888,36 +3862,81 @@ Object.defineProperty(exports, "__esModule", {
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 exports.default = {
-    props: ['services'],
+    props: ['services', 'competencies', 'markets', 'categories', 'scales', 'payments'],
     data: function data() {
-        return {};
-    }
-};
-
-/***/ }),
-
-/***/ "./node_modules/babel-loader/lib/index.js?cacheDirectory!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/organizations/Technical.vue":
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-//
-//
-//
-//
-//
-//
-
-exports.default = {
-    props: ['technical'],
-    data: function data() {
-        return {};
+        return {
+            delays: [{ days: 0, name: 'On Delivery' }, { days: 15, name: '15 Days' }, { days: 30, name: '30 Days' }, { days: 45, name: '45 Days' }, { days: 60, name: '60 Days' }, { days: 90, name: '90 Days' }]
+        };
     }
 };
 
@@ -3944,6 +3963,14 @@ exports.push([module.i, "\n.item .content {\n    padding: 8px 0;\n}\n", ""]);
 
 exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/css-base.js")();
 exports.push([module.i, "\n.comment.segment {\n    padding: 8px!important;\n    border: 1px solid #F3F4F5!important;\n}\n.comment.segment.secondary {\n    border: 1px solid #dcddde!important;\n    background-color: #F3F4F5!important;\n}\n", ""]);
+
+/***/ }),
+
+/***/ "./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"id\":\"data-v-24239ef9\",\"scoped\":false,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/components/organizations/Services.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/css-base.js")();
+exports.push([module.i, "\n.ui.action.input input[type=\"file\"] {\n  display: none;\n}\n", ""]);
 
 /***/ }),
 
@@ -9263,24 +9290,6 @@ module.exports = function normalizeComponent (
 
 /***/ }),
 
-/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-08cb20d2\"}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/organizations/Technical.vue":
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', {
-    staticClass: "ui bottom attached tab"
-  })
-},staticRenderFns: []}
-module.exports.render._withStripped = true
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-     require("vue-hot-reload-api").rerender("data-v-08cb20d2", module.exports)
-  }
-}
-
-/***/ }),
-
 /***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-0de6e740\"}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/ProductProgress.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -9513,7 +9522,6 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "value": _vm.$parent.crsf
     }
   }), _vm._v(" "), _vm._m(0), _vm._v(" "), _c('general-tab', {
-    staticClass: "active",
     attrs: {
       "data-tab": "general",
       "organization": _vm.organization,
@@ -9531,23 +9539,20 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "remove": _vm.removeFacility
     }
   }), _vm._v(" "), _c('services-tab', {
+    staticClass: "active",
     attrs: {
       "data-tab": "services",
-      "services": _vm.services
-    }
-  }), _vm._v(" "), _c('technical-tab', {
-    attrs: {
-      "data-tab": "technical",
-      "technical": _vm.technical
+      "services": _vm.services,
+      "competencies": _vm._competencies,
+      "markets": _vm._markets,
+      "categories": _vm._categories,
+      "scales": _vm.scales,
+      "payments": _vm.payments
     }
   }), _vm._v(" "), _c('certifications-tab', {
     attrs: {
       "data-tab": "certifications",
-      "certifications": _vm.certifications
-    }
-  }), _vm._v(" "), _c('awards-tab', {
-    attrs: {
-      "data-tab": "awards",
+      "certifications": _vm.certifications,
       "awards": _vm.awards
     }
   }), _vm._v(" "), _c('div', {
@@ -9565,6 +9570,12 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "type": "hidden",
       "name": "facilities"
+    }
+  }), _vm._v(" "), _c('input', {
+    ref: "services",
+    attrs: {
+      "type": "hidden",
+      "name": "services"
     }
   }), _vm._v(" "), _c('button', {
     staticClass: "ui orange submit right floated button",
@@ -9584,7 +9595,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   return _c('div', {
     staticClass: "ui pointing secondary menu"
   }, [_c('a', {
-    staticClass: "item orange active",
+    staticClass: "item orange",
     attrs: {
       "data-tab": "general"
     }
@@ -9594,26 +9605,16 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "data-tab": "facilities"
     }
   }, [_vm._v("Facilities")]), _vm._v(" "), _c('a', {
-    staticClass: "item orange",
+    staticClass: "item orange active",
     attrs: {
       "data-tab": "services"
     }
-  }, [_vm._v("Services & Prices")]), _vm._v(" "), _c('a', {
-    staticClass: "item orange",
-    attrs: {
-      "data-tab": "technical"
-    }
-  }, [_vm._v("Technical")]), _vm._v(" "), _c('a', {
+  }, [_vm._v("Services & Pricing")]), _vm._v(" "), _c('a', {
     staticClass: "item orange",
     attrs: {
       "data-tab": "certifications"
     }
-  }, [_vm._v("Certifications")]), _vm._v(" "), _c('a', {
-    staticClass: "item orange",
-    attrs: {
-      "data-tab": "awards"
-    }
-  }, [_vm._v("Awards")])])
+  }, [_vm._v("Certifications & Awards")])])
 }]}
 module.exports.render._withStripped = true
 if (false) {
@@ -9790,7 +9791,258 @@ if (false) {
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
     staticClass: "ui bottom attached tab"
-  })
+  }, [_c('h3', {
+    staticClass: "ui header dividing"
+  }, [_vm._v("Services")]), _vm._v(" "), _c('div', {
+    staticClass: "grouped fields"
+  }, [_c('label', {
+    attrs: {
+      "for": "expertise"
+    }
+  }, [_vm._v("Geographical Market(s)")]), _vm._v(" "), _c('div', {
+    staticClass: "ui three column stackable grid basic segment"
+  }, _vm._l((_vm.markets), function(m) {
+    return _c('div', {
+      staticClass: "field column"
+    }, [_c('div', {
+      staticClass: "ui checkbox"
+    }, [_c('input', {
+      directives: [{
+        name: "model",
+        rawName: "v-model",
+        value: (_vm.services.markets),
+        expression: "services.markets"
+      }],
+      attrs: {
+        "type": "checkbox"
+      },
+      domProps: {
+        "value": m.id,
+        "checked": Array.isArray(_vm.services.markets) ? _vm._i(_vm.services.markets, m.id) > -1 : (_vm.services.markets)
+      },
+      on: {
+        "__c": function($event) {
+          var $$a = _vm.services.markets,
+            $$el = $event.target,
+            $$c = $$el.checked ? (true) : (false);
+          if (Array.isArray($$a)) {
+            var $$v = m.id,
+              $$i = _vm._i($$a, $$v);
+            if ($$c) {
+              $$i < 0 && (_vm.services.markets = $$a.concat($$v))
+            } else {
+              $$i > -1 && (_vm.services.markets = $$a.slice(0, $$i).concat($$a.slice($$i + 1)))
+            }
+          } else {
+            _vm.services.markets = $$c
+          }
+        }
+      }
+    }), _vm._v(" "), _c('label', [_vm._v(_vm._s(m.name))])])])
+  }))]), _vm._v(" "), _c('div', {
+    staticClass: "grouped fields"
+  }, [_c('label', {
+    attrs: {
+      "for": "expertise"
+    }
+  }, [_vm._v("Competencies")]), _vm._v(" "), _c('div', {
+    staticClass: "ui three column stackable grid basic segment"
+  }, _vm._l((_vm.competencies), function(c) {
+    return _c('div', {
+      staticClass: "field column"
+    }, [_c('div', {
+      staticClass: "ui checkbox"
+    }, [_c('input', {
+      directives: [{
+        name: "model",
+        rawName: "v-model",
+        value: (_vm.services.competencies),
+        expression: "services.competencies"
+      }],
+      attrs: {
+        "type": "checkbox"
+      },
+      domProps: {
+        "value": c.id,
+        "checked": Array.isArray(_vm.services.competencies) ? _vm._i(_vm.services.competencies, c.id) > -1 : (_vm.services.competencies)
+      },
+      on: {
+        "__c": function($event) {
+          var $$a = _vm.services.competencies,
+            $$el = $event.target,
+            $$c = $$el.checked ? (true) : (false);
+          if (Array.isArray($$a)) {
+            var $$v = c.id,
+              $$i = _vm._i($$a, $$v);
+            if ($$c) {
+              $$i < 0 && (_vm.services.competencies = $$a.concat($$v))
+            } else {
+              $$i > -1 && (_vm.services.competencies = $$a.slice(0, $$i).concat($$a.slice($$i + 1)))
+            }
+          } else {
+            _vm.services.competencies = $$c
+          }
+        }
+      }
+    }), _vm._v(" "), _c('label', [_vm._v(_vm._s(c.name))])])])
+  }))]), _vm._v(" "), _c('div', {
+    staticClass: "grouped fields"
+  }, [_c('label', {
+    attrs: {
+      "for": "expertise"
+    }
+  }, [_vm._v("Toy Categories")]), _vm._v(" "), _c('div', {
+    staticClass: "ui three column stackable grid basic segment"
+  }, _vm._l((_vm.categories), function(c) {
+    return _c('div', {
+      staticClass: "field column"
+    }, [_c('div', {
+      staticClass: "ui checkbox"
+    }, [_c('input', {
+      directives: [{
+        name: "model",
+        rawName: "v-model",
+        value: (_vm.services.expertise),
+        expression: "services.expertise"
+      }],
+      attrs: {
+        "type": "checkbox"
+      },
+      domProps: {
+        "value": c.id,
+        "checked": Array.isArray(_vm.services.expertise) ? _vm._i(_vm.services.expertise, c.id) > -1 : (_vm.services.expertise)
+      },
+      on: {
+        "__c": function($event) {
+          var $$a = _vm.services.expertise,
+            $$el = $event.target,
+            $$c = $$el.checked ? (true) : (false);
+          if (Array.isArray($$a)) {
+            var $$v = c.id,
+              $$i = _vm._i($$a, $$v);
+            if ($$c) {
+              $$i < 0 && (_vm.services.expertise = $$a.concat($$v))
+            } else {
+              $$i > -1 && (_vm.services.expertise = $$a.slice(0, $$i).concat($$a.slice($$i + 1)))
+            }
+          } else {
+            _vm.services.expertise = $$c
+          }
+        }
+      }
+    }), _vm._v(" "), _c('label', [_vm._v(_vm._s(c.title))])])])
+  }))]), _vm._v(" "), _c('div', {
+    staticClass: "inline fields"
+  }, [_c('label', {
+    attrs: {
+      "for": "scale"
+    }
+  }, [_vm._v("Scale of Production:")]), _vm._v(" "), _vm._l((_vm.scales), function(s) {
+    return _c('div', {
+      staticClass: "field"
+    }, [_c('div', {
+      staticClass: "ui radio checkbox"
+    }, [_c('input', {
+      directives: [{
+        name: "model",
+        rawName: "v-model",
+        value: (_vm.services.scale),
+        expression: "services.scale"
+      }],
+      staticClass: "hidden",
+      attrs: {
+        "type": "radio",
+        "name": "scale",
+        "tabindex": "0"
+      },
+      domProps: {
+        "value": s.id,
+        "checked": _vm._q(_vm.services.scale, s.id)
+      },
+      on: {
+        "__c": function($event) {
+          _vm.services.scale = s.id
+        }
+      }
+    }), _vm._v(" "), _c('label', [_vm._v(_vm._s(s.name))])])])
+  })], 2), _vm._v(" "), _c('h3', {
+    staticClass: "ui header dividing"
+  }, [_vm._v("Pricing")]), _vm._v(" "), _c('div', {
+    staticClass: "inline fields"
+  }, [_c('label', {
+    attrs: {
+      "for": "payment"
+    }
+  }, [_vm._v("Ways of Payment:")]), _vm._v(" "), _vm._l((_vm.payments), function(p) {
+    return _c('div', {
+      staticClass: "field"
+    }, [_c('div', {
+      staticClass: "ui checkbox"
+    }, [_c('input', {
+      directives: [{
+        name: "model",
+        rawName: "v-model",
+        value: (_vm.services.payments),
+        expression: "services.payments"
+      }],
+      attrs: {
+        "type": "checkbox"
+      },
+      domProps: {
+        "value": p.id,
+        "checked": Array.isArray(_vm.services.payments) ? _vm._i(_vm.services.payments, p.id) > -1 : (_vm.services.payments)
+      },
+      on: {
+        "__c": function($event) {
+          var $$a = _vm.services.payments,
+            $$el = $event.target,
+            $$c = $$el.checked ? (true) : (false);
+          if (Array.isArray($$a)) {
+            var $$v = p.id,
+              $$i = _vm._i($$a, $$v);
+            if ($$c) {
+              $$i < 0 && (_vm.services.payments = $$a.concat($$v))
+            } else {
+              $$i > -1 && (_vm.services.payments = $$a.slice(0, $$i).concat($$a.slice($$i + 1)))
+            }
+          } else {
+            _vm.services.payments = $$c
+          }
+        }
+      }
+    }), _vm._v(" "), _c('label', [_vm._v(_vm._s(p.name))])])])
+  })], 2), _vm._v(" "), _c('div', {
+    staticClass: "inline fields"
+  }, [_c('label', {
+    attrs: {
+      "for": "payment"
+    }
+  }, [_vm._v("Paid in (delay):")]), _vm._v(" "), _vm._l((_vm.delays), function(d) {
+    return _c('div', {
+      staticClass: "field"
+    }, [_c('div', {
+      staticClass: "ui radio checkbox"
+    }, [_c('input', {
+      directives: [{
+        name: "model",
+        rawName: "v-model",
+        value: (_vm.services.paymentDelay),
+        expression: "services.paymentDelay"
+      }],
+      attrs: {
+        "type": "radio"
+      },
+      domProps: {
+        "value": d.days,
+        "checked": _vm._q(_vm.services.paymentDelay, d.days)
+      },
+      on: {
+        "__c": function($event) {
+          _vm.services.paymentDelay = d.days
+        }
+      }
+    }), _vm._v(" "), _c('label', [_vm._v(_vm._s(d.name))])])])
+  })], 2)])
 },staticRenderFns: []}
 module.exports.render._withStripped = true
 if (false) {
@@ -10697,24 +10949,6 @@ if (false) {
   module.hot.accept()
   if (module.hot.data) {
      require("vue-hot-reload-api").rerender("data-v-3f850458", module.exports)
-  }
-}
-
-/***/ }),
-
-/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-43c7d911\"}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/organizations/Awards.vue":
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', {
-    staticClass: "ui bottom attached tab"
-  })
-},staticRenderFns: []}
-module.exports.render._withStripped = true
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-     require("vue-hot-reload-api").rerender("data-v-43c7d911", module.exports)
   }
 }
 
@@ -14813,6 +15047,33 @@ if(false) {
  if(!content.locals) {
    module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"id\":\"data-v-22002d20\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./MessageView.vue", function() {
      var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"id\":\"data-v-22002d20\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./MessageView.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+
+/***/ "./node_modules/vue-style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"id\":\"data-v-24239ef9\",\"scoped\":false,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/components/organizations/Services.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__("./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"id\":\"data-v-24239ef9\",\"scoped\":false,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/components/organizations/Services.vue");
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__("./node_modules/vue-style-loader/lib/addStylesClient.js")("6256485e", content, false);
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"id\":\"data-v-24239ef9\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Services.vue", function() {
+     var newContent = require("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"id\":\"data-v-24239ef9\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Services.vue");
      if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
      update(newContent);
    });
@@ -26809,41 +27070,6 @@ module.exports = Component.exports
 
 /***/ }),
 
-/***/ "./resources/assets/js/components/organizations/Awards.vue":
-/***/ (function(module, exports, __webpack_require__) {
-
-var Component = __webpack_require__("./node_modules/vue-loader/lib/component-normalizer.js")(
-  /* script */
-  __webpack_require__("./node_modules/babel-loader/lib/index.js?cacheDirectory!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/organizations/Awards.vue"),
-  /* template */
-  __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-43c7d911\"}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/organizations/Awards.vue"),
-  /* scopeId */
-  null,
-  /* cssModules */
-  null
-)
-Component.options.__file = "/Users/finik/Sites/toylabs/resources/assets/js/components/organizations/Awards.vue"
-if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
-if (Component.options.functional) {console.error("[vue-loader] Awards.vue: functional components are not supported with templates, they should use render functions.")}
-
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-43c7d911", Component.options)
-  } else {
-    hotAPI.reload("data-v-43c7d911", Component.options)
-  }
-})()}
-
-module.exports = Component.exports
-
-
-/***/ }),
-
 /***/ "./resources/assets/js/components/organizations/Certifications.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -26952,6 +27178,10 @@ module.exports = Component.exports
 /***/ "./resources/assets/js/components/organizations/Services.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
+
+/* styles */
+__webpack_require__("./node_modules/vue-style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"id\":\"data-v-24239ef9\",\"scoped\":false,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/components/organizations/Services.vue")
+
 var Component = __webpack_require__("./node_modules/vue-loader/lib/component-normalizer.js")(
   /* script */
   __webpack_require__("./node_modules/babel-loader/lib/index.js?cacheDirectory!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/organizations/Services.vue"),
@@ -26984,41 +27214,6 @@ module.exports = Component.exports
 
 /***/ }),
 
-/***/ "./resources/assets/js/components/organizations/Technical.vue":
-/***/ (function(module, exports, __webpack_require__) {
-
-var Component = __webpack_require__("./node_modules/vue-loader/lib/component-normalizer.js")(
-  /* script */
-  __webpack_require__("./node_modules/babel-loader/lib/index.js?cacheDirectory!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/organizations/Technical.vue"),
-  /* template */
-  __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-08cb20d2\"}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/organizations/Technical.vue"),
-  /* scopeId */
-  null,
-  /* cssModules */
-  null
-)
-Component.options.__file = "/Users/finik/Sites/toylabs/resources/assets/js/components/organizations/Technical.vue"
-if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
-if (Component.options.functional) {console.error("[vue-loader] Technical.vue: functional components are not supported with templates, they should use render functions.")}
-
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-08cb20d2", Component.options)
-  } else {
-    hotAPI.reload("data-v-08cb20d2", Component.options)
-  }
-})()}
-
-module.exports = Component.exports
-
-
-/***/ }),
-
 /***/ "./resources/assets/js/components/organizations/index.js":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -27028,12 +27223,10 @@ module.exports = Component.exports
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-var AwardsTab = exports.AwardsTab = __webpack_require__("./resources/assets/js/components/organizations/Awards.vue");
 var CertificationsTab = exports.CertificationsTab = __webpack_require__("./resources/assets/js/components/organizations/Certifications.vue");
 var FacilitiesTab = exports.FacilitiesTab = __webpack_require__("./resources/assets/js/components/organizations/Facilities.vue");
 var GeneralTab = exports.GeneralTab = __webpack_require__("./resources/assets/js/components/organizations/General.vue");
 var ServicesTab = exports.ServicesTab = __webpack_require__("./resources/assets/js/components/organizations/Services.vue");
-var TechnicalTab = exports.TechnicalTab = __webpack_require__("./resources/assets/js/components/organizations/Technical.vue");
 
 /***/ }),
 
