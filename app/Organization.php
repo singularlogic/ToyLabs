@@ -14,6 +14,7 @@ class Organization extends Model
     protected $fillable = [
         'name', 'legal_name', 'address', 'po_box', 'postal_code', 'country_id', 'twitter', 'facebook', 'instagram',
         'phone', 'fax', 'website_url', 'description', 'owner_id', 'organization_type_id', 'legal_form', 'city',
+        'production_scale', 'payment_in',
     ];
     protected $appends = ['typeSlug'];
 
@@ -65,12 +66,12 @@ class Organization extends Model
     public function getServicesAttribute()
     {
         return [
-            'expertise'    => $this->expertise->pluck('id'),
-            'competencies' => $this->competencies->pluck('id'),
-            'markets'      => [],
-            'payments'     => [],
-            'paymentDelay' => null,
-            'scale'        => null,
+            'expertise'        => $this->expertise->pluck('id'),
+            'competencies'     => $this->competencies->pluck('id'),
+            'markets'          => [],
+            'payments'         => [],
+            'payment_in'       => $this->payment_in,
+            'production_scale' => $this->production_scale,
 
         ];
     }

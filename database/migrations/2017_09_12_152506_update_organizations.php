@@ -18,6 +18,8 @@ class UpdateOrganizations extends Migration
             $table->dropColumn('reg_number');
             $table->dropColumn('vat_number');
 
+            $table->string('payment_in')->nullable();
+            $table->enum('production_scale', ['prototype', 'small', 'medium', 'large', 'xlarge'])->nullable();
             $table->integer('country_id')->nullable();
             $table->string('twitter')->nullable();
             $table->string('facebook')->nullable();
@@ -37,6 +39,8 @@ class UpdateOrganizations extends Migration
             $table->dropColumn('twitter');
             $table->dropColumn('facebook');
             $table->dropColumn('instagram');
+            $table->dropColumn('production_scale');
+            $table->dropColumn('payment_in');
 
             $table->string('reg_country')->nullable();
             $table->string('reg_number')->nullable();

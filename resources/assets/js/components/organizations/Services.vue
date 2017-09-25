@@ -39,10 +39,10 @@
         </div>
 
         <div class="inline fields">
-            <label for="scale">Scale of Production:</label>
+            <label for="scale">Production Scale:</label>
             <div class="field" v-for="s of scales">
                 <div class="ui radio checkbox">
-                    <input type="radio" name="scale" :value="s.id" tabindex="0" class="hidden" v-model="services.scale" />
+                    <input type="radio" :value="s.id" v-model="services.production_scale" />
                     <label>{{ s.name }}</label>
                 </div>
             </div>
@@ -64,7 +64,7 @@
             <label for="payment">Paid in (delay):</label>
             <div class="field" v-for="d of delays">
                 <div class="ui radio checkbox">
-                    <input type="radio" :value="d.days" v-model="services.paymentDelay" />
+                    <input type="radio" :value="d.name" v-model="services.payment_in" />
                     <label>{{ d.name }}</label>
                 </div>
             </div>

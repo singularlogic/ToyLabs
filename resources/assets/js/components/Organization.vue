@@ -87,11 +87,11 @@
             return {
                 organization: organization,
                 scales: [
-                    { id: 1, name: 'Prototyping Only' },
-                    { id: 2, name: 'Small' },
-                    { id: 3, name: 'Medium' },
-                    { id: 4, name: 'Large' },
-                    { id: 5, name: 'Extra Large' },
+                    { id: 'prototype', name: 'Prototyping Only' },
+                    { id: 'small', name: 'Small' },
+                    { id: 'medium', name: 'Medium' },
+                    { id: 'large', name: 'Large' },
+                    { id: 'xlarge', name: 'Extra Large' },
                 ],
                 payments: [
                     { id: 1, name: 'Bank Transfer' },

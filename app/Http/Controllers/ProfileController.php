@@ -172,6 +172,9 @@ class ProfileController extends Controller
             $org      = Organization::find($id);
             $org->competencies()->sync($services['competencies']);
             $org->expertise()->sync($services['expertise']);
+            $org->payment_in       = $services['payment_in'];
+            $org->production_scale = $services['production_scale'];
+            $org->save();
 
             return redirect('dashboard')->with('success', 'Organization profile updated successfully');
         } else {

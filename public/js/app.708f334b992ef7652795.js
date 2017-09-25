@@ -2511,7 +2511,7 @@ exports.default = {
 
         return {
             organization: organization,
-            scales: [{ id: 1, name: 'Prototyping Only' }, { id: 2, name: 'Small' }, { id: 3, name: 'Medium' }, { id: 4, name: 'Large' }, { id: 5, name: 'Extra Large' }],
+            scales: [{ id: 'prototype', name: 'Prototyping Only' }, { id: 'small', name: 'Small' }, { id: 'medium', name: 'Medium' }, { id: 'large', name: 'Large' }, { id: 'xlarge', name: 'Extra Large' }],
             payments: [{ id: 1, name: 'Bank Transfer' }, { id: 2, name: 'Check' }, { id: 3, name: 'Credit Card' }, { id: 4, name: 'Paypal' }, { id: 5, name: 'Bitcoin' }],
             facilities: this._facilities === null ? [] : this._facilities,
             services: this._services,
@@ -9937,7 +9937,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "for": "scale"
     }
-  }, [_vm._v("Scale of Production:")]), _vm._v(" "), _vm._l((_vm.scales), function(s) {
+  }, [_vm._v("Production Scale:")]), _vm._v(" "), _vm._l((_vm.scales), function(s) {
     return _c('div', {
       staticClass: "field"
     }, [_c('div', {
@@ -9946,22 +9946,19 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       directives: [{
         name: "model",
         rawName: "v-model",
-        value: (_vm.services.scale),
-        expression: "services.scale"
+        value: (_vm.services.production_scale),
+        expression: "services.production_scale"
       }],
-      staticClass: "hidden",
       attrs: {
-        "type": "radio",
-        "name": "scale",
-        "tabindex": "0"
+        "type": "radio"
       },
       domProps: {
         "value": s.id,
-        "checked": _vm._q(_vm.services.scale, s.id)
+        "checked": _vm._q(_vm.services.production_scale, s.id)
       },
       on: {
         "__c": function($event) {
-          _vm.services.scale = s.id
+          _vm.services.production_scale = s.id
         }
       }
     }), _vm._v(" "), _c('label', [_vm._v(_vm._s(s.name))])])])
@@ -10026,19 +10023,19 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       directives: [{
         name: "model",
         rawName: "v-model",
-        value: (_vm.services.paymentDelay),
-        expression: "services.paymentDelay"
+        value: (_vm.services.payment_in),
+        expression: "services.payment_in"
       }],
       attrs: {
         "type": "radio"
       },
       domProps: {
-        "value": d.days,
-        "checked": _vm._q(_vm.services.paymentDelay, d.days)
+        "value": d.name,
+        "checked": _vm._q(_vm.services.payment_in, d.name)
       },
       on: {
         "__c": function($event) {
-          _vm.services.paymentDelay = d.days
+          _vm.services.payment_in = d.name
         }
       }
     }), _vm._v(" "), _c('label', [_vm._v(_vm._s(d.name))])])])
