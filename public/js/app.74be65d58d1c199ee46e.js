@@ -2480,7 +2480,7 @@ Object.defineProperty(exports, "__esModule", {
 var _organizations = __webpack_require__("./resources/assets/js/components/organizations/index.js");
 
 exports.default = {
-    props: ['_countries', '_legalForms', '_id', '_organization', '_facilities', '_competencies', '_markets', '_categories', '_services', '_payment-types'],
+    props: ['_countries', '_legalForms', '_id', '_organization', '_facilities', '_competencies', '_markets', '_categories', '_services', '_paymentTypes', 'awardTypes', 'certificationTypes'],
     components: {
         GeneralTab: _organizations.GeneralTab, FacilitiesTab: _organizations.FacilitiesTab, ServicesTab: _organizations.ServicesTab, CertificationsTab: _organizations.CertificationsTab
     },
@@ -2533,6 +2533,8 @@ exports.default = {
         submit: function submit() {
             this.$refs.services.value = JSON.stringify(this.services);
             this.$refs.facilities.value = JSON.stringify(this.facilities);
+            this.$refs.awards.value = JSON.stringify(this.awards);
+            this.$refs.certifications.value = JSON.stringify(this.certifications);
             this.$refs.orgForm.submit();
         },
         addFacility: function addFacility(facility) {
@@ -2543,9 +2545,35 @@ exports.default = {
             if (~index) {
                 this.facilities.splice(index, 1);
             }
+        },
+        addAward: function addAward(award) {
+            this.awards.push(award);
+        },
+        addCertification: function addCertification(certification) {
+            this.certiciations.push(certification);
+        },
+        removeAward: function removeAward(award) {
+            var index = this.awards.indexOf(award);
+            if (~index) {
+                this.awards.splice(index, 1);
+            }
+        },
+        removeCertification: function removeCertification(certification) {
+            var index = this.certifications.indexOf(certification);
+            if (~index) {
+                this.certifications.splice(index, 1);
+            }
         }
     }
 }; //
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -3590,11 +3618,163 @@ Object.defineProperty(exports, "__esModule", {
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 exports.default = {
-    props: ['certifications', 'awards'],
+    props: ['certifications', 'awards', 'certificationTypes', 'awardTypes'],
     data: function data() {
-        return {};
+        return {
+            insertCertificationMode: false,
+            insertAwardMode: false,
+            newCertification: {},
+            newAward: {}
+        };
+    },
+
+    computed: {
+        isCertificationValid: function isCertificationValid() {
+            return !!this.newCertification.type.id;
+        },
+        isAwardValid: function isAwardValid() {
+            return !!this.newAward.type.id;
+        }
+    },
+    methods: {
+        addCertification: function addCertification() {
+            this.newCertification = {
+                type: {},
+                date: ''
+            };
+            this.insertCertificationMode = true;
+        },
+        cancelCertification: function cancelCertification() {
+            this.insertCertificationMode = false;
+        },
+        removeCertification: function removeCertification(certification) {
+            this.$emit('removeCertification', certification);
+        },
+        saveCertification: function saveCertification() {
+            this.$emit('addCertification', this.newCertification);
+            this.newCertification = {};
+            this.insertCertificationMode = false;
+        },
+        addAward: function addAward() {
+            this.newAward = {
+                type: {},
+                date: ''
+            };
+            this.insertAwardMode = true;
+        },
+        cancelAward: function cancelAward() {
+            this.insertAwardMode = false;
+        },
+        removeAward: function removeAward(award) {
+            this.$emit('removeAward', award);
+        },
+        saveAward: function saveAward() {
+            this.$emit('addAward', this.newAward);
+            this.newAward = {};
+            this.insertAwardMode = false;
+        }
     }
 };
 
@@ -9551,8 +9731,16 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }), _vm._v(" "), _c('certifications-tab', {
     attrs: {
       "data-tab": "certifications",
+      "certification-types": _vm.certificationTypes,
+      "award-types": _vm.awardTypes,
       "certifications": _vm.certifications,
       "awards": _vm.awards
+    },
+    on: {
+      "addAward": _vm.addAward,
+      "addCertification": _vm.addCertification,
+      "removeAward": _vm.removeAward,
+      "removeCertification": _vm.removeCertification
     }
   }), _vm._v(" "), _c('div', {
     staticClass: "ui divider"
@@ -9575,6 +9763,18 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "type": "hidden",
       "name": "services"
+    }
+  }), _vm._v(" "), _c('input', {
+    ref: "awards",
+    attrs: {
+      "type": "hidden",
+      "name": "awards"
+    }
+  }), _vm._v(" "), _c('input', {
+    ref: "certifications",
+    attrs: {
+      "type": "hidden",
+      "name": "certifications"
     }
   }), _vm._v(" "), _c('button', {
     staticClass: "ui orange submit right floated button",
@@ -10938,8 +11138,222 @@ if (false) {
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
     staticClass: "ui bottom attached tab"
-  })
-},staticRenderFns: []}
+  }, [_c('h3', {
+    staticClass: "ui header dividing"
+  }, [_vm._v("Certifications")]), _vm._v(" "), _c('table', {
+    staticClass: "ui celled table"
+  }, [_vm._m(0), _vm._v(" "), _c('tbody', [(_vm.certifications.length == 0) ? _c('tr', [_c('td', {
+    staticClass: "center aligned",
+    attrs: {
+      "colspan": "5"
+    }
+  }, [_vm._v("No certifications added")])]) : _vm._e(), _vm._v(" "), _vm._l((_vm.certifications), function(certification) {
+    return _c('tr', [_c('td', [_vm._v(_vm._s(certification.name))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(certification.date))]), _vm._v(" "), _c('td', {
+      staticClass: "collapsing"
+    }, [_c('button', {
+      staticClass: "ui mini red icon button",
+      attrs: {
+        "type": "button"
+      },
+      on: {
+        "click": function($event) {
+          _vm.removeCertification(certification)
+        }
+      }
+    }, [_c('i', {
+      staticClass: "trash icon"
+    })])])])
+  })], 2), _vm._v(" "), (!_vm.insertCertificationMode) ? _c('tfoot', [_c('th', {
+    attrs: {
+      "colspan": "5"
+    }
+  }, [_c('div', {
+    staticClass: "ui right floated small primary labeled icon button",
+    on: {
+      "click": function($event) {
+        _vm.addCertification()
+      }
+    }
+  }, [_c('i', {
+    staticClass: "marker icon"
+  }), _vm._v(" Add Certification\n                ")])])]) : _vm._e(), _vm._v(" "), (_vm.insertCertificationMode) ? _c('tfoot', [_c('tr', [_c('th', [_c('select', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.newCertification.type),
+      expression: "newCertification.type"
+    }],
+    staticClass: "ui search dropdown",
+    attrs: {
+      "name": "country_id"
+    },
+    on: {
+      "change": function($event) {
+        var $$selectedVal = Array.prototype.filter.call($event.target.options, function(o) {
+          return o.selected
+        }).map(function(o) {
+          var val = "_value" in o ? o._value : o.value;
+          return val
+        });
+        _vm.newCertification.type = $event.target.multiple ? $$selectedVal : $$selectedVal[0]
+      }
+    }
+  }, [_c('option', {
+    attrs: {
+      "value": ""
+    }
+  }, [_vm._v("Select Certification...")]), _vm._v(" "), _vm._l((_vm.certificationTypes), function(c) {
+    return _c('option', {
+      domProps: {
+        "value": c
+      }
+    }, [_vm._v(_vm._s(c.name))])
+  })], 2)]), _vm._v(" "), _c('th'), _vm._v(" "), _c('th', {
+    staticClass: "collapsing"
+  }, [_c('button', {
+    staticClass: "ui mini basic green icon button",
+    attrs: {
+      "type": "button",
+      "disabled": !_vm.isCertificationValid
+    },
+    on: {
+      "click": function($event) {
+        _vm.saveCertification()
+      }
+    }
+  }, [_c('i', {
+    staticClass: "checkmark icon"
+  })]), _vm._v(" "), _c('button', {
+    staticClass: "ui mini basic red icon button",
+    attrs: {
+      "type": "button"
+    },
+    on: {
+      "click": function($event) {
+        _vm.cancelCertification()
+      }
+    }
+  }, [_c('i', {
+    staticClass: "remove icon"
+  })])])])]) : _vm._e()], 1), _vm._v(" "), _c('h3', {
+    staticClass: "ui header dividing"
+  }, [_vm._v("Awards")]), _vm._v(" "), _c('table', {
+    staticClass: "ui celled table"
+  }, [_vm._m(1), _vm._v(" "), _c('tbody', [(_vm.awards.length == 0) ? _c('tr', [_c('td', {
+    staticClass: "center aligned",
+    attrs: {
+      "colspan": "5"
+    }
+  }, [_vm._v("No awards added")])]) : _vm._e(), _vm._v(" "), _vm._l((_vm.awards), function(award) {
+    return _c('tr', [_c('td', [_vm._v(_vm._s(award.name))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(award.date))]), _vm._v(" "), _c('td', {
+      staticClass: "collapsing"
+    }, [_c('button', {
+      staticClass: "ui mini red icon button",
+      attrs: {
+        "type": "button"
+      },
+      on: {
+        "click": function($event) {
+          _vm.removeAward(award)
+        }
+      }
+    }, [_c('i', {
+      staticClass: "trash icon"
+    })])])])
+  })], 2), _vm._v(" "), (!_vm.insertAwardMode) ? _c('tfoot', [_c('th', {
+    attrs: {
+      "colspan": "5"
+    }
+  }, [_c('div', {
+    staticClass: "ui right floated small primary labeled icon button",
+    on: {
+      "click": function($event) {
+        _vm.addAward()
+      }
+    }
+  }, [_c('i', {
+    staticClass: "marker icon"
+  }), _vm._v(" Add Award\n                ")])])]) : _vm._e(), _vm._v(" "), (_vm.insertAwardMode) ? _c('tfoot', [_c('tr', [_c('th', [_c('select', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.newAward.type),
+      expression: "newAward.type"
+    }],
+    staticClass: "ui search dropdown",
+    attrs: {
+      "name": "country_id"
+    },
+    on: {
+      "change": function($event) {
+        var $$selectedVal = Array.prototype.filter.call($event.target.options, function(o) {
+          return o.selected
+        }).map(function(o) {
+          var val = "_value" in o ? o._value : o.value;
+          return val
+        });
+        _vm.newAward.type = $event.target.multiple ? $$selectedVal : $$selectedVal[0]
+      }
+    }
+  }, [_c('option', {
+    attrs: {
+      "value": ""
+    }
+  }, [_vm._v("Select Award...")]), _vm._v(" "), _vm._l((_vm.awardTypes), function(a) {
+    return _c('option', {
+      domProps: {
+        "value": a
+      }
+    }, [_vm._v(_vm._s(a.name))])
+  })], 2)]), _vm._v(" "), _c('th'), _vm._v(" "), _c('th', {
+    staticClass: "collapsing"
+  }, [_c('button', {
+    staticClass: "ui mini basic green icon button",
+    attrs: {
+      "type": "button",
+      "disabled": !_vm.isAwardValid
+    },
+    on: {
+      "click": function($event) {
+        _vm.saveAward()
+      }
+    }
+  }, [_c('i', {
+    staticClass: "checkmark icon"
+  })]), _vm._v(" "), _c('button', {
+    staticClass: "ui mini basic red icon button",
+    attrs: {
+      "type": "button"
+    },
+    on: {
+      "click": function($event) {
+        _vm.cancelAward()
+      }
+    }
+  }, [_c('i', {
+    staticClass: "remove icon"
+  })])])])]) : _vm._e()], 1)])
+},staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('thead', {
+    staticClass: "full-width"
+  }, [_c('tr', [_c('th', {
+    staticClass: "ten wide"
+  }, [_vm._v("Name")]), _vm._v(" "), _c('th', {
+    staticClass: "five wide"
+  }, [_vm._v("Date")]), _vm._v(" "), _c('th', {
+    staticClass: "one wide"
+  })])])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('thead', {
+    staticClass: "full-width"
+  }, [_c('tr', [_c('th', {
+    staticClass: "ten wide"
+  }, [_vm._v("Name")]), _vm._v(" "), _c('th', {
+    staticClass: "five wide"
+  }, [_vm._v("Date")]), _vm._v(" "), _c('th', {
+    staticClass: "one wide"
+  })])])
+}]}
 module.exports.render._withStripped = true
 if (false) {
   module.hot.accept()

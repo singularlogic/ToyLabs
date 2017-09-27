@@ -33,8 +33,14 @@
         ></services-tab>
 
         <certifications-tab data-tab="certifications"
+            :certification-types="certificationTypes"
+            :award-types="awardTypes"
             :certifications="certifications"
             :awards="awards"
+            @addAward="addAward"
+            @addCertification="addCertification"
+            @removeAward="removeAward"
+            @removeCertification="removeCertification"
         ></certifications-tab>
 
 
@@ -43,6 +49,8 @@
         <input type="hidden" name="id" :value="_id" />
         <input type="hidden" name="facilities" ref="facilities" />
         <input type="hidden" name="services" ref="services" />
+        <input type="hidden" name="awards" ref="awards" />
+        <input type="hidden" name="certifications" ref="certifications" />
         <button type="button" class="ui orange submit right floated button" @click="submit">{{ submitText }}</button>
         <a href="/dashboard" class="ui default right floated button">Cancel</a>
     </form>
@@ -54,7 +62,7 @@
     export default {
         props: [
             '_countries', '_legalForms', '_id', '_organization', '_facilities', '_competencies', '_markets',
-            '_categories', '_services', '_payment-types'
+            '_categories', '_services', '_paymentTypes', 'awardTypes', 'certificationTypes',
         ],
         components: {
             GeneralTab, FacilitiesTab, ServicesTab, CertificationsTab,
@@ -113,6 +121,8 @@
             submit() {
                 this.$refs.services.value = JSON.stringify(this.services);
                 this.$refs.facilities.value = JSON.stringify(this.facilities);
+                this.$refs.awards.value = JSON.stringify(this.awards);
+                this.$refs.certifications.value = JSON.stringify(this.certifications);
                 this.$refs.orgForm.submit();
             },
             addFacility(facility) {
@@ -122,6 +132,24 @@
                 const index = this.facilities.indexOf(facility);
                 if (~index) {
                     this.facilities.splice(index, 1);
+                }
+            },
+            addAward(award) {
+                this.awards.push(award);
+            },
+            addCertification(certification) {
+                this.certiciations.push(certification);
+            },
+            removeAward(award) {
+                const index = this.awards.indexOf(award);
+                if (~index) {
+                    this.awards.splice(index, 1);
+                }
+            },
+            removeCertification(certification) {
+                const index = this.certifications.indexOf(certification);
+                if (~index) {
+                    this.certifications.splice(index, 1);
                 }
             },
         }

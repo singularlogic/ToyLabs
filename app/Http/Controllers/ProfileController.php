@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Award;
+use App\Certification;
 use App\Competency;
 use App\Country;
 use App\Facility;
@@ -123,16 +125,18 @@ class ProfileController extends Controller
         $org = Organization::find($id)->first();
 
         $data = [
-            'countries'    => Country::orderBy('name', 'ASC')->get(),
-            'legalForms'   => $this->legalForms,
-            'id'           => $id,
-            'organization' => $org,
-            'facilities'   => Facility::where('organization_id', $id)->get(),
-            'competencies' => Competency::orderBy('name', 'ASC')->get(),
-            'markets'      => [],
-            'categories'   => ToyCategory::where('title', '<>', 'Other')->orderBy('title')->get(),
-            'services'     => $org->services,
-            'paymentTypes' => PaymentType::orderBy('name', 'ASC')->get(),
+            'countries'          => Country::orderBy('name', 'ASC')->get(),
+            'legalForms'         => $this->legalForms,
+            'id'                 => $id,
+            'organization'       => $org,
+            'facilities'         => Facility::where('organization_id', $id)->get(),
+            'competencies'       => Competency::orderBy('name', 'ASC')->get(),
+            'markets'            => [],
+            'categories'         => ToyCategory::where('title', '<>', 'Other')->orderBy('title')->get(),
+            'services'           => $org->services,
+            'paymentTypes'       => PaymentType::orderBy('name', 'ASC')->get(),
+            'awardTypes'         => Award::orderBy('name', 'ASC')->get(),
+            'certificationTypes' => Certification::orderBy('name', 'ASC')->get(),
         ];
 
         if ($id > 0) {

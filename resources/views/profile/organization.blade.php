@@ -23,6 +23,8 @@
                 :_categories="{{ json_encode($categories) }}"
                 :_payment-types="{{ json_encode($paymentTypes) }}"
                 :_services="{{ json_encode($services) }}"
+                :_awardTypes="{{ json_encode($awardTypes) }}"
+                :_certificationTypes="{{ json_encode($certificationTypes) }}"
             ></Organization>
         </div>
 @endsection
