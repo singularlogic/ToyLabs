@@ -2480,7 +2480,7 @@ Object.defineProperty(exports, "__esModule", {
 var _organizations = __webpack_require__("./resources/assets/js/components/organizations/index.js");
 
 exports.default = {
-    props: ['_countries', '_legalForms', '_id', '_organization', '_facilities', '_competencies', '_markets', '_categories', '_services'],
+    props: ['_countries', '_legalForms', '_id', '_organization', '_facilities', '_competencies', '_markets', '_categories', '_services', '_payment-types'],
     components: {
         GeneralTab: _organizations.GeneralTab, FacilitiesTab: _organizations.FacilitiesTab, ServicesTab: _organizations.ServicesTab, CertificationsTab: _organizations.CertificationsTab
     },
@@ -2512,7 +2512,6 @@ exports.default = {
         return {
             organization: organization,
             scales: [{ id: 'prototype', name: 'Prototyping Only' }, { id: 'small', name: 'Small' }, { id: 'medium', name: 'Medium' }, { id: 'large', name: 'Large' }, { id: 'xlarge', name: 'Extra Large' }],
-            payments: [{ id: 1, name: 'Bank Transfer' }, { id: 2, name: 'Check' }, { id: 3, name: 'Credit Card' }, { id: 4, name: 'Paypal' }, { id: 5, name: 'Bitcoin' }],
             facilities: this._facilities === null ? [] : this._facilities,
             services: this._services,
             certifications: [],
@@ -3932,7 +3931,7 @@ Object.defineProperty(exports, "__esModule", {
 //
 
 exports.default = {
-    props: ['services', 'competencies', 'markets', 'categories', 'scales', 'payments'],
+    props: ['services', 'competencies', 'markets', 'categories', 'scales', 'paymentTypes'],
     data: function data() {
         return {
             delays: [{ days: 0, name: 'On Delivery' }, { days: 15, name: '15 Days' }, { days: 30, name: '30 Days' }, { days: 45, name: '45 Days' }, { days: 60, name: '60 Days' }, { days: 90, name: '90 Days' }]
@@ -9522,6 +9521,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "value": _vm.$parent.crsf
     }
   }), _vm._v(" "), _vm._m(0), _vm._v(" "), _c('general-tab', {
+    staticClass: "active",
     attrs: {
       "data-tab": "general",
       "organization": _vm.organization,
@@ -9539,7 +9539,6 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "remove": _vm.removeFacility
     }
   }), _vm._v(" "), _c('services-tab', {
-    staticClass: "active",
     attrs: {
       "data-tab": "services",
       "services": _vm.services,
@@ -9547,7 +9546,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "markets": _vm._markets,
       "categories": _vm._categories,
       "scales": _vm.scales,
-      "payments": _vm.payments
+      "paymentTypes": _vm._paymentTypes
     }
   }), _vm._v(" "), _c('certifications-tab', {
     attrs: {
@@ -9595,7 +9594,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   return _c('div', {
     staticClass: "ui pointing secondary menu"
   }, [_c('a', {
-    staticClass: "item orange",
+    staticClass: "item orange active",
     attrs: {
       "data-tab": "general"
     }
@@ -9605,7 +9604,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "data-tab": "facilities"
     }
   }, [_vm._v("Facilities")]), _vm._v(" "), _c('a', {
-    staticClass: "item orange active",
+    staticClass: "item orange",
     attrs: {
       "data-tab": "services"
     }
@@ -9970,7 +9969,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "for": "payment"
     }
-  }, [_vm._v("Ways of Payment:")]), _vm._v(" "), _vm._l((_vm.payments), function(p) {
+  }, [_vm._v("Ways of Payment:")]), _vm._v(" "), _vm._l((_vm.paymentTypes), function(p) {
     return _c('div', {
       staticClass: "field"
     }, [_c('div', {
@@ -9979,31 +9978,31 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       directives: [{
         name: "model",
         rawName: "v-model",
-        value: (_vm.services.payments),
-        expression: "services.payments"
+        value: (_vm.services.payment_types),
+        expression: "services.payment_types"
       }],
       attrs: {
         "type": "checkbox"
       },
       domProps: {
         "value": p.id,
-        "checked": Array.isArray(_vm.services.payments) ? _vm._i(_vm.services.payments, p.id) > -1 : (_vm.services.payments)
+        "checked": Array.isArray(_vm.services.payment_types) ? _vm._i(_vm.services.payment_types, p.id) > -1 : (_vm.services.payment_types)
       },
       on: {
         "__c": function($event) {
-          var $$a = _vm.services.payments,
+          var $$a = _vm.services.payment_types,
             $$el = $event.target,
             $$c = $$el.checked ? (true) : (false);
           if (Array.isArray($$a)) {
             var $$v = p.id,
               $$i = _vm._i($$a, $$v);
             if ($$c) {
-              $$i < 0 && (_vm.services.payments = $$a.concat($$v))
+              $$i < 0 && (_vm.services.payment_types = $$a.concat($$v))
             } else {
-              $$i > -1 && (_vm.services.payments = $$a.slice(0, $$i).concat($$a.slice($$i + 1)))
+              $$i > -1 && (_vm.services.payment_types = $$a.slice(0, $$i).concat($$a.slice($$i + 1)))
             }
           } else {
-            _vm.services.payments = $$c
+            _vm.services.payment_types = $$c
           }
         }
       }

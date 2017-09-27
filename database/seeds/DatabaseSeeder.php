@@ -15,6 +15,7 @@ class DatabaseSeeder extends Seeder
         // $this->call(OrganizationTypesSeeder::class);
         // $this->call(AddToyCategories::class);
         // $this->call(OrganizationTypesSeeder::class);
-        $this->call(RegionalSeeder::class);
+        // $this->call(RegionalSeeder::class);
+        // $this->call(PaymentTypesSeeder::class);
     }
 }

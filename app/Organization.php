@@ -58,6 +58,11 @@ class Organization extends Model
         return $this->belongsToMany(Competency::class, 'competencies_organizations');
     }
 
+    public function paymentTypes()
+    {
+        return $this->belongsToMany(PaymentType::class, 'payments_organizations');
+    }
+
     public function expertise()
     {
         return $this->belongsToMany(ToyCategory::class, 'toycategories_organizations', 'organization_id', 'category_id');
@@ -69,7 +74,7 @@ class Organization extends Model
             'expertise'        => $this->expertise->pluck('id'),
             'competencies'     => $this->competencies->pluck('id'),
             'markets'          => [],
-            'payments'         => [],
+            'payment_types'    => $this->paymentTypes->pluck('id'),
             'payment_in'       => $this->payment_in,
             'production_scale' => $this->production_scale,
 

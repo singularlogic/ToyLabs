@@ -1,7 +1,7 @@
 @extends('layouts.default', ['class' => ''])
 
 @section('title')
-    {{ $pagetitle or 'EditOrganization' }}
+    {{ $pagetitle or 'Edit Organization' }}
 @endsection
 
 @section('content')
@@ -21,6 +21,7 @@
                 :_competencies="{{ json_encode($competencies) }}"
                 :_markets="{{ json_encode($markets) }}"
                 :_categories="{{ json_encode($categories) }}"
+                :_payment-types="{{ json_encode($paymentTypes) }}"
                 :_services="{{ json_encode($services) }}"
             ></Organization>
         </div>

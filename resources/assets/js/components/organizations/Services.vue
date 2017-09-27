@@ -52,9 +52,9 @@
 
         <div class="inline fields">
             <label for="payment">Ways of Payment:</label>
-            <div class="field" v-for="p of payments">
+            <div class="field" v-for="p of paymentTypes">
                 <div class="ui checkbox">
-                    <input type="checkbox" :value="p.id" v-model="services.payments" />
+                    <input type="checkbox" :value="p.id" v-model="services.payment_types" />
                     <label>{{ p.name }}</label>
                 </div>
             </div>
@@ -74,7 +74,7 @@
 
 <script>
     export default {
-        props: ['services', 'competencies', 'markets', 'categories', 'scales', 'payments'],
+        props: ['services', 'competencies', 'markets', 'categories', 'scales', 'paymentTypes'],
         data() {
             return {
                 delays: [

@@ -4,13 +4,13 @@
         <input type="hidden" name="_token" :value="$parent.crsf" />
 
         <div class="ui pointing secondary menu">
-            <a class="item orange" data-tab="general">General</a>
+            <a class="item orange active" data-tab="general">General</a>
             <a class="item orange" data-tab="facilities">Facilities</a>
-            <a class="item orange active" data-tab="services">Services &amp; Pricing</a>
+            <a class="item orange" data-tab="services">Services &amp; Pricing</a>
             <a class="item orange" data-tab="certifications">Certifications &amp; Awards</a>
         </div>
 
-        <general-tab data-tab="general"
+        <general-tab class="active" data-tab="general"
             :organization="organization"
             :countries="_countries"
             :legalForms="_legalForms"
@@ -23,13 +23,13 @@
             @remove="removeFacility"
         ></facilities-tab>
 
-        <services-tab class="active" data-tab="services"
+        <services-tab data-tab="services"
             :services="services"
             :competencies="_competencies"
             :markets="_markets"
             :categories="_categories"
             :scales="scales"
-            :payments="payments"
+            :paymentTypes="_paymentTypes"
         ></services-tab>
 
         <certifications-tab data-tab="certifications"
@@ -54,7 +54,7 @@
     export default {
         props: [
             '_countries', '_legalForms', '_id', '_organization', '_facilities', '_competencies', '_markets',
-            '_categories', '_services'
+            '_categories', '_services', '_payment-types'
         ],
         components: {
             GeneralTab, FacilitiesTab, ServicesTab, CertificationsTab,
@@ -92,13 +92,6 @@
                     { id: 'medium', name: 'Medium' },
                     { id: 'large', name: 'Large' },
                     { id: 'xlarge', name: 'Extra Large' },
-                ],
-                payments: [
-                    { id: 1, name: 'Bank Transfer' },
-                    { id: 2, name: 'Check' },
-                    { id: 3, name: 'Credit Card' },
-                    { id: 4, name: 'Paypal' },
-                    { id: 5, name: 'Bitcoin' },
                 ],
                 facilities: this._facilities === null ? [] : this._facilities,
                 services: this._services,

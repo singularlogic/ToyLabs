@@ -8,6 +8,7 @@ use App\Facility;
 use App\Notifications\UserLeftOrganization;
 use App\Organization;
 use App\OrganizationType;
+use App\PaymentType;
 use App\Profile;
 use App\ToyCategory;
 use App\User;
@@ -131,6 +132,7 @@ class ProfileController extends Controller
             'markets'      => [],
             'categories'   => ToyCategory::where('title', '<>', 'Other')->orderBy('title')->get(),
             'services'     => $org->services,
+            'paymentTypes' => PaymentType::orderBy('name', 'ASC')->get(),
         ];
 
         if ($id > 0) {
@@ -172,6 +174,7 @@ class ProfileController extends Controller
             $org      = Organization::find($id);
             $org->competencies()->sync($services['competencies']);
             $org->expertise()->sync($services['expertise']);
+            $org->paymentTypes()->sync($services['payment_types']);
             $org->payment_in       = $services['payment_in'];
             $org->production_scale = $services['production_scale'];
             $org->save();
