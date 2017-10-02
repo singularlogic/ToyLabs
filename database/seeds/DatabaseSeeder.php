@@ -17,5 +17,6 @@ class DatabaseSeeder extends Seeder
         // $this->call(OrganizationTypesSeeder::class);
         // $this->call(RegionalSeeder::class);
         // $this->call(PaymentTypesSeeder::class);
+        // $this->call(AgeSeeder::class);
     }
 }

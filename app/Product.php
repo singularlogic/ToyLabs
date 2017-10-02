@@ -12,7 +12,7 @@ class Product extends Model implements HasMedia
 {
     use HasComments, HasMediaTrait, LikeableTrait;
 
-    protected $fillable = ['title', 'description', 'owner_id', 'owner_type', 'ages', 'status', 'category_id'];
+    protected $fillable = ['title', 'description', 'owner_id', 'owner_type', 'min_age', 'max_age', 'status', 'category_id'];
     protected $appends  = ['image', 'type', 'likeCount', 'commentCount', 'liked', 'paragraphedDescription'];
 
     public function owner()
@@ -70,5 +70,25 @@ class Product extends Model implements HasMedia
     public function detailedComments()
     {
         return $this->comments()->with('creator');
+    }
+
+    public function getAgesAttribute()
+    {
+        $min = Age::where('value', $this->min_age)->first();
+        $max = Age::where('value', $this->max_age)->first();
+
+        $ages = '';
+        if ($min) {
+            $ages .= $min['name'];
+            if ($max) {
+                $ages .= ' - ' . $max['name'];
+            } else {
+                $ages .= '+';
+            }
+
+            return $ages;
+        }
+
+        return null;
     }
 }

@@ -18,9 +18,11 @@
             <div class="ui clearing divider"></div>
 
             <div class="ui horizontal divided list">
+@if($product['ages'])
                 <div class="item">
                     <strong>Ages</strong>: {{ $product['ages'] }}
                 </div>
+@endif
                 <div class="item">
                     <strong>Category</strong>: {{ $product['category']['title'] }}
                 </div>

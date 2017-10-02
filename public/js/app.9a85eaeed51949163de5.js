@@ -2838,10 +2838,22 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 exports.default = {
     components: { Dropzone: _vue2Dropzone2.default, ConfirmDialog: _ConfirmDialog2.default },
-    props: ['_product', '_user', '_organizations', '_categories'],
+    props: ['_product', '_user', '_organizations', '_categories', '_ages'],
     data: function data() {
         return {
             submitText: this._product.id ? 'Update' : 'Create',
@@ -10825,7 +10837,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   })]), _vm._v(" "), _c('div', {
     staticClass: "fields"
   }, [_c('div', {
-    staticClass: "twelve wide field"
+    staticClass: "ten wide field"
   }, [_c('label', [_vm._v("Category")]), _vm._v(" "), _c('select', {
     directives: [{
       name: "model",
@@ -10859,33 +10871,80 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       }
     }, [_vm._v(_vm._s(c.title))])
   })], 2)]), _vm._v(" "), _c('div', {
-    staticClass: "four wide field",
+    staticClass: "three wide field",
     attrs: {
       "required": ""
     }
-  }, [_c('label', [_vm._v("Ages")]), _vm._v(" "), _c('input', {
+  }, [_c('label', [_vm._v("Suitable for Ages From")]), _vm._v(" "), _c('select', {
     directives: [{
       name: "model",
       rawName: "v-model",
-      value: (_vm.product.ages),
-      expression: "product.ages"
+      value: (_vm.product.min_age),
+      expression: "product.min_age"
     }],
+    staticClass: "ui search dropdown",
     attrs: {
-      "type": "text",
-      "name": "ages",
-      "placeholder": "Target ages",
-      "required": ""
-    },
-    domProps: {
-      "value": (_vm.product.ages)
+      "name": "min_age"
     },
     on: {
-      "input": function($event) {
-        if ($event.target.composing) { return; }
-        _vm.product.ages = $event.target.value
+      "change": function($event) {
+        var $$selectedVal = Array.prototype.filter.call($event.target.options, function(o) {
+          return o.selected
+        }).map(function(o) {
+          var val = "_value" in o ? o._value : o.value;
+          return val
+        });
+        _vm.product.min_age = $event.target.multiple ? $$selectedVal : $$selectedVal[0]
       }
     }
-  })])]), _vm._v(" "), (_vm.editLegal) ? _c('div', [_c('h4', {
+  }, [_c('option', {
+    attrs: {
+      "value": ""
+    }
+  }, [_vm._v("Select Minimum Age")]), _vm._v(" "), _vm._l((_vm._ages), function(a) {
+    return _c('option', {
+      domProps: {
+        "value": a.value
+      }
+    }, [_vm._v(_vm._s(a.name))])
+  })], 2)]), _vm._v(" "), _c('div', {
+    staticClass: "three wide field",
+    attrs: {
+      "required": ""
+    }
+  }, [_c('label', [_vm._v("To")]), _vm._v(" "), _c('select', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.product.max_age),
+      expression: "product.max_age"
+    }],
+    staticClass: "ui search dropdown",
+    attrs: {
+      "name": "max_age"
+    },
+    on: {
+      "change": function($event) {
+        var $$selectedVal = Array.prototype.filter.call($event.target.options, function(o) {
+          return o.selected
+        }).map(function(o) {
+          var val = "_value" in o ? o._value : o.value;
+          return val
+        });
+        _vm.product.max_age = $event.target.multiple ? $$selectedVal : $$selectedVal[0]
+      }
+    }
+  }, [_c('option', {
+    attrs: {
+      "value": ""
+    }
+  }, [_vm._v("Select Maximum Age")]), _vm._v(" "), _vm._l((_vm._ages), function(a) {
+    return _c('option', {
+      domProps: {
+        "value": a.value
+      }
+    }, [_vm._v(_vm._s(a.name))])
+  })], 2)])]), _vm._v(" "), (_vm.editLegal) ? _c('div', [_c('h4', {
     staticClass: "ui dividing header"
   }, [_vm._v("Legal")]), _vm._v(" "), _c('div', {
     staticClass: "inline fields"

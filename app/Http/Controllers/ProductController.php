@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Age;
 use App\Design;
 use App\Product;
 use App\Prototype;
@@ -100,6 +101,7 @@ class ProductController extends Controller
             'user'          => $user,
             'organizations' => $user->organizations,
             'categories'    => ToyCategory::all(),
+            'ages'          => Age::orderBy('value', 'ASC')->get(),
             'product'       => [
                 'title'       => '',
                 'description' => '',
@@ -123,7 +125,8 @@ class ProductController extends Controller
         $product = Product::create([
             'title'       => $input['title'],
             'description' => $input['description'],
-            'ages'        => $input['ages'],
+            'min_age'     => isset($input['min_age']) ? $input['min_age'] : null,
+            'max_age'     => isset($input['max_age']) ? $input['max_age'] : null,
             'is_public'   => $input['is_public'],
             'category_id' => $input['category_id'],
             'owner_id'    => $input['owner_id'],
@@ -152,6 +155,7 @@ class ProductController extends Controller
             'user'          => $user,
             'organizations' => $user->organizations,
             'categories'    => ToyCategory::all(),
+            'ages'          => Age::orderBy('value', 'ASC')->get(),
             'product'       => $product,
         ];
 
@@ -169,11 +173,14 @@ class ProductController extends Controller
         $user    = Auth::user();
         $files   = json_decode($input['files'], true);
 
+        // dd($input);
+
         if ($product && $this->canEdit($user, $product)) {
             Product::where('id', $id)->update([
                 'title'       => $input['title'],
                 'description' => $input['description'],
-                'ages'        => $input['ages'],
+                'min_age'     => isset($input['min_age']) ? $input['min_age'] : null,
+                'max_age'     => isset($input['max_age']) ? $input['max_age'] : null,
                 'is_public'   => $input['is_public'],
                 'category_id' => $input['category_id'],
                 'owner_id'    => $input['owner_id'],

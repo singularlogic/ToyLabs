@@ -13,6 +13,7 @@
                 :_user="{{ json_encode($user) }}"
                 :_organizations="{{ json_encode($organizations) }}"
                 :_categories="{{ json_encode($categories) }}"
+                :_ages="{{ json_encode($ages) }}"
             ></product-create>
         </div>
 @endsection

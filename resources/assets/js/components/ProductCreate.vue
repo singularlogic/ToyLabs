@@ -12,16 +12,28 @@
             <textarea v-model="product.description" name="description" required></textarea>
         </div>
         <div class="fields">
-            <div class="twelve wide field">
+            <div class="ten wide field">
                 <label>Category</label>
                 <select class="ui search dropdown" name="category_id" v-model="product.category_id">
                     <option value="">Select Product Category</option>
                     <option v-for="c of _categories" :value="c.id">{{ c.title }}</option>
                 </select>
             </div>
-            <div class="four wide field" required>
-                <label>Ages</label>
-                <input type="text" v-model="product.ages" name="ages" placeholder="Target ages" required />
+            <div class="three wide field" required>
+                <label>Suitable for Ages From</label>
+                <select class="ui search dropdown" name="min_age" v-model="product.min_age">
+                    <option value="">Select Minimum Age</option>
+                    <option v-for="a of _ages" :value="a.value">{{ a.name }}</option>
+                </select>
+                <!-- <input type="text" v-model="product.min_age" name="ages" placeholder="Target ages" required /> -->
+            </div>
+            <div class="three wide field" required>
+                <label>To</label>
+                <select class="ui search dropdown" name="max_age" v-model="product.max_age">
+                    <option value="">Select Maximum Age</option>
+                    <option v-for="a of _ages" :value="a.value">{{ a.name }}</option>
+                </select>
+                <!-- <input type="text" v-model="product.max_age" name="ages" placeholder="Target ages" required /> -->
             </div>
         </div>
 
@@ -117,7 +129,7 @@ import Dropzone from 'vue2-dropzone';
 
 export default {
     components: { Dropzone, ConfirmDialog },
-    props: ['_product', '_user', '_organizations', '_categories'],
+    props: ['_product', '_user', '_organizations', '_categories', '_ages'],
     data() {
         return {
             submitText: this._product.id ? 'Update' : 'Create',
