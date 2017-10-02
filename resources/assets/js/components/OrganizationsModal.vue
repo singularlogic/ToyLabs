@@ -19,8 +19,6 @@
 </template>
 
 <script>
-import OrganizationsModal from './components/OrganizationsModal.vue';
-
 export default {
     name: 'OrganizationsModal',
     props: ['organizations', 'myOrganizations'],
@@ -29,8 +27,5 @@ export default {
             joinOrg: ''
         };
     },
-    components: {
-        OrganizationsModal
-    }
 }
 </script>

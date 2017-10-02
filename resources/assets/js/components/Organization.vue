@@ -1,129 +1,157 @@
 <template>
-            <!-- Organization -->
-            <form class="ui form" method="POST" action="/organization/edit">
-                <input type="hidden" name="_token" :value="$parent.crsf" />
+    <!-- Organization -->
+    <form class="ui form" method="POST" action="/organization/edit" ref="orgForm">
+        <input type="hidden" name="_token" :value="$parent.crsf" />
 
-                <h3 class="ui header">General</h3>
-                <div class="ui divider"></div>
+        <div class="ui pointing secondary menu">
+            <a class="item orange active" data-tab="general">General</a>
+            <a class="item orange" data-tab="facilities">Facilities</a>
+            <a class="item orange" data-tab="services">Services &amp; Pricing</a>
+            <a class="item orange" data-tab="certifications">Certifications &amp; Awards</a>
+        </div>
 
-                <div class="equal width fields">
-                    <div class="field">
-                        <label>Name</label>
-                        <input type="text" name="name" placeholder="Name" v-model="organization.name" autofocus required />
-                    </div>
-                    <div class="field">
-                        <label>Legal Name</label>
-                        <input type="text" name="legal_name" placeholder="Legal name" v-model="organization.legal_name" required />
-                    </div>
-                </div>
+        <general-tab class="active" data-tab="general"
+            :organization="organization"
+            :countries="_countries"
+            :legalForms="_legalForms"
+        ></general-tab>
 
-                <div class="equal width fields">
-                    <div class="field">
-                        <label>Registration Country</label>
-                        <select class="ui search dropdown" name="reg_country" v-model="organization.reg_country">
-                            <option value="">Select Country</option>
-                            <option v-for="c in _countries" v-bind:value="c">{{ c }}</option>
-                        </select>
-                    </div>
-                    <div class="field">
-                        <label>Registration Number</label>
-                        <input type="text" name="reg_number" placeholder="#########" v-model="organization.reg_number" />
-                    </div>
-                    <div class="field">
-                        <label>Legal Form</label>
-                        <select class="ui search dropdown" name="legal_form" v-model="organization.legal_form">
-                            <option value="">Select One</option>
-                            <option v-for="l in _legalForms" v-bind:value="l">{{ l }}</option>
-                        </select>
-                    </div>
-                    <div class="field">
-                        <label>VAT Number</label>
-                        <input type="text" name="vat_number" placeholder="########" v-model="organization.vat_number" />
-                    </div>
-                </div>
-                <div class="field">
-                    <label>Description</label>
-                    <textarea name="description" v-model="organization.description"></textarea>
-                </div>
+        <facilities-tab data-tab="facilities"
+            :facilities="facilities"
+            :countries="_countries"
+            @add="addFacility"
+            @remove="removeFacility"
+        ></facilities-tab>
 
-                <h3 class="ui header">Address</h3>
-                <div class="ui divider"></div>
+        <services-tab data-tab="services"
+            :services="services"
+            :competencies="_competencies"
+            :markets="_markets"
+            :categories="_categories"
+            :scales="scales"
+            :paymentTypes="_paymentTypes"
+        ></services-tab>
 
-                <div class="field">
-                    <label>Street Name &amp; Number</label>
-                    <input type="text" name="address" placeholder="Street Name and Number" v-model="organization.address" />
-                </div>
-                <div class="equal width fields">
-                    <div class="field">
-                        <label>P.O. Box</label>
-                        <input type="text" name="po_box" placeholder="P.O. Box" v-model="organization.po_box" />
-                    </div>
-                    <div class="field">
-                        <label>Postal Code</label>
-                        <input type="text" name="postal_code" placeholder="Postal Code" v-model="organization.postal_code" />
-                    </div>
-                    <div class="field">
-                        <label>City</label>
-                        <input type="text" name="city" placeholder="City" v-model="organization.city" />
-                    </div>
-                </div>
-                <div class="fields">
-                    <div class="four wide field">
-                        <label>Phone</label>
-                        <input type="text" name="phone" placeholder="Phone" v-model="organization.phone" />
-                    </div>
-                    <div class="four wide field">
-                        <label>Fax Number</label>
-                        <input type="text" name="fax" placeholder="Fax Number" v-model="organization.fax" />
-                    </div>
-                    <div class="eight wide field">
-                        <label>Website URL</label>
-                        <input type="text" name="website_url" placeholder="Website URL" v-model="organization.website_url" />
-                    </div>
-                </div>
+        <certifications-tab data-tab="certifications"
+            :certification-types="certificationTypes"
+            :award-types="awardTypes"
+            :certifications="certifications"
+            :awards="awards"
+            @addAward="addAward"
+            @addCertification="addCertification"
+            @removeAward="removeAward"
+            @removeCertification="removeCertification"
+        ></certifications-tab>
 
-                <div class="ui divider"></div>
 
-                <input type="hidden" name="id" :value="_id" />
+        <div class="ui divider"></div>
 
-                <button type="submit" class="ui orange submit right floated button">{{ submitText }}</button>
-                <a href="/dashboard" class="ui default right floated button">Cancel</a>
-            </form>
+        <input type="hidden" name="id" :value="_id" />
+        <input type="hidden" name="facilities" ref="facilities" />
+        <input type="hidden" name="services" ref="services" />
+        <input type="hidden" name="awards" ref="awards" />
+        <input type="hidden" name="certifications" ref="certifications" />
+        <button type="button" class="ui orange submit right floated button" @click="submit">{{ submitText }}</button>
+        <a href="/dashboard" class="ui default right floated button">Cancel</a>
+    </form>
 </template>
 
 <script>
+    import { GeneralTab, FacilitiesTab, ServicesTab, CertificationsTab } from './organizations';
+
     export default {
-        props: ['_countries', '_legalForms', '_id', '_organization'],
+        props: [
+            '_countries', '_legalForms', '_id', '_organization', '_facilities', '_competencies', '_markets',
+            '_categories', '_services', '_paymentTypes', 'awardTypes', 'certificationTypes',
+        ],
+        components: {
+            GeneralTab, FacilitiesTab, ServicesTab, CertificationsTab,
+        },
         data () {
+            let organization;
+
             if (this._organization === null) {
-                return {
-                    organization: {
-                        name: '',
-                        description: '',
-                        legal_name: '',
-                        reg_country: '',
-                        reg_number: '',
-                        legal_form: '',
-                        vat_number: '',
-                        address: '',
-                        po_box: '',
-                        postal_code: '',
-                        city: '',
-                        phone: '',
-                        fax: '',
-                        website_url: '',
-                    }
+                organization = {
+                    name: '',
+                    legal_name: '',
+                    legal_form: '',
+                    description: '',
+                    address: '',
+                    postal_code: '',
+                    city: '',
+                    country: '',
+                    po_box: '',
+                    phone: '',
+                    fax: '',
+                    website_url: '',
+                    instagram: '',
+                    facebook: '',
+                    twitter: '',
                 };
+            } else {
+                organization = this._organization;
             }
 
             return {
-                organization: this._organization,
+                organization: organization,
+                scales: [
+                    { id: 'prototype', name: 'Prototyping Only' },
+                    { id: 'small', name: 'Small' },
+                    { id: 'medium', name: 'Medium' },
+                    { id: 'large', name: 'Large' },
+                    { id: 'xlarge', name: 'Extra Large' },
+                ],
+                facilities: this._facilities === null ? [] : this._facilities,
+                services: this._services,
+                certifications: [],
+                awards: [],
             }
+        },
+        mounted() {
+            this.$nextTick(() => {
+                $('.menu .item').tab();
+            });
         },
         computed: {
             submitText() {
                 return this._id === 0 ? 'Create' : 'Update';
-            }
+            },
+        },
+        methods: {
+            submit() {
+                this.$refs.services.value = JSON.stringify(this.services);
+                this.$refs.facilities.value = JSON.stringify(this.facilities);
+                this.$refs.awards.value = JSON.stringify(this.awards);
+                this.$refs.certifications.value = JSON.stringify(this.certifications);
+                this.$refs.orgForm.submit();
+            },
+            addFacility(facility) {
+                this.facilities.push(facility);
+            },
+            removeFacility(facility) {
+                const index = this.facilities.indexOf(facility);
+                if (~index) {
+                    this.facilities.splice(index, 1);
+                }
+            },
+            addAward(award) {
+                this.awards.push(award);
+            },
+            addCertification(certification) {
+                this.certiciations.push(certification);
+            },
+            removeAward(award) {
+                const index = this.awards.indexOf(award);
+                if (~index) {
+                    this.awards.splice(index, 1);
+                }
+            },
+            removeCertification(certification) {
+                const index = this.certifications.indexOf(certification);
+                if (~index) {
+                    this.certifications.splice(index, 1);
+                }
+            },
         }
     }
 </script>

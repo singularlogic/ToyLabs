@@ -22,7 +22,7 @@
     </head>
     <body>
         <div class="ui middle aligned center aligned grid" id="app" v-cloak>
-            <div class="column">
+            <div class="column restricted">
                 <div class="ui row basic segment">
                     <h1 class="ui orange image header">
                         <a href="/" title="Home"><img src="/images/toylabs_logo_big_flat.svg" class="image" /></a>

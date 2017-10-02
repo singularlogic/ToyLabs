@@ -15,7 +15,7 @@ body > .grid {
 .column > .row > .image img {
   width: 8em!important;
 }
-.column {
+.restricted {
   max-width: 650px;
 }
 .pusher .column {

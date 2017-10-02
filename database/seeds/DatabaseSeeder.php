@@ -13,11 +13,9 @@ class DatabaseSeeder extends Seeder
     {
         // $this->call(RolesTableSeeder::class);
         // $this->call(OrganizationTypesSeeder::class);
-        $products = factory(App\Product::class, 20)
-            ->create()
-            ->each(function ($u) {
-                $u->designs()->save(factory(App\Design::class)->make());
-                $u->prototypes()->save(factory(App\Prototype::class)->make());
-            });
+        // $this->call(AddToyCategories::class);
+        // $this->call(OrganizationTypesSeeder::class);
+        // $this->call(RegionalSeeder::class);
+        // $this->call(PaymentTypesSeeder::class);
     }
 }

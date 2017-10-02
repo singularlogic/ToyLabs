@@ -92,3 +92,7 @@ Route::delete('/user/comment/{id}', ['as' => 'user.comment.delete', 'uses' => 'U
 Route::get('/product/{id}', ['as' => 'product.details', 'uses' => 'ProductController@showProduct']);
 Route::get('/design/{id}', ['as' => 'design.details', 'uses' => 'ProductController@showDesign']);
 Route::get('/prototype/{id}', ['as' => 'prototype.details', 'uses' => 'ProductController@showPrototype']);
+
+// API
+Route::get('/api/states/{id}', 'APIController@countryStates');
+Route::get('/api/cities/{id}', 'APIController@stateCities');
