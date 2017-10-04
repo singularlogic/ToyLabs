@@ -56,6 +56,14 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/product/{id}/edit', ['as' => 'product.edit', 'uses' => 'ProductController@edit']);
     Route::post('/product/{id}/edit', ['as' => 'product.edit.post', 'uses' => 'ProductController@doEdit']);
 
+    Route::get('/product/{id}/marketanalysis', ['as' => 'product.analysis', 'uses' => 'MarketAnalysisController@index']);
+    Route::get('/product/{id}/designs', ['as' => 'product.designs', 'uses' => 'DesignController@productDesigns']);
+
+    Route::get('/product/{id}/designs/create', ['as' => 'design.create', 'uses' => 'DesignController@create']);
+    Route::post('/product/{id}/designs/create', ['as' => 'design.create.post', 'uses' => 'DesignController@doCreate']);
+    Route::get('/design/{id}/edit', ['as' => 'design.edit', 'uses' => 'DesignController@edit']);
+    Route::post('/design/{id}/edit', ['as' => 'design.edit.post', 'uses' => 'DesignController@doEdit']);
+
     // Files
     Route::post('/file/upload', ['as' => 'file.upload', 'uses' => 'FileController@upload']);
     Route::delete('/file/delete', ['as' => 'file.delete', 'uses' => 'FileController@delete']);

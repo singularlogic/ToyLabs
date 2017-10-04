@@ -4,38 +4,33 @@
             <a :href="`/product/${product.id}`">{{ product.title }}</a>
             <div class="ui label" :class="{ blue: owner !== 'Personal', orange: owner === 'Personal' }">{{ owner }}</div>
         </h3>
-        <div class="ui right floated">
-            <a class="ui compact basic blue icon button" :href="`/product/${product.id}/edit`" data-tooltip="Edit Product..." data-position="left center" data-inverted>
-                <i class="settings icon"></i>
-            </a>
-        </div>
 
         <div class="ui hidden clearing divider"></div>
 
         <div class="content">
             <div class="ui five mini steps">
-                <a class="step" :class="getClass('concept')">
+                <a class="step" :class="getClass('concept')" :href="`/product/${product.id}/edit`">
                     <i class="idea icon"></i>
                     <div class="content">
                         <div class="title">Concept</div>
                         <div class="description">Basic Product Information</div>
                     </div>
                 </a>
-                <a class="step" :class="getClass('research')">
+                <a class="step" :class="getClass('research')" :href="`/product/${product.id}/marketanalysis`">
                     <i class="line chart icon"></i>
                     <div class="content">
                         <div class="title">Research</div>
                         <div class="description">Market Analysis</div>
                     </div>
                 </a>
-                <a class="step" :class="getClass('design')">
+                <a class="step" :class="getClass('design')" :href="`/product/${product.id}/designs`">
                     <i class="pencil icon"></i>
                     <div class="content">
                         <div class="title">Design</div>
                         <div class="description">Exploring different designs</div>
                     </div>
                 </a>
-                <a class="step" :class="getClass('prototype')">
+                <a class="step" :class="getClass('prototype')" :href="`/product/${product.id}/prototypes`">
                     <i class="icon cube"></i>
                     <div class="content">
                         <div class="title">Prototype</div>

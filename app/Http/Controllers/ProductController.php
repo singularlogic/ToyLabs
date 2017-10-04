@@ -121,6 +121,7 @@ class ProductController extends Controller
     public function doCreate(Request $request)
     {
         $input = $request->all();
+        $files = json_decode($input['files'], true);
 
         $product = Product::create([
             'title'       => $input['title'],
@@ -128,7 +129,7 @@ class ProductController extends Controller
             'min_age'     => isset($input['min_age']) ? $input['min_age'] : null,
             'max_age'     => isset($input['max_age']) ? $input['max_age'] : null,
             'is_public'   => $input['is_public'],
-            'category_id' => $input['category_id'],
+            'category_id' => isset($input['category_id']) ? $input['category_id'] : null,
             'owner_id'    => $input['owner_id'],
             'owner_type'  => $input['owner_type'],
         ]);
@@ -173,8 +174,6 @@ class ProductController extends Controller
         $user    = Auth::user();
         $files   = json_decode($input['files'], true);
 
-        // dd($input);
-
         if ($product && $this->canEdit($user, $product)) {
             Product::where('id', $id)->update([
                 'title'       => $input['title'],
@@ -182,9 +181,10 @@ class ProductController extends Controller
                 'min_age'     => isset($input['min_age']) ? $input['min_age'] : null,
                 'max_age'     => isset($input['max_age']) ? $input['max_age'] : null,
                 'is_public'   => $input['is_public'],
-                'category_id' => $input['category_id'],
+                'category_id' => isset($input['category_id']) ? $input['category_id'] : null,
                 'owner_id'    => $input['owner_id'],
                 'owner_type'  => $input['owner_type'],
+                'status'      => $input['status'] ?: $product['status'],
             ]);
 
             foreach ($files as $file) {
@@ -192,6 +192,9 @@ class ProductController extends Controller
                 $product->addMedia($path)->usingName($file['name'])->toMediaCollection('images');
             }
 
+            if ($input['status']) {
+                return redirect()->route('product.analysis', ['id' => $id])->with('success', 'Product updated successfully!');
+            }
             return redirect('dashboard')->with('success', 'Product updated successfully!');
         }
 

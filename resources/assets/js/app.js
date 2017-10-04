@@ -12,7 +12,8 @@ import Comments from './components/Comments.vue';
 import Likes from './components/Likes.vue';
 import ProductList from './components/ProductList.vue';
 import ProductCreate from './components/ProductCreate.vue';
-// import DesignCreate from './components/DesignCreate.vue';
+import DesignCreate from './components/DesignCreate.vue';
+import DesignsTable from './components/DesignsTable.vue';
 
 /**
  * Navbar transition for the homepage
@@ -49,6 +50,8 @@ const router = new VueRouter({
     routes: [],
 });
 
+Vue.use(require('vue-moment'));
+
 const app = new Vue({
     store,
     router,
@@ -68,6 +71,7 @@ const app = new Vue({
         Likes,
         ProductList,
         ProductCreate,
-        // DesignCreate,
+        DesignCreate,
+        DesignsTable,
     }
 });

@@ -1,5 +1,5 @@
 <template>
-    <form class="ui form" method="POST">
+    <form class="ui form" method="POST" ref="productForm">
         <input type="hidden" name="_token" :value="$parent.crsf" />
 
         <h4 class="ui dividing header">General</h4>
@@ -25,7 +25,6 @@
                     <option value="">Select Minimum Age</option>
                     <option v-for="a of _ages" :value="a.value">{{ a.name }}</option>
                 </select>
-                <!-- <input type="text" v-model="product.min_age" name="ages" placeholder="Target ages" required /> -->
             </div>
             <div class="three wide field" required>
                 <label>To</label>
@@ -33,7 +32,6 @@
                     <option value="">Select Maximum Age</option>
                     <option v-for="a of _ages" :value="a.value">{{ a.name }}</option>
                 </select>
-                <!-- <input type="text" v-model="product.max_age" name="ages" placeholder="Target ages" required /> -->
             </div>
         </div>
 
@@ -107,12 +105,14 @@
 
         <input type="hidden" name="owner_id" :value="owner_id" />
         <input type="hidden" name="owner_type" :value="owner_type" />
+        <input type="hidden" name="status" ref="status" />
         <input type="hidden" name="files" :value="files" />
 
+
+        <button type="button" class="ui blue left floated button" v-if="product.status == 'concept' && _product.id" @click="nextStep">Continue to Market Analysis</button>
         <button type="submit" class="ui orange submit right floated labeled icon button" ref="submitButton">
-            <i class="edit icon"></i> {{ submitText }}
+            <i class="save icon"></i> {{ submitText }}
         </button>
-        <a href="/dashboard" class="ui default right floated button">Cancel</a>
 
         <confirm-dialog
             id="imageDelete"
@@ -138,6 +138,7 @@ export default {
             owner: this._product.owner_type === 'App\\User' ? 'me' : 'org',
             editLegal: this._product.id ? false : true,
             images: [],
+            status: null,
         };
     },
     mounted() {
@@ -196,7 +197,11 @@ export default {
                     }
                 },
             }).modal('show');
-        }
+        },
+        nextStep() {
+            this.$refs.status.value = 'design';
+            this.$refs.productForm.submit();
+        },
     }
 }
 </script>

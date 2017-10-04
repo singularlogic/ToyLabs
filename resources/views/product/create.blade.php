@@ -5,8 +5,11 @@
 @section('content')
         <div class="ui main container">
             <!-- Product / Create -->
-            <h1 class="ui header">{{ $title }}</h1>
-            <div class="ui divider"></div>
+            <h1 class="ui left floated header">{{ $title }}</h1>
+            <a href="/dashboard" class="ui right floated basic button">
+                <i class="chevron left icon"></i>Back to Dashboard
+            </a>
+            <div class="ui clearing divider"></div>
 
             <product-create
                 :_product="{{ json_encode($product) }}"
