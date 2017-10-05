@@ -14,6 +14,7 @@ class Prototype extends Model implements HasMedia
 
     protected $fillable = ['title', 'description', 'is_public', 'design_id', 'product_id'];
     protected $appends  = ['image', 'type', 'likeCount', 'commentCount', 'liked'];
+    protected $touches  = ['product'];
 
     public function design()
     {

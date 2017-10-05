@@ -14,6 +14,7 @@ class Design extends Model implements HasMedia
 
     protected $fillable = ['title', 'description', 'is_public', 'parent_id', 'version', 'product_id'];
     protected $appends  = ['image', 'type', 'likeCount', 'commentCount', 'liked'];
+    protected $touches  = ['product'];
 
     public function parent()
     {

@@ -4,6 +4,9 @@
             <a :href="`/product/${product.id}`">{{ product.title }}</a>
             <div class="ui label" :class="{ blue: owner !== 'Personal', orange: owner === 'Personal' }">{{ owner }}</div>
         </h3>
+        <small class="ui right floated" style="padding-top: 7px; padding-right: 10px;">
+            <strong>Last Modified:</strong> <em>{{ product.updated_at | moment('DD.MM.YYYY') }}</em>
+        </small>
 
         <div class="ui hidden clearing divider"></div>
 

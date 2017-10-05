@@ -53,7 +53,7 @@ class DesignController extends Controller
             'design'     => [
                 'title'       => '',
                 'description' => '',
-                'is_public'   => false,
+                'is_public'   => 0,
             ],
         ];
 

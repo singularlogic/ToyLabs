@@ -3181,6 +3181,9 @@ Object.defineProperty(exports, "__esModule", {
 //
 //
 //
+//
+//
+//
 
 exports.default = {
     props: ['product'],
@@ -14254,7 +14257,13 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     class: {
       blue: _vm.owner !== 'Personal', orange: _vm.owner === 'Personal'
     }
-  }, [_vm._v(_vm._s(_vm.owner))])]), _vm._v(" "), _c('div', {
+  }, [_vm._v(_vm._s(_vm.owner))])]), _vm._v(" "), _c('small', {
+    staticClass: "ui right floated",
+    staticStyle: {
+      "padding-top": "7px",
+      "padding-right": "10px"
+    }
+  }, [_c('strong', [_vm._v("Last Modified:")]), _vm._v(" "), _c('em', [_vm._v(_vm._s(_vm._f("moment")(_vm.product.updated_at, 'DD.MM.YYYY')))])]), _vm._v(" "), _c('div', {
     staticClass: "ui hidden clearing divider"
   }), _vm._v(" "), _c('div', {
     staticClass: "content"
