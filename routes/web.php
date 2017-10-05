@@ -58,11 +58,17 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('/product/{id}/marketanalysis', ['as' => 'product.analysis', 'uses' => 'MarketAnalysisController@index']);
     Route::get('/product/{id}/designs', ['as' => 'product.designs', 'uses' => 'DesignController@productDesigns']);
+    Route::get('/product/{id}/prototypes', ['as' => 'product.prototypes', 'uses' => 'PrototypeController@productPrototypes']);
 
     Route::get('/product/{id}/designs/create', ['as' => 'design.create', 'uses' => 'DesignController@create']);
     Route::post('/product/{id}/designs/create', ['as' => 'design.create.post', 'uses' => 'DesignController@doCreate']);
     Route::get('/design/{id}/edit', ['as' => 'design.edit', 'uses' => 'DesignController@edit']);
     Route::post('/design/{id}/edit', ['as' => 'design.edit.post', 'uses' => 'DesignController@doEdit']);
+
+    Route::get('/product/{id}/prototypes/create', ['as' => 'prototype.create', 'uses' => 'PrototypeController@create']);
+    Route::post('/product/{id}/prototypes/create', ['as' => 'prototype.create.post', 'uses' => 'PrototypeController@doCreate']);
+    Route::get('/prototype/{id}/edit', ['as' => 'prototype.edit', 'uses' => 'PrototypeController@edit']);
+    Route::post('/prototype/{id}/edit', ['as' => 'prototype.edit.post', 'uses' => 'PrototypeController@doEdit']);
 
     // Files
     Route::post('/file/upload', ['as' => 'file.upload', 'uses' => 'FileController@upload']);

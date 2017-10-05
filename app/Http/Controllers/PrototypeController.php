@@ -2,45 +2,45 @@
 
 namespace App\Http\Controllers;
 
-use App\Design;
 use App\Organization;
 use App\Product;
+use App\Prototype;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class DesignController extends Controller
+class PrototypeController extends Controller
 {
     public function __construct()
     {
         $this->middleware('auth')->except(['index', 'show']);
     }
 
-    public function index(Request $request)
+    public function index()
     {
         if ($request->user()) {
             $user = $request->user();
 
-            return Design::where('is_public', true)
+            return Prototype::where('is_public', true)
                 ->orWhere(['owner_id' => $user->id, 'owner_type' => User::class])
                 ->orWhere(['owner_id' => $user->organization, 'owner_type' => Organization::class])
                 ->orderBy('updated_at', 'DESC')->get();
         }
 
-        return Design::where('is_public', true)->get();
+        return Prototype::where('is_public', true)->get();
     }
 
-    public function productDesigns(int $id)
+    public function productPrototypes(int $id)
     {
         $data = [
-            'id'      => $id,
-            'designs' => Design::where('product_id', $id)->orderBy('updated_at', 'DESC')->get(),
+            'id'         => $id,
+            'prototypes' => Prototype::where('product_id', $id)->orderBy('updated_at', 'DESC')->get(),
         ];
 
-        return view('product.designs', $data);
+        return view('product.prototypes', $data);
     }
 
-    public function show(Request $request, $id)
+    public function show($id)
     {
 
     }
@@ -48,16 +48,16 @@ class DesignController extends Controller
     public function create(Request $request, $id)
     {
         $data = [
-            'title'      => 'Create Design',
+            'title'      => 'Create Prototype',
             'product_id' => $id,
-            'design'     => [
+            'prototype'  => [
                 'title'       => '',
                 'description' => '',
-                'is_public'   => false,
+                'is_public'   => 0,
             ],
         ];
 
-        return view('design.create', $data);
+        return view('prototype.create', $data);
     }
 
     public function doCreate(Request $request, $id)
@@ -65,23 +65,17 @@ class DesignController extends Controller
         $input   = $request->all();
         $user    = Auth::user();
         $product = Product::find($id);
-        // $files = json_decode($input['files'], true);
 
         if ($this->canEdit($user, $product)) {
-            $design = Design::create([
+            $prototype = Prototype::create([
                 'title'       => $input['title'],
                 'description' => $input['description'],
                 'is_public'   => $input['is_public'],
                 'product_id'  => $id,
             ]);
 
-            // foreach ($files as $file) {
-            //     $path = storage_path('/app/' . $file['path']);
-            //     $product->addMedia($path)->usingName($file['name'])->toMediaCollection('images');
-            // }
-
-            \Session::flash('success', 'Design created successfully.');
-            return redirect()->route('product.designs', ['id' => $id]);
+            \Session::flash('success', 'Prototype created successfully.');
+            return redirect()->route('product.prototypes', ['id' => $id]);
         }
 
         return redirect('dashboard')->with('error', 'You are not permitted to edit this product!');
@@ -89,39 +83,33 @@ class DesignController extends Controller
 
     public function edit(Request $request, $id)
     {
-        $design = Design::find($id);
+        $prototype = Prototype::find($id);
 
         $data = [
-            'title'      => 'Edit Design',
-            'product_id' => $design->product_id,
-            'design'     => $design,
+            'title'      => 'Edit Prototype',
+            'product_id' => $prototype->product_id,
+            'prototype'  => $prototype,
         ];
 
-        return view('design.create', $data);
+        return view('prototype.create', $data);
     }
 
     public function doEdit(Request $request, $id)
     {
-        $input   = $request->all();
-        $design  = Design::find($id);
-        $user    = Auth::user();
-        $product = Product::find($design->product_id);
-        // $files  = json_decode($input['files'], true);
+        $input     = $request->all();
+        $prototype = Prototype::find($id);
+        $user      = Auth::user();
+        $product   = Product::find($prototype->product_id);
 
-        if ($design && $this->canEdit($user, $product)) {
-            Design::where('id', $id)->update([
+        if ($prototype && $this->canEdit($user, $product)) {
+            Prototype::where('id', $id)->update([
                 'title'       => $input['title'],
                 'description' => $input['description'],
                 'is_public'   => $input['is_public'],
             ]);
 
-            // foreach ($files as $file) {
-            //     $path = storage_path('/app/' . $file['path']);
-            //     $product->addMedia($path)->usingName($file['name'])->toMediaCollection('images');
-            // }
-
-            \Session::flash('success', 'Design updated successfully!');
-            return redirect()->route('product.designs', ['id' => $design->product_id]);
+            \Session::flash('success', 'Prototype updated successfully!');
+            return redirect()->route('product.prototypes', ['id' => $prototype->product_id]);
         }
 
         return redirect('dashboard')->with('error', 'You are not permitted to edit this product!');
@@ -137,5 +125,4 @@ class DesignController extends Controller
 
         return false;
     }
-
 }

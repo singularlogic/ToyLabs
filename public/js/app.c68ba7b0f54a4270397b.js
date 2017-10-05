@@ -3598,6 +3598,144 @@ exports.default = {
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js?cacheDirectory!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/PrototypeCreate.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+exports.default = {
+    props: ['_prototype', '_product_id'],
+    data: function data() {
+        return {
+            submitText: this._prototype.id ? 'Update' : 'Create',
+            prototype: this._prototype
+        };
+    }
+};
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?cacheDirectory!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/PrototypesTable.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _moment = __webpack_require__("./node_modules/moment/moment.js");
+
+var _moment2 = _interopRequireDefault(_moment);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = {
+    props: ['_prototypes', '_product_id'],
+    data: function data() {
+        return {
+            prototypes: this._prototypes
+        };
+    },
+
+    methods: {
+        formatDate: function formatDate(time) {
+            return (0, _moment2.default)(new Date(time)).format('DD.MM.YYYY');
+        }
+    }
+}; //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js?cacheDirectory!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/ReplyForm.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -16325,6 +16463,99 @@ if (false) {
 
 /***/ }),
 
+/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-449aae61\"}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/PrototypesTable.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('table', {
+    staticClass: "ui celled table"
+  }, [_vm._m(0), _vm._v(" "), _c('tbody', [(_vm.prototypes.length == 0) ? _c('tr', [_c('td', {
+    staticClass: "center aligned",
+    attrs: {
+      "colspan": "3"
+    }
+  }, [_vm._v("No product prototypes found!")])]) : _vm._e(), _vm._v(" "), _vm._l((_vm.prototypes), function(p) {
+    return _c('tr', [_c('td', [_c('a', {
+      attrs: {
+        "href": ("/prototype/" + (p.id) + "/")
+      }
+    }, [_vm._v(_vm._s(p.title))])]), _vm._v(" "), _c('td', {
+      staticClass: "center aligned"
+    }, [_c('timeago', {
+      attrs: {
+        "since": p.updated_at,
+        "max-time": 86400 * 7,
+        "format": _vm.formatDate,
+        "auto-update": 30
+      }
+    })], 1), _vm._v(" "), _c('td', [_c('div', {
+      staticClass: "ui tiny basic icon buttons"
+    }, [_c('a', {
+      staticClass: "ui button",
+      attrs: {
+        "href": ("/prototype/" + (p.id) + "/edit"),
+        "data-tooltip": "Edit Prototype",
+        "data-position": "top center",
+        "data-inverted": ""
+      }
+    }, [_c('i', {
+      staticClass: "pencil icon"
+    })]), _vm._v(" "), _vm._m(1, true), _vm._v(" "), _vm._m(2, true)])])])
+  })], 2), _vm._v(" "), _c('tfoot', [_c('th', {
+    attrs: {
+      "colspan": "3"
+    }
+  }, [_c('a', {
+    staticClass: "ui right floated small primary labeled icon button",
+    attrs: {
+      "href": ("/product/" + _vm._product_id + "/prototypes/create")
+    }
+  }, [_c('i', {
+    staticClass: "marker icon"
+  }), _vm._v(" Add Prototype\n            ")])])])], 1)
+},staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('thead', {
+    staticClass: "full-width"
+  }, [_c('tr', [_c('th', {
+    staticClass: "twelve wide"
+  }, [_vm._v("Title")]), _vm._v(" "), _c('th', {
+    staticClass: "two center aligned"
+  }, [_vm._v("Last Modified")]), _vm._v(" "), _c('th', {
+    staticClass: "collapsing"
+  }, [_vm._v("Actions")])])])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('button', {
+    staticClass: "ui button",
+    attrs: {
+      "data-tooltip": "Discussions",
+      "data-position": "top center",
+      "data-inverted": ""
+    }
+  }, [_c('i', {
+    staticClass: "comments outline icon"
+  })])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('button', {
+    staticClass: "ui button",
+    attrs: {
+      "data-tooltip": "Partner Matching",
+      "data-position": "top center",
+      "data-inverted": ""
+    }
+  }, [_c('i', {
+    staticClass: "handshake icon"
+  })])
+}]}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-449aae61", module.exports)
+  }
+}
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-482106f2\"}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/ReplyForm.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -16412,6 +16643,161 @@ if (false) {
   module.hot.accept()
   if (module.hot.data) {
      require("vue-hot-reload-api").rerender("data-v-4c167f93", module.exports)
+  }
+}
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-4f1fb7e2\"}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/PrototypeCreate.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('form', {
+    staticClass: "ui form",
+    attrs: {
+      "method": "POST"
+    }
+  }, [_c('input', {
+    attrs: {
+      "type": "hidden",
+      "name": "_token"
+    },
+    domProps: {
+      "value": _vm.$parent.crsf
+    }
+  }), _vm._v(" "), _c('h4', {
+    staticClass: "ui dividing header"
+  }, [_vm._v("General")]), _vm._v(" "), _c('div', {
+    staticClass: "field"
+  }, [_c('label', [_vm._v("Title")]), _vm._v(" "), _c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.prototype.title),
+      expression: "prototype.title"
+    }],
+    attrs: {
+      "type": "text",
+      "name": "title",
+      "placeholder": "Enter a descriptive title for your prototype",
+      "required": ""
+    },
+    domProps: {
+      "value": (_vm.prototype.title)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.prototype.title = $event.target.value
+      }
+    }
+  })]), _vm._v(" "), _c('div', {
+    staticClass: "field"
+  }, [_c('label', [_vm._v("Description")]), _vm._v(" "), _c('textarea', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.prototype.description),
+      expression: "prototype.description"
+    }],
+    attrs: {
+      "name": "description",
+      "required": ""
+    },
+    domProps: {
+      "value": (_vm.prototype.description)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.prototype.description = $event.target.value
+      }
+    }
+  })]), _vm._v(" "), _c('div', {
+    staticClass: "inline fields"
+  }, [_vm._m(0), _vm._v(" "), _c('div', {
+    staticClass: "field"
+  }, [_c('div', {
+    staticClass: "ui radio checkbox"
+  }, [_c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.prototype.is_public),
+      expression: "prototype.is_public"
+    }],
+    attrs: {
+      "type": "radio",
+      "name": "is_public",
+      "id": "false",
+      "value": "0"
+    },
+    domProps: {
+      "checked": _vm._q(_vm.prototype.is_public, "0")
+    },
+    on: {
+      "__c": function($event) {
+        _vm.prototype.is_public = "0"
+      }
+    }
+  }), _vm._v(" "), _c('label', {
+    attrs: {
+      "for": "false"
+    }
+  }, [_vm._v("No")])])]), _vm._v(" "), _c('div', {
+    staticClass: "field"
+  }, [_c('div', {
+    staticClass: "ui radio checkbox"
+  }, [_c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.prototype.is_public),
+      expression: "prototype.is_public"
+    }],
+    attrs: {
+      "type": "radio",
+      "name": "is_public",
+      "id": "true",
+      "value": "1"
+    },
+    domProps: {
+      "checked": _vm._q(_vm.prototype.is_public, "1")
+    },
+    on: {
+      "__c": function($event) {
+        _vm.prototype.is_public = "1"
+      }
+    }
+  }), _vm._v(" "), _c('label', {
+    attrs: {
+      "for": "true"
+    }
+  }, [_vm._v("Yes")])])])]), _vm._v(" "), _c('div', {
+    staticClass: "ui divider"
+  }), _vm._v(" "), _c('button', {
+    ref: "submitButton",
+    staticClass: "ui orange submit right floated labeled icon button",
+    attrs: {
+      "type": "submit"
+    }
+  }, [_c('i', {
+    staticClass: "edit icon"
+  }), _vm._v(" " + _vm._s(_vm.submitText) + "\n    ")])])
+},staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('label', {
+    attrs: {
+      "for": "public"
+    }
+  }, [_c('i', {
+    staticClass: "red warning icon"
+  }), _vm._v("\n            Do you want to make your prototype public (can be seen by everyone)?\n        ")])
+}]}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-4f1fb7e2", module.exports)
   }
 }
 
@@ -31689,9 +32075,17 @@ var _DesignCreate = __webpack_require__("./resources/assets/js/components/Design
 
 var _DesignCreate2 = _interopRequireDefault(_DesignCreate);
 
+var _PrototypeCreate = __webpack_require__("./resources/assets/js/components/PrototypeCreate.vue");
+
+var _PrototypeCreate2 = _interopRequireDefault(_PrototypeCreate);
+
 var _DesignsTable = __webpack_require__("./resources/assets/js/components/DesignsTable.vue");
 
 var _DesignsTable2 = _interopRequireDefault(_DesignsTable);
+
+var _PrototypesTable = __webpack_require__("./resources/assets/js/components/PrototypesTable.vue");
+
+var _PrototypesTable2 = _interopRequireDefault(_PrototypesTable);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -31756,7 +32150,9 @@ var app = new _vue2.default({
         ProductList: _ProductList2.default,
         ProductCreate: _ProductCreate2.default,
         DesignCreate: _DesignCreate2.default,
-        DesignsTable: _DesignsTable2.default
+        PrototypeCreate: _PrototypeCreate2.default,
+        DesignsTable: _DesignsTable2.default,
+        PrototypesTable: _PrototypesTable2.default
     }
 });
 
@@ -32583,6 +32979,76 @@ if (false) {(function () {
     hotAPI.createRecord("data-v-a0d36166", Component.options)
   } else {
     hotAPI.reload("data-v-a0d36166", Component.options)
+  }
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+
+/***/ "./resources/assets/js/components/PrototypeCreate.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var Component = __webpack_require__("./node_modules/vue-loader/lib/component-normalizer.js")(
+  /* script */
+  __webpack_require__("./node_modules/babel-loader/lib/index.js?cacheDirectory!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/PrototypeCreate.vue"),
+  /* template */
+  __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-4f1fb7e2\"}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/PrototypeCreate.vue"),
+  /* scopeId */
+  null,
+  /* cssModules */
+  null
+)
+Component.options.__file = "/Users/finik/Sites/toylabs/resources/assets/js/components/PrototypeCreate.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] PrototypeCreate.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-4f1fb7e2", Component.options)
+  } else {
+    hotAPI.reload("data-v-4f1fb7e2", Component.options)
+  }
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+
+/***/ "./resources/assets/js/components/PrototypesTable.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var Component = __webpack_require__("./node_modules/vue-loader/lib/component-normalizer.js")(
+  /* script */
+  __webpack_require__("./node_modules/babel-loader/lib/index.js?cacheDirectory!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/PrototypesTable.vue"),
+  /* template */
+  __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-449aae61\"}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/PrototypesTable.vue"),
+  /* scopeId */
+  null,
+  /* cssModules */
+  null
+)
+Component.options.__file = "/Users/finik/Sites/toylabs/resources/assets/js/components/PrototypesTable.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] PrototypesTable.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-449aae61", Component.options)
+  } else {
+    hotAPI.reload("data-v-449aae61", Component.options)
   }
 })()}
 

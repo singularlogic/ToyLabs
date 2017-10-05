@@ -13,7 +13,9 @@ import Likes from './components/Likes.vue';
 import ProductList from './components/ProductList.vue';
 import ProductCreate from './components/ProductCreate.vue';
 import DesignCreate from './components/DesignCreate.vue';
+import PrototypeCreate from './components/PrototypeCreate.vue';
 import DesignsTable from './components/DesignsTable.vue';
+import PrototypesTable from './components/PrototypesTable.vue';
 
 /**
  * Navbar transition for the homepage
@@ -72,6 +74,8 @@ const app = new Vue({
         ProductList,
         ProductCreate,
         DesignCreate,
+        PrototypeCreate,
         DesignsTable,
+        PrototypesTable,
     }
 });
