@@ -33,6 +33,8 @@
 
         <div class="ui divider"></div>
 
+        <input type="hidden" name="design_id" :value="_design_id" />
+
         <button type="submit" class="ui orange submit right floated labeled icon button" ref="submitButton">
             <i class="edit icon"></i> {{ submitText }}
         </button>
@@ -41,7 +43,7 @@
 
 <script>
 export default {
-    props: ['_prototype', '_product_id'],
+    props: ['_prototype', '_product_id', '_design_id'],
     data() {
         return {
             submitText: this._prototype.id ? 'Update' : 'Create',

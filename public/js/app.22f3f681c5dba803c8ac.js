@@ -1980,8 +1980,7 @@ exports.default = {
     methods: {
         formatDate: function formatDate(time) {
             return (0, _moment2.default)(new Date(time)).format('DD.MM.YYYY');
-        },
-        addDesign: function addDesign() {}
+        }
     }
 }; //
 //
@@ -3651,9 +3650,11 @@ Object.defineProperty(exports, "__esModule", {
 //
 //
 //
+//
+//
 
 exports.default = {
-    props: ['_prototype', '_product_id'],
+    props: ['_prototype', '_product_id', '_design_id'],
     data: function data() {
         return {
             submitText: this._prototype.id ? 'Update' : 'Create',
@@ -16005,7 +16006,17 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       }
     }, [_c('i', {
       staticClass: "pencil icon"
-    })]), _vm._v(" "), _vm._m(1, true), _vm._v(" "), _vm._m(2, true), _vm._v(" "), _vm._m(3, true), _vm._v(" "), _vm._m(4, true)])])])
+    })]), _vm._v(" "), _vm._m(1, true), _vm._v(" "), _vm._m(2, true), _vm._v(" "), _vm._m(3, true), _vm._v(" "), _c('a', {
+      staticClass: "ui button",
+      attrs: {
+        "href": ("/product/" + _vm._product_id + "/prototypes/create/" + (d.id)),
+        "data-tooltip": "Create Prototype",
+        "data-position": "top center",
+        "data-inverted": ""
+      }
+    }, [_c('i', {
+      staticClass: "cubes icon"
+    })])])])])
   })], 2), _vm._v(" "), _c('tfoot', [_c('th', {
     attrs: {
       "colspan": "4"
@@ -16062,17 +16073,6 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [_c('i', {
     staticClass: "handshake icon"
-  })])
-},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('button', {
-    staticClass: "ui button",
-    attrs: {
-      "data-tooltip": "Create Prototype",
-      "data-position": "top center",
-      "data-inverted": ""
-    }
-  }, [_c('i', {
-    staticClass: "cubes icon"
   })])
 }]}
 module.exports.render._withStripped = true
@@ -16784,6 +16784,14 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [_vm._v("Yes")])])])]), _vm._v(" "), _c('div', {
     staticClass: "ui divider"
+  }), _vm._v(" "), _c('input', {
+    attrs: {
+      "type": "hidden",
+      "name": "design_id"
+    },
+    domProps: {
+      "value": _vm._design_id
+    }
   }), _vm._v(" "), _c('button', {
     ref: "submitButton",
     staticClass: "ui orange submit right floated labeled icon button",

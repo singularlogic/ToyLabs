@@ -72,6 +72,7 @@ class PrototypeController extends Controller
                 'description' => $input['description'],
                 'is_public'   => $input['is_public'],
                 'product_id'  => $id,
+                'design_id'   => $input['design_id'],
             ]);
 
             \Session::flash('success', 'Prototype created successfully.');

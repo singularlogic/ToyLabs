@@ -65,6 +65,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/design/{id}/edit', ['as' => 'design.edit', 'uses' => 'DesignController@edit']);
     Route::post('/design/{id}/edit', ['as' => 'design.edit.post', 'uses' => 'DesignController@doEdit']);
 
+    Route::get('/product/{id}/prototypes/create/{design_id}', ['as' => 'prototype.makeprototype', 'uses' => 'DesignController@makePrototype']);
+    Route::post('/product/{id}/prototypes/create/{design_id}', ['as' => 'prototype.makeprototype.post', 'uses' => 'PrototypeController@doCreate']);
     Route::get('/product/{id}/prototypes/create', ['as' => 'prototype.create', 'uses' => 'PrototypeController@create']);
     Route::post('/product/{id}/prototypes/create', ['as' => 'prototype.create.post', 'uses' => 'PrototypeController@doCreate']);
     Route::get('/prototype/{id}/edit', ['as' => 'prototype.edit', 'uses' => 'PrototypeController@edit']);

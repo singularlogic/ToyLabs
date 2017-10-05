@@ -127,6 +127,38 @@ class DesignController extends Controller
         return redirect('dashboard')->with('error', 'You are not permitted to edit this product!');
     }
 
+    public function makePrototype(Request $request, $id, $design_id)
+    {
+        $user    = Auth::user();
+        $product = Product::find($id);
+        $design  = Design::find($design_id);
+
+        if ($product && $design && $this->canEdit($user, $product)) {
+            // Progress product status to the next step
+            if ($product->status === 'design') {
+                $product->status = 'prototype';
+                $product->save();
+            }
+
+            // Create a new prototype based on the design
+            $data = [
+                'title'      => 'Create Prototype',
+                'product_id' => $product->id,
+                'design_id'  => $design->id,
+                'prototype'  => [
+                    'title'       => $design->title,
+                    'description' => $design->description,
+                    'is_public'   => 0,
+                ],
+            ];
+
+            return view('prototype.create', $data);
+        }
+
+        \Session::flash('error', 'You are not permitted to edit this product!');
+        return redirect()->route('product.designs', ['id' => $input['id']]);
+    }
+
     protected function canEdit($user, $product)
     {
         if (is_a($product->owner, 'App\User') && $product->owner->id === $user->id) {

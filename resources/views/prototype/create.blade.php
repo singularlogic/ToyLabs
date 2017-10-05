@@ -14,6 +14,7 @@
         <prototype-create
             :_prototype="{{ json_encode($prototype) }}"
             :_product_id="{{ $product_id }}"
+            :_design_id="{{ $design_id or null }}"
         ></prototype-create>
     </div>
 @endsection

@@ -32,9 +32,9 @@
                             <button class="ui button" data-tooltip="Partner Matching" data-position="top center" data-inverted>
                                 <i class="handshake icon"></i>
                             </button>
-                            <button class="ui button" data-tooltip="Create Prototype" data-position="top center" data-inverted>
+                            <a :href="`/product/${_product_id}/prototypes/create/${d.id}`" class="ui button" data-tooltip="Create Prototype" data-position="top center" data-inverted>
                                 <i class="cubes icon"></i>
-                            </button>
+                            </a>
                         </div>
                     </td>
                 </tr>
@@ -62,9 +62,6 @@ export default {
     methods: {
         formatDate(time) {
             return moment(new Date(time)).format('DD.MM.YYYY');
-        },
-        addDesign() {
-
         },
     }
 }
