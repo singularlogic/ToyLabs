@@ -46,7 +46,7 @@ class CreateOrganizationsTable extends Migration
             $table->foreign('organization_type_id')->references('id')->on('organization_types');
         });
 
-        Schema::create('organization_has_users', function (Blueprint $table) {
+        Schema::create('organization_user', function (Blueprint $table) {
             $table->integer('user_id')->unsigned();
             $table->integer('organization_id')->unsigned();
 
@@ -62,7 +62,7 @@ class CreateOrganizationsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('organization_has_users');
+        Schema::dropIfExists('organization_user');
         Schema::dropIfExists('organizations');
         Schema::dropIfExists('organization_types');
     }
