@@ -11,3 +11,4 @@ npm-debug.log
 .env
 *.sublime-workspace
 .DS_Store
+/deploy.php

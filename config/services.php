@@ -36,14 +36,14 @@ return [
     ],
 
     'facebook'  => [
-        'client_id'     => '162103697654424',
-        'client_secret' => 'c72d72ca6929e62fa09a83e67bd4409a',
-        'redirect'      => 'http://toylabs.dev/login/callback/facebook',
+        'client_id'     => env('FB_CLIENT_ID'),
+        'client_secret' => env('FB_CLIENT_SECRET'),
+        'redirect'      => env('FB_REDIRECT'),
     ],
 
     'google'    => [
-        'client_id'     => '328908169512-93fanb64d9cj1098dule03492mhqll3d.apps.googleusercontent.com',
-        'client_secret' => 't9ksb23KvSyOLDiSHqDWnXKb',
-        'redirect'      => 'http://toylabs.dev/login/callback/google',
+        'client_id'     => env('GOOGLE_CLIENT_ID'),
+        'client_secret' => env('GOOGLE_CLIENT_SECRET'),
+        'redirect'      => env('GOOGLE_REDIRECT'),
     ],
 ];
