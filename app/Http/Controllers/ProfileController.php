@@ -122,7 +122,7 @@ class ProfileController extends Controller
     {
         $user = Auth::user();
 
-        $org = Organization::find($id)->first();
+        $org = Organization::find($id);
 
         $data = [
             'countries'          => Country::orderBy('name', 'ASC')->get(),
@@ -133,7 +133,7 @@ class ProfileController extends Controller
             'competencies'       => Competency::orderBy('name', 'ASC')->get(),
             'markets'            => [],
             'categories'         => ToyCategory::where('title', '<>', 'Other')->orderBy('title')->get(),
-            'services'           => $org->services,
+            'services'           => $org ? $org->services : [],
             'paymentTypes'       => PaymentType::orderBy('name', 'ASC')->get(),
             'awardTypes'         => Award::orderBy('name', 'ASC')->get(),
             'certificationTypes' => Certification::orderBy('name', 'ASC')->get(),
