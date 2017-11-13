@@ -33,7 +33,7 @@
 
         <h3 class="ui dividing header">
             Images
-            <div class="sub header">For informational images only. If your design is public, these are made public as well</div>
+            <div class="sub header">For informational images only. If your prototype is public, these are made public as well</div>
         </h3>
 
         <div class="ui relaxed horizontal divided list" v-if="images" style="margin-bottom: 10px;">
@@ -62,7 +62,7 @@
 
         <h3 class="ui dividing header">
             Files
-            <div class="sub header">Use this field to upload designs and documents for collaboration with your partners. These remain private, even if the design is made public</div>
+            <div class="sub header">Use this field to upload designs and documents for collaboration with your partners. These remain private, even if the prototype is made public</div>
         </h3>
 
         <div class="ui relaxed horizontal divided list" v-if="files" style="margin-bottom: 10px;">

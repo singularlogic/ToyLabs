@@ -120,8 +120,9 @@ class ProductController extends Controller
 
     public function doCreate(Request $request)
     {
-        $input = $request->all();
-        $files = json_decode($input['files'], true);
+        $input  = $request->all();
+        $files  = json_decode($input['files'], true);
+        $images = json_decode($input['images'], true);
 
         $product = Product::create([
             'title'       => $input['title'],
@@ -134,9 +135,14 @@ class ProductController extends Controller
             'owner_type'  => $input['owner_type'],
         ]);
 
+        foreach ($images as $image) {
+            $path = storage_path('/app/' . $image['path']);
+            $product->addMedia($path)->usingName($image['name'])->toMediaCollection('images');
+        }
+
         foreach ($files as $file) {
             $path = storage_path('/app/' . $file['path']);
-            $product->addMedia($path)->usingName($file['name'])->toMediaCollection('images');
+            $product->addMedia($path)->usingName($file['name'])->toMediaCollection('files');
         }
 
         return redirect('dashboard')->with('success', 'Product created successfully.');
@@ -173,6 +179,7 @@ class ProductController extends Controller
         $product = Product::find($id);
         $user    = Auth::user();
         $files   = json_decode($input['files'], true);
+        $images  = json_decode($input['images'], true);
 
         if ($product && $this->canEdit($user, $product)) {
             Product::where('id', $id)->update([
@@ -187,9 +194,14 @@ class ProductController extends Controller
                 'status'      => $input['status'] ?: $product['status'],
             ]);
 
+            foreach ($images as $image) {
+                $path = storage_path('/app/' . $image['path']);
+                $product->addMedia($path)->usingName($image['name'])->toMediaCollection('images');
+            }
+
             foreach ($files as $file) {
                 $path = storage_path('/app/' . $file['path']);
-                $product->addMedia($path)->usingName($file['name'])->toMediaCollection('images');
+                $product->addMedia($path)->usingName($file['name'])->toMediaCollection('files');
             }
 
             if ($input['status']) {

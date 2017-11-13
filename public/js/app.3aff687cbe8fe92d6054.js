@@ -3193,6 +3193,37 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 exports.default = {
     components: { Dropzone: _vue2Dropzone2.default, ConfirmDialog: _ConfirmDialog2.default },
@@ -3204,7 +3235,8 @@ exports.default = {
             organization: this._organizations.length > 0 ? this._organizations[0] : null,
             owner: this._product.owner_type === 'App\\User' ? 'me' : 'org',
             editLegal: this._product.id ? false : true,
-            images: [],
+            uploadedImages: [],
+            uploadedFiles: [],
             status: null
         };
     },
@@ -3225,13 +3257,26 @@ exports.default = {
         owner_type: function owner_type() {
             return this.owner === 'me' ? 'App\\User' : 'App\\Organization';
         },
+        images: function images() {
+            return this.product.media ? this.product.media.filter(function (obj) {
+                return obj.collection_name === 'images';
+            }) : [];
+        },
         files: function files() {
-            return JSON.stringify(this.images);
+            return this.product.media ? this.product.media.filter(function (obj) {
+                return obj.collection_name === 'files';
+            }) : [];
+        },
+        imagesArray: function imagesArray() {
+            return JSON.stringify(this.uploadedImages);
+        },
+        filesArray: function filesArray() {
+            return JSON.stringify(this.uploadedFiles);
         }
     },
     methods: {
         fileAdded: function fileAdded(file) {
-            this.images.push({
+            this.uploadedFiles.push({
                 name: file.name,
                 path: JSON.parse(file.xhr.response).path
             });
@@ -3240,34 +3285,56 @@ exports.default = {
             var _this = this;
 
             var path = JSON.parse(file.xhr.response).path;
-            var f = this.images.find(function (o) {
+            var f = this.uploadedFiles.find(function (o) {
                 return o.path === path;
             });
-            var idx = this.images.indexOf(f);
+            var idx = this.uploadedFiles.indexOf(f);
             if (~idx) {
                 axios.delete('/file/delete', {
                     data: { path: path }
                 }).then(function (response) {
-                    _this.images.splice(idx, 1);
+                    _this.uploadedFiles.splice(idx, 1);
+                });
+            }
+        },
+        imageAdded: function imageAdded(file) {
+            this.uploadedImages.push({
+                name: file.name,
+                path: JSON.parse(file.xhr.response).path
+            });
+        },
+        imageRemoved: function imageRemoved(file, error, xhr) {
+            var _this2 = this;
+
+            var path = JSON.parse(file.xhr.response).path;
+            var f = this.uploadedImages.find(function (o) {
+                return o.path === path;
+            });
+            var idx = this.uploadedImages.indexOf(f);
+            if (~idx) {
+                axios.delete('/file/delete', {
+                    data: { path: path }
+                }).then(function (response) {
+                    _this2.uploadedImages.splice(idx, 1);
                 });
             }
         },
         deleteMedia: function deleteMedia(id) {
-            var _this2 = this;
+            var _this3 = this;
 
             $('#imageDelete').modal({
                 closable: false,
                 onApprove: function onApprove() {
-                    var media = _this2.product.media.find(function (o) {
+                    var media = _this3.product.media.find(function (o) {
                         return o.id == id;
                     });
-                    var idx = _this2.product.media.indexOf(media);
+                    var idx = _this3.product.media.indexOf(media);
                     if (~idx) {
                         axios.delete('/attachment/remove', {
                             data: { id: id }
                         }).then(function (response) {
                             if (response.status === 200) {
-                                _this2.product.media.splice(idx, 1);
+                                _this3.product.media.splice(idx, 1);
                             }
                         });
                     }
@@ -19311,14 +19378,12 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "for": "true"
     }
-  }, [_vm._v("Yes")])])])])]) : _vm._e(), _vm._v(" "), _c('h3', {
-    staticClass: "ui dividing header"
-  }, [_vm._v("Images")]), _vm._v(" "), (_vm.product.media) ? _c('div', {
+  }, [_vm._v("Yes")])])])])]) : _vm._e(), _vm._v(" "), _vm._m(1), _vm._v(" "), (_vm.images) ? _c('div', {
     staticClass: "ui relaxed horizontal divided list",
     staticStyle: {
       "margin-bottom": "10px"
     }
-  }, _vm._l((_vm.product.media), function(image) {
+  }, _vm._l((_vm.images), function(image) {
     return _c('div', {
       staticClass: "item"
     }, [_c('img', {
@@ -19350,6 +19415,50 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "showRemoveLink": true,
       "paramName": "image",
       "acceptedFileTypes": "image/*"
+    },
+    on: {
+      "vdropzone-success": _vm.imageAdded,
+      "vdropzone-removed-file": _vm.imageRemoved
+    }
+  }, [_c('input', {
+    attrs: {
+      "type": "hidden",
+      "name": "_token"
+    },
+    domProps: {
+      "value": _vm.$parent.crsf
+    }
+  })]), _vm._v(" "), _vm._m(2), _vm._v(" "), (_vm.files) ? _c('div', {
+    staticClass: "ui relaxed horizontal divided list",
+    staticStyle: {
+      "margin-bottom": "10px"
+    }
+  }, _vm._l((_vm.files), function(file) {
+    return _c('div', {
+      staticClass: "item"
+    }, [_c('div', {
+      staticClass: "content"
+    }, [_c('span', {
+      staticClass: "header"
+    }, [_vm._v("\n                    " + _vm._s(file.name) + "\n                    "), _c('a', {
+      attrs: {
+        "href": "javascript:void(0)"
+      },
+      on: {
+        "click": function($event) {
+          _vm.deleteMedia(file.id)
+        }
+      }
+    }, [_c('i', {
+      staticClass: "grey delete icon"
+    })])])])])
+  })) : _vm._e(), _vm._v(" "), _c('dropzone', {
+    attrs: {
+      "id": "files",
+      "url": "/file/upload",
+      "useFontAwesome": true,
+      "showRemoveLink": true,
+      "paramName": "file"
     },
     on: {
       "vdropzone-success": _vm.fileAdded,
@@ -19390,10 +19499,18 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }), _vm._v(" "), _c('input', {
     attrs: {
       "type": "hidden",
+      "name": "images"
+    },
+    domProps: {
+      "value": _vm.imagesArray
+    }
+  }), _vm._v(" "), _c('input', {
+    attrs: {
+      "type": "hidden",
       "name": "files"
     },
     domProps: {
-      "value": _vm.files
+      "value": _vm.filesArray
     }
   }), _vm._v(" "), (_vm.product.status == 'concept' && _vm._product.id) ? _c('button', {
     staticClass: "ui blue left floated button",
@@ -19415,7 +19532,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "id": "imageDelete",
       "icon": "trash",
-      "title": "Delete Image?",
+      "title": "Delete file?",
       "body": "Are you sure you want to delete this file? This action cannot be undone!"
     }
   })], 1)
@@ -19427,6 +19544,18 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_c('i', {
     staticClass: "red warning icon"
   }), _vm._v("\n                Do you want to make your product public (can be seen by everyone)?\n            ")])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('h3', {
+    staticClass: "ui dividing header"
+  }, [_vm._v("\n        Images\n        "), _c('div', {
+    staticClass: "sub header"
+  }, [_vm._v("For informational images only. If your product is public, these are made public as well")])])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('h3', {
+    staticClass: "ui dividing header"
+  }, [_vm._v("\n        Files\n        "), _c('div', {
+    staticClass: "sub header"
+  }, [_vm._v("Use this field to upload designs and documents for collaboration with your partners. These remain private, even if the design is made public")])])
 }]}
 module.exports.render._withStripped = true
 if (false) {
@@ -20531,13 +20660,13 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "ui dividing header"
   }, [_vm._v("\n        Images\n        "), _c('div', {
     staticClass: "sub header"
-  }, [_vm._v("For informational images only. If your design is public, these are made public as well")])])
+  }, [_vm._v("For informational images only. If your prototype is public, these are made public as well")])])
 },function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('h3', {
     staticClass: "ui dividing header"
   }, [_vm._v("\n        Files\n        "), _c('div', {
     staticClass: "sub header"
-  }, [_vm._v("Use this field to upload designs and documents for collaboration with your partners. These remain private, even if the design is made public")])])
+  }, [_vm._v("Use this field to upload designs and documents for collaboration with your partners. These remain private, even if the prototype is made public")])])
 }]}
 module.exports.render._withStripped = true
 if (false) {
