@@ -193,7 +193,8 @@ class ProfileController extends Controller
             $org->acceptFriendRequest($user);
 
             // Add Facilities
-            foreach ($input['facilities'] as $facility) {
+            $facilities = json_decode($input['facilities'], true);
+            foreach ($facilities as $facility) {
                 Facility::create([
                     'name'            => $facility['name'],
                     'city_id'         => $facility['city']['id'],
