@@ -27,6 +27,11 @@ class FileController extends Controller
             return response()->json(['path' => $path])->setStatusCode(Response::HTTP_OK, Response::$statusTexts[Response::HTTP_OK]);
         }
 
+        if ($request->hasFile('file')) {
+            $path = $request->file->store('files');
+            return response()->json(['path' => $path])->setStatusCode(Response::HTTP_OK, Response::$statusTexts[Response::HTTP_OK]);
+        }
+
         return response()->json(['error' => 'File not found'])->setStatusCode(Response::HTTP_BAD_REQUEST, Response::$statusTexts[Response::HTTP_BAD_REQUEST]);
     }
 

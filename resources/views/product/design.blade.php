@@ -15,7 +15,7 @@
             <div class="ui clearing divider"></div>
 
             <div class="ui basic segment">
-                <img class="ui large left bordered floated image" src="/images/placeholder.jpg" />
+                <img class="ui large left bordered floated image" src="{{ $design['image'] }}" />
 
                 {!! nl2br(e($design['description'])) !!}
             </div>

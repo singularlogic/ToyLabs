@@ -65,7 +65,8 @@ class DesignController extends Controller
         $input   = $request->all();
         $user    = Auth::user();
         $product = Product::find($id);
-        // $files = json_decode($input['files'], true);
+        $files   = json_decode($input['files'], true);
+        $images  = json_decode($input['images'], true);
 
         if ($this->canEdit($user, $product)) {
             $design = Design::create([
@@ -75,10 +76,15 @@ class DesignController extends Controller
                 'product_id'  => $id,
             ]);
 
-            // foreach ($files as $file) {
-            //     $path = storage_path('/app/' . $file['path']);
-            //     $product->addMedia($path)->usingName($file['name'])->toMediaCollection('images');
-            // }
+            foreach ($images as $image) {
+                $path = storage_path('/app/' . $image['path']);
+                $design->addMedia($path)->usingName($image['name'])->toMediaCollection('images');
+            }
+
+            foreach ($files as $file) {
+                $path = storage_path('/app/' . $file['path']);
+                $design->addMedia($path)->usingName($file['name'])->toMediaCollection('files');
+            }
 
             \Session::flash('success', 'Design created successfully.');
             return redirect()->route('product.designs', ['id' => $id]);
@@ -106,7 +112,8 @@ class DesignController extends Controller
         $design  = Design::find($id);
         $user    = Auth::user();
         $product = Product::find($design->product_id);
-        // $files  = json_decode($input['files'], true);
+        $images  = json_decode($input['images'], true);
+        $files   = json_decode($input['files'], true);
 
         if ($design && $this->canEdit($user, $product)) {
             Design::where('id', $id)->update([
@@ -115,10 +122,15 @@ class DesignController extends Controller
                 'is_public'   => $input['is_public'],
             ]);
 
-            // foreach ($files as $file) {
-            //     $path = storage_path('/app/' . $file['path']);
-            //     $product->addMedia($path)->usingName($file['name'])->toMediaCollection('images');
-            // }
+            foreach ($images as $image) {
+                $path = storage_path('/app/' . $image['path']);
+                $design->addMedia($path)->usingName($image['name'])->toMediaCollection('images');
+            }
+
+            foreach ($files as $file) {
+                $path = storage_path('/app/' . $file['path']);
+                $design->addMedia($path)->usingName($file['name'])->toMediaCollection('files');
+            }
 
             \Session::flash('success', 'Design updated successfully!');
             return redirect()->route('product.designs', ['id' => $design->product_id]);

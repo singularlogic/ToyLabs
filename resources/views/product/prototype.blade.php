@@ -12,8 +12,16 @@
                 liked="{{ $prototype['liked'] }}"
                 type="prototype"
             ></likes>
-
             <div class="ui clearing divider"></div>
+
+            <div class="ui basic segment">
+                <img class="ui large left bordered floated image" src="{{ $prototype['image'] }}" />
+
+                {!! nl2br(e($prototype['description'])) !!}
+            </div>
+
+            <div class="ui hidden clearing divider"></div>
+
 @if(count($prototype['images']))
             <div class="ui dividing header">Images ({{ count($prototype['images']) }})</div>
 
@@ -21,14 +29,6 @@
                 :images="{{ json_encode($prototype['images']) }}"
             ></gallery>
 @endif
-
-            <div class="ui basic segment">
-                <img class="ui large left bordered floated image" src="/images/placeholder.jpg" />
-
-                {!! nl2br(e($prototype['description'])) !!}
-            </div>
-
-            <div class="ui hidden clearing divider"></div>
 
             <comments
                 :comments="{{ json_encode($prototype['comments']) }}"

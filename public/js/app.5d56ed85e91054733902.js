@@ -1899,6 +1899,83 @@ exports.default = {
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+
+var _ConfirmDialog = __webpack_require__("./resources/assets/js/components/ConfirmDialog.vue");
+
+var _ConfirmDialog2 = _interopRequireDefault(_ConfirmDialog);
+
+var _vue2Dropzone = __webpack_require__("./node_modules/vue2-dropzone/dist/vue2-dropzone.js");
+
+var _vue2Dropzone2 = _interopRequireDefault(_vue2Dropzone);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -1942,12 +2019,102 @@ Object.defineProperty(exports, "__esModule", {
 //
 
 exports.default = {
+    components: { Dropzone: _vue2Dropzone2.default, ConfirmDialog: _ConfirmDialog2.default },
     props: ['_design', '_product_id'],
     data: function data() {
         return {
             submitText: this._design.id ? 'Update' : 'Create',
-            design: this._design
+            design: this._design,
+            uploadedImages: [],
+            uploadedFiles: []
         };
+    },
+
+    computed: {
+        images: function images() {
+            return this.design.media ? this.design.media.filter(function (obj) {
+                return obj.collection_name === 'images';
+            }) : [];
+        },
+        files: function files() {
+            return this.design.media ? this.design.media.filter(function (obj) {
+                return obj.collection_name === 'files';
+            }) : [];
+        },
+        imagesArray: function imagesArray() {
+            return JSON.stringify(this.uploadedImages);
+        },
+        filesArray: function filesArray() {
+            return JSON.stringify(this.uploadedFiles);
+        }
+    },
+    methods: {
+        fileAdded: function fileAdded(file) {
+            this.uploadedFiles.push({
+                name: file.name,
+                path: JSON.parse(file.xhr.response).path
+            });
+        },
+        fileRemoved: function fileRemoved(file, error, xhr) {
+            var _this = this;
+
+            var path = JSON.parse(file.xhr.response).path;
+            var f = this.uploadedFiles.find(function (o) {
+                return o.path === path;
+            });
+            var idx = this.uploadedFiles.indexOf(f);
+            if (~idx) {
+                axios.delete('/file/delete', {
+                    data: { path: path }
+                }).then(function (response) {
+                    _this.uploadedFiles.splice(idx, 1);
+                });
+            }
+        },
+        imageAdded: function imageAdded(file) {
+            this.uploadedImages.push({
+                name: file.name,
+                path: JSON.parse(file.xhr.response).path
+            });
+        },
+        imageRemoved: function imageRemoved(file, error, xhr) {
+            var _this2 = this;
+
+            var path = JSON.parse(file.xhr.response).path;
+            var f = this.uploadedImages.find(function (o) {
+                return o.path === path;
+            });
+            var idx = this.uploadedImages.indexOf(f);
+            if (~idx) {
+                axios.delete('/file/delete', {
+                    data: { path: path }
+                }).then(function (response) {
+                    _this2.uploadedImages.splice(idx, 1);
+                });
+            }
+        },
+        deleteMedia: function deleteMedia(id) {
+            var _this3 = this;
+
+            $('#imageDelete').modal({
+                closable: false,
+                onApprove: function onApprove() {
+                    var media = _this3.design.media.find(function (o) {
+                        return o.id == id;
+                    });
+                    var idx = _this3.design.media.indexOf(media);
+                    if (~idx) {
+                        axios.delete('/attachment/remove', {
+                            data: { id: id }
+                        }).then(function (response) {
+                            if (response.status === 200) {
+                                _this3.design.media.splice(idx, 1);
+                            }
+                        });
+                    }
+                }
+            }).modal('show');
+        }
     }
 };
 
@@ -3639,6 +3806,83 @@ exports.default = {
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+
+var _ConfirmDialog = __webpack_require__("./resources/assets/js/components/ConfirmDialog.vue");
+
+var _ConfirmDialog2 = _interopRequireDefault(_ConfirmDialog);
+
+var _vue2Dropzone = __webpack_require__("./node_modules/vue2-dropzone/dist/vue2-dropzone.js");
+
+var _vue2Dropzone2 = _interopRequireDefault(_vue2Dropzone);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -3684,12 +3928,102 @@ Object.defineProperty(exports, "__esModule", {
 //
 
 exports.default = {
+    components: { Dropzone: _vue2Dropzone2.default, ConfirmDialog: _ConfirmDialog2.default },
     props: ['_prototype', '_product_id', '_design_id'],
     data: function data() {
         return {
             submitText: this._prototype.id ? 'Update' : 'Create',
-            prototype: this._prototype
+            prototype: this._prototype,
+            uploadedImages: [],
+            uploadedFiles: []
         };
+    },
+
+    computed: {
+        images: function images() {
+            return this.prototype.media ? this.prototype.media.filter(function (obj) {
+                return obj.collection_name === 'images';
+            }) : [];
+        },
+        files: function files() {
+            return this.prototype.media ? this.prototype.media.filter(function (obj) {
+                return obj.collection_name === 'files';
+            }) : [];
+        },
+        imagesArray: function imagesArray() {
+            return JSON.stringify(this.uploadedImages);
+        },
+        filesArray: function filesArray() {
+            return JSON.stringify(this.uploadedFiles);
+        }
+    },
+    methods: {
+        fileAdded: function fileAdded(file) {
+            this.uploadedFiles.push({
+                name: file.name,
+                path: JSON.parse(file.xhr.response).path
+            });
+        },
+        fileRemoved: function fileRemoved(file, error, xhr) {
+            var _this = this;
+
+            var path = JSON.parse(file.xhr.response).path;
+            var f = this.uploadedFiles.find(function (o) {
+                return o.path === path;
+            });
+            var idx = this.uploadedFiles.indexOf(f);
+            if (~idx) {
+                axios.delete('/file/delete', {
+                    data: { path: path }
+                }).then(function (response) {
+                    _this.uploadedFiles.splice(idx, 1);
+                });
+            }
+        },
+        imageAdded: function imageAdded(file) {
+            this.uploadedImages.push({
+                name: file.name,
+                path: JSON.parse(file.xhr.response).path
+            });
+        },
+        imageRemoved: function imageRemoved(file, error, xhr) {
+            var _this2 = this;
+
+            var path = JSON.parse(file.xhr.response).path;
+            var f = this.uploadedImages.find(function (o) {
+                return o.path === path;
+            });
+            var idx = this.uploadedImages.indexOf(f);
+            if (~idx) {
+                axios.delete('/file/delete', {
+                    data: { path: path }
+                }).then(function (response) {
+                    _this2.uploadedImages.splice(idx, 1);
+                });
+            }
+        },
+        deleteMedia: function deleteMedia(id) {
+            var _this3 = this;
+
+            $('#imageDelete').modal({
+                closable: false,
+                onApprove: function onApprove() {
+                    var media = _this3.prototype.media.find(function (o) {
+                        return o.id == id;
+                    });
+                    var idx = _this3.prototype.media.indexOf(media);
+                    if (~idx) {
+                        axios.delete('/attachment/remove', {
+                            data: { id: id }
+                        }).then(function (response) {
+                            if (response.status === 200) {
+                                _this3.prototype.media.splice(idx, 1);
+                            }
+                        });
+                    }
+                }
+            }).modal('show');
+        }
     }
 };
 
@@ -19579,7 +19913,101 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "for": "true"
     }
-  }, [_vm._v("Yes")])])])]), _vm._v(" "), _c('div', {
+  }, [_vm._v("Yes")])])])]), _vm._v(" "), _vm._m(1), _vm._v(" "), (_vm.images) ? _c('div', {
+    staticClass: "ui relaxed horizontal divided list",
+    staticStyle: {
+      "margin-bottom": "10px"
+    }
+  }, _vm._l((_vm.images), function(image) {
+    return _c('div', {
+      staticClass: "item"
+    }, [_c('img', {
+      staticClass: "ui mini image",
+      attrs: {
+        "src": ("/file/" + (image.id))
+      }
+    }), _vm._v(" "), _c('div', {
+      staticClass: "content"
+    }, [_c('span', {
+      staticClass: "header"
+    }, [_vm._v("\n                    " + _vm._s(image.name) + "\n                    "), _c('a', {
+      attrs: {
+        "href": "javascript:void(0)"
+      },
+      on: {
+        "click": function($event) {
+          _vm.deleteMedia(image.id)
+        }
+      }
+    }, [_c('i', {
+      staticClass: "grey delete icon"
+    })])])])])
+  })) : _vm._e(), _vm._v(" "), _c('dropzone', {
+    attrs: {
+      "id": "images",
+      "url": "/file/upload",
+      "useFontAwesome": true,
+      "showRemoveLink": true,
+      "paramName": "image",
+      "acceptedFileTypes": "image/*"
+    },
+    on: {
+      "vdropzone-success": _vm.imageAdded,
+      "vdropzone-removed-file": _vm.imageRemoved
+    }
+  }, [_c('input', {
+    attrs: {
+      "type": "hidden",
+      "name": "_token"
+    },
+    domProps: {
+      "value": _vm.$parent.crsf
+    }
+  })]), _vm._v(" "), _vm._m(2), _vm._v(" "), (_vm.files) ? _c('div', {
+    staticClass: "ui relaxed horizontal divided list",
+    staticStyle: {
+      "margin-bottom": "10px"
+    }
+  }, _vm._l((_vm.files), function(file) {
+    return _c('div', {
+      staticClass: "item"
+    }, [_c('div', {
+      staticClass: "content"
+    }, [_c('span', {
+      staticClass: "header"
+    }, [_vm._v("\n                    " + _vm._s(file.name) + "\n                    "), _c('a', {
+      attrs: {
+        "href": "javascript:void(0)"
+      },
+      on: {
+        "click": function($event) {
+          _vm.deleteMedia(file.id)
+        }
+      }
+    }, [_c('i', {
+      staticClass: "grey delete icon"
+    })])])])])
+  })) : _vm._e(), _vm._v(" "), _c('dropzone', {
+    attrs: {
+      "id": "files",
+      "url": "/file/upload",
+      "useFontAwesome": true,
+      "showRemoveLink": true,
+      "paramName": "file"
+    },
+    on: {
+      "vdropzone-success": _vm.fileAdded,
+      "vdropzone-removed-file": _vm.fileRemoved
+    }
+  }, [_c('input', {
+    attrs: {
+      "type": "hidden",
+      "name": "_token"
+    },
+    domProps: {
+      "value": _vm.$parent.crsf
+    }
+  })]), _vm._v(" "), _c('div', {
     staticClass: "ui divider"
   }), _vm._v(" "), _c('button', {
     ref: "submitButton",
@@ -19589,7 +20017,30 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [_c('i', {
     staticClass: "edit icon"
-  }), _vm._v(" " + _vm._s(_vm.submitText) + "\n    ")])])
+  }), _vm._v(" " + _vm._s(_vm.submitText) + "\n    ")]), _vm._v(" "), _c('confirm-dialog', {
+    attrs: {
+      "id": "imageDelete",
+      "icon": "trash",
+      "title": "Delete file?",
+      "body": "Are you sure you want to delete this file? This action cannot be undone!"
+    }
+  }), _vm._v(" "), _c('input', {
+    attrs: {
+      "type": "hidden",
+      "name": "files"
+    },
+    domProps: {
+      "value": _vm.filesArray
+    }
+  }), _vm._v(" "), _c('input', {
+    attrs: {
+      "type": "hidden",
+      "name": "images"
+    },
+    domProps: {
+      "value": _vm.imagesArray
+    }
+  })], 1)
 },staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('label', {
     attrs: {
@@ -19598,6 +20049,18 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_c('i', {
     staticClass: "red warning icon"
   }), _vm._v("\n            Do you want to make your design public (can be seen by everyone)?\n        ")])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('h3', {
+    staticClass: "ui dividing header"
+  }, [_vm._v("\n        Images\n        "), _c('div', {
+    staticClass: "sub header"
+  }, [_vm._v("For informational images only. If your design is public, these are made public as well")])])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('h3', {
+    staticClass: "ui dividing header"
+  }, [_vm._v("\n        Files\n        "), _c('div', {
+    staticClass: "sub header"
+  }, [_vm._v("Use this field to upload designs and documents for collaboration with your partners. These remain private, even if the design is made public")])])
 }]}
 module.exports.render._withStripped = true
 if (false) {
@@ -19919,7 +20382,101 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "for": "true"
     }
-  }, [_vm._v("Yes")])])])]), _vm._v(" "), _c('div', {
+  }, [_vm._v("Yes")])])])]), _vm._v(" "), _vm._m(1), _vm._v(" "), (_vm.images) ? _c('div', {
+    staticClass: "ui relaxed horizontal divided list",
+    staticStyle: {
+      "margin-bottom": "10px"
+    }
+  }, _vm._l((_vm.images), function(image) {
+    return _c('div', {
+      staticClass: "item"
+    }, [_c('img', {
+      staticClass: "ui mini image",
+      attrs: {
+        "src": ("/file/" + (image.id))
+      }
+    }), _vm._v(" "), _c('div', {
+      staticClass: "content"
+    }, [_c('span', {
+      staticClass: "header"
+    }, [_vm._v("\n                    " + _vm._s(image.name) + "\n                    "), _c('a', {
+      attrs: {
+        "href": "javascript:void(0)"
+      },
+      on: {
+        "click": function($event) {
+          _vm.deleteMedia(image.id)
+        }
+      }
+    }, [_c('i', {
+      staticClass: "grey delete icon"
+    })])])])])
+  })) : _vm._e(), _vm._v(" "), _c('dropzone', {
+    attrs: {
+      "id": "images",
+      "url": "/file/upload",
+      "useFontAwesome": true,
+      "showRemoveLink": true,
+      "paramName": "image",
+      "acceptedFileTypes": "image/*"
+    },
+    on: {
+      "vdropzone-success": _vm.imageAdded,
+      "vdropzone-removed-file": _vm.imageRemoved
+    }
+  }, [_c('input', {
+    attrs: {
+      "type": "hidden",
+      "name": "_token"
+    },
+    domProps: {
+      "value": _vm.$parent.crsf
+    }
+  })]), _vm._v(" "), _vm._m(2), _vm._v(" "), (_vm.files) ? _c('div', {
+    staticClass: "ui relaxed horizontal divided list",
+    staticStyle: {
+      "margin-bottom": "10px"
+    }
+  }, _vm._l((_vm.files), function(file) {
+    return _c('div', {
+      staticClass: "item"
+    }, [_c('div', {
+      staticClass: "content"
+    }, [_c('span', {
+      staticClass: "header"
+    }, [_vm._v("\n                    " + _vm._s(file.name) + "\n                    "), _c('a', {
+      attrs: {
+        "href": "javascript:void(0)"
+      },
+      on: {
+        "click": function($event) {
+          _vm.deleteMedia(file.id)
+        }
+      }
+    }, [_c('i', {
+      staticClass: "grey delete icon"
+    })])])])])
+  })) : _vm._e(), _vm._v(" "), _c('dropzone', {
+    attrs: {
+      "id": "files",
+      "url": "/file/upload",
+      "useFontAwesome": true,
+      "showRemoveLink": true,
+      "paramName": "file"
+    },
+    on: {
+      "vdropzone-success": _vm.fileAdded,
+      "vdropzone-removed-file": _vm.fileRemoved
+    }
+  }, [_c('input', {
+    attrs: {
+      "type": "hidden",
+      "name": "_token"
+    },
+    domProps: {
+      "value": _vm.$parent.crsf
+    }
+  })]), _vm._v(" "), _c('div', {
     staticClass: "ui divider"
   }), _vm._v(" "), _c('input', {
     attrs: {
@@ -19937,7 +20494,30 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [_c('i', {
     staticClass: "edit icon"
-  }), _vm._v(" " + _vm._s(_vm.submitText) + "\n    ")])])
+  }), _vm._v(" " + _vm._s(_vm.submitText) + "\n    ")]), _vm._v(" "), _c('confirm-dialog', {
+    attrs: {
+      "id": "imageDelete",
+      "icon": "trash",
+      "title": "Delete file?",
+      "body": "Are you sure you want to delete this file? This action cannot be undone!"
+    }
+  }), _vm._v(" "), _c('input', {
+    attrs: {
+      "type": "hidden",
+      "name": "files"
+    },
+    domProps: {
+      "value": _vm.filesArray
+    }
+  }), _vm._v(" "), _c('input', {
+    attrs: {
+      "type": "hidden",
+      "name": "images"
+    },
+    domProps: {
+      "value": _vm.imagesArray
+    }
+  })], 1)
 },staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('label', {
     attrs: {
@@ -19946,6 +20526,18 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_c('i', {
     staticClass: "red warning icon"
   }), _vm._v("\n            Do you want to make your prototype public (can be seen by everyone)?\n        ")])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('h3', {
+    staticClass: "ui dividing header"
+  }, [_vm._v("\n        Images\n        "), _c('div', {
+    staticClass: "sub header"
+  }, [_vm._v("For informational images only. If your design is public, these are made public as well")])])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('h3', {
+    staticClass: "ui dividing header"
+  }, [_vm._v("\n        Files\n        "), _c('div', {
+    staticClass: "sub header"
+  }, [_vm._v("Use this field to upload designs and documents for collaboration with your partners. These remain private, even if the design is made public")])])
 }]}
 module.exports.render._withStripped = true
 if (false) {

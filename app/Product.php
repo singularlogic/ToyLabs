@@ -102,4 +102,15 @@ class Product extends Model implements HasMedia
 
         return $result;
     }
+
+    public function getFilesAttribute()
+    {
+        $files  = $this->getMedia('files');
+        $result = [];
+        foreach ($files as $file) {
+            $result[] = $file->getUrl();
+        }
+
+        return $result;
+    }
 }

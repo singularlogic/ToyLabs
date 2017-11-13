@@ -23,9 +23,9 @@ class Prototype extends Model implements HasMedia
 
     public function getImageAttribute()
     {
-        $covers = $this->getMedia('cover');
-        if (count($covers) > 0) {
-            return $covers[0]->getUrl();
+        $images = $this->getMedia('images');
+        if (count($images) > 0) {
+            return $images[0]->getUrl();
         }
 
         return '/images/placeholder.jpg';
@@ -57,6 +57,17 @@ class Prototype extends Model implements HasMedia
         $result = [];
         foreach ($images as $image) {
             $result[] = $image->getUrl();
+        }
+
+        return $result;
+    }
+
+    public function getFilesAttribute()
+    {
+        $files  = $this->getMedia('files');
+        $result = [];
+        foreach ($files as $file) {
+            $result[] = $file->getUrl();
         }
 
         return $result;

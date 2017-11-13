@@ -65,6 +65,8 @@ class PrototypeController extends Controller
         $input   = $request->all();
         $user    = Auth::user();
         $product = Product::find($id);
+        $files   = json_decode($input['files'], true);
+        $images  = json_decode($input['images'], true);
 
         if ($this->canEdit($user, $product)) {
             $prototype = Prototype::create([
@@ -74,6 +76,16 @@ class PrototypeController extends Controller
                 'product_id'  => $id,
                 'design_id'   => $input['design_id'],
             ]);
+
+            foreach ($images as $image) {
+                $path = storage_path('/app/' . $image['path']);
+                $prototype->addMedia($path)->usingName($image['name'])->toMediaCollection('images');
+            }
+
+            foreach ($files as $file) {
+                $path = storage_path('/app/' . $file['path']);
+                $prototype->addMedia($path)->usingName($file['name'])->toMediaCollection('files');
+            }
 
             \Session::flash('success', 'Prototype created successfully.');
             return redirect()->route('product.prototypes', ['id' => $id]);
@@ -89,6 +101,7 @@ class PrototypeController extends Controller
         $data = [
             'title'      => 'Edit Prototype',
             'product_id' => $prototype->product_id,
+            'design_id'  => $prototype->design ? $prototype->design->id : null,
             'prototype'  => $prototype,
         ];
 
@@ -101,6 +114,8 @@ class PrototypeController extends Controller
         $prototype = Prototype::find($id);
         $user      = Auth::user();
         $product   = Product::find($prototype->product_id);
+        $images    = json_decode($input['images'], true);
+        $files     = json_decode($input['files'], true);
 
         if ($prototype && $this->canEdit($user, $product)) {
             Prototype::where('id', $id)->update([
@@ -108,6 +123,16 @@ class PrototypeController extends Controller
                 'description' => $input['description'],
                 'is_public'   => $input['is_public'],
             ]);
+
+            foreach ($images as $image) {
+                $path = storage_path('/app/' . $image['path']);
+                $prototype->addMedia($path)->usingName($image['name'])->toMediaCollection('images');
+            }
+
+            foreach ($files as $file) {
+                $path = storage_path('/app/' . $file['path']);
+                $prototype->addMedia($path)->usingName($file['name'])->toMediaCollection('files');
+            }
 
             \Session::flash('success', 'Prototype updated successfully!');
             return redirect()->route('product.prototypes', ['id' => $prototype->product_id]);
