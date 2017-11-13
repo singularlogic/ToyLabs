@@ -91,4 +91,15 @@ class Product extends Model implements HasMedia
 
         return null;
     }
+
+    public function getImagesAttribute()
+    {
+        $images = $this->getMedia('images');
+        $result = [];
+        foreach ($images as $image) {
+            $result[] = $image->getUrl();
+        }
+
+        return $result;
+    }
 }

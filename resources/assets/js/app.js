@@ -16,6 +16,7 @@ import DesignCreate from './components/DesignCreate.vue';
 import PrototypeCreate from './components/PrototypeCreate.vue';
 import DesignsTable from './components/DesignsTable.vue';
 import PrototypesTable from './components/PrototypesTable.vue';
+import Gallery from './components/Gallery';
 
 /**
  * Navbar transition for the homepage
@@ -77,5 +78,6 @@ const app = new Vue({
         PrototypeCreate,
         DesignsTable,
         PrototypesTable,
+        Gallery,
     }
 });

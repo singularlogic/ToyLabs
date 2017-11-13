@@ -60,4 +60,16 @@ class Design extends Model implements HasMedia
     {
         return $this->belongsTo(Product::class);
     }
+
+    public function getImagesAttribute()
+    {
+        $images = $this->getMedia('images');
+        $result = [];
+        foreach ($images as $image) {
+            $result[] = $image->getUrl();
+        }
+
+        return $result;
+    }
+
 }

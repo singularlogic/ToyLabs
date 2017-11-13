@@ -12,7 +12,15 @@
                 liked="{{ $prototype['liked'] }}"
                 type="prototype"
             ></likes>
+
             <div class="ui clearing divider"></div>
+@if(count($prototype['images']))
+            <div class="ui dividing header">Images ({{ count($prototype['images']) }})</div>
+
+            <gallery
+                :images="{{ json_encode($prototype['images']) }}"
+            ></gallery>
+@endif
 
             <div class="ui basic segment">
                 <img class="ui large left bordered floated image" src="/images/placeholder.jpg" />

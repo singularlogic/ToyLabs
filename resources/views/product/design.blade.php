@@ -21,6 +21,13 @@
             </div>
 
             <div class="ui hidden clearing divider"></div>
+@if(count($design['images']))
+            <div class="ui dividing header">Images ({{ count($design['images']) }})</div>
+
+            <gallery
+                :images="{{ json_encode($design['images']) }}"
+            ></gallery>
+@endif
 
 @if(count($design['prototypes']))
             <h3 class="ui dividing header">Prototypes ({{ count($design['prototypes']) }})</h3>

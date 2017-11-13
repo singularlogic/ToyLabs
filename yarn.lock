@@ -5661,6 +5661,12 @@ uuid@^3.0.0:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-3.0.1.tgz#6544bba2dfda8c1cf17e629a3a305e2bb1fee6c1"
 
+v-viewer@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/v-viewer/-/v-viewer-0.2.0.tgz#8aff8256f9e4e5325f407a7c62ee28ac34dfb18c"
+  dependencies:
+    viewerjs "^0.7.2"
+
 vali-date@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/vali-date/-/vali-date-1.0.0.tgz#1b904a59609fb328ef078138420934f6b86709a6"
@@ -5681,6 +5687,10 @@ verror@1.3.6:
   resolved "https://registry.yarnpkg.com/verror/-/verror-1.3.6.tgz#cff5df12946d297d2baaefaa2689e25be01c005c"
   dependencies:
     extsprintf "1.0.2"
+
+viewerjs@^0.7.2:
+  version "0.7.2"
+  resolved "https://registry.yarnpkg.com/viewerjs/-/viewerjs-0.7.2.tgz#71c87eb15c47e7b329362673ab0820d5a30a32e9"
 
 vinyl-assign@^1.0.1:
   version "1.2.1"
