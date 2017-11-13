@@ -187,7 +187,7 @@ class ProductController extends Controller
                 'description' => $input['description'],
                 'min_age'     => isset($input['min_age']) ? $input['min_age'] : null,
                 'max_age'     => isset($input['max_age']) ? $input['max_age'] : null,
-                'is_public'   => $input['is_public'],
+                'is_public'   => isset($input['is_public']) ? $input['is_public'] : false,
                 'category_id' => isset($input['category_id']) ? $input['category_id'] : null,
                 'owner_id'    => $input['owner_id'],
                 'owner_type'  => $input['owner_type'],

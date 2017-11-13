@@ -137,24 +137,24 @@
                     <div class="ui middle aligned divided list" style="padding-left: 50px;">
                         <div class="item" v-for="o in professional.organizations">
                             <div class="right floated content">
-                                <a class="ui negative mini button" v-if="o.owner_id != personal.id" @click="leaveGroup(o, false)">Leave</a>
-                                <div class="ui basic green label" v-if="o.owner_id == personal.id">Owner</div>
+                                <a class="ui negative mini button" v-if="o.owner_id != personal.user_id" @click="leaveGroup(o, false)">Leave</a>
+                                <div class="ui basic green label" v-if="o.owner_id == personal.user_id">Owner</div>
                             </div>
                             <img class="ui avatar image" src="/images/avatar/small/elliot.jpg" />
                             <div class="content">
-                                <div class="header" v-if="o.owner_id !== personal.id">{{ o.name }}</div>
-                                <a class="header" v-if="o.owner_id == personal.id" :href="`/organization/${o.id}/edit`">{{ o.name }}</a>
+                                <div class="header" v-if="o.owner_id !== personal.user_id">{{ o.name }}</div>
+                                <a class="header" v-if="o.owner_id == personal.user_id" :href="`/organization/${o.id}/edit`">{{ o.name }}</a>
                             </div>
                         </div>
                         <div class="item" v-for="o in professional.pending">
                             <div class="right floated content">
                                 <div class="ui basic black label">Pending</div>
-                                <a class="ui negative mini button" v-if="o.owner_id != personal.id" @click="leaveGroup(o, true)">Cancel</a>
+                                <a class="ui negative mini button" v-if="o.owner_id != personal.user_id" @click="leaveGroup(o, true)">Cancel</a>
                             </div>
                             <img class="ui avatar image" src="/images/avatar/small/elliot.jpg" />
                             <div class="content">
-                                <div class="header" v-if="o.owner_id !== personal.id">{{ o.name }}</div>
-                                <a class="header" v-if="o.owner_id == personal.id" :href="`/organization/${o.id}/edit`">{{ o.name }}</a>
+                                <div class="header" v-if="o.owner_id !== personal.user_id">{{ o.name }}</div>
+                                <a class="header" v-if="o.owner_id == personal.user_id" :href="`/organization/${o.id}/edit`">{{ o.name }}</a>
                             </div>
                         </div>
                         <div class="item" style="margin-top: 20px;" v-if="orgCount == 0">
