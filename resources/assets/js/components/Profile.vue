@@ -176,7 +176,7 @@
                 <div class="ui divider"></div>
 
                 <input type="hidden" name="createOrganization" ref="createOrganization" />
-                <!-- <input type="hidden" name="newOrganizations" ref="newOrganizations" /> -->
+                <input type="hidden" name="joinOrg" :value="joinOrg" />
 
                 <button type="submit" class="ui orange submit right floated button" ref="submitButton">{{ submitText }}</button>
                 <a href="/dashboard" class="ui default right floated button">Cancel</a>
@@ -257,9 +257,13 @@ export default {
                         if (response.status === 200) {
                             const org = this._organizations.find(org => org.id = this.joinOrg);
                             this.professional.pending.push(org);
+                            this.joinOrg = null;
                         }
                     });
-                }
+                },
+                onDeny: () => {
+                    this.joinOrg = null;
+                },
             }).modal('show');
         },
         leaveGroup(org, pending) {

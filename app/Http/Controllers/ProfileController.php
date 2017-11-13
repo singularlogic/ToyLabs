@@ -96,6 +96,15 @@ class ProfileController extends Controller
             return redirect()->route('organization.edit.mine');
         }
 
+        if (isset($input['joinOrg'])) {
+            $user = Auth::user();
+            $org  = Organization::find($input['joinOrg']);
+
+            if ($org) {
+                $user->befriend($org);
+            }
+        }
+
         if (isset($input['has_organization'])) {
             if (isset($input['state'])) {
                 if ($input['state'] === 'new') {
