@@ -190,7 +190,7 @@ class ProfileController extends Controller
 
             // Ask to join the group and then approve request
             $user->befriend($org);
-            $org->acceptacceptFriendRequest($user);
+            $org->acceptFriendRequest($user);
 
             // Add Facilities
             foreach ($input['facilities'] as $facility) {
