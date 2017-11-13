@@ -27,7 +27,8 @@ class DashboardController extends Controller
             'owner_type' => Organization::class,
         ])->orderBy('updated_at', 'DESC')->get();
         $data = [
-            'products' => $products,
+            'products'    => $products,
+            'is_complete' => !!$user->profile,
         ];
 
         return view('dashboard', $data);
