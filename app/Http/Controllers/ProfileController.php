@@ -7,6 +7,7 @@ use App\Certification;
 use App\Competency;
 use App\Country;
 use App\Facility;
+use App\GeographicalMarket;
 use App\Notifications\UserLeftOrganization;
 use App\Organization;
 use App\OrganizationType;
@@ -140,7 +141,7 @@ class ProfileController extends Controller
             'organization'       => $org,
             'facilities'         => Facility::where('organization_id', $id)->get(),
             'competencies'       => Competency::orderBy('name', 'ASC')->get(),
-            'markets'            => [],
+            'markets'            => GeographicalMarket::get(),
             'categories'         => ToyCategory::where('title', '<>', 'Other')->orderBy('title')->get(),
             'services'           => $org ? $org->services : [],
             'paymentTypes'       => PaymentType::orderBy('name', 'ASC')->get(),
@@ -188,6 +189,7 @@ class ProfileController extends Controller
             $org->competencies()->sync($services['competencies']);
             $org->expertise()->sync($services['expertise']);
             $org->paymentTypes()->sync($services['payment_types']);
+            $org->markets()->sync($services['markets']);
             $org->payment_in       = $services['payment_in'];
             $org->production_scale = $services['production_scale'];
             $org->save();

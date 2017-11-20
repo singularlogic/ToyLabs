@@ -4,7 +4,7 @@
 
         <div class="grouped fields">
             <label for="expertise">Geographical Market(s)</label>
-            <div class="ui three column stackable grid basic segment">
+            <div class="ui four column stackable grid basic segment">
                 <div class="field column" v-for="m of markets">
                     <div class="ui checkbox">
                         <input type="checkbox" :value="m.id" v-model="services.markets" />

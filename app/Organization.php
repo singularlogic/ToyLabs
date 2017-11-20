@@ -48,6 +48,11 @@ class Organization extends Model
         return $this->hasMany(Facility::class);
     }
 
+    public function markets()
+    {
+        return $this->belongsToMany(GeographicalMarket::class, 'geographical_market_organization');
+    }
+
     public function country()
     {
         return $this->belongsTo(Country::class);
@@ -73,11 +78,10 @@ class Organization extends Model
         return [
             'expertise'        => $this->expertise->pluck('id'),
             'competencies'     => $this->competencies->pluck('id'),
-            'markets'          => [],
+            'markets'          => $this->markets->pluck('id'),
             'payment_types'    => $this->paymentTypes->pluck('id'),
             'payment_in'       => $this->payment_in,
             'production_scale' => $this->production_scale,
-
         ];
     }
 }
