@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\SocialAccount;
 use App\User;
+use Illuminate\Http\Request;
 use Laravel\Socialite\Contracts\User as ProviderUser;
 use Laravel\Socialite\Facades\Socialite;
 
@@ -57,8 +58,12 @@ class SocialAuthController extends Controller
         return Socialite::driver($provider)->redirect();
     }
 
-    public function callback($provider)
+    public function callback(Request $request, $provider)
     {
+        if (!$request->has('code') || $request->has('denied')) {
+            return redirect('/login');
+        }
+
         $user = $this->getOrCreateUser($provider, Socialite::driver($provider)->user());
         auth()->login($user);
 
