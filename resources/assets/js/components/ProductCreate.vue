@@ -171,6 +171,7 @@ export default {
             uploadedImages: [],
             uploadedFiles: [],
             status: null,
+            editable: false,
         };
     },
     mounted() {

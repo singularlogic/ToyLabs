@@ -3262,7 +3262,8 @@ exports.default = {
             editLegal: this._product.id ? false : true,
             uploadedImages: [],
             uploadedFiles: [],
-            status: null
+            status: null,
+            editable: false
         };
     },
     mounted: function mounted() {
@@ -3418,6 +3419,11 @@ exports.default = {
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+//
+//
+//
+//
+//
 //
 //
 //
@@ -4921,7 +4927,7 @@ exports.push([module.i, "/*!\n * Viewer.js v0.7.2\n * https://github.com/fengyua
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/css-base.js")();
-exports.push([module.i, "\n.ui.steps {\n    margin: 0!important;\n}\n.ui.steps .step {\n    padding: 0.2em 2em!important;\n}\n.ui.hidden.divider {\n    margin: 1px 0!important;\n}\n", ""]);
+exports.push([module.i, "\n.ui.steps {\n    margin: 0!important;\n}\n.ui.steps .step {\n    padding: 0.2em 2em!important;\n}\n.ui.hidden.divider {\n    margin: 1px 0!important;\n}\n.ui.steps .step.completed .title {\n    color: #4183c4;\n}\n", ""]);
 
 /***/ }),
 
@@ -17805,22 +17811,26 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "item"
   }, [_c('h3', {
     staticClass: "ui left floated header"
-  }, [_c('a', {
-    attrs: {
-      "href": ("/product/" + (_vm.product.id))
-    }
-  }, [_vm._v(_vm._s(_vm.product.title))]), _vm._v(" "), _c('div', {
+  }, [_vm._v("\n        " + _vm._s(_vm.product.title) + "\n        "), _c('div', {
     staticClass: "ui label",
     class: {
       blue: _vm.owner !== 'Personal', orange: _vm.owner === 'Personal'
     }
   }, [_vm._v(_vm._s(_vm.owner))])]), _vm._v(" "), _c('small', {
-    staticClass: "ui right floated",
+    staticClass: "ui right floated"
+  }, [_c('strong', [_vm._v("Last Modified:")]), _vm._v(" "), _c('em', [_vm._v(_vm._s(_vm._f("moment")(_vm.product.updated_at, 'DD.MM.YYYY')))]), _vm._v(" "), _c('a', {
+    staticClass: "ui mini blue icon button",
     staticStyle: {
-      "padding-top": "7px",
-      "padding-right": "10px"
+      "margin-left": "10px"
+    },
+    attrs: {
+      "href": ("/product/" + (_vm.product.id) + "/edit"),
+      "data-tooltip": "Edit product...",
+      "data-inverted": ""
     }
-  }, [_c('strong', [_vm._v("Last Modified:")]), _vm._v(" "), _c('em', [_vm._v(_vm._s(_vm._f("moment")(_vm.product.updated_at, 'DD.MM.YYYY')))])]), _vm._v(" "), _c('div', {
+  }, [_c('i', {
+    staticClass: "icon edit"
+  })])]), _vm._v(" "), _c('div', {
     staticClass: "ui hidden clearing divider"
   }), _vm._v(" "), _c('div', {
     staticClass: "content"
@@ -17830,7 +17840,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "step",
     class: _vm.getClass('concept'),
     attrs: {
-      "href": ("/product/" + (_vm.product.id) + "/edit")
+      "href": ("/product/" + (_vm.product.id))
     }
   }, [_c('i', {
     staticClass: "idea icon"

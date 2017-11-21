@@ -1,18 +1,23 @@
 <template>
     <div class="item">
         <h3 class="ui left floated header">
-            <a :href="`/product/${product.id}`">{{ product.title }}</a>
+            <!-- <a :href="`/product/${product.id}`">{{ product.title }}</a> -->
+            {{ product.title }}
             <div class="ui label" :class="{ blue: owner !== 'Personal', orange: owner === 'Personal' }">{{ owner }}</div>
         </h3>
-        <small class="ui right floated" style="padding-top: 7px; padding-right: 10px;">
+        <small class="ui right floated">
             <strong>Last Modified:</strong> <em>{{ product.updated_at | moment('DD.MM.YYYY') }}</em>
+            <a class="ui mini blue icon button" :href="`/product/${product.id}/edit`"
+                style="margin-left: 10px;" data-tooltip="Edit product..." data-inverted>
+                <i class="icon edit"></i>
+            </a>
         </small>
 
         <div class="ui hidden clearing divider"></div>
 
         <div class="content">
             <div class="ui five mini steps">
-                <a class="step" :class="getClass('concept')" :href="`/product/${product.id}/edit`">
+                <a class="step" :class="getClass('concept')" :href="`/product/${product.id}`">
                     <i class="idea icon"></i>
                     <div class="content">
                         <div class="title">Concept</div>
@@ -104,5 +109,8 @@ export default {
 
 .ui.hidden.divider {
     margin: 1px 0!important;
+}
+.ui.steps .step.completed .title {
+    color: #4183c4;
 }
 </style>
