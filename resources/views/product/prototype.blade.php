@@ -21,6 +21,20 @@
             </div>
 
             <div class="ui hidden clearing divider"></div>
+@if(sizeof($files) > 0 and $isCollaborator)
+            <div class="ui info message">
+@foreach($files as $file)
+                <div class="ui mini horizontal divided list">
+                    <a class="item" href="{{ $file->getUrl() }}" download>
+                        <i class="large file outline icon"></i>
+                        <div class="content" style="padding-left: 0">
+                            <div class="header">{{ $file->name }}</div>
+                        </div>
+                    </a>
+                </div>
+@endforeach
+            </div>
+@endif
 
 @if(count($prototype['images']))
             <div class="ui dividing header">Images ({{ count($prototype['images']) }})</div>

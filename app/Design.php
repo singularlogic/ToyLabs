@@ -18,7 +18,7 @@ class Design extends Model implements HasMedia
 
     public function parent()
     {
-        return $this->belontsTo(Design::class, 'parent_id');
+        return $this->belongsTo(Design::class, 'parent_id');
     }
 
     public function revisions()
