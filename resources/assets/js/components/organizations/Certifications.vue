@@ -5,8 +5,8 @@
         <table class="ui celled table">
             <thead class="full-width">
                 <tr>
-                    <th class="ten wide">Name</th>
-                    <th class="five wide">Date</th>
+                    <th class="twelve wide">Name</th>
+                    <th class="three wide">Date</th>
                     <th class="one wide"></th>
                 </tr>
             </thead>
@@ -16,7 +16,7 @@
                 </tr>
                 <tr v-for="certification in certifications">
                     <td>{{ certification.name }}</td>
-                    <td>{{ certification.date }}</td>
+                    <td>{{ certification.pivot.certified_at | formatDate }}</td>
                     <td class="collapsing">
                         <button type="button" class="ui mini red icon button" @click="removeCertification(certification)">
                             <i class="trash icon"></i>
@@ -34,12 +34,15 @@
             <tfoot v-if="insertCertificationMode">
                 <tr>
                     <th>
-                        <select class="ui search dropdown" name="country_id" v-model="newCertification.type">
+                        <select class="ui search dropdown" name="country_id" v-model="newCertification">
                             <option value="">Select Certification...</option>
                             <option v-for="c in certificationTypes" v-bind:value="c">{{ c.name }}</option>
                         </select>
                     </th>
                     <th>
+                        <datepicker
+                            v-model="newCertificationDate"
+                        ></datepicker>
                     </th>
                     <th class="collapsing">
                         <button type="button" class="ui mini basic green icon button" @click="saveCertification()" :disabled="!isCertificationValid">
@@ -56,8 +59,8 @@
         <table class="ui celled table">
             <thead class="full-width">
                 <tr>
-                    <th class="ten wide">Name</th>
-                    <th class="five wide">Date</th>
+                    <th class="twelve wide">Name</th>
+                    <th class="three wide">Date</th>
                     <th class="one wide"></th>
                 </tr>
             </thead>
@@ -67,7 +70,7 @@
                 </tr>
                 <tr v-for="award in awards">
                     <td>{{ award.name }}</td>
-                    <td>{{ award.date }}</td>
+                    <td>{{ award.pivot.awarded_at | formatDate }}</td>
                     <td class="collapsing">
                         <button type="button" class="ui mini red icon button" @click="removeAward(award)">
                             <i class="trash icon"></i>
@@ -85,12 +88,15 @@
             <tfoot v-if="insertAwardMode">
                 <tr>
                     <th>
-                        <select class="ui search dropdown" name="country_id" v-model="newAward.type">
+                        <select class="ui search dropdown" name="country_id" v-model="newAward">
                             <option value="">Select Award...</option>
                             <option v-for="a in awardTypes" v-bind:value="a">{{ a.name }}</option>
                         </select>
                     </th>
                     <th>
+                        <datepicker
+                            v-model="newAwardDate"
+                        ></datepicker>
                     </th>
                     <th class="collapsing">
                         <button type="button" class="ui mini basic green icon button" @click="saveAward()" :disabled="!isAwardValid">
@@ -105,30 +111,38 @@
 </template>
 
 <script>
+import Datepicker from 'vuejs-datepicker';
+import moment from 'moment';
+
     export default {
         props: ['certifications', 'awards', 'certificationTypes', 'awardTypes'],
+        components: { Datepicker },
         data() {
             return {
                 insertCertificationMode: false,
                 insertAwardMode: false,
                 newCertification: {},
                 newAward: {},
+                newCertificationDate: null,
+                newAwardDate: null,
             };
         },
         computed: {
             isCertificationValid() {
-                return !!this.newCertification.type.id;
+                return !!this.newCertification.id;
             },
             isAwardValid() {
-                return !!this.newAward.type.id;
+                return !!this.newAward.id;
             },
+        },
+        filters: {
+            formatDate(value) {
+                return moment(value).format('ll');
+            }
         },
         methods: {
             addCertification() {
-                this.newCertification = {
-                    type: {},
-                    date: '',
-                };
+                this.newCertification = {};
                 this.insertCertificationMode = true;
             },
             cancelCertification() {
@@ -138,15 +152,16 @@
                 this.$emit('removeCertification', certification);
             },
             saveCertification() {
+                this.newCertification.pivot = {
+                    certified_at: this.newCertificationDate
+                };
                 this.$emit('addCertification', this.newCertification);
                 this.newCertification = {};
+                this.newCertificationDate = null;
                 this.insertCertificationMode = false;
             },
             addAward() {
-                this.newAward = {
-                    type: {},
-                    date: '',
-                };
+                this.newAward = {};
                 this.insertAwardMode = true;
             },
             cancelAward() {
@@ -156,8 +171,12 @@
                 this.$emit('removeAward', award);
             },
             saveAward() {
+                this.newAward.pivot = {
+                    awarded_at: this.newAwardDate
+                };
                 this.$emit('addAward', this.newAward);
                 this.newAward = {};
+                this.newAwardDate = null;
                 this.insertAwardMode = false;
             },
         }

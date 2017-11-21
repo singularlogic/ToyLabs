@@ -25,6 +25,8 @@
                 :_services="{{ json_encode($services) }}"
                 :_awardTypes="{{ json_encode($awardTypes) }}"
                 :_certificationTypes="{{ json_encode($certificationTypes) }}"
+                :_certifications="{{ json_encode($certifications) }}"
+                :_awards="{{ json_encode($awards) }}"
             ></Organization>
         </div>
 @endsection

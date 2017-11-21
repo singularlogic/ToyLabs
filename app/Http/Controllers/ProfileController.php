@@ -147,6 +147,8 @@ class ProfileController extends Controller
             'paymentTypes'       => PaymentType::orderBy('name', 'ASC')->get(),
             'awardTypes'         => Award::orderBy('name', 'ASC')->get(),
             'certificationTypes' => Certification::orderBy('name', 'ASC')->get(),
+            'certifications'     => $org ? $org->certifications : [],
+            'awards'             => $org ? $org->awards : [],
         ];
 
         if ($id > 0) {
@@ -192,6 +194,13 @@ class ProfileController extends Controller
             $org->markets()->sync($services['markets']);
             $org->payment_in       = $services['payment_in'];
             $org->production_scale = $services['production_scale'];
+
+            // Update Awards & Certifications
+            $awards         = json_decode($input['awards'], true);
+            $certifications = json_decode($input['certifications'], true);
+            $org->awards()->sync($awards);
+            $org->certifications()->sync($certifications);
+
             $org->save();
 
             return redirect('dashboard')->with('success', 'Organization profile updated successfully');

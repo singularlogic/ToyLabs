@@ -33,8 +33,8 @@
         ></services-tab>
 
         <certifications-tab data-tab="certifications"
-            :certification-types="certificationTypes"
-            :award-types="awardTypes"
+            :certification-types="_certificationtypes"
+            :award-types="_awardtypes"
             :certifications="certifications"
             :awards="awards"
             @addAward="addAward"
@@ -57,12 +57,13 @@
 </template>
 
 <script>
+    import moment from 'moment';
     import { GeneralTab, FacilitiesTab, ServicesTab, CertificationsTab } from './organizations';
 
     export default {
         props: [
             '_countries', '_legalForms', '_id', '_organization', '_facilities', '_competencies', '_markets',
-            '_categories', '_services', '_paymentTypes', 'awardTypes', 'certificationTypes',
+            '_categories', '_services', '_paymentTypes', '_awardtypes', '_certificationtypes', '_certifications', '_awards'
         ],
         components: {
             GeneralTab, FacilitiesTab, ServicesTab, CertificationsTab,
@@ -103,8 +104,8 @@
                 ],
                 facilities: this._facilities === null ? [] : this._facilities,
                 services: this._services,
-                certifications: [],
-                awards: [],
+                certifications: this._certifications,
+                awards: this._awards,
             }
         },
         mounted() {
@@ -121,8 +122,25 @@
             submit() {
                 this.$refs.services.value = JSON.stringify(this.services);
                 this.$refs.facilities.value = JSON.stringify(this.facilities);
-                this.$refs.awards.value = JSON.stringify(this.awards);
-                this.$refs.certifications.value = JSON.stringify(this.certifications);
+                let awards = [];
+                this.awards.reduce((arr, obj) => {
+                        arr.push({
+                            award_id: obj.id,
+                            awarded_at: moment(obj.pivot.date).format('YYYY-MM-DD HH:mm:ss'),
+                        });
+                        return arr;
+                }, awards);
+                this.$refs.awards.value = JSON.stringify(awards);
+
+                let certifications = [];
+                this.certifications.reduce((arr, obj) => {
+                        arr.push({
+                            certification_id: obj.id,
+                            certified_at: moment(obj.pivot.date).format('YYYY-MM-DD HH:mm:ss'),
+                        });
+                        return arr;
+                }, certifications);
+                this.$refs.certifications.value = JSON.stringify(certifications);
                 this.$refs.orgForm.submit();
             },
             addFacility(facility) {
@@ -138,7 +156,7 @@
                 this.awards.push(award);
             },
             addCertification(certification) {
-                this.certiciations.push(certification);
+                this.certifications.push(certification);
             },
             removeAward(award) {
                 const index = this.awards.indexOf(award);

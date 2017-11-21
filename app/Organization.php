@@ -53,6 +53,16 @@ class Organization extends Model
         return $this->belongsToMany(GeographicalMarket::class, 'geographical_market_organization');
     }
 
+    public function awards()
+    {
+        return $this->belongsToMany(Award::class, 'award_organization')->withPivot('awarded_at');
+    }
+
+    public function certifications()
+    {
+        return $this->belongsToMany(Certification::class, 'certification_organization')->withPivot('certified_at');
+    }
+
     public function country()
     {
         return $this->belongsTo(Country::class);

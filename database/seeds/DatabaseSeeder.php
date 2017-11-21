@@ -19,5 +19,7 @@ class DatabaseSeeder extends Seeder
         // $this->call(PaymentTypesSeeder::class);
         // $this->call(AgeSeeder::class);
         $this->call(GeographicalMarketSeeder::class);
+        $this->call(CertificationsSeeder::class);
+        $this->call(AwardsSeeder::class);
     }
 }
