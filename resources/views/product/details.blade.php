@@ -15,6 +15,11 @@
                 liked="{{ $product['liked'] }}"
                 type="product"
             ></likes>
+@if(Auth::user())
+            <a href="/dashboard" class="ui right floated basic button">
+                <i class="chevron left icon"></i>Back to Dashboard
+            </a>
+@endif
             <div class="ui clearing divider"></div>
 
             <div class="ui horizontal divided list">
