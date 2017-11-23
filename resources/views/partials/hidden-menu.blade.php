@@ -7,6 +7,7 @@
 @if(Auth::check())
                 <a class="item{{ Request::is('dashboard') ? ' active' : '' }}" href="{{ route('dashboard') }}">Products</a>
 @endif
+                <a class="item{{ Request::is('organizations') ? ' active' : '' }}" href="{{ route('organizations') }}">Members</a>
                 <a class="item{{ Request::is('about') ? ' active' : '' }}" href="{{ route('about') }}">About</a>
                 <div class="right menu">
 @if(Auth::check())

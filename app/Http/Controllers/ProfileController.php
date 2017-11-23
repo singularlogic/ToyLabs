@@ -280,6 +280,11 @@ class ProfileController extends Controller
 
     public function organizations()
     {
+        $organizations = Organization::orderBy('name', 'ASC')->get();
+        $data          = [
+            'organizations' => $organizations,
+        ];
 
+        return view('profile.organizations', $data);
     }
 }

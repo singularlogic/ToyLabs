@@ -5,7 +5,7 @@
 @endsection
 
 @section('content')
-        <!-- Organization -->
+        <!-- Profile/Public -->
         <div class="ui main container" id="orgPage">
             @include('partials.status')
             <h1 class="ui header">{{ $pagetitle or 'Organization Profile' }}</h1>
