@@ -43,6 +43,36 @@ class Organization extends Model
         return $this->morphMany(Product::class, 'owner');
     }
 
+    public function designs()
+    {
+        return $this->hasManyThrough(Design::class, Product::class, 'owner_id')->where('owner_type', Organization::class)->where('is_public');
+    }
+
+    public function prototypes()
+    {
+        return $this->hasManyThrough(Prototype::class, Product::class, 'owner_id')->where('owner_type', Organization::class);
+    }
+
+    public function publicProducts()
+    {
+        return $this->morphMany(Product::class, 'owner')
+            ->where('is_public', true);
+    }
+
+    public function publicDesigns()
+    {
+        return $this->hasManyThrough(Design::class, Product::class, 'owner_id')
+            ->where('owner_type', Organization::class)
+            ->where('designs.is_public', true);
+    }
+
+    public function publicPrototypes()
+    {
+        return $this->hasManyThrough(Prototype::class, Product::class, 'owner_id')
+            ->where('owner_type', Organization::class)
+            ->where('prototypes.is_public', true);
+    }
+
     public function facilities()
     {
         return $this->hasMany(Facility::class);
@@ -55,7 +85,7 @@ class Organization extends Model
 
     public function awards()
     {
-        return $this->belongsToMany(Award::class, 'award_organization')->withPivot('awarded_at');
+        return $this->belongsToMany(Award::class, 'award_organization')->withPivot('awarded_at')->orderBy('awarded_at', 'desc');
     }
 
     public function certifications()

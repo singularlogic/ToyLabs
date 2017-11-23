@@ -2945,7 +2945,7 @@ exports.default = {
             this.awards.reduce(function (arr, obj) {
                 arr.push({
                     award_id: obj.id,
-                    awarded_at: (0, _moment2.default)(obj.pivot.date).format('YYYY-MM-DD HH:mm:ss')
+                    awarded_at: (0, _moment2.default)(obj.pivot.awarded_at).format('YYYY-MM-DD HH:mm:ss')
                 });
                 return arr;
             }, awards);
@@ -2955,7 +2955,7 @@ exports.default = {
             this.certifications.reduce(function (arr, obj) {
                 arr.push({
                     certification_id: obj.id,
-                    certified_at: (0, _moment2.default)(obj.pivot.date).format('YYYY-MM-DD HH:mm:ss')
+                    certified_at: (0, _moment2.default)(obj.pivot.certified_at).format('YYYY-MM-DD HH:mm:ss')
                 });
                 return arr;
             }, certifications);
@@ -3022,7 +3022,7 @@ Object.defineProperty(exports, "__esModule", {
 //
 
 exports.default = {
-    props: ['product', 'detailed'],
+    props: ['product', 'detailed', 'target'],
     data: function data() {
         return {};
     },
@@ -3539,7 +3539,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 exports.default = {
     components: { Product: _Product2.default },
-    props: ['products', 'size', 'detailed'],
+    props: ['products', 'size', 'detailed', 'target'],
     data: function data() {
         return {};
     },
@@ -3547,6 +3547,7 @@ exports.default = {
         // TODO: Get products/designs/prototypes from backend
     }
 }; //
+//
 //
 //
 //
@@ -20431,7 +20432,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   return _c('a', {
     staticClass: "card",
     attrs: {
-      "href": _vm.url
+      "href": _vm.url,
+      "target": _vm.target
     }
   }, [_c('div', {
     staticClass: "ui fluid image"
@@ -20774,7 +20776,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       key: p.id,
       attrs: {
         "product": p,
-        "detailed": _vm.detailed
+        "detailed": _vm.detailed,
+        "target": _vm.target
       }
     })
   }))]) : _vm._e()
@@ -36123,6 +36126,7 @@ $(document).ready(function () {
         position: 'bottom center',
         variation: 'very wide'
     });
+    $('#orgPage .menu .item').tab();
 });
 
 var router = new VueRouter({

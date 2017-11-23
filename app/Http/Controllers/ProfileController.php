@@ -15,6 +15,7 @@ use App\PaymentType;
 use App\Profile;
 use App\ToyCategory;
 use App\User;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
@@ -131,8 +132,10 @@ class ProfileController extends Controller
     public function showOrganizationProfile($id)
     {
         $user = Auth::user();
-
-        $org = Organization::find($id);
+        $org  = Organization::find($id);
+        if ($org->owner_id !== $user->id) {
+            return redirect()->route('organization.profile', ['id' => $id])->with('error', 'You are not the owner of this organization');
+        }
 
         $data = [
             'countries'          => Country::orderBy('name', 'ASC')->get(),
@@ -256,5 +259,27 @@ class ProfileController extends Controller
         }
 
         return response()->json(['error' => 'Organization not found!'])->setStatusCode(Response::HTTP_NOT_FOUND);
+    }
+
+    public function organizationProfile(Request $request, $id)
+    {
+        try {
+            $org = Organization::findOrFail($id);
+        } catch (ModelNotFoundException $e) {
+            return back()->with('error', 'Organization not found');
+        }
+
+        $data = [
+            'pagetitle'    => $org->name,
+            'organization' => $org,
+            'competencies' => Competency::orderBy('name', 'asc')->get(),
+        ];
+
+        return view('profile.public', $data);
+    }
+
+    public function organizations()
+    {
+
     }
 }

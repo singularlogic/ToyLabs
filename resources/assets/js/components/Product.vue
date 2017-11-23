@@ -1,5 +1,5 @@
 <template>
-    <a class="card" :href="url">
+    <a class="card" :href="url" :target="target">
         <div class="ui fluid image">
             <img :src="product.image" />
             <span class="ui right ribbon label" :class="getClass" v-if="detailed">{{ product.type }}</span>
@@ -17,7 +17,7 @@
 
 <script>
 export default {
-    props: ['product', 'detailed'],
+    props: ['product', 'detailed', 'target'],
     data() {
         return {};
     },

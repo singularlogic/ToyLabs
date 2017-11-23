@@ -5,6 +5,7 @@
                 :key="p.id"
                 :product="p"
                 :detailed="detailed"
+                :target="target"
             ></Product>
         </div>
     </div>
@@ -15,7 +16,7 @@ import Product from './Product.vue';
 
 export default {
     components: { Product },
-    props: ['products', 'size', 'detailed'],
+    props: ['products', 'size', 'detailed', 'target'],
     data() {
         return {};
     },

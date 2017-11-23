@@ -45,6 +45,7 @@ $(document).ready(function() {
         position: 'bottom center',
         variation: 'very wide',
     });
+    $('#orgPage .menu .item').tab();
 });
 
 const router = new VueRouter({

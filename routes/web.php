@@ -44,9 +44,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/profile/edit', ['as' => 'profile.edit.post', 'uses' => 'ProfileController@savePersonalProfile']);
 
     // Organization Profile
-    Route::get('/organization/edit', ['as' => 'organization.edit.mine', 'uses' => 'ProfileController@showMyOrganizationProfile']);
+    // Route::get('/organization/edit', ['as' => 'organization.edit.mine', 'uses' => 'ProfileController@showMyOrganizationProfile']);
     Route::get('/organization/{id}/edit', ['as' => 'organization.edit', 'uses' => 'ProfileController@showOrganizationProfile']);
-    Route::post('/organization/edit', ['as' => 'organization.edit.post', 'uses' => 'ProfileController@saveOrganizationProfile']);
+    // Route::post('/organization/edit', ['as' => 'organization.edit.post', 'uses' => 'ProfileController@saveOrganizationProfile']);
     Route::put('/organization/{id}/join', ['as' => 'organization.join', 'uses' => 'ProfileController@joinOrganization']);
     Route::put('/organization/{id}/leave', ['as' => 'organization.leave', 'uses' => 'ProfileController@leaveOrganization']);
 
@@ -77,6 +77,10 @@ Route::group(['middleware' => 'auth'], function () {
     Route::delete('/file/delete', ['as' => 'file.delete', 'uses' => 'FileController@delete']);
     Route::delete('/attachment/remove', ['as' => 'attachment.delete', 'uses' => 'FileController@remove']);
 });
+
+// Public Profiles
+Route::get('/organizations', ['as' => 'organizations', 'uses' => 'ProfileController@organizations']);
+Route::get('/organization/{id}', ['as' => 'organization.profile', 'uses' => 'ProfileController@organizationProfile']);
 
 // Notifications
 Route::group(['prefix' => 'notifications'], function () {

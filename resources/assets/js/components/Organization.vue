@@ -126,7 +126,7 @@
                 this.awards.reduce((arr, obj) => {
                         arr.push({
                             award_id: obj.id,
-                            awarded_at: moment(obj.pivot.date).format('YYYY-MM-DD HH:mm:ss'),
+                            awarded_at: moment(obj.pivot.awarded_at).format('YYYY-MM-DD HH:mm:ss'),
                         });
                         return arr;
                 }, awards);
@@ -136,7 +136,7 @@
                 this.certifications.reduce((arr, obj) => {
                         arr.push({
                             certification_id: obj.id,
-                            certified_at: moment(obj.pivot.date).format('YYYY-MM-DD HH:mm:ss'),
+                            certified_at: moment(obj.pivot.certified_at).format('YYYY-MM-DD HH:mm:ss'),
                         });
                         return arr;
                 }, certifications);
