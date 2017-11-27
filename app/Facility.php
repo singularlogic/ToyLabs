@@ -25,7 +25,7 @@ class Facility extends Model
 
     public function getCountryAttribute()
     {
-        return $this->city->state->country()->first(['id', 'name']);
+        return $this->city->state->country()->first(['id', 'name', 'sortcode']);
     }
 
     public function organization()

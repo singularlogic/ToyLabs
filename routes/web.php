@@ -44,9 +44,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/profile/edit', ['as' => 'profile.edit.post', 'uses' => 'ProfileController@savePersonalProfile']);
 
     // Organization Profile
-    // Route::get('/organization/edit', ['as' => 'organization.edit.mine', 'uses' => 'ProfileController@showMyOrganizationProfile']);
+    Route::get('/organization/edit', ['as' => 'organization.edit.mine', 'uses' => 'ProfileController@showMyOrganizationProfile']);
     Route::get('/organization/{id}/edit', ['as' => 'organization.edit', 'uses' => 'ProfileController@showOrganizationProfile']);
-    // Route::post('/organization/edit', ['as' => 'organization.edit.post', 'uses' => 'ProfileController@saveOrganizationProfile']);
+    Route::post('/organization/edit', ['as' => 'organization.edit.post', 'uses' => 'ProfileController@saveOrganizationProfile']);
     Route::put('/organization/{id}/join', ['as' => 'organization.join', 'uses' => 'ProfileController@joinOrganization']);
     Route::put('/organization/{id}/leave', ['as' => 'organization.leave', 'uses' => 'ProfileController@leaveOrganization']);
 
@@ -71,6 +71,10 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/product/{id}/prototypes/create', ['as' => 'prototype.create.post', 'uses' => 'PrototypeController@doCreate']);
     Route::get('/prototype/{id}/edit', ['as' => 'prototype.edit', 'uses' => 'PrototypeController@edit']);
     Route::post('/prototype/{id}/edit', ['as' => 'prototype.edit.post', 'uses' => 'PrototypeController@doEdit']);
+
+    // Partner Matching
+    Route::get('/{type}/{id}/collaborate', ['as' => 'collaborate', 'uses' => 'PartnerMatchingController@index'])->where('type', 'design|prototype');
+    Route::post('/partner/search', ['as' => 'collaborate.search', 'uses' => 'PartnerMatchingController@search']);
 
     // Files
     Route::post('/file/upload', ['as' => 'file.upload', 'uses' => 'FileController@upload']);

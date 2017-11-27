@@ -17,6 +17,7 @@ import PrototypeCreate from './components/PrototypeCreate.vue';
 import DesignsTable from './components/DesignsTable.vue';
 import PrototypesTable from './components/PrototypesTable.vue';
 import Gallery from './components/Gallery';
+import Search from './components/Search';
 
 /**
  * Navbar transition for the homepage
@@ -46,6 +47,7 @@ $(document).ready(function() {
         variation: 'very wide',
     });
     $('#orgPage .menu .item').tab();
+    // $('#searchForm .ui.radio.checkbox').checkbox();
 });
 
 const router = new VueRouter({
@@ -80,5 +82,6 @@ const app = new Vue({
         DesignsTable,
         PrototypesTable,
         Gallery,
+        Search,
     }
 });
