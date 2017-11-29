@@ -34,8 +34,28 @@ class PartnerMatchingController extends Controller
                 'type' => $type,
                 'name' => ucfirst($type . 's'),
             ],
+            'id'           => $id,
+            'type'         => $type,
         ];
         return view('product.collaborate', $data);
+    }
+
+    public function organizationSearch(Request $request)
+    {
+        $query         = $request->get('query');
+        $organizations = Organization::hydrate(\Searchy::organizations('name')->query($query)->get()->toArray());
+
+        $results = [];
+        foreach ($organizations as $organization) {
+            $results[] = [
+                'id'          => $organization->id,
+                'title'       => $organization->name,
+                'description' => $organization->organizationType->name,
+                'url'         => '/contact/' . $organization->id . '/' . $request->get('type') . '/' . $request->get('id'),
+            ];
+        }
+
+        return ['results' => $results];
     }
 
     public function search(Request $request)
@@ -94,7 +114,20 @@ class PartnerMatchingController extends Controller
             $id = -1;
         }
         return $organizations->reject(function ($item) use ($id) {
-            return $item->id === $id;
+            return $item->id === -1; //$id;
         })->sortByDesc('score');
+    }
+
+    public function contact(Request $request, int $org_id, string $type, int $id)
+    {
+        $organization = Organization::findOrFail($org_id);
+        $obj          = $type === 'design' ? Design::findOrFail($id) : Prototype::findOrFail($id);
+        $data         = [
+            'organization' => $organization,
+            'type'         => $type,
+            'name'         => $obj->title,
+        ];
+
+        return view('collaborations.contact', $data);
     }
 }

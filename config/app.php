@@ -186,6 +186,7 @@ return [
         Laravel\Socialite\SocialiteServiceProvider::class,
         Spatie\MediaLibrary\MediaLibraryServiceProvider::class,
         Spatie\Permission\PermissionServiceProvider::class,
+        TomLingham\Searchy\SearchyServiceProvider::class,
 
     ],
 
@@ -241,6 +242,7 @@ return [
         'Socialite'    => Laravel\Socialite\Facades\Socialite::class,
         'Form'         => Collective\Html\FormFacade::class,
         'Html'         => Collective\Html\HtmlFacade::class,
+        'Searchy'      => TomLingham\Searchy\Facades\Searchy::class,
     ],
 
 ];

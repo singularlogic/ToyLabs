@@ -20,6 +20,8 @@
                 :payment-types="{{ json_encode($paymentTypes) }}"
                 :competencies="{{ json_encode($competencies) }}"
                 :back="{{ json_encode($back) }}"
+                :id="{{ $id }}"
+                type="{{ $type }}"
             ></Search>
         </div>
 @endsection

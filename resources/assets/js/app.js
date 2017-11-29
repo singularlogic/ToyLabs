@@ -47,7 +47,6 @@ $(document).ready(function() {
         variation: 'very wide',
     });
     $('#orgPage .menu .item').tab();
-    // $('#searchForm .ui.radio.checkbox').checkbox();
 });
 
 const router = new VueRouter({

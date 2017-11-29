@@ -24,7 +24,7 @@
                             <button class="ui button" data-tooltip="Discussions" data-position="top center" data-inverted>
                                 <i class="comments outline icon"></i>
                             </button>
-                            <a class="ui button" data-tooltip="Partner Matching" :href="`/prototype/${p.id}/collaborate`" data-position="top center" data-inverted>
+                            <a class="ui button" data-tooltip="Collaborations" :href="`/prototype/${p.id}/collaborate`" data-position="top center" data-inverted>
                                 <i class="handshake icon"></i>
                             </a>
                         </div>

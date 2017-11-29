@@ -6,7 +6,7 @@
         <!-- Dashboard -->
         <div class="ui main container">
             <div class="ui clearing">
-                <h1 class="ui left floated header">Products</h1>
+                <h1 class="ui left floated header">Dashboard</h1>
                 <div class="ui right floated search">
                     <div class="ui icon input">
                         <input class="prompt" type="text" placeholder="Search..." />

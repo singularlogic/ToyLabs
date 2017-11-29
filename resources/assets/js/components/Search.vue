@@ -1,6 +1,18 @@
 <template>
     <div id="searchForm">
         <div class="ui segment">
+            <div class="ui basic segment">
+                <div class="ui fluid category search" ref="textSearch">
+                    <div class="ui fluid icon input">
+                        <input class="prompt" type="text" placeholder="Search by name..." />
+                        <i class="search icon"></i>
+                    </div>
+                    <div class="results"></div>
+                </div>
+            </div>
+
+            <div class="ui horizontal divider">Advanced Search</div>
+
             <div class="ui fluid form">
                 <div class="inline fields">
                     <label for="role">I am looking for a:</label>
@@ -57,7 +69,7 @@
         </div>
 
 
-        <h2 class="ui dividing header">Search results</h2>
+        <h2 class="ui dividing header" v-if="searchComplete">Search results</h2>
 
         <div class="ui active centered inline loader" v-if="loading"></div>
 
@@ -74,12 +86,13 @@ import SearchResults from './SearchResults';
 import _ from 'lodash';
 
 export default {
-    props: ['roles', 'competencies', 'paymentTypes', 'back'],
+    props: ['roles', 'competencies', 'paymentTypes', 'back', 'type', 'id'],
     components: { SearchResults },
     data() {
         return {
             loading: false,
             searchComplete: false,
+            nameLoading: false,
             query: {},
             activeQuery: {},
             results: [],
@@ -102,6 +115,14 @@ export default {
     },
     created() {
         this.clear();
+    },
+    mounted() {
+        $(this.$refs.textSearch).search({
+            minCharacters: 3,
+            apiSettings: {
+                url: `/organizations/search?query={query}&type=${this.type}&id=${this.id}`,
+            },
+        });
     },
     methods: {
         clear() {

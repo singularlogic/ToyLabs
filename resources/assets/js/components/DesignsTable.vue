@@ -29,7 +29,7 @@
                             <button class="ui button" data-tooltip="Discussions" data-position="top center" data-inverted>
                                 <i class="comments outline icon"></i>
                             </button>
-                            <a class="ui button" :href="`/design/${d.id}/collaborate`" data-tooltip="Partner Matching" data-position="top center" data-inverted>
+                            <a class="ui button" :href="`/design/${d.id}/collaborate`" data-tooltip="Collaborations" data-position="top center" data-inverted>
                                 <i class="handshake icon"></i>
                             </a>
                             <a :href="`/product/${_product_id}/prototypes/create/${d.id}`" class="ui button" data-tooltip="Create Prototype" data-position="top center" data-inverted>
