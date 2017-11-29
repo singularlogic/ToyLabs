@@ -34,7 +34,7 @@ export default {
     methods: {
         flags(org) {
             let flags = [];
-            if (org.country) {
+            if (org.country !== null) {
                 flags.push(org.country.sortcode.toLowerCase());
             }
             org.facilities.reduce((arr, obj) => {
@@ -70,6 +70,7 @@ export default {
             return numeral(value).format('0%');
         },
         trim(value, length) {
+            if (value === null) return 'No description';
             return value.substring(0, length) + '...';
         },
     },
