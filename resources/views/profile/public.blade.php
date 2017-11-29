@@ -34,6 +34,7 @@
                             <div class="ui secondary segment">
                                 <h4 class="ui dividing header">Contact</h4>
                                 <div class="ui list">
+@if($organization->address or $organization->city or $organization->country)
                                     <div class="item">
                                         <i class="marker icon"></i>
                                         <div class="content">
@@ -43,6 +44,7 @@
                                             @if($organization->country){{ $organization->country->name }}@endif
                                         </div>
                                     </div>
+@endif
 @if($organization->phone)
                                     <div class="item">
                                         <i class="phone icon"></i>
@@ -104,6 +106,7 @@
 @endforeach
                             </div>
 
+@if(count($organization->certifications) > 0)
                             <h3 class="ui dividing header">Certifications</h3>
                             <div class="ui list">
 @foreach($organization->certifications as $certification)
@@ -113,7 +116,9 @@
                                 </div>
 @endforeach
                             </div>
+@endif
 
+@if(count($organization->awards) > 0)
                             <h3 class="ui dividing header">Awards</h3>
                             <div class="ui list">
 @foreach($organization->awards as $award)
@@ -126,6 +131,7 @@
                                 </div>
 @endforeach
                             </div>
+@endif
                         </div>
                     </div>
                 </div>

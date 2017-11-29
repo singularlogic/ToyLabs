@@ -13,7 +13,11 @@
                 <div class="ui two column grid">
 @foreach($organizations as $organization)
                     <div class="item column">
+@if($organization->country)
                         <i class="{{ strtolower($organization->country->sortcode) }} flag"></i>
+@else
+                        <i class="eu flag"></i>
+@endif
                         <div class="content">
                             <div class="header">
                                 <a href="/organization/{{ $organization->id }}">{{ $organization->name }}</a>

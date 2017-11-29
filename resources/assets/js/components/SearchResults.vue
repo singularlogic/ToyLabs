@@ -12,7 +12,6 @@
                     <button class="ui right floated positive mini button" type="button">Add</button>
                     <a class="ui right floated orange mini button" :href="`/contact/${result.id}/${$parent.type}/${$parent.id}`">Contact</a>
 
-                    <!-- <div class="ui horizontal label" :style="{ backgroundColor: scoreColor(result.score) }">{{ result.score | percentage }}</div> -->
                     <div class="ui tiny basic label" :class="{ red: !rule.matched, green: rule.matched }" v-for="rule of rules(result)">
                         <i class="checkmark icon" v-if="rule.matched"></i>
                         <i class="remove icon" v-if="!rule.matched"></i>
