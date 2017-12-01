@@ -95,14 +95,11 @@
 
                             <div class="ui two column stackable grid basic segment">
 @foreach($competencies as $competency)
+                                @if($organization->competencies->contains($competency))
                                     <div class="column" style="padding: 5px 0">
-                                        @if($organization->competencies->contains($competency))
                                         <i class="green checkmark icon"></i> <strong>{{ $competency->name }}</strong>
-                                        @else
-                                        <i class="remove icon" style="color: #999999"></i>
-                                        <span style="color: #999999">{{ $competency->name }}</span>
-                                        @endif
                                     </div>
+                                @endif
 @endforeach
                             </div>
 
