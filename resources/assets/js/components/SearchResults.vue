@@ -10,7 +10,9 @@
                 <div class="description">{{ result.description | trim(500) }}</div>
                 <div class="extra">
                     <button class="ui right floated positive mini button" type="button">Add</button>
-                    <a class="ui right floated orange mini button" :href="`/contact/${result.id}/${$parent.type}/${$parent.id}`">Contact</a>
+                    <router-link :to="`/${$parent.type}/${$parent.id}/collaborate/contact/${result.id}`" class="ui right floated orange mini button">
+                        Contact
+                    </router-link>
 
                     <div class="ui tiny basic label" :class="{ red: !rule.matched, green: rule.matched }" v-for="rule of rules(result)">
                         <i class="checkmark icon" v-if="rule.matched"></i>

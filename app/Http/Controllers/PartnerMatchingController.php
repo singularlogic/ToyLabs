@@ -60,7 +60,8 @@ class PartnerMatchingController extends Controller
                 'id'          => $organization->id,
                 'title'       => $organization->name,
                 'description' => $organization->organizationType->name,
-                'url'         => '/contact/' . $organization->id . '/' . $request->get('type') . '/' . $request->get('id'),
+                'url'         => '/' . $request->get('type') . '/' . $request->get('id') . '/collaborate/contact/' . $organization->id,
+                // 'url'         => '/contact/' . $organization->id . '/' . $request->get('type') . '/' . $request->get('id'),
             ];
         }
 
@@ -146,7 +147,8 @@ class PartnerMatchingController extends Controller
             'thread_id'    => $thread ? $thread->id : null,
         ];
 
-        return view('collaborations.contact', $data);
+        // return view('collaborations.contact', $data);
+        return $data;
     }
 
     public function doContact(Request $request)
@@ -202,60 +204,6 @@ class PartnerMatchingController extends Controller
 
         $message['user'] = \Auth::user();
         return compact('message', 'thread');
-
-        // if (isset($input['thread']['id'])) {
-        //     try {
-        //         $thread = Thread::findOrFail($input['thread']['id']);
-        //     } catch (NotFoundHttpException $e) {
-        //         abort(404);
-        //     }
-        //     $thread->activateAllParticipants();
-
-        //     $message = Message::create([
-        //         'thread_id' => $input['thread']['id'],
-        //         'user_id'   => \Auth::user()->id,
-        //         'body'      => $input['message'],
-        //     ]);
-
-        //     // Add replier as a participant
-        //     $participant = Participant::firstOrCreate([
-        //         'thread_id' => $thread->id,
-        //         'user_id'   => \Auth::user()->id,
-        //     ]);
-        //     $participant->last_read = new Carbon;
-        //     $participant->save();
-
-        // } else {
-        //     // New Thread
-        //     $thread = Thread::create($input['thread']);
-
-        //     // Message
-        //     $message = Message::create([
-        //         'thread_id' => $thread->id,
-        //         'user_id'   => \Auth::user()->id,
-        //         'body'      => $input['message'],
-        //     ]);
-
-        //     // Sender
-        //     Participant::create([
-        //         'thread_id' => $thread->id,
-        //         'user_id'   => \Auth::user()->id,
-        //         'last_read' => new Carbon,
-        //     ]);
-
-        //     // Recipients are the Owner of the Organization and the Owner of my Organization (if not myself)
-        //     $thread->addParticipant($org->owner);
-        //     // event(new NewMessage($org->owner, $thread->id));
-
-        //     $product_owner = $target->product->owner;
-        //     if ($product_owner !== $request->user) {
-        //         $thread->addParticipant($product_owner);
-        //         // event(new NewMessage($product_owner, $thread->id));
-        //     }
-
-        //     $message['user'] = \Auth::user();
-        //     return compact('message', 'thread');
-        // }
     }
 
     public function discussions(Request $request, string $type, int $id)
@@ -269,5 +217,24 @@ class PartnerMatchingController extends Controller
             ],
         ];
         return view('collaborations.discussions', $data);
+    }
+
+    public function negotiations(Request $request, string $type, int $id)
+    {
+        $obj          = $type === 'design' ? Design::findOrFail($id) : Prototype::findOrFail($id);
+        $negotiations = $obj->negotiations;
+        $result       = [];
+
+        foreach ($negotiations as $n) {
+            $org      = $n->organization;
+            $result[] = [
+                'org_id'       => $org->id,
+                'organization' => $org->name,
+                'status'       => 'Negotiating',
+                'updated_at'   => $n->updated_at->toDateTimeString(),
+            ];
+        }
+
+        return $result;
     }
 }

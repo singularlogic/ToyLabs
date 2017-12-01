@@ -19,6 +19,7 @@ import PrototypesTable from './components/PrototypesTable.vue';
 import Gallery from './components/Gallery.vue';
 import Search from './components/Search.vue';
 import Contact from './components/collaborations/Contact.vue';
+import CollaborationsPage from './components/collaborations/CollaborationsPage.vue';
 
 /**
  * Navbar transition for the homepage
@@ -72,6 +73,7 @@ const app = new Vue({
         Organization,
         NotificationArea,
         NotificationsPage,
+        CollaborationsPage,
         ProductsGrid,
         Comments,
         Likes,

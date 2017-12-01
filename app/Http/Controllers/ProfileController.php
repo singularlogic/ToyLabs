@@ -287,4 +287,14 @@ class ProfileController extends Controller
 
         return view('profile.organizations', $data);
     }
+
+    public function json(int $id)
+    {
+        try {
+            $org = Organization::findOrFail($id);
+            return $org;
+        } catch (ModelNotFoundException $e) {
+            abort(404);
+        }
+    }
 }

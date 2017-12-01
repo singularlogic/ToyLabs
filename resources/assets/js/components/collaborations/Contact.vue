@@ -1,5 +1,13 @@
 <template>
     <div v-cloak>
+        <div class="ui icon negative message" v-if="!thread.locked">
+            <i class="warning icon"></i>
+            <div class="content">
+                <div class="header">Important</div>
+                <p>Before you add someone to your {{ target.type }}, make sure you discuss and agree on the terms of your collaboration.  If needed, you can use the form below to attach and exchange documents (e.g. NDA agreements, contracts, etc) to help you reach an agreement.</p>
+            </div>
+        </div>
+
         <div class="ui error message" v-if="error">
             <div class="content">
                 <p>{{ error }}</p>
@@ -33,40 +41,29 @@
 import MessageView from '../MessageView.vue';
 
 export default {
+    name: 'contact',
     components: { MessageView },
-    props: ['organization', 'thread_id', 'target'],
+    beforeRouteEnter(to, from, next) {
+        axios.get(`/contact/${to.params.org_id}/${to.params.type}/${to.params.id}`).then((res) => {
+            next(vm => vm.setData(res));
+        });
+    },
+    beforeRouteUpdate(to, from, next) {
+        axios.get(`/contact/${to.params.org_id}/${to.params.type}/${to.params.id}`).then((res) => {
+            this.setData(res);
+            next();
+        });
+    },
     data() {
         return {
-            thread: {
-                subject: `[${this.capitalize(this.target.type)}: ${this.target.title}] Collaboration discussion with ${this.organization.name}`,
-                locked: false,
-                type: 'negotiation',
-                target_id: this.target.id,
-                target_type: `App\\${this.capitalize(this.target.type)}`,
-                organization_id: this.organization.id,
-            },
+            organization: {},
+            thread: {},
+            target: {},
             messages: [],
             reply: '',
             users: [],
             error: null,
         };
-    },
-    created() {
-        if (this.thread_id) {
-            axios.get(`/messages/${this.thread_id}`).then((response) => {
-                if (response.status === 200) {
-                    if (response.data.error) {
-                        this.error = response.data.error;
-                    } else {
-                        this.thread = response.data.thread;
-                        this.messages = response.data.messages;
-                        this.users = response.data.users;
-                    }
-                } else {
-                    this.error = 'An error occured';
-                }
-            });
-        }
     },
     methods: {
         capitalize(value) {
@@ -85,7 +82,35 @@ export default {
                     this.reply = '';
                 }
             });
-        }
+        },
+        setData(res) {
+            if (res.status === 200) {
+                this.organization = res.data.organization;
+                this.target = res.data.target;
+                if (res.data.thread_id) {
+                    this.thread_id = res.data.thread_id;
+                    axios.get(`/messages/${this.thread_id}`).then((response) => {
+                        if (response.status === 200) {
+                            if (response.data.error) {
+                                this.error = response.data.error;
+                            } else {
+                                this.thread = response.data.thread;
+                                this.messages = response.data.messages;
+                                this.users = response.data.users;
+                                this.$store.commit('setActiveThread', { thread: this.thread });
+                            }
+                        } else {
+                            this.error = 'An error occured';
+                        }
+                    });
+                }
+                this.$store.commit('setOrganization', { organization: this.organization });
+            }
+        },
+    },
+    destroyed() {
+        this.$store.commit('setActiveThread', { thread: null });
+        this.$store.commit('setOrganization', { organization: null });
     },
 }
 </script>

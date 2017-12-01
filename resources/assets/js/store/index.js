@@ -10,6 +10,7 @@ const state = {
     notifications: [],
     unreadMessagesCounter: 0,
     activeThread: null,
+    activePartner: null,
 };
 
 const store = new Vuex.Store({

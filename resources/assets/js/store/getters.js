@@ -13,3 +13,4 @@ export const unreadMessages = (state) => state.unreadMessagesCounter;
 export const totalMessages = (state) => state.messages.length;
 
 export const activeThread = (state) => state.activeThread;
+export const activePartner = (state) => state.activePartner;

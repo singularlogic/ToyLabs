@@ -13,7 +13,6 @@
 
 Route::get('/', 'HomeController@index')->name('home');
 Route::get('/about', function () {return view('about');})->name('about');
-Route::get('/feed/{tab?}', ['as' => 'feed', 'uses' => 'NotificationController@feed']);
 
 // Login/Register & Social Logins
 Route::get('/login', ['as' => 'login', 'uses' => 'Auth\\LoginController@showLoginForm']);
@@ -36,6 +35,9 @@ Route::get('/file/{id}', ['as' => 'file', 'uses' => 'FileController@get']);
 
 // Routes for logged users
 Route::group(['middleware' => 'auth'], function () {
+    // Notifications & Messages page
+    Route::get('/feed/{tab?}', ['as' => 'feed', 'uses' => 'NotificationController@feed']);
+
     // Dashboard
     Route::get('/dashboard', ['as' => 'dashboard', 'uses' => 'DashboardController@show']);
 
@@ -74,8 +76,12 @@ Route::group(['middleware' => 'auth'], function () {
 
     // Partner Matching
     Route::get('/organizations/search', ['as' => 'organization.search', 'uses' => 'PartnerMatchingController@organizationSearch']);
-    Route::get('/{type}/{id}/collaborate', ['as' => 'collaborate', 'uses' => 'PartnerMatchingController@index'])->where('type', 'design|prototype');
+
+    // Collaborations
+    Route::get('/{type}/{id}/collaborate/{page?}', ['as' => 'collaborate', 'uses' => 'PartnerMatchingController@index'])->where('type', 'design|prototype');
+    Route::get('/{type}/{id}/collaborate/contact/{org_id?}', ['as' => 'collaborate', 'uses' => 'PartnerMatchingController@index'])->where('type', 'design|prototype');
     Route::get('/{type}/{id}/discussions', ['as' => 'prototype.discussions', 'uses' => 'PartnerMatchingController@discussions'])->where('type', 'design|prototype');
+    Route::get('/{type}/{id}/negotiations', ['as' => 'prototype.negotiations', 'uses' => 'PartnerMatchingController@negotiations'])->where('type', 'design|prototype');
 
     Route::post('/partner/search', ['as' => 'collaborate.search', 'uses' => 'PartnerMatchingController@search']);
     Route::get('/contact/{org_id}/{type}/{id}', ['as' => 'collaborate.contact', 'uses' => 'PartnerMatchingController@contact'])->where('type', 'design|prototype');

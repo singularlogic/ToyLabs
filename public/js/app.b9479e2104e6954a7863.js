@@ -4531,6 +4531,8 @@ exports.default = {
 //
 //
 //
+//
+//
 
 /***/ }),
 
@@ -4633,6 +4635,72 @@ exports.default = {
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js?cacheDirectory!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/collaborations/CollaborationsPage.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+var _vuex = __webpack_require__("./node_modules/vuex/dist/vuex.esm.js");
+
+var _Search = __webpack_require__("./resources/assets/js/components/Search.vue");
+
+var _Search2 = _interopRequireDefault(_Search);
+
+var _Overview = __webpack_require__("./resources/assets/js/components/collaborations/Overview.vue");
+
+var _Overview2 = _interopRequireDefault(_Overview);
+
+var _Contact = __webpack_require__("./resources/assets/js/components/collaborations/Contact.vue");
+
+var _Contact2 = _interopRequireDefault(_Contact);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = {
+    props: ['roles', 'competencies', 'paymentTypes', 'back', 'type', 'id'],
+    created: function created() {
+        var baseUrl = '/' + this.type + '/' + this.id + '/collaborate';
+        var routes = [{ name: 'overview', path: baseUrl + '/', component: _Overview2.default, props: { type: this.type, id: this.id } }, { name: 'search', path: baseUrl + '/search', component: _Search2.default,
+            props: {
+                roles: this.roles,
+                competencies: this.competencies,
+                paymentTypes: this.paymentTypes,
+                back: this.back,
+                type: this.type,
+                id: this.id
+            }
+        }, { name: 'discussionview', path: '/:type/:id/collaborate/contact/:org_id', component: _Contact2.default }];
+
+        this.$router.addRoutes(routes);
+    },
+
+    computed: _extends({}, (0, _vuex.mapGetters)({
+        organization: 'activePartner'
+    }))
+};
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js?cacheDirectory!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/collaborations/Contact.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -4650,42 +4718,33 @@ var _MessageView2 = _interopRequireDefault(_MessageView);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.default = {
+    name: 'contact',
     components: { MessageView: _MessageView2.default },
-    props: ['organization', 'thread_id', 'target'],
+    beforeRouteEnter: function beforeRouteEnter(to, from, next) {
+        axios.get('/contact/' + to.params.org_id + '/' + to.params.type + '/' + to.params.id).then(function (res) {
+            next(function (vm) {
+                return vm.setData(res);
+            });
+        });
+    },
+    beforeRouteUpdate: function beforeRouteUpdate(to, from, next) {
+        var _this = this;
+
+        axios.get('/contact/' + to.params.org_id + '/' + to.params.type + '/' + to.params.id).then(function (res) {
+            _this.setData(res);
+            next();
+        });
+    },
     data: function data() {
         return {
-            thread: {
-                subject: '[' + this.capitalize(this.target.type) + ': ' + this.target.title + '] Collaboration discussion with ' + this.organization.name,
-                locked: false,
-                type: 'negotiation',
-                target_id: this.target.id,
-                target_type: 'App\\' + this.capitalize(this.target.type),
-                organization_id: this.organization.id
-            },
+            organization: {},
+            thread: {},
+            target: {},
             messages: [],
             reply: '',
             users: [],
             error: null
         };
-    },
-    created: function created() {
-        var _this = this;
-
-        if (this.thread_id) {
-            axios.get('/messages/' + this.thread_id).then(function (response) {
-                if (response.status === 200) {
-                    if (response.data.error) {
-                        _this.error = response.data.error;
-                    } else {
-                        _this.thread = response.data.thread;
-                        _this.messages = response.data.messages;
-                        _this.users = response.data.users;
-                    }
-                } else {
-                    _this.error = 'An error occured';
-                }
-            });
-        }
     },
 
     methods: {
@@ -4707,7 +4766,37 @@ exports.default = {
                     _this2.reply = '';
                 }
             });
+        },
+        setData: function setData(res) {
+            var _this3 = this;
+
+            if (res.status === 200) {
+                this.organization = res.data.organization;
+                this.target = res.data.target;
+                if (res.data.thread_id) {
+                    this.thread_id = res.data.thread_id;
+                    axios.get('/messages/' + this.thread_id).then(function (response) {
+                        if (response.status === 200) {
+                            if (response.data.error) {
+                                _this3.error = response.data.error;
+                            } else {
+                                _this3.thread = response.data.thread;
+                                _this3.messages = response.data.messages;
+                                _this3.users = response.data.users;
+                                _this3.$store.commit('setActiveThread', { thread: _this3.thread });
+                            }
+                        } else {
+                            _this3.error = 'An error occured';
+                        }
+                    });
+                }
+                this.$store.commit('setOrganization', { organization: this.organization });
+            }
         }
+    },
+    destroyed: function destroyed() {
+        this.$store.commit('setActiveThread', { thread: null });
+        this.$store.commit('setOrganization', { organization: null });
     }
 }; //
 //
@@ -4718,6 +4807,88 @@ exports.default = {
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?cacheDirectory!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/collaborations/Overview.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _moment = __webpack_require__("./node_modules/moment/moment.js");
+
+var _moment2 = _interopRequireDefault(_moment);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = {
+    props: ['type', 'id'],
+    data: function data() {
+        return {
+            threads: []
+        };
+    },
+    created: function created() {
+        var _this = this;
+
+        axios.get('/' + this.type + '/' + this.id + '/negotiations').then(function (res) {
+            if (res.status === 200) {
+                _this.threads = res.data;
+            }
+        });
+    },
+
+    methods: {
+        getClass: function getClass(status) {
+            switch (status) {
+                case 'Accepted':
+                    return 'positive';
+                case 'Rejected':
+                    return 'negative';
+                default:
+                    return '';
+            }
+        },
+        formatDate: function formatDate(time) {
+            return (0, _moment2.default)(new Date(time)).format('DD.MM.YYYY');
+        }
+    }
+}; //
 //
 //
 //
@@ -39635,6 +39806,56 @@ if (false) {
 
 /***/ }),
 
+/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-758900fe\"}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/collaborations/Overview.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('table', {
+    staticClass: "ui sortable celled striped table"
+  }, [_vm._m(0), _vm._v(" "), _c('tbody', _vm._l((_vm.threads), function(thread) {
+    return _c('tr', {
+      class: _vm.getClass(thread.status)
+    }, [_c('td', [_c('router-link', {
+      attrs: {
+        "to": {
+          name: 'discussionview',
+          params: {
+            id: _vm.id,
+            type: _vm.type,
+            org_id: thread.org_id
+          }
+        }
+      }
+    }, [_vm._v(_vm._s(thread.organization))])], 1), _vm._v(" "), _c('td', [_vm._v(_vm._s(thread.status))]), _vm._v(" "), _c('td', {
+      staticClass: "center aligned"
+    }, [_c('timeago', {
+      attrs: {
+        "since": thread.updated_at,
+        "max-time": 86400 * 7,
+        "format": _vm.formatDate,
+        "auto-update": 30
+      }
+    })], 1)])
+  }))])
+},staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('thead', [_c('tr', [_c('th', {
+    staticClass: "ten wide"
+  }, [_vm._v("Organization")]), _vm._v(" "), _c('th', {
+    staticClass: "three wide"
+  }, [_vm._v("Status")]), _vm._v(" "), _c('th', {
+    staticClass: "three wide center aligned"
+  }, [_vm._v("Last Message")])])])
+}]}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-758900fe", module.exports)
+  }
+}
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-815e8656\"}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/RequestsTab.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -39717,7 +39938,15 @@ if (false) {
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', {}, [(_vm.error) ? _c('div', {
+  return _c('div', {}, [(!_vm.thread.locked) ? _c('div', {
+    staticClass: "ui icon negative message"
+  }, [_c('i', {
+    staticClass: "warning icon"
+  }), _vm._v(" "), _c('div', {
+    staticClass: "content"
+  }, [_c('div', {
+    staticClass: "header"
+  }, [_vm._v("Important")]), _vm._v(" "), _c('p', [_vm._v("Before you add someone to your " + _vm._s(_vm.target.type) + ", make sure you discuss and agree on the terms of your collaboration.  If needed, you can use the form below to attach and exchange documents (e.g. NDA agreements, contracts, etc) to help you reach an agreement.")])])]) : _vm._e(), _vm._v(" "), (_vm.error) ? _c('div', {
     staticClass: "ui error message"
   }, [_c('div', {
     staticClass: "content"
@@ -40594,6 +40823,55 @@ if (false) {
 
 /***/ }),
 
+/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-dfe2487c\"}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/collaborations/CollaborationsPage.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    attrs: {
+      "id": "collaborations"
+    }
+  }, [_c('div', {
+    staticClass: "ui pointing secondary orange menu"
+  }, [_c('router-link', {
+    staticClass: "item",
+    attrs: {
+      "to": ("/" + _vm.type + "/" + _vm.id + "/collaborate"),
+      "exact": ""
+    }
+  }, [_vm._v("Overview")]), _vm._v(" "), _c('router-link', {
+    staticClass: "item",
+    attrs: {
+      "to": ("/" + _vm.type + "/" + _vm.id + "/collaborate/search")
+    }
+  }, [_vm._v("Search")]), _vm._v(" "), (_vm.organization) ? _c('router-link', {
+    staticClass: "item",
+    attrs: {
+      "to": {
+        name: 'discussionview',
+        params: {
+          id: _vm.id,
+          type: _vm.type,
+          org_id: _vm.organization.id
+        }
+      }
+    }
+  }, [_vm._v(_vm._s(_vm.organization.name))]) : _vm._e()], 1), _vm._v(" "), _c('keep-alive', {
+    attrs: {
+      "include": "search"
+    }
+  }, [_c('router-view')], 1)], 1)
+},staticRenderFns: []}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-dfe2487c", module.exports)
+  }
+}
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-e0ce3fc6\"}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/organizations/General.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -41024,12 +41302,12 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       attrs: {
         "type": "button"
       }
-    }, [_vm._v("Add")]), _vm._v(" "), _c('a', {
+    }, [_vm._v("Add")]), _vm._v(" "), _c('router-link', {
       staticClass: "ui right floated orange mini button",
       attrs: {
-        "href": ("/contact/" + (result.id) + "/" + (_vm.$parent.type) + "/" + (_vm.$parent.id))
+        "to": ("/" + (_vm.$parent.type) + "/" + (_vm.$parent.id) + "/collaborate/contact/" + (result.id))
       }
-    }, [_vm._v("Contact")]), _vm._v(" "), _vm._l((_vm.rules(result)), function(rule) {
+    }, [_vm._v("\n                    Contact\n                ")]), _vm._v(" "), _vm._l((_vm.rules(result)), function(rule) {
       return _c('div', {
         staticClass: "ui tiny basic label",
         class: {
@@ -54965,14 +55243,15 @@ var _Contact = __webpack_require__("./resources/assets/js/components/collaborati
 
 var _Contact2 = _interopRequireDefault(_Contact);
 
+var _CollaborationsPage = __webpack_require__("./resources/assets/js/components/collaborations/CollaborationsPage.vue");
+
+var _CollaborationsPage2 = _interopRequireDefault(_CollaborationsPage);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /**
  * Navbar transition for the homepage
  */
-
-
-// Import VueJS Components
 $(document).ready(function () {
     // fix menu when passed
     $('.masthead').visibility({
@@ -55000,6 +55279,9 @@ $(document).ready(function () {
     $('#orgPage .menu .item').tab();
 });
 
+// Import VueJS Components
+
+
 var router = new VueRouter({
     mode: 'history',
     linkActiveClass: 'active',
@@ -55023,6 +55305,7 @@ var app = new _vue2.default({
         Organization: _Organization2.default,
         NotificationArea: _NotificationArea2.default,
         NotificationsPage: _NotificationsPage2.default,
+        CollaborationsPage: _CollaborationsPage2.default,
         ProductsGrid: _ProductsGrid2.default,
         Comments: _Comments2.default,
         Likes: _Likes2.default,
@@ -56153,6 +56436,41 @@ module.exports = Component.exports
 
 /***/ }),
 
+/***/ "./resources/assets/js/components/collaborations/CollaborationsPage.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var Component = __webpack_require__("./node_modules/vue-loader/lib/component-normalizer.js")(
+  /* script */
+  __webpack_require__("./node_modules/babel-loader/lib/index.js?cacheDirectory!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/collaborations/CollaborationsPage.vue"),
+  /* template */
+  __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-dfe2487c\"}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/collaborations/CollaborationsPage.vue"),
+  /* scopeId */
+  null,
+  /* cssModules */
+  null
+)
+Component.options.__file = "/Users/finik/Sites/toylabs/resources/assets/js/components/collaborations/CollaborationsPage.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] CollaborationsPage.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-dfe2487c", Component.options)
+  } else {
+    hotAPI.reload("data-v-dfe2487c", Component.options)
+  }
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+
 /***/ "./resources/assets/js/components/collaborations/Contact.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -56180,6 +56498,41 @@ if (false) {(function () {
     hotAPI.createRecord("data-v-9309c0aa", Component.options)
   } else {
     hotAPI.reload("data-v-9309c0aa", Component.options)
+  }
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+
+/***/ "./resources/assets/js/components/collaborations/Overview.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var Component = __webpack_require__("./node_modules/vue-loader/lib/component-normalizer.js")(
+  /* script */
+  __webpack_require__("./node_modules/babel-loader/lib/index.js?cacheDirectory!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/collaborations/Overview.vue"),
+  /* template */
+  __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-758900fe\"}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/collaborations/Overview.vue"),
+  /* scopeId */
+  null,
+  /* cssModules */
+  null
+)
+Component.options.__file = "/Users/finik/Sites/toylabs/resources/assets/js/components/collaborations/Overview.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] Overview.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-758900fe", Component.options)
+  } else {
+    hotAPI.reload("data-v-758900fe", Component.options)
   }
 })()}
 
@@ -56546,6 +56899,9 @@ var totalMessages = exports.totalMessages = function totalMessages(state) {
 var activeThread = exports.activeThread = function activeThread(state) {
   return state.activeThread;
 };
+var activePartner = exports.activePartner = function activePartner(state) {
+  return state.activePartner;
+};
 
 /***/ }),
 
@@ -56588,7 +56944,8 @@ var state = {
     messages: [],
     notifications: [],
     unreadMessagesCounter: 0,
-    activeThread: null
+    activeThread: null,
+    activePartner: null
 };
 
 var store = new _vuex2.default.Store({
@@ -56666,6 +57023,12 @@ var setActiveThread = exports.setActiveThread = function setActiveThread(state, 
     var thread = _ref5.thread;
 
     state.activeThread = thread;
+};
+
+var setOrganization = exports.setOrganization = function setOrganization(state, _ref6) {
+    var organization = _ref6.organization;
+
+    state.activePartner = organization;
 };
 
 /***/ }),

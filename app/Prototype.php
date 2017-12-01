@@ -72,4 +72,14 @@ class Prototype extends Model implements HasMedia
 
         return $result;
     }
+
+    public function negotiations()
+    {
+        return $this->morphMany(Thread::class, 'target')->where('type', 'negotiation');
+    }
+
+    public function feedback()
+    {
+        return $this->morphMany(Thread::class, 'target')->where('type', 'feedback');
+    }
 }

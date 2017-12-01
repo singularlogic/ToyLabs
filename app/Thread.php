@@ -20,4 +20,9 @@ class Thread extends BaseThread
     {
         return $this->morphTo();
     }
+
+    public function organization()
+    {
+        return $this->belongsTo(Organization::class);
+    }
 }

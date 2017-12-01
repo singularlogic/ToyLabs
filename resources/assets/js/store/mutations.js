@@ -34,3 +34,7 @@ export const removeNotification = (state, { notificationId }) => {
 export const setActiveThread = (state, { thread }) => {
     state.activeThread = thread;
 };
+
+export const setOrganization = (state, { organization }) => {
+    state.activePartner = organization;
+};
