@@ -6,7 +6,7 @@
         <!-- Collaborations/Contact -->
         <div class="ui main container">
             <h1 class="ui left floated header">
-                [{{ ucfirst($type) }}] {{ $name }}
+                {{ ucfirst($type) }}: {{ $name }}
                 <div class="sub header">Collaboration discusion with <strong>{{ $organization->name }}</strong></div>
             </h1>
             <div class="ui clearing divider"></div>
@@ -20,6 +20,10 @@
                 </div>
             </div>
 
-
+            <contact
+                :target="{{ json_encode($target) }}"
+                :organization="{{ json_encode($organization) }}"
+                :thread_id="'{{ $thread_id }}'"
+            ></contact>
         </div>
 @endsection

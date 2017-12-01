@@ -9,6 +9,10 @@ use App\OrganizationType;
 use App\PaymentType;
 use App\Product;
 use App\Prototype;
+use App\Thread;
+use Carbon\Carbon;
+use Cmgmyr\Messenger\Models\Message;
+use Cmgmyr\Messenger\Models\Participant;
 use Illuminate\Http\Request;
 
 class PartnerMatchingController extends Controller
@@ -20,6 +24,11 @@ class PartnerMatchingController extends Controller
         'large'     => 3,
         'xlarge'    => 4,
     ];
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
 
     public function index(Request $request, string $type, int $id)
     {
@@ -122,12 +131,143 @@ class PartnerMatchingController extends Controller
     {
         $organization = Organization::findOrFail($org_id);
         $obj          = $type === 'design' ? Design::findOrFail($id) : Prototype::findOrFail($id);
-        $data         = [
+        $thread       = Thread::where('type', 'negotiation')
+            ->where('organization_id', $org_id)
+            ->where('target_id', $id)
+            ->where('target_type', get_class($obj))
+            ->first();
+
+        $data = [
             'organization' => $organization,
+            'id'           => $id,
             'type'         => $type,
             'name'         => $obj->title,
+            'target'       => $obj,
+            'thread_id'    => $thread ? $thread->id : null,
         ];
 
         return view('collaborations.contact', $data);
+    }
+
+    public function doContact(Request $request)
+    {
+        $input = $request->all();
+
+        $org    = null;
+        $target = null;
+        try {
+            // Existing Thread
+            $org    = Organization::findOrFail($input['thread']['organization_id']);
+            $target = $input['thread']['target_type']::findOrFail($input['thread']['target_id']);
+        } catch (NotFoundHttpException $e) {
+            abort(404);
+        }
+
+        if (isset($input['thread']['id'])) {
+            try {
+                $thread = Thread::findOrFail($input['thread']['id']);
+            } catch (NotFoundHttpException $e) {
+                abort(404);
+            }
+            $thread->activateAllParticipants();
+        } else {
+            // New Thread
+            $thread = Thread::create($input['thread']);
+        }
+
+        // Message
+        $message = Message::create([
+            'thread_id' => $thread->id,
+            'user_id'   => \Auth::user()->id,
+            'body'      => $input['message'],
+        ]);
+
+        // Sender
+        $participant = Participant::firstOrCreate([
+            'thread_id' => $thread->id,
+            'user_id'   => \Auth::user()->id,
+        ]);
+        $participant->last_read = new Carbon;
+        $participant->save();
+
+        // Recipients are the Owner of the Organization and the Owner of my Organization (if not myself)
+        $thread->addParticipant($org->owner);
+        // event(new NewMessage($org->owner, $thread->id));
+
+        $product_owner = $target->product->owner;
+        if ($product_owner !== $request->user) {
+            $thread->addParticipant($product_owner);
+            // event(new NewMessage($product_owner, $thread->id));
+        }
+
+        $message['user'] = \Auth::user();
+        return compact('message', 'thread');
+
+        // if (isset($input['thread']['id'])) {
+        //     try {
+        //         $thread = Thread::findOrFail($input['thread']['id']);
+        //     } catch (NotFoundHttpException $e) {
+        //         abort(404);
+        //     }
+        //     $thread->activateAllParticipants();
+
+        //     $message = Message::create([
+        //         'thread_id' => $input['thread']['id'],
+        //         'user_id'   => \Auth::user()->id,
+        //         'body'      => $input['message'],
+        //     ]);
+
+        //     // Add replier as a participant
+        //     $participant = Participant::firstOrCreate([
+        //         'thread_id' => $thread->id,
+        //         'user_id'   => \Auth::user()->id,
+        //     ]);
+        //     $participant->last_read = new Carbon;
+        //     $participant->save();
+
+        // } else {
+        //     // New Thread
+        //     $thread = Thread::create($input['thread']);
+
+        //     // Message
+        //     $message = Message::create([
+        //         'thread_id' => $thread->id,
+        //         'user_id'   => \Auth::user()->id,
+        //         'body'      => $input['message'],
+        //     ]);
+
+        //     // Sender
+        //     Participant::create([
+        //         'thread_id' => $thread->id,
+        //         'user_id'   => \Auth::user()->id,
+        //         'last_read' => new Carbon,
+        //     ]);
+
+        //     // Recipients are the Owner of the Organization and the Owner of my Organization (if not myself)
+        //     $thread->addParticipant($org->owner);
+        //     // event(new NewMessage($org->owner, $thread->id));
+
+        //     $product_owner = $target->product->owner;
+        //     if ($product_owner !== $request->user) {
+        //         $thread->addParticipant($product_owner);
+        //         // event(new NewMessage($product_owner, $thread->id));
+        //     }
+
+        //     $message['user'] = \Auth::user();
+        //     return compact('message', 'thread');
+        // }
+    }
+
+    public function discussions(Request $request, string $type, int $id)
+    {
+        $obj  = $type === 'design' ? Design::findOrFail($id) : Prototype::findOrFail($id);
+        $data = [
+            'back' => [
+                'id'   => $obj->product->id,
+                'type' => $type,
+                'name' => ucfirst($type . 's'),
+            ],
+        ];
+        return view('collaborations.discussions', $data);
     }
 }

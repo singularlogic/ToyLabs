@@ -12,7 +12,7 @@
                 :message="m"
             ></message-view>
         </div>
-        <form class="ui reply form" v-if="messages.length > 0">
+        <form class="ui reply form" v-if="messages.length > 0 && !thread.locked">
             <div class="field">
                 <textarea v-model="reply"></textarea>
             </div>
@@ -20,6 +20,9 @@
                 <i class="icon edit"></i> Add Reply
             </div>
         </form>
+        <div class="ui default labelled disabled icon right floated button" v-if="thread.locked">
+            <i class="lock icon"></i> Locked
+        </div>
       </div>
 </template>
 

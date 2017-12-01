@@ -16,8 +16,9 @@ import DesignCreate from './components/DesignCreate.vue';
 import PrototypeCreate from './components/PrototypeCreate.vue';
 import DesignsTable from './components/DesignsTable.vue';
 import PrototypesTable from './components/PrototypesTable.vue';
-import Gallery from './components/Gallery';
-import Search from './components/Search';
+import Gallery from './components/Gallery.vue';
+import Search from './components/Search.vue';
+import Contact from './components/collaborations/Contact.vue';
 
 /**
  * Navbar transition for the homepage
@@ -82,5 +83,6 @@ const app = new Vue({
         PrototypesTable,
         Gallery,
         Search,
+        Contact,
     }
 });

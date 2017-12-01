@@ -2,7 +2,7 @@
     <div class="ui divided items">
         <div class="item" v-for="(result, index) of results">
             <div class="content">
-                <h3 class="header">{{ index + 1 }}. <a :href="`/organization/${result.id}`" target="_BLANK">{{ result.name }}</a></h3>
+                <h3 class="header">{{ parseInt(index) + 1 }}. <a :href="`/organization/${result.id}`" target="_BLANK">{{ result.name }}</a></h3>
                 <div class="meta">
                     {{ result.organization_type.name }}
                     <i class="flag" :class="flag" v-for="flag of flags(result)"></i>

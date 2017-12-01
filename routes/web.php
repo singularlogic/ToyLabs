@@ -75,8 +75,11 @@ Route::group(['middleware' => 'auth'], function () {
     // Partner Matching
     Route::get('/organizations/search', ['as' => 'organization.search', 'uses' => 'PartnerMatchingController@organizationSearch']);
     Route::get('/{type}/{id}/collaborate', ['as' => 'collaborate', 'uses' => 'PartnerMatchingController@index'])->where('type', 'design|prototype');
+    Route::get('/{type}/{id}/discussions', ['as' => 'prototype.discussions', 'uses' => 'PartnerMatchingController@discussions'])->where('type', 'design|prototype');
+
     Route::post('/partner/search', ['as' => 'collaborate.search', 'uses' => 'PartnerMatchingController@search']);
     Route::get('/contact/{org_id}/{type}/{id}', ['as' => 'collaborate.contact', 'uses' => 'PartnerMatchingController@contact'])->where('type', 'design|prototype');
+    Route::post('/contact/{org_id}/{type}/{id}', ['as' => 'collaborate.contact.post', 'uses' => 'PartnerMatchingController@doContact'])->where('type', 'design|prototype');
 
     // Files
     Route::post('/file/upload', ['as' => 'file.upload', 'uses' => 'FileController@upload']);
