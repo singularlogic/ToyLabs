@@ -1,6 +1,6 @@
 <template>
     <div v-cloak>
-        <div class="ui icon negative message" v-if="!thread.locked">
+        <div class="ui icon negative message" v-if="showWarning">
             <i class="warning icon"></i>
             <div class="content">
                 <div class="header">Important</div>
@@ -44,12 +44,14 @@ export default {
     name: 'contact',
     components: { MessageView },
     beforeRouteEnter(to, from, next) {
-        axios.get(`/contact/${to.params.org_id}/${to.params.type}/${to.params.id}`).then((res) => {
+        const type = typeof to.params.thread_type === 'undefined' ? '' : to.params.thread_type;
+        axios.get(`/contact/${to.params.org_id}/${to.params.type}/${to.params.id}/${type}`).then((res) => {
             next(vm => vm.setData(res));
         });
     },
     beforeRouteUpdate(to, from, next) {
-        axios.get(`/contact/${to.params.org_id}/${to.params.type}/${to.params.id}`).then((res) => {
+        const type = typeof to.params.thread_type === 'undefined' ? '' : to.params.thread_type;
+        axios.get(`/contact/${to.params.org_id}/${to.params.type}/${to.params.id}/${type}`).then((res) => {
             this.setData(res);
             next();
         });
@@ -64,6 +66,11 @@ export default {
             users: [],
             error: null,
         };
+    },
+    computed: {
+        showWarning() {
+            return !this.thread.locked && this.thread.type === 'negotiation';
+        }
     },
     methods: {
         capitalize(value) {

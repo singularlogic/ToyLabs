@@ -1,13 +1,12 @@
 @extends('layouts.default', ['class' => ''])
 
-@section('title', __('Collaborations'))
+@section('title', 'Feedback')
 
 @section('content')
+        <!-- Collaborations/Feedback -->
         <div class="ui main container">
-            <!-- Product / Collaborate -->
-
             <h1 class="ui left floated header">
-                {{ __('Collaborations') }}
+                {{ __('Feedback') }}
                 <div class="sub header">{{ ucfirst($back['type']) }}:  {{ $product->title }}</div>
             </h1>
             <a href="/product/{{ $back['id'] }}/{{ $back['type'] }}s" class="ui right floated basic button">
@@ -15,13 +14,9 @@
             </a>
             <div class="ui clearing divider"></div>
 
-            <collaborations-page
-                :roles="{{ json_encode($roles) }}"
-                :payment-types="{{ json_encode($paymentTypes) }}"
-                :competencies="{{ json_encode($competencies) }}"
-                :back="{{ json_encode($back) }}"
+            <feedback-page
+                :type="`{{ $back['type'] }}`"
                 :id="{{ $id }}"
-                :type="'{{ $type }}'"
-            ></collaborations-page>
+            ></feedback-page>
         </div>
 @endsection

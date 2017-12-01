@@ -21,7 +21,7 @@
                             <a class="ui button" :href="`/prototype/${p.id}/edit`" data-tooltip="Edit Prototype" data-position="top center" data-inverted>
                                 <i class="pencil icon"></i>
                             </a>
-                            <a class="ui button" :href="`/prototype/${p.id}/discussions`" data-tooltip="Discussions" data-position="top center" data-inverted>
+                            <a class="ui button" :href="`/prototype/${p.id}/feedback`" data-tooltip="Feedback" data-position="top center" data-inverted>
                                 <i class="comments outline icon"></i>
                             </a>
                             <a class="ui button" data-tooltip="Collaborations" :href="`/prototype/${p.id}/collaborate`" data-position="top center" data-inverted>

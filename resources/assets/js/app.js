@@ -20,6 +20,7 @@ import Gallery from './components/Gallery.vue';
 import Search from './components/Search.vue';
 import Contact from './components/collaborations/Contact.vue';
 import CollaborationsPage from './components/collaborations/CollaborationsPage.vue';
+import FeedbackPage from './components/FeedbackPage.vue';
 
 /**
  * Navbar transition for the homepage
@@ -74,6 +75,7 @@ const app = new Vue({
         NotificationArea,
         NotificationsPage,
         CollaborationsPage,
+        FeedbackPage,
         ProductsGrid,
         Comments,
         Likes,

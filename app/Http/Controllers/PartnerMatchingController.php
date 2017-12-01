@@ -128,11 +128,11 @@ class PartnerMatchingController extends Controller
         })->sortByDesc('score');
     }
 
-    public function contact(Request $request, int $org_id, string $type, int $id)
+    public function contact(Request $request, int $org_id, string $type, int $id, string $thread_type = 'negotiation')
     {
         $organization = Organization::findOrFail($org_id);
         $obj          = $type === 'design' ? Design::findOrFail($id) : Prototype::findOrFail($id);
-        $thread       = Thread::where('type', 'negotiation')
+        $thread       = Thread::where('type', $thread_type)
             ->where('organization_id', $org_id)
             ->where('target_id', $id)
             ->where('target_type', get_class($obj))
@@ -147,7 +147,6 @@ class PartnerMatchingController extends Controller
             'thread_id'    => $thread ? $thread->id : null,
         ];
 
-        // return view('collaborations.contact', $data);
         return $data;
     }
 
@@ -206,17 +205,19 @@ class PartnerMatchingController extends Controller
         return compact('message', 'thread');
     }
 
-    public function discussions(Request $request, string $type, int $id)
+    public function feedback(Request $request, string $type, int $id)
     {
         $obj  = $type === 'design' ? Design::findOrFail($id) : Prototype::findOrFail($id);
         $data = [
-            'back' => [
+            'id'      => $id,
+            'back'    => [
                 'id'   => $obj->product->id,
                 'type' => $type,
                 'name' => ucfirst($type . 's'),
             ],
+            'product' => $obj,
         ];
-        return view('collaborations.discussions', $data);
+        return view('collaborations.feedback', $data);
     }
 
     public function negotiations(Request $request, string $type, int $id)
@@ -231,6 +232,24 @@ class PartnerMatchingController extends Controller
                 'org_id'       => $org->id,
                 'organization' => $org->name,
                 'status'       => 'Negotiating',
+                'updated_at'   => $n->updated_at->toDateTimeString(),
+            ];
+        }
+
+        return $result;
+    }
+
+    public function discussions(Request $request, string $type, int $id)
+    {
+        $obj      = $type === 'design' ? Design::findOrFail($id) : Prototype::findOrFail($id);
+        $feedback = $obj->feedback;
+        $result   = [];
+
+        foreach ($feedback as $n) {
+            $org      = $n->organization;
+            $result[] = [
+                'org_id'       => $org->id,
+                'organization' => $org->name,
                 'updated_at'   => $n->updated_at->toDateTimeString(),
             ];
         }

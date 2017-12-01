@@ -2203,6 +2203,56 @@ exports.default = {
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js?cacheDirectory!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/FeedbackPage.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+var _vuex = __webpack_require__("./node_modules/vuex/dist/vuex.esm.js");
+
+var _Overview = __webpack_require__("./resources/assets/js/components/collaborations/Overview.vue");
+
+var _Overview2 = _interopRequireDefault(_Overview);
+
+var _Contact = __webpack_require__("./resources/assets/js/components/collaborations/Contact.vue");
+
+var _Contact2 = _interopRequireDefault(_Contact);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = {
+    props: ['type', 'id'],
+    created: function created() {
+        var baseUrl = '/' + this.type + '/' + this.id + '/feedback';
+        var routes = [{ name: 'feedback', path: baseUrl + '/', component: _Overview2.default, props: { type: this.type, id: this.id, thread_type: 'feedback' } }, { name: 'feedbackview', path: '/:type/:id/feedback/:org_id', component: _Contact2.default }];
+
+        this.$router.addRoutes(routes);
+    },
+
+    computed: _extends({}, (0, _vuex.mapGetters)({
+        organization: 'activePartner'
+    }))
+};
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js?cacheDirectory!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/Gallery.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -4680,7 +4730,7 @@ exports.default = {
     props: ['roles', 'competencies', 'paymentTypes', 'back', 'type', 'id'],
     created: function created() {
         var baseUrl = '/' + this.type + '/' + this.id + '/collaborate';
-        var routes = [{ name: 'overview', path: baseUrl + '/', component: _Overview2.default, props: { type: this.type, id: this.id } }, { name: 'search', path: baseUrl + '/search', component: _Search2.default,
+        var routes = [{ name: 'overview', path: baseUrl + '/', component: _Overview2.default, props: { type: this.type, id: this.id, thread_type: 'negotiation' } }, { name: 'search', path: baseUrl + '/search', component: _Search2.default,
             props: {
                 roles: this.roles,
                 competencies: this.competencies,
@@ -4721,7 +4771,8 @@ exports.default = {
     name: 'contact',
     components: { MessageView: _MessageView2.default },
     beforeRouteEnter: function beforeRouteEnter(to, from, next) {
-        axios.get('/contact/' + to.params.org_id + '/' + to.params.type + '/' + to.params.id).then(function (res) {
+        var type = typeof to.params.thread_type === 'undefined' ? '' : to.params.thread_type;
+        axios.get('/contact/' + to.params.org_id + '/' + to.params.type + '/' + to.params.id + '/' + type).then(function (res) {
             next(function (vm) {
                 return vm.setData(res);
             });
@@ -4730,7 +4781,8 @@ exports.default = {
     beforeRouteUpdate: function beforeRouteUpdate(to, from, next) {
         var _this = this;
 
-        axios.get('/contact/' + to.params.org_id + '/' + to.params.type + '/' + to.params.id).then(function (res) {
+        var type = typeof to.params.thread_type === 'undefined' ? '' : to.params.thread_type;
+        axios.get('/contact/' + to.params.org_id + '/' + to.params.type + '/' + to.params.id + '/' + type).then(function (res) {
             _this.setData(res);
             next();
         });
@@ -4747,6 +4799,11 @@ exports.default = {
         };
     },
 
+    computed: {
+        showWarning: function showWarning() {
+            return !this.thread.locked && this.thread.type === 'negotiation';
+        }
+    },
     methods: {
         capitalize: function capitalize(value) {
             return value.charAt(0).toUpperCase() + value.slice(1);
@@ -4857,7 +4914,7 @@ var _moment2 = _interopRequireDefault(_moment);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.default = {
-    props: ['type', 'id'],
+    props: ['type', 'id', 'thread_type'],
     data: function data() {
         return {
             threads: []
@@ -4866,13 +4923,19 @@ exports.default = {
     created: function created() {
         var _this = this;
 
-        axios.get('/' + this.type + '/' + this.id + '/negotiations').then(function (res) {
+        var url = '/' + this.type + '/' + this.id + '/' + (this.thread_type === 'negotiation' ? 'negotiations' : 'discussions');
+        axios.get(url).then(function (res) {
             if (res.status === 200) {
                 _this.threads = res.data;
             }
         });
     },
 
+    computed: {
+        view: function view() {
+            return this.thread_type === 'feedback' ? 'feedbackview' : 'discussionview';
+        }
+    },
     methods: {
         getClass: function getClass(status) {
             switch (status) {
@@ -4889,6 +4952,11 @@ exports.default = {
         }
     }
 }; //
+//
+//
+//
+//
+//
 //
 //
 //
@@ -37395,6 +37463,46 @@ if (false) {
 
 /***/ }),
 
+/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-2c93f840\"}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/FeedbackPage.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    attrs: {
+      "id": "collaborations"
+    }
+  }, [_c('div', {
+    staticClass: "ui pointing secondary orange menu"
+  }, [_c('router-link', {
+    staticClass: "item",
+    attrs: {
+      "to": ("/" + _vm.type + "/" + _vm.id + "/feedback"),
+      "exact": ""
+    }
+  }, [_vm._v("Overview")]), _vm._v(" "), (_vm.organization) ? _c('router-link', {
+    staticClass: "item",
+    attrs: {
+      "to": {
+        name: 'feedbackview',
+        params: {
+          id: _vm.id,
+          type: _vm.type,
+          org_id: _vm.organization.id
+        }
+      }
+    }
+  }, [_vm._v(_vm._s(_vm.organization.name))]) : _vm._e()], 1), _vm._v(" "), _c('router-view')], 1)
+},staticRenderFns: []}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-2c93f840", module.exports)
+  }
+}
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-2ca937ca\"}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/NewMessageModal.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -38585,8 +38693,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     })]), _vm._v(" "), _vm._m(1, true), _vm._v(" "), _c('a', {
       staticClass: "ui button",
       attrs: {
-        "href": ("/design/" + (d.id) + "/discussions"),
-        "data-tooltip": "Discussions",
+        "href": ("/design/" + (d.id) + "/feedback"),
+        "data-tooltip": "Feedback",
         "data-position": "top center",
         "data-inverted": ""
       }
@@ -39231,8 +39339,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     })]), _vm._v(" "), _c('a', {
       staticClass: "ui button",
       attrs: {
-        "href": ("/prototype/" + (p.id) + "/discussions"),
-        "data-tooltip": "Discussions",
+        "href": ("/prototype/" + (p.id) + "/feedback"),
+        "data-tooltip": "Feedback",
         "data-position": "top center",
         "data-inverted": ""
       }
@@ -39812,21 +39920,26 @@ if (false) {
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('table', {
     staticClass: "ui sortable celled striped table"
-  }, [_vm._m(0), _vm._v(" "), _c('tbody', _vm._l((_vm.threads), function(thread) {
+  }, [_c('thead', [_c('tr', [_c('th', [_vm._v("Organization")]), _vm._v(" "), (_vm.thread_type === 'negotiation') ? _c('th', {
+    staticClass: "three wide"
+  }, [_vm._v("Status")]) : _vm._e(), _vm._v(" "), _c('th', {
+    staticClass: "three wide center aligned"
+  }, [_vm._v("Last Message")])])]), _vm._v(" "), _c('tbody', [_vm._l((_vm.threads), function(thread) {
     return _c('tr', {
       class: _vm.getClass(thread.status)
     }, [_c('td', [_c('router-link', {
       attrs: {
         "to": {
-          name: 'discussionview',
+          name: _vm.view,
           params: {
             id: _vm.id,
             type: _vm.type,
-            org_id: thread.org_id
+            org_id: thread.org_id,
+            thread_type: _vm.thread_type
           }
         }
       }
-    }, [_vm._v(_vm._s(thread.organization))])], 1), _vm._v(" "), _c('td', [_vm._v(_vm._s(thread.status))]), _vm._v(" "), _c('td', {
+    }, [_vm._v("\n                    " + _vm._s(thread.organization) + "\n                ")])], 1), _vm._v(" "), (_vm.thread_type === 'negotiation') ? _c('td', [_vm._v(_vm._s(thread.status))]) : _vm._e(), _vm._v(" "), _c('td', {
       staticClass: "center aligned"
     }, [_c('timeago', {
       attrs: {
@@ -39836,16 +39949,12 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         "auto-update": 30
       }
     })], 1)])
-  }))])
-},staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('thead', [_c('tr', [_c('th', {
-    staticClass: "ten wide"
-  }, [_vm._v("Organization")]), _vm._v(" "), _c('th', {
-    staticClass: "three wide"
-  }, [_vm._v("Status")]), _vm._v(" "), _c('th', {
-    staticClass: "three wide center aligned"
-  }, [_vm._v("Last Message")])])])
-}]}
+  }), _vm._v(" "), (_vm.threads.length === 0) ? _c('tr', [_c('td', {
+    attrs: {
+      "colspan": "3"
+    }
+  }, [_vm._v("No discussions found")])]) : _vm._e()], 2)])
+},staticRenderFns: []}
 module.exports.render._withStripped = true
 if (false) {
   module.hot.accept()
@@ -39938,7 +40047,7 @@ if (false) {
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', {}, [(!_vm.thread.locked) ? _c('div', {
+  return _c('div', {}, [(_vm.showWarning) ? _c('div', {
     staticClass: "ui icon negative message"
   }, [_c('i', {
     staticClass: "warning icon"
@@ -40852,7 +40961,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         params: {
           id: _vm.id,
           type: _vm.type,
-          org_id: _vm.organization.id
+          org_id: _vm.organization.id,
+          thread_type: 'negotiation'
         }
       }
     }
@@ -55247,11 +55357,18 @@ var _CollaborationsPage = __webpack_require__("./resources/assets/js/components/
 
 var _CollaborationsPage2 = _interopRequireDefault(_CollaborationsPage);
 
+var _FeedbackPage = __webpack_require__("./resources/assets/js/components/FeedbackPage.vue");
+
+var _FeedbackPage2 = _interopRequireDefault(_FeedbackPage);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /**
  * Navbar transition for the homepage
  */
+
+
+// Import VueJS Components
 $(document).ready(function () {
     // fix menu when passed
     $('.masthead').visibility({
@@ -55279,9 +55396,6 @@ $(document).ready(function () {
     $('#orgPage .menu .item').tab();
 });
 
-// Import VueJS Components
-
-
 var router = new VueRouter({
     mode: 'history',
     linkActiveClass: 'active',
@@ -55306,6 +55420,7 @@ var app = new _vue2.default({
         NotificationArea: _NotificationArea2.default,
         NotificationsPage: _NotificationsPage2.default,
         CollaborationsPage: _CollaborationsPage2.default,
+        FeedbackPage: _FeedbackPage2.default,
         ProductsGrid: _ProductsGrid2.default,
         Comments: _Comments2.default,
         Likes: _Likes2.default,
@@ -55560,6 +55675,41 @@ if (false) {(function () {
     hotAPI.createRecord("data-v-38093c65", Component.options)
   } else {
     hotAPI.reload("data-v-38093c65", Component.options)
+  }
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+
+/***/ "./resources/assets/js/components/FeedbackPage.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var Component = __webpack_require__("./node_modules/vue-loader/lib/component-normalizer.js")(
+  /* script */
+  __webpack_require__("./node_modules/babel-loader/lib/index.js?cacheDirectory!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/FeedbackPage.vue"),
+  /* template */
+  __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-2c93f840\"}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/FeedbackPage.vue"),
+  /* scopeId */
+  null,
+  /* cssModules */
+  null
+)
+Component.options.__file = "/Users/finik/Sites/toylabs/resources/assets/js/components/FeedbackPage.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] FeedbackPage.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-2c93f840", Component.options)
+  } else {
+    hotAPI.reload("data-v-2c93f840", Component.options)
   }
 })()}
 

@@ -2,20 +2,25 @@
     <table class="ui sortable celled striped table">
         <thead>
             <tr>
-                <th class="ten wide">Organization</th>
-                <th class="three wide">Status</th>
+                <th>Organization</th>
+                <th class="three wide" v-if="thread_type === 'negotiation'">Status</th>
                 <th class="three wide center aligned">Last Message</th>
             </tr>
         </thead>
         <tbody>
             <tr v-for="thread of threads" :class="getClass(thread.status)">
                 <td>
-                    <router-link :to="{ name: 'discussionview', params: { id, type, org_id: thread.org_id } }">{{ thread.organization }}</router-link>
+                    <router-link :to="{ name: view, params: { id, type, org_id: thread.org_id, thread_type } }">
+                        {{ thread.organization }}
+                    </router-link>
                 </td>
-                <td>{{ thread.status }}</td>
+                <td v-if="thread_type === 'negotiation'">{{ thread.status }}</td>
                 <td class="center aligned">
                     <timeago :since="thread.updated_at" :max-time="86400 * 7" :format="formatDate" :auto-update="30"></timeago>
                 </td>
+            </tr>
+            <tr v-if="threads.length === 0">
+                <td colspan="3">No discussions found</td>
             </tr>
         </tbody>
     </table>
@@ -25,18 +30,24 @@
 import moment from 'moment';
 
 export default {
-    props: ['type', 'id'],
+    props: ['type', 'id', 'thread_type'],
     data() {
         return {
             threads: [],
         }
     },
     created() {
-        axios.get(`/${this.type}/${this.id}/negotiations`).then((res) => {
+        const url = `/${this.type}/${this.id}/${this.thread_type === 'negotiation' ? 'negotiations' : 'discussions' }`;
+        axios.get(url).then((res) => {
             if (res.status === 200) {
                 this.threads = res.data;
             }
         });
+    },
+    computed: {
+        view() {
+            return this.thread_type === 'feedback' ? 'feedbackview' : 'discussionview';
+        },
     },
     methods: {
         getClass(status) {
