@@ -36541,7 +36541,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_c('h3', {
     staticClass: "ui left floated header"
   }, [_vm._v("\n        " + _vm._s(_vm.product.title) + "\n        "), _c('div', {
-    staticClass: "ui label",
+    staticClass: "ui basic label",
     class: {
       blue: _vm.owner !== 'Personal', orange: _vm.owner === 'Personal'
     }
@@ -55394,6 +55394,7 @@ $(document).ready(function () {
         variation: 'very wide'
     });
     $('#orgPage .menu .item').tab();
+    $('#dashboard .menu .item').tab();
 });
 
 var router = new VueRouter({

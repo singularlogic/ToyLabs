@@ -3,7 +3,7 @@
         <h3 class="ui left floated header">
             <!-- <a :href="`/product/${product.id}`">{{ product.title }}</a> -->
             {{ product.title }}
-            <div class="ui label" :class="{ blue: owner !== 'Personal', orange: owner === 'Personal' }">{{ owner }}</div>
+            <div class="ui basic label" :class="{ blue: owner !== 'Personal', orange: owner === 'Personal' }">{{ owner }}</div>
         </h3>
         <small class="ui right floated">
             <strong>Last Modified:</strong> <em>{{ product.updated_at | moment('DD.MM.YYYY') }}</em>

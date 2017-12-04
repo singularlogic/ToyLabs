@@ -50,6 +50,7 @@ $(document).ready(function() {
         variation: 'very wide',
     });
     $('#orgPage .menu .item').tab();
+    $('#dashboard .menu .item').tab();
 });
 
 const router = new VueRouter({
