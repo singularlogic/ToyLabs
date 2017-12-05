@@ -51,6 +51,7 @@ $(document).ready(function() {
     });
     $('#orgPage .menu .item').tab();
     $('#dashboard .menu .item').tab();
+    $('table.sortable').tablesort();
 });
 
 const router = new VueRouter({

@@ -7,8 +7,6 @@ use App\Product;
 use App\User;
 use Illuminate\Support\Facades\Auth;
 
-// use Illuminate\Http\Request;
-
 class DashboardController extends Controller
 {
     public function show()
@@ -26,9 +24,12 @@ class DashboardController extends Controller
             'owner_id'   => $user->organization,
             'owner_type' => Organization::class,
         ])->orderBy('updated_at', 'DESC')->get();
+
         $data = [
             'products'    => $products,
             'is_complete' => !!$user->profile,
+            'items'       => [],
+            'archive'     => [],
         ];
 
         return view('dashboard', $data);
