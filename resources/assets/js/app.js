@@ -19,6 +19,7 @@ import PrototypesTable from './components/PrototypesTable.vue';
 import Gallery from './components/Gallery.vue';
 import Search from './components/Search.vue';
 import Contact from './components/collaborations/Contact.vue';
+import DashboardPage from './components/DashboardPage.vue';
 import CollaborationsPage from './components/collaborations/CollaborationsPage.vue';
 import FeedbackPage from './components/FeedbackPage.vue';
 
@@ -75,6 +76,7 @@ const app = new Vue({
         Profile,
         Organization,
         NotificationArea,
+        DashboardPage,
         NotificationsPage,
         CollaborationsPage,
         FeedbackPage,

@@ -39,7 +39,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/feed/{tab?}', ['as' => 'feed', 'uses' => 'NotificationController@feed']);
 
     // Dashboard
-    Route::get('/dashboard', ['as' => 'dashboard', 'uses' => 'DashboardController@show']);
+    Route::get('/dashboard/{tab?}', ['as' => 'dashboard', 'uses' => 'DashboardController@show']);
+    Route::get('/dashboard/message/{id?}', ['as' => 'dashboard.thread', 'uses' => 'DashboardController@show']);
 
     // Personal Profile
     Route::get('/profile/edit', ['as' => 'profile.edit', 'uses' => 'ProfileController@showPersonalProfile']);

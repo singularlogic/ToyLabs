@@ -4,7 +4,15 @@
 
 @section('content')
         <!-- Dashboard -->
-        <div class="ui main container" id="dashboard">
+        @include('partials.status')
+
+        <dashboard-page
+            :is-profile-complete="{{ $is_complete }}"
+            :products="{{ json_encode($products) }}"
+            :active-collaborations="{{ json_encode($items) }}"
+            :archived-collaborations="{{ json_encode($archive) }}"
+        ></dashboard-page>
+{{--         <div class="ui main container" id="dashboard">
             @include('partials.status')
 
             <div class="ui orange pointing secondary menu">
@@ -128,4 +136,4 @@
 @endif
             </div>
         </div>
-@endsection
+ --}}@endsection

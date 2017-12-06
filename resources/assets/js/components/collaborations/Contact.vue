@@ -40,6 +40,7 @@
 
 <script>
 import MessageView from '../MessageView.vue';
+import _ from 'lodash';
 
 export default {
     name: 'contact',
@@ -60,7 +61,9 @@ export default {
     data() {
         return {
             organization: {},
-            thread: {},
+            thread: {
+                locked: true,
+            },
             target: {},
             messages: [],
             reply: '',
@@ -111,14 +114,14 @@ export default {
                                 this.thread = response.data.thread;
                                 this.messages = response.data.messages;
                                 this.users = response.data.users;
-                                this.$store.commit('setActiveThread', { thread: this.thread });
+                                this.$store.commit('setActiveThread', { thread: _.cloneDeep(this.thread) });
                             }
                         } else {
                             this.error = 'An error occured';
                         }
                     });
                 }
-                this.$store.commit('setOrganization', { organization: this.organization });
+                this.$store.commit('setOrganization', { organization: _.cloneDeep(this.organization) });
             }
         },
     },

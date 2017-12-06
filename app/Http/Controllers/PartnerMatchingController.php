@@ -262,6 +262,7 @@ class PartnerMatchingController extends Controller
     public function addPartner(Request $request, string $type, int $id, int $org_id)
     {
         $item = $type === 'design' ? Design::findOrFail($id) : Prototype::findOrFail($id);
+        $org  = Organization::findOrFail($org_id);
 
         Collaboration::updateOrCreate([
             'organization_id'     => $org_id,
@@ -269,6 +270,22 @@ class PartnerMatchingController extends Controller
             'collaboratable_type' => get_class($item),
         ], [
             'status' => 'accepted',
+        ]);
+
+        // Lock negotiations thread
+        Thread::where('organization_id', $org_id)
+            ->where('target_id', $item->id)
+            ->where('target_type', get_class($item))
+            ->where('type', 'negotiation')
+            ->update(['locked' => true]);
+
+        // Open feedback thread
+        Thread::create([
+            'subject'         => '[' . ucfirst($item->type) . ': ' . $item->title . '] Feedback from ' . $org->name,
+            'organization_id' => $org_id,
+            'target_id'       => $item->id,
+            'target_type'     => get_class($item),
+            'type'            => 'feedback',
         ]);
     }
 

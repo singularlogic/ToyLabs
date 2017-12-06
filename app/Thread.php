@@ -25,4 +25,19 @@ class Thread extends BaseThread
     {
         return $this->belongsTo(Organization::class);
     }
+
+    public static function findID(string $type, $target, int $org_id)
+    {
+        $t = Thread::where('organization_id', $org_id)
+            ->where('target_id', $target->id)
+            ->where('target_type', get_class($target))
+            ->where('type', $type)
+            ->first();
+
+        if ($t) {
+            return $t->id;
+        }
+
+        return null;
+    }
 }

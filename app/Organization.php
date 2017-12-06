@@ -127,11 +127,11 @@ class Organization extends Model
 
     public function activeCollaborations()
     {
-        return $this->hasMany(Collaboration::class)->where('status', 'accepted');
+        return $this->hasMany(Collaboration::class)->where('status', 'accepted')->with('collaboratable');
     }
 
     public function archivedCollaborations()
     {
-        return $this->hasMany(Collaboration::class)->where('status', 'archived');
+        return $this->hasMany(Collaboration::class)->where('status', 'archived')->with('collaboratable');
     }
 }

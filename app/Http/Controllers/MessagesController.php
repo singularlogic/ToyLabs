@@ -72,7 +72,7 @@ class MessagesController extends Controller
     public function show($id)
     {
         try {
-            $thread = Thread::findOrFail($id);
+            $thread = Thread::with('target')->findOrFail($id);
         } catch (ModelNotFoundException $e) {
             $error = 'Thread not found';
             return compact('error');

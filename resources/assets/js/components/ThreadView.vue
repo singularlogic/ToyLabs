@@ -12,7 +12,7 @@
                 :message="m"
             ></message-view>
         </div>
-        <form class="ui reply form" v-if="messages.length > 0 && !thread.locked">
+        <form class="ui reply form" v-if="!thread.locked">
             <div class="field">
                 <textarea v-model="reply"></textarea>
             </div>
