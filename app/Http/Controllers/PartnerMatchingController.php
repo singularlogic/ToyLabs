@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Collaboration;
 use App\Competency;
 use App\Design;
 use App\Organization;
@@ -32,8 +33,9 @@ class PartnerMatchingController extends Controller
 
     public function index(Request $request, string $type, int $id)
     {
-        $obj  = $type === 'design' ? Design::findOrFail($id) : Prototype::findOrFail($id);
-        $data = [
+        $obj      = $type === 'design' ? Design::findOrFail($id) : Prototype::findOrFail($id);
+        $is_owner = $this->canEdit(\Auth::user(), $obj->product);
+        $data     = [
             'product'      => $obj,
             'roles'        => OrganizationType::get(),
             'competencies' => Competency::orderBy('name', 'ASC')->get(),
@@ -45,6 +47,7 @@ class PartnerMatchingController extends Controller
             ],
             'id'           => $id,
             'type'         => $type,
+            'is_owner'     => $is_owner,
         ];
         return view('product.collaborate', $data);
     }
@@ -222,17 +225,16 @@ class PartnerMatchingController extends Controller
 
     public function negotiations(Request $request, string $type, int $id)
     {
-        $obj          = $type === 'design' ? Design::findOrFail($id) : Prototype::findOrFail($id);
-        $negotiations = $obj->negotiations;
-        $result       = [];
+        $obj            = $type === 'design' ? Design::findOrFail($id) : Prototype::findOrFail($id);
+        $collaborations = $obj->collaborations;
+        $result         = [];
 
-        foreach ($negotiations as $n) {
-            $org      = $n->organization;
+        foreach ($collaborations as $collaboration) {
             $result[] = [
-                'org_id'       => $org->id,
-                'organization' => $org->name,
-                'status'       => 'Negotiating',
-                'updated_at'   => $n->updated_at->toDateTimeString(),
+                'org_id'       => $collaboration->organization_id,
+                'organization' => $collaboration->organization->name,
+                'status'       => ucfirst($collaboration->status),
+                'updated_at'   => $collaboration->updated_at->toDateTimeString(),
             ];
         }
 
@@ -255,5 +257,29 @@ class PartnerMatchingController extends Controller
         }
 
         return $result;
+    }
+
+    public function addPartner(Request $request, string $type, int $id, int $org_id)
+    {
+        $item = $type === 'design' ? Design::findOrFail($id) : Prototype::findOrFail($id);
+
+        Collaboration::updateOrCreate([
+            'organization_id'     => $org_id,
+            'collaboratable_id'   => $item->id,
+            'collaboratable_type' => get_class($item),
+        ], [
+            'status' => 'accepted',
+        ]);
+    }
+
+    protected function canEdit($user, $product)
+    {
+        if (is_a($product->owner, 'App\User') && $product->owner->id === $user->id) {
+            return true;
+        } else if (is_a($product->owner, 'App\Organization') && $user->organizations->where('id', $product->owner->id)) {
+            return true;
+        }
+
+        return false;
     }
 }

@@ -3,8 +3,7 @@
         <thead>
             <tr>
                 <th>Organization</th>
-                <th class="three wide" v-if="thread_type === 'negotiation'">Status</th>
-                <th class="three wide center aligned">Last Message</th>
+                <th class="four wide" v-if="thread_type === 'negotiation'">Status</th>
             </tr>
         </thead>
         <tbody>
@@ -14,9 +13,9 @@
                         {{ thread.organization }}
                     </router-link>
                 </td>
-                <td v-if="thread_type === 'negotiation'">{{ thread.status }}</td>
-                <td class="center aligned">
-                    <timeago :since="thread.updated_at" :max-time="86400 * 7" :format="formatDate" :auto-update="30"></timeago>
+                <td v-if="thread_type === 'negotiation'" :class="{ disabled: thread.status === 'Archived' }">
+                    <i class="icon" :class="getIcon(thread.status)"></i>
+                    {{ thread.status }}
                 </td>
             </tr>
             <tr v-if="threads.length === 0">
@@ -56,6 +55,22 @@ export default {
                 return 'positive';
             case 'Rejected':
                 return 'negative';
+            case 'Archived':
+                return 'grey';
+            default:
+                return '';
+            }
+        },
+        getIcon(status) {
+            switch (status) {
+            case 'Accepted':
+                return 'check circle';
+            case 'Rejected':
+                return 'remove circle';
+            case 'Archived':
+                return 'archive';
+            case 'Negotiating':
+                return 'comments'
             default:
                 return '';
             }

@@ -80,6 +80,7 @@ Route::group(['middleware' => 'auth'], function () {
     // Collaborations
     Route::get('/{type}/{id}/collaborate/{page?}', ['as' => 'collaborate', 'uses' => 'PartnerMatchingController@index'])->where('type', 'design|prototype');
     Route::get('/{type}/{id}/collaborate/contact/{org_id?}', ['as' => 'collaborate', 'uses' => 'PartnerMatchingController@index'])->where('type', 'design|prototype');
+    Route::post('/{type}/{id}/collaborate/contact/{org_id}', ['as' => 'collaborate', 'uses' => 'PartnerMatchingController@addPartner'])->where('type', 'design|prototype');
     Route::get('/{type}/{id}/feedback/{org_id?}', ['as' => 'prototype.feedback', 'uses' => 'PartnerMatchingController@feedback'])->where('type', 'design|prototype');
     Route::get('/{type}/{id}/negotiations', ['as' => 'prototype.negotiations', 'uses' => 'PartnerMatchingController@negotiations'])->where('type', 'design|prototype');
     Route::get('/{type}/{id}/discussions', ['as' => 'prototype.discussions', 'uses' => 'PartnerMatchingController@discussions'])->where('type', 'design|prototype');

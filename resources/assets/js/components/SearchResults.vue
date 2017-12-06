@@ -9,7 +9,7 @@
                 </div>
                 <div class="description">{{ result.description | trim(500) }}</div>
                 <div class="extra">
-                    <button class="ui right floated positive mini button" type="button">Add</button>
+                    <button class="ui right floated positive mini button" type="button" @click="add(result.id)" v-if="canAdd">Add</button>
                     <router-link :to="`/${$parent.type}/${$parent.id}/collaborate/contact/${result.id}`" class="ui right floated orange mini button">
                         Contact
                     </router-link>
@@ -32,7 +32,7 @@
 import numeral from 'numeral';
 
 export default {
-    props: ['results', 'query'],
+    props: ['results', 'query', 'canAdd'],
     methods: {
         flags(org) {
             let flags = [];
@@ -65,6 +65,9 @@ export default {
         scoreColor(value) {
             const hue = (value*120).toString(10);
             return ['hsl(', hue, ',100%,50%)'].join('');
+        },
+        add(id) {
+            this.$emit('add', id);
         },
     },
     filters: {

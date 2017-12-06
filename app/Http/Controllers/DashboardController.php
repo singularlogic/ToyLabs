@@ -25,11 +25,13 @@ class DashboardController extends Controller
             'owner_type' => Organization::class,
         ])->orderBy('updated_at', 'DESC')->get();
 
+        $org = Organization::find(1);
+
         $data = [
             'products'    => $products,
             'is_complete' => !!$user->profile,
-            'items'       => [],
-            'archive'     => [],
+            'items'       => $org->activeCollaborations,
+            'archive'     => $org->archivedCollaborations,
         ];
 
         return view('dashboard', $data);

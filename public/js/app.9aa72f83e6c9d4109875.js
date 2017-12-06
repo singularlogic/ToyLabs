@@ -4428,9 +4428,11 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 //
 //
 //
+//
+//
 
 exports.default = {
-    props: ['roles', 'competencies', 'paymentTypes', 'back', 'type', 'id'],
+    props: ['roles', 'competencies', 'paymentTypes', 'back', 'type', 'id', 'isOwner'],
     components: { SearchResults: _SearchResults2.default },
     data: function data() {
         return {
@@ -4482,6 +4484,11 @@ exports.default = {
                     _this.searchComplete = true;
                 }
             });
+        },
+        addPartner: function addPartner(id) {
+            axios.post('/' + this.type + '/' + this.id + '/collaborate/contact/' + id).then(function (res) {
+                console.log(res);
+            });
         }
     }
 };
@@ -4505,7 +4512,7 @@ var _numeral2 = _interopRequireDefault(_numeral);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.default = {
-    props: ['results', 'query'],
+    props: ['results', 'query', 'canAdd'],
     methods: {
         flags: function flags(org) {
             var flags = [];
@@ -4542,6 +4549,9 @@ exports.default = {
         scoreColor: function scoreColor(value) {
             var hue = (value * 120).toString(10);
             return ['hsl(', hue, ',100%,50%)'].join('');
+        },
+        add: function add(id) {
+            this.$emit('add', id);
         }
     },
     filters: {
@@ -4727,7 +4737,7 @@ var _Contact2 = _interopRequireDefault(_Contact);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.default = {
-    props: ['roles', 'competencies', 'paymentTypes', 'back', 'type', 'id'],
+    props: ['roles', 'competencies', 'paymentTypes', 'back', 'type', 'id', 'isOwner'],
     created: function created() {
         var baseUrl = '/' + this.type + '/' + this.id + '/collaborate';
         var routes = [{ name: 'overview', path: baseUrl + '/', component: _Overview2.default, props: { type: this.type, id: this.id, thread_type: 'negotiation' } }, { name: 'search', path: baseUrl + '/search', component: _Search2.default,
@@ -4737,7 +4747,8 @@ exports.default = {
                 paymentTypes: this.paymentTypes,
                 back: this.back,
                 type: this.type,
-                id: this.id
+                id: this.id,
+                isOwner: this.isOwner
             }
         }, { name: 'discussionview', path: '/:type/:id/collaborate/contact/:org_id', component: _Contact2.default }];
 
@@ -4805,11 +4816,19 @@ exports.default = {
         }
     },
     methods: {
+        add: function add() {
+            var _this2 = this;
+
+            var params = this.$router.currentRoute.params;
+            axios.post('/' + params.type + '/' + params.id + '/collaborate/contact/' + params.org_id).then(function (res) {
+                _this2.thread.locked = true;
+            });
+        },
         capitalize: function capitalize(value) {
             return value.charAt(0).toUpperCase() + value.slice(1);
         },
         sendReply: function sendReply() {
-            var _this2 = this;
+            var _this3 = this;
 
             axios.post('/contact/' + this.organization.id + '/' + this.target.type + '/' + this.target.id, {
                 thread: this.thread,
@@ -4817,15 +4836,15 @@ exports.default = {
             }).then(function (response) {
                 if (response.status === 200) {
                     if (typeof response.data.thread !== 'undefined') {
-                        _this2.thread = response.data.thread;
+                        _this3.thread = response.data.thread;
                     }
-                    _this2.messages.push(response.data.message);
-                    _this2.reply = '';
+                    _this3.messages.push(response.data.message);
+                    _this3.reply = '';
                 }
             });
         },
         setData: function setData(res) {
-            var _this3 = this;
+            var _this4 = this;
 
             if (res.status === 200) {
                 this.organization = res.data.organization;
@@ -4835,15 +4854,15 @@ exports.default = {
                     axios.get('/messages/' + this.thread_id).then(function (response) {
                         if (response.status === 200) {
                             if (response.data.error) {
-                                _this3.error = response.data.error;
+                                _this4.error = response.data.error;
                             } else {
-                                _this3.thread = response.data.thread;
-                                _this3.messages = response.data.messages;
-                                _this3.users = response.data.users;
-                                _this3.$store.commit('setActiveThread', { thread: _this3.thread });
+                                _this4.thread = response.data.thread;
+                                _this4.messages = response.data.messages;
+                                _this4.users = response.data.users;
+                                _this4.$store.commit('setActiveThread', { thread: _this4.thread });
                             }
                         } else {
-                            _this3.error = 'An error occured';
+                            _this4.error = 'An error occured';
                         }
                     });
                 }
@@ -4856,6 +4875,7 @@ exports.default = {
         this.$store.commit('setOrganization', { organization: null });
     }
 }; //
+//
 //
 //
 //
@@ -4943,6 +4963,22 @@ exports.default = {
                     return 'positive';
                 case 'Rejected':
                     return 'negative';
+                case 'Archived':
+                    return 'grey';
+                default:
+                    return '';
+            }
+        },
+        getIcon: function getIcon(status) {
+            switch (status) {
+                case 'Accepted':
+                    return 'check circle';
+                case 'Rejected':
+                    return 'remove circle';
+                case 'Archived':
+                    return 'archive';
+                case 'Negotiating':
+                    return 'comments';
                 default:
                     return '';
             }
@@ -4952,7 +4988,6 @@ exports.default = {
         }
     }
 }; //
-//
 //
 //
 //
@@ -38617,7 +38652,11 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }) : _vm._e(), _vm._v(" "), (_vm.searchComplete) ? _c('search-results', {
     attrs: {
       "results": _vm.results,
-      "query": _vm.activeQuery
+      "query": _vm.activeQuery,
+      "canAdd": _vm.isOwner
+    },
+    on: {
+      "add": _vm.addPartner
     }
   }) : _vm._e()], 1)
 },staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -39921,10 +39960,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   return _c('table', {
     staticClass: "ui sortable celled striped table"
   }, [_c('thead', [_c('tr', [_c('th', [_vm._v("Organization")]), _vm._v(" "), (_vm.thread_type === 'negotiation') ? _c('th', {
-    staticClass: "three wide"
-  }, [_vm._v("Status")]) : _vm._e(), _vm._v(" "), _c('th', {
-    staticClass: "three wide center aligned"
-  }, [_vm._v("Last Message")])])]), _vm._v(" "), _c('tbody', [_vm._l((_vm.threads), function(thread) {
+    staticClass: "four wide"
+  }, [_vm._v("Status")]) : _vm._e()])]), _vm._v(" "), _c('tbody', [_vm._l((_vm.threads), function(thread) {
     return _c('tr', {
       class: _vm.getClass(thread.status)
     }, [_c('td', [_c('router-link', {
@@ -39939,16 +39976,14 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
           }
         }
       }
-    }, [_vm._v("\n                    " + _vm._s(thread.organization) + "\n                ")])], 1), _vm._v(" "), (_vm.thread_type === 'negotiation') ? _c('td', [_vm._v(_vm._s(thread.status))]) : _vm._e(), _vm._v(" "), _c('td', {
-      staticClass: "center aligned"
-    }, [_c('timeago', {
-      attrs: {
-        "since": thread.updated_at,
-        "max-time": 86400 * 7,
-        "format": _vm.formatDate,
-        "auto-update": 30
+    }, [_vm._v("\n                    " + _vm._s(thread.organization) + "\n                ")])], 1), _vm._v(" "), (_vm.thread_type === 'negotiation') ? _c('td', {
+      class: {
+        disabled: thread.status === 'Archived'
       }
-    })], 1)])
+    }, [_c('i', {
+      staticClass: "icon",
+      class: _vm.getIcon(thread.status)
+    }), _vm._v("\n                " + _vm._s(thread.status) + "\n            ")]) : _vm._e()])
   }), _vm._v(" "), (_vm.threads.length === 0) ? _c('tr', [_c('td', {
     attrs: {
       "colspan": "3"
@@ -40088,7 +40123,17 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         _vm.reply = $event.target.value
       }
     }
-  })]), _vm._v(" "), _c('div', {
+  })]), _vm._v(" "), _c('button', {
+    staticClass: "ui left floated positive button",
+    attrs: {
+      "type": "button"
+    },
+    on: {
+      "click": function($event) {
+        _vm.add()
+      }
+    }
+  }, [_vm._v("Add as collaborator")]), _vm._v(" "), _c('div', {
     staticClass: "ui orange labeled icon right floated button",
     on: {
       "click": _vm.sendReply
@@ -41407,12 +41452,17 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       staticClass: "description"
     }, [_vm._v(_vm._s(_vm._f("trim")(result.description, 500)))]), _vm._v(" "), _c('div', {
       staticClass: "extra"
-    }, [_c('button', {
+    }, [(_vm.canAdd) ? _c('button', {
       staticClass: "ui right floated positive mini button",
       attrs: {
         "type": "button"
+      },
+      on: {
+        "click": function($event) {
+          _vm.add(result.id)
+        }
       }
-    }, [_vm._v("Add")]), _vm._v(" "), _c('router-link', {
+    }, [_vm._v("Add")]) : _vm._e(), _vm._v(" "), _c('router-link', {
       staticClass: "ui right floated orange mini button",
       attrs: {
         "to": ("/" + (_vm.$parent.type) + "/" + (_vm.$parent.id) + "/collaborate/contact/" + (result.id))

@@ -76,7 +76,9 @@
         <search-results
             :results="results"
             :query="activeQuery"
+            :canAdd="isOwner"
             v-if="searchComplete"
+            @add="addPartner"
         ></search-results>
     </div>
 </template>
@@ -86,7 +88,7 @@ import SearchResults from './SearchResults';
 import _ from 'lodash';
 
 export default {
-    props: ['roles', 'competencies', 'paymentTypes', 'back', 'type', 'id'],
+    props: ['roles', 'competencies', 'paymentTypes', 'back', 'type', 'id', 'isOwner'],
     components: { SearchResults },
     data() {
         return {
@@ -147,6 +149,11 @@ export default {
                     this.loading = false;
                     this.searchComplete = true;
                 }
+            });
+        },
+        addPartner(id) {
+            axios.post(`/${this.type}/${this.id}/collaborate/contact/${id}`).then(res => {
+                console.log(res);
             });
         },
     }

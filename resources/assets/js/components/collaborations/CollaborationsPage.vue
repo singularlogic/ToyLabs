@@ -19,7 +19,7 @@ import Overview from './Overview.vue';
 import Contact from './Contact.vue';
 
 export default {
-    props: ['roles', 'competencies', 'paymentTypes', 'back', 'type', 'id'],
+    props: ['roles', 'competencies', 'paymentTypes', 'back', 'type', 'id', 'isOwner'],
     created() {
         const baseUrl = `/${this.type}/${this.id}/collaborate`;
         const routes = [
@@ -31,8 +31,9 @@ export default {
                     paymentTypes: this.paymentTypes,
                     back: this.back,
                     type: this.type,
-                    id: this.id
-                }
+                    id: this.id,
+                    isOwner: this.isOwner,
+                },
             },
             { name: 'discussionview', path: `/:type/:id/collaborate/contact/:org_id`, component:  Contact },
         ];

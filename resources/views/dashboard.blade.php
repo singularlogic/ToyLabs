@@ -36,7 +36,7 @@
                 ></product-list>
             </div>
             <div class="ui tab basic segment" data-tab="mycollaborations">
-@if($items)
+@if($items->count() > 0)
                 <table class="ui sortable celled compact striped table">
                     <thead>
                         <tr>
@@ -51,22 +51,22 @@
 @foreach($items as $item)
                         <tr>
                             <td>
-                                @if($item->type == 'design')<i class="pencil icon"></i>@else<i class="boxes icon"></i>@endif
-                                <a href="/{{ $item->type }}/{{ $item->id }}" target="_BLANK">{{ $item->title }}</a>
+                                @if($item->collaboratable->type == 'design')<i class="pencil icon"></i>@else<i class="cube icon"></i>@endif
+                                <a href="/{{ $item->collaboratable->type }}/{{ $item->collaboratable->id }}" target="_BLANK">{{ $item->collaboratable->title }}</a>
                             </td>
                             <td>
-                                <a href="/product/{{ $item->product->id }}" target="_BLANK">{{ $item->product->title }}</a>
+                                <a href="/product/{{ $item->collaboratable->product->id }}" target="_BLANK">{{ $item->collaboratable->product->title }}</a>
                             </td>
-                            <td class="center aligned">{{ $item->version }}</td>
+                            <td class="center aligned">{{ $item->collaboratable->version }}</td>
                             <td class="center aligned">
-                                {{ $item->updated_at->format('d.m.Y') }}
+                                {{ $item->collaboratable->updated_at->format('d.m.Y') }}
                             </td>
                             <td>
                                 <div class="ui tiny basic icon buttons">
-                                    <a class="ui button" href="/design/{{ $item->id }}/feedback" data-tooltip="Feedback" data-position="top center"data-inverted>
+                                    <a class="ui button" href="/design/{{ $item->collaboratable->id }}/feedback" data-tooltip="Feedback" data-position="top center"data-inverted>
                                         <i class="comments outline icon"></i>
                                     </a>
-                                    <a class="ui button" href="/design/{{ $item->id }}/negotiations" data-tooltip="Negotiations" data-position="top center"data-inverted>
+                                    <a class="ui button" href="/design/{{ $item->collaboratable->id }}/negotiations" data-tooltip="Negotiations" data-position="top center"data-inverted>
                                         <i class="file text outline icon"></i>
                                     </a>
                                 </div>
@@ -82,7 +82,7 @@
 @endif
             </div>
             <div class="ui tab basic segment" data-tab="archive">
-@if($archive)
+@if($archive->count() > 0)
                 <table class="ui sortable celled compact striped table">
                     <thead>
                         <tr>
@@ -97,22 +97,22 @@
 @foreach($archive as $item)
                         <tr>
                             <td>
-                                @if($item->type == 'design')<i class="pencil icon"></i>@else<i class="boxes icon"></i>@endif
-                                <a href="/{{ $item->type }}/{{ $item->id }}" target="_BLANK">{{ $item->title }}</a>
+                                @if($item->collaboratable->type == 'design')<i class="pencil icon"></i>@else<i class="cube icon"></i>@endif
+                                <a href="/{{ $item->collaboratable->type }}/{{ $item->collaboratable->id }}" target="_BLANK">{{ $item->collaboratable->title }}</a>
                             </td>
                             <td>
-                                <a href="/product/{{ $item->product->id }}" target="_BLANK">{{ $item->product->title }}</a>
+                                <a href="/product/{{ $item->collaboratable->product->id }}" target="_BLANK">{{ $item->collaboratable->product->title }}</a>
                             </td>
-                            <td class="center aligned">{{ $item->version }}</td>
+                            <td class="center aligned">{{ $item->collaboratable->version }}</td>
                             <td class="center aligned">
-                                {{ $item->updated_at->format('d.m.Y') }}
+                                {{ $item->collaboratable->updated_at->format('d.m.Y') }}
                             </td>
                             <td>
                                 <div class="ui tiny basic icon buttons">
-                                    <a class="ui button" href="/design/{{ $item->id }}/feedback" data-tooltip="Feedback" data-position="top center"data-inverted>
+                                    <a class="ui button" href="/design/{{ $item->collaboratable->id }}/feedback" data-tooltip="Feedback" data-position="top center"data-inverted>
                                         <i class="comments outline icon"></i>
                                     </a>
-                                    <a class="ui button" href="/design/{{ $item->id }}/negotiations" data-tooltip="Negotiations" data-position="top center"data-inverted>
+                                    <a class="ui button" href="/design/{{ $item->collaboratable->id }}/negotiations" data-tooltip="Negotiations" data-position="top center"data-inverted>
                                         <i class="file text outline icon"></i>
                                     </a>
                                 </div>

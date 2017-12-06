@@ -27,6 +27,7 @@
             <div class="field">
                 <textarea v-model="reply"></textarea>
             </div>
+            <button class="ui left floated positive button" type="button" @click="add()">Add as collaborator</button>
             <div class="ui orange labeled icon right floated button" @click="sendReply">
                 <i class="send icon"></i> Send
             </div>
@@ -73,6 +74,12 @@ export default {
         }
     },
     methods: {
+        add() {
+            const params = this.$router.currentRoute.params;
+            axios.post(`/${params.type}/${params.id}/collaborate/contact/${params.org_id}`).then(res => {
+                this.thread.locked = true;
+            });
+        },
         capitalize(value) {
             return value.charAt(0).toUpperCase() + value.slice(1);
         },

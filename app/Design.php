@@ -92,4 +92,9 @@ class Design extends Model implements HasMedia
     {
         return $this->morphMany(Thread::class, 'target')->where('type', 'feedback');
     }
+
+    public function collaborations()
+    {
+        return $this->morphMany(Collaboration::class, 'collaboratable');
+    }
 }
