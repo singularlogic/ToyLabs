@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Events\NewMessage;
+use App\Message;
 use App\Thread;
 use App\User;
 use Carbon\Carbon;
-use Cmgmyr\Messenger\Models\Message;
 use Cmgmyr\Messenger\Models\Participant;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Auth;
@@ -120,11 +120,16 @@ class MessagesController extends Controller
         ]);
 
         // Message
-        Message::create([
+        $message = Message::create([
             'thread_id' => $thread->id,
             'user_id'   => Auth::user()->id,
             'body'      => $input['body'],
         ]);
+        $files = isset($input['files']) ? $input['files'] : [];
+        foreach ($files as $file) {
+            $path = storage_path('/app/' . $file['path']);
+            $message->addMedia($path)->usingName($file['name'])->toMediaCollection('files');
+        }
 
         // Sender
         Participant::create([
@@ -166,6 +171,11 @@ class MessagesController extends Controller
             'user_id'   => Auth::id(),
             'body'      => Input::get('message'),
         ]);
+        $files = Input::get('files') ?: [];
+        foreach ($files as $file) {
+            $path = storage_path('/app/' . $file['path']);
+            $message->addMedia($path)->usingName($file['name'])->toMediaCollection('files');
+        }
 
         // Add replier as a participant
         $participant = Participant::firstOrCreate([

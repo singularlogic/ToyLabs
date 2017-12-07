@@ -1,5 +1,5 @@
 <template>
-    <div v-cloak>
+    <div v-cloak class="thread">
         <div class="ui error message" v-if="error">
             <div class="content">
                 <p>{{ error }}</p>
@@ -12,25 +12,40 @@
                 :message="m"
             ></message-view>
         </div>
+
+        <dropzone id="files" ref="myDropzone"
+            url="/file/upload"
+            :useFontAwesome="true"
+            :showRemoveLink="true"
+            paramName="file"
+            v-on:vdropzone-success="fileAdded"
+            v-on:vdropzone-removed-file="fileRemoved"
+            v-if="!thread.locked"
+        >
+            <input type="hidden" name="_token" :value="$parent.$root.crsf" />
+        </dropzone>
+
         <form class="ui reply form" v-if="!thread.locked">
             <div class="field">
                 <textarea v-model="reply"></textarea>
             </div>
-            <div class="ui orange labeled icon right floated button" @click="sendReply">
+
+            <button class="ui orange labeled icon right floated button" type="button" @click="sendReply" :disabled="reply.length == 0">
                 <i class="icon edit"></i> Add Reply
-            </div>
+            </button>
         </form>
         <div class="ui default labelled disabled icon right floated button" v-if="thread.locked">
             <i class="lock icon"></i> Locked
         </div>
-      </div>
+    </div>
 </template>
 
 <script>
 import MessageView from './MessageView.vue';
+import Dropzone from 'vue2-dropzone';
 
 export default {
-    components: { MessageView },
+    components: { MessageView, Dropzone },
     data() {
         return {
             thread: {
@@ -40,6 +55,7 @@ export default {
             reply: '',
             users: [],
             error: null,
+            uploadedFiles: [],
         };
     },
     created() {
@@ -61,14 +77,28 @@ export default {
         });
     },
     methods: {
+        fileAdded(file) {
+            this.uploadedFiles.push({
+                name: file.name,
+                path: JSON.parse(file.xhr.response).path,
+            });
+        },
+        fileRemoved(file, error, xhr) {
+            const path = JSON.parse(file.xhr.response).path;
+            const f = this.uploadedFiles.find((o) => o.path === path);
+            const idx = this.uploadedFiles.indexOf(f);
+        },
         sendReply() {
             const id = this.$route.params.id;
             axios.put(`/messages/${id}`, {
-                message: this.reply
+                message: this.reply,
+                files: this.uploadedFiles,
             }).then((response) => {
                 if (response.status === 200) {
                     this.messages.push(response.data.message);
                     this.reply = '';
+                    this.uploadedFiles = [];
+                    this.$refs.myDropzone.removeAllFiles();
                 }
             });
         }
@@ -78,3 +108,9 @@ export default {
     }
 }
 </script>
+
+<style>
+.thread .dropzone .dz-message {
+    margin: 1em 0;
+}
+</style>

@@ -163,3 +163,11 @@ body > .grid {
 #dashboard .ui.secondary.pointing.menu .search.item input {
   min-width: 250px;
 }
+.thread .dropzone {
+  min-height: 100px;
+  margin-bottom: 20px;
+  background-color: rgba(242, 113, 29, 0.1);
+}
+.thread .dropzone .dz-message {
+  margin: 1em 0;
+}

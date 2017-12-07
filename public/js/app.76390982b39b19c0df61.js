@@ -2320,7 +2320,7 @@ exports.default = {
     props: ['type', 'id'],
     created: function created() {
         var baseUrl = '/' + this.type + '/' + this.id + '/feedback';
-        var routes = [{ name: 'feedback', path: baseUrl + '/', component: _Overview2.default, props: { type: this.type, id: this.id, thread_type: 'feedback' } }, { name: 'feedbackview', path: '/:type/:id/feedback/:org_id', component: _Contact2.default }];
+        var routes = [{ name: 'feedback', path: baseUrl + '/', component: _Overview2.default, props: { type: this.type, id: this.id, thread_type: 'feedback' } }, { name: 'feedbackview', path: '/:type/:id/:thread_type/:org_id', component: _Contact2.default }];
 
         this.$router.addRoutes(routes);
     },
@@ -2483,6 +2483,13 @@ exports.default = {
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -4689,10 +4696,57 @@ var _MessageView = __webpack_require__("./resources/assets/js/components/Message
 
 var _MessageView2 = _interopRequireDefault(_MessageView);
 
+var _vue2Dropzone = __webpack_require__("./node_modules/vue2-dropzone/dist/vue2-dropzone.js");
+
+var _vue2Dropzone2 = _interopRequireDefault(_vue2Dropzone);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
 exports.default = {
-    components: { MessageView: _MessageView2.default },
+    components: { MessageView: _MessageView2.default, Dropzone: _vue2Dropzone2.default },
     data: function data() {
         return {
             thread: {
@@ -4701,7 +4755,8 @@ exports.default = {
             messages: [],
             reply: '',
             users: [],
-            error: null
+            error: null,
+            uploadedFiles: []
         };
     },
     created: function created() {
@@ -4726,16 +4781,32 @@ exports.default = {
     },
 
     methods: {
+        fileAdded: function fileAdded(file) {
+            this.uploadedFiles.push({
+                name: file.name,
+                path: JSON.parse(file.xhr.response).path
+            });
+        },
+        fileRemoved: function fileRemoved(file, error, xhr) {
+            var path = JSON.parse(file.xhr.response).path;
+            var f = this.uploadedFiles.find(function (o) {
+                return o.path === path;
+            });
+            var idx = this.uploadedFiles.indexOf(f);
+        },
         sendReply: function sendReply() {
             var _this2 = this;
 
             var id = this.$route.params.id;
             axios.put('/messages/' + id, {
-                message: this.reply
+                message: this.reply,
+                files: this.uploadedFiles
             }).then(function (response) {
                 if (response.status === 200) {
                     _this2.messages.push(response.data.message);
                     _this2.reply = '';
+                    _this2.uploadedFiles = [];
+                    _this2.$refs.myDropzone.removeAllFiles();
                 }
             });
         }
@@ -4743,34 +4814,7 @@ exports.default = {
     destroyed: function destroyed() {
         this.$store.commit('setActiveThread', { thread: null });
     }
-}; //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
+};
 
 /***/ }),
 
@@ -4855,56 +4899,19 @@ var _MessageView = __webpack_require__("./resources/assets/js/components/Message
 
 var _MessageView2 = _interopRequireDefault(_MessageView);
 
+var _vue2Dropzone = __webpack_require__("./node_modules/vue2-dropzone/dist/vue2-dropzone.js");
+
+var _vue2Dropzone2 = _interopRequireDefault(_vue2Dropzone);
+
 var _lodash = __webpack_require__("./node_modules/lodash/lodash.js");
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
 exports.default = {
     name: 'contact',
-    components: { MessageView: _MessageView2.default },
+    components: { MessageView: _MessageView2.default, Dropzone: _vue2Dropzone2.default },
     beforeRouteEnter: function beforeRouteEnter(to, from, next) {
         var type = typeof to.params.thread_type === 'undefined' ? '' : to.params.thread_type;
         axios.get('/contact/' + to.params.org_id + '/' + to.params.type + '/' + to.params.id + '/' + type).then(function (res) {
@@ -4932,13 +4939,18 @@ exports.default = {
             messages: [],
             reply: '',
             users: [],
-            error: null
+            error: null,
+            is_owner: false,
+            uploadedFiles: []
         };
     },
 
     computed: {
         showWarning: function showWarning() {
             return !this.thread.locked && this.thread.type === 'negotiation';
+        },
+        canAdd: function canAdd() {
+            return !this.thread.locked && this.is_owner && this.thread.type === 'negotiation';
         }
     },
     methods: {
@@ -4950,15 +4962,29 @@ exports.default = {
                 _this2.thread.locked = true;
             });
         },
+        fileAdded: function fileAdded(file) {
+            this.uploadedFiles.push({
+                name: file.name,
+                path: JSON.parse(file.xhr.response).path
+            });
+        },
+        fileRemoved: function fileRemoved(file, error, xhr) {
+            var path = JSON.parse(file.xhr.response).path;
+            var f = this.uploadedFiles.find(function (o) {
+                return o.path === path;
+            });
+            var idx = this.uploadedFiles.indexOf(f);
+        },
         capitalize: function capitalize(value) {
             return value.charAt(0).toUpperCase() + value.slice(1);
         },
         sendReply: function sendReply() {
             var _this3 = this;
 
-            axios.post('/contact/' + this.organization.id + '/' + this.target.type + '/' + this.target.id, {
+            axios.post('/contact/' + this.organization.id + '/' + this.target.type + '/' + this.target.id + '/' + this.thread.type, {
                 thread: this.thread,
-                message: this.reply
+                message: this.reply,
+                files: this.uploadedFiles
             }).then(function (response) {
                 if (response.status === 200) {
                     if (typeof response.data.thread !== 'undefined') {
@@ -4966,6 +4992,8 @@ exports.default = {
                     }
                     _this3.messages.push(response.data.message);
                     _this3.reply = '';
+                    _this3.uploadedFiles = [];
+                    _this3.$refs.myDropzone.removeAllFiles();
                 }
             });
         },
@@ -4975,6 +5003,7 @@ exports.default = {
             if (res.status === 200) {
                 this.organization = res.data.organization;
                 this.target = res.data.target;
+                this.is_owner = res.data.is_owner;
                 if (res.data.thread_id) {
                     this.thread_id = res.data.thread_id;
                     axios.get('/messages/' + this.thread_id).then(function (response) {
@@ -5000,7 +5029,58 @@ exports.default = {
         this.$store.commit('setActiveThread', { thread: null });
         this.$store.commit('setOrganization', { organization: null });
     }
-};
+}; //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /***/ }),
 
@@ -5801,6 +5881,14 @@ exports.push([module.i, "\n.vue-dropzone {\n    border: 1px dashed rgba(34,36,38
 
 exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/css-base.js")();
 exports.push([module.i, "\n.ui.ribbon.label {\n    text-transform: capitalize!important;\n}\n", ""]);
+
+/***/ }),
+
+/***/ "./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"id\":\"data-v-929de04a\",\"scoped\":false,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/components/ThreadView.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/css-base.js")();
+exports.push([module.i, "\n.thread .dropzone .dz-message {\n    margin: 1em 0;\n}\n", ""]);
 
 /***/ }),
 
@@ -37286,7 +37374,21 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     domProps: {
       "innerHTML": _vm._s(_vm.formatMessage(_vm.message.body))
     }
-  })])])
+  }), _vm._v(" "), (_vm.message.files.length) ? _c('div', {
+    staticClass: "files"
+  }, [_c('div', {
+    staticClass: "ui divider"
+  }), _vm._v(" "), _vm._l((_vm.message.files), function(file) {
+    return _c('a', {
+      staticClass: "ui small blue label",
+      attrs: {
+        "href": file.url,
+        "download": ""
+      }
+    }, [_c('i', {
+      staticClass: "attach icon"
+    }), _vm._v("\n                " + _vm._s(file.name) + "\n            ")])
+  })], 2) : _vm._e()])])
 },staticRenderFns: []}
 module.exports.render._withStripped = true
 if (false) {
@@ -37842,7 +37944,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         params: {
           id: _vm.id,
           type: _vm.type,
-          org_id: _vm.organization.id
+          org_id: _vm.organization.id,
+          thread_type: 'feedback'
         }
       }
     }
@@ -40342,7 +40445,9 @@ if (false) {
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', {}, [(_vm.error) ? _c('div', {
+  return _c('div', {
+    staticClass: "thread"
+  }, [(_vm.error) ? _c('div', {
     staticClass: "ui error message"
   }, [_c('div', {
     staticClass: "content"
@@ -40355,75 +40460,28 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         "message": m
       }
     })
-  })), _vm._v(" "), (!_vm.thread.locked) ? _c('form', {
-    staticClass: "ui reply form"
-  }, [_c('div', {
-    staticClass: "field"
-  }, [_c('textarea', {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: (_vm.reply),
-      expression: "reply"
-    }],
-    domProps: {
-      "value": (_vm.reply)
+  })), _vm._v(" "), (!_vm.thread.locked) ? _c('dropzone', {
+    ref: "myDropzone",
+    attrs: {
+      "id": "files",
+      "url": "/file/upload",
+      "useFontAwesome": true,
+      "showRemoveLink": true,
+      "paramName": "file"
     },
     on: {
-      "input": function($event) {
-        if ($event.target.composing) { return; }
-        _vm.reply = $event.target.value
-      }
+      "vdropzone-success": _vm.fileAdded,
+      "vdropzone-removed-file": _vm.fileRemoved
     }
-  })]), _vm._v(" "), _c('div', {
-    staticClass: "ui orange labeled icon right floated button",
-    on: {
-      "click": _vm.sendReply
+  }, [_c('input', {
+    attrs: {
+      "type": "hidden",
+      "name": "_token"
+    },
+    domProps: {
+      "value": _vm.$parent.$root.crsf
     }
-  }, [_c('i', {
-    staticClass: "icon edit"
-  }), _vm._v(" Add Reply\n        ")])]) : _vm._e(), _vm._v(" "), (_vm.thread.locked) ? _c('div', {
-    staticClass: "ui default labelled disabled icon right floated button"
-  }, [_c('i', {
-    staticClass: "lock icon"
-  }), _vm._v(" Locked\n    ")]) : _vm._e()])
-},staticRenderFns: []}
-module.exports.render._withStripped = true
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-     require("vue-hot-reload-api").rerender("data-v-929de04a", module.exports)
-  }
-}
-
-/***/ }),
-
-/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-9309c0aa\"}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/collaborations/Contact.vue":
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', {}, [(_vm.showWarning) ? _c('div', {
-    staticClass: "ui icon negative message"
-  }, [_c('i', {
-    staticClass: "warning icon"
-  }), _vm._v(" "), _c('div', {
-    staticClass: "content"
-  }, [_c('div', {
-    staticClass: "header"
-  }, [_vm._v("Important")]), _vm._v(" "), _c('p', [_vm._v("Before you add someone to your " + _vm._s(_vm.target.type) + ", make sure you discuss and agree on the terms of your collaboration.  If needed, you can use the form below to attach and exchange documents (e.g. NDA agreements, contracts, etc) to help you reach an agreement.")])])]) : _vm._e(), _vm._v(" "), (_vm.error) ? _c('div', {
-    staticClass: "ui error message"
-  }, [_c('div', {
-    staticClass: "content"
-  }, [_c('p', [_vm._v(_vm._s(_vm.error))])])]) : _vm._e(), _vm._v(" "), _c('div', {
-    staticClass: "ui threaded comments"
-  }, _vm._l((_vm.messages), function(m) {
-    return _c('message-view', {
-      key: m.id,
-      attrs: {
-        "message": m
-      }
-    })
-  })), _vm._v(" "), (!_vm.thread.locked) ? _c('form', {
+  })]) : _vm._e(), _vm._v(" "), (!_vm.thread.locked) ? _c('form', {
     staticClass: "ui reply form"
   }, [_c('div', {
     staticClass: "field"
@@ -40444,6 +40502,101 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       }
     }
   })]), _vm._v(" "), _c('button', {
+    staticClass: "ui orange labeled icon right floated button",
+    attrs: {
+      "type": "button",
+      "disabled": _vm.reply.length == 0
+    },
+    on: {
+      "click": _vm.sendReply
+    }
+  }, [_c('i', {
+    staticClass: "icon edit"
+  }), _vm._v(" Add Reply\n        ")])]) : _vm._e(), _vm._v(" "), (_vm.thread.locked) ? _c('div', {
+    staticClass: "ui default labelled disabled icon right floated button"
+  }, [_c('i', {
+    staticClass: "lock icon"
+  }), _vm._v(" Locked\n    ")]) : _vm._e()], 1)
+},staticRenderFns: []}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-929de04a", module.exports)
+  }
+}
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-9309c0aa\"}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/collaborations/Contact.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    staticClass: "thread"
+  }, [(_vm.showWarning) ? _c('div', {
+    staticClass: "ui icon negative message"
+  }, [_c('i', {
+    staticClass: "warning icon"
+  }), _vm._v(" "), _c('div', {
+    staticClass: "content"
+  }, [_c('div', {
+    staticClass: "header"
+  }, [_vm._v("Important")]), _vm._v(" "), _c('p', [_vm._v("Before you add someone to your " + _vm._s(_vm.target.type) + ", make sure you discuss and agree on the terms of your collaboration.  If needed, you can use the form below to attach and exchange documents (e.g. NDA agreements, contracts, etc) to help you reach an agreement.")])])]) : _vm._e(), _vm._v(" "), (_vm.error) ? _c('div', {
+    staticClass: "ui error message"
+  }, [_c('div', {
+    staticClass: "content"
+  }, [_c('p', [_vm._v(_vm._s(_vm.error))])])]) : _vm._e(), _vm._v(" "), _c('div', {
+    staticClass: "ui threaded comments"
+  }, _vm._l((_vm.messages), function(m) {
+    return _c('message-view', {
+      key: m.id,
+      attrs: {
+        "message": m
+      }
+    })
+  })), _vm._v(" "), (!_vm.thread.locked) ? _c('dropzone', {
+    ref: "myDropzone",
+    attrs: {
+      "id": "files",
+      "url": "/file/upload",
+      "useFontAwesome": true,
+      "showRemoveLink": true,
+      "paramName": "file"
+    },
+    on: {
+      "vdropzone-success": _vm.fileAdded,
+      "vdropzone-removed-file": _vm.fileRemoved
+    }
+  }, [_c('input', {
+    attrs: {
+      "type": "hidden",
+      "name": "_token"
+    },
+    domProps: {
+      "value": _vm.$parent.$root.crsf
+    }
+  })]) : _vm._e(), _vm._v(" "), (!_vm.thread.locked) ? _c('form', {
+    staticClass: "ui reply form"
+  }, [_c('div', {
+    staticClass: "field"
+  }, [_c('textarea', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.reply),
+      expression: "reply"
+    }],
+    domProps: {
+      "value": (_vm.reply)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.reply = $event.target.value
+      }
+    }
+  })]), _vm._v(" "), (_vm.canAdd) ? _c('button', {
     staticClass: "ui left floated positive button",
     attrs: {
       "type": "button"
@@ -40453,8 +40606,12 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         _vm.add()
       }
     }
-  }, [_vm._v("Add as collaborator")]), _vm._v(" "), _c('div', {
+  }, [_vm._v("\n            Add as collaborator\n        ")]) : _vm._e(), _vm._v(" "), _c('button', {
     staticClass: "ui orange labeled icon right floated button",
+    attrs: {
+      "type": "button",
+      "disabled": _vm.reply.length == 0
+    },
     on: {
       "click": _vm.sendReply
     }
@@ -40464,7 +40621,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "ui disabled default labeled icon right floated button"
   }, [_c('i', {
     staticClass: "lock icon"
-  }), _vm._v(" Locked\n    ")]) : _vm._e()])
+  }), _vm._v(" Locked\n    ")]) : _vm._e()], 1)
 },staticRenderFns: []}
 module.exports.render._withStripped = true
 if (false) {
@@ -44701,6 +44858,33 @@ if(false) {
  if(!content.locals) {
    module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"id\":\"data-v-4c167f93\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Product.vue", function() {
      var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"id\":\"data-v-4c167f93\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Product.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+
+/***/ "./node_modules/vue-style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"id\":\"data-v-929de04a\",\"scoped\":false,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/components/ThreadView.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__("./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"id\":\"data-v-929de04a\",\"scoped\":false,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/components/ThreadView.vue");
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__("./node_modules/vue-style-loader/lib/addStylesClient.js")("5117eee2", content, false);
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"id\":\"data-v-929de04a\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./ThreadView.vue", function() {
+     var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"id\":\"data-v-929de04a\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./ThreadView.vue");
      if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
      update(newContent);
    });
@@ -56967,6 +57151,10 @@ module.exports = Component.exports
 
 /***/ "./resources/assets/js/components/ThreadView.vue":
 /***/ (function(module, exports, __webpack_require__) {
+
+
+/* styles */
+__webpack_require__("./node_modules/vue-style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"id\":\"data-v-929de04a\",\"scoped\":false,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/components/ThreadView.vue")
 
 var Component = __webpack_require__("./node_modules/vue-loader/lib/component-normalizer.js")(
   /* script */

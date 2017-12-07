@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Collaboration;
 use App\Competency;
 use App\Design;
+use App\Message;
 use App\Organization;
 use App\OrganizationType;
 use App\PaymentType;
@@ -12,7 +13,6 @@ use App\Product;
 use App\Prototype;
 use App\Thread;
 use Carbon\Carbon;
-use Cmgmyr\Messenger\Models\Message;
 use Cmgmyr\Messenger\Models\Participant;
 use Illuminate\Http\Request;
 
@@ -148,6 +148,7 @@ class PartnerMatchingController extends Controller
             'name'         => $obj->title,
             'target'       => $obj,
             'thread_id'    => $thread ? $thread->id : null,
+            'is_owner'     => $organization->owner_id === \Auth::id(),
         ];
 
         return $data;
@@ -185,6 +186,11 @@ class PartnerMatchingController extends Controller
             'user_id'   => \Auth::user()->id,
             'body'      => $input['message'],
         ]);
+        $files = isset($input['files']) ? $input['files'] : [];
+        foreach ($files as $file) {
+            $path = storage_path('/app/' . $file['path']);
+            $message->addMedia($path)->usingName($file['name'])->toMediaCollection('files');
+        }
 
         // Sender
         $participant = Participant::firstOrCreate([

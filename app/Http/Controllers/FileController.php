@@ -17,7 +17,11 @@ class FileController extends Controller
             abort(404);
         }
 
-        return response()->file($media->getPath(), ['Content-Type' => $media->mime_type]);
+        return response()->file($media->getPath(), [
+            'Content-Type'        => $media->mime_type,
+            'Content-Disposition' => 'attachment; filename="' . $media->name . '"',
+            'Content-Length'      => $media->size,
+        ]);
     }
 
     public function upload(Request $request)
