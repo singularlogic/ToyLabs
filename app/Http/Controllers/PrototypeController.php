@@ -32,9 +32,14 @@ class PrototypeController extends Controller
 
     public function productPrototypes(int $id)
     {
+        $product = Product::find($id);
+        if (\Gate::denies('edit.product', $product)) {
+            abort(401, 'Unauthorized access');
+        }
+
         $data = [
             'id'         => $id,
-            'prototypes' => Prototype::where('product_id', $id)->orderBy('updated_at', 'DESC')->get(),
+            'prototypes' => $product->prototypes()->orderBy('updated_at', 'DESC')->get(),
         ];
 
         return view('product.prototypes', $data);
@@ -47,6 +52,11 @@ class PrototypeController extends Controller
 
     public function create(Request $request, $id)
     {
+        $product = Product::find($id);
+        if (\Gate::denies('edit.product', $product)) {
+            abort(401, 'Unauthorized access');
+        }
+
         $data = [
             'title'      => 'Create Prototype',
             'product_id' => $id,
@@ -68,7 +78,7 @@ class PrototypeController extends Controller
         $files   = json_decode($input['files'], true);
         $images  = json_decode($input['images'], true);
 
-        if ($this->canEdit($user, $product)) {
+        if (\Gate::allows('edit.product', $product)) {
             $prototype = Prototype::create([
                 'title'       => $input['title'],
                 'description' => $input['description'],
@@ -97,6 +107,9 @@ class PrototypeController extends Controller
     public function edit(Request $request, $id)
     {
         $prototype = Prototype::find($id);
+        if (\Gate::denies('edit.product', $product)) {
+            abort(401, 'Unauthorized access');
+        }
 
         $data = [
             'title'      => 'Edit Prototype',
@@ -117,7 +130,7 @@ class PrototypeController extends Controller
         $images    = json_decode($input['images'], true);
         $files     = json_decode($input['files'], true);
 
-        if ($prototype && $this->canEdit($user, $product)) {
+        if ($prototype && \Gate::allows('edit.product', $product)) {
             Prototype::where('id', $id)->update([
                 'title'       => $input['title'],
                 'description' => $input['description'],
@@ -139,16 +152,5 @@ class PrototypeController extends Controller
         }
 
         return redirect('dashboard')->with('error', 'You are not permitted to edit this product!');
-    }
-
-    protected function canEdit($user, $product)
-    {
-        if (is_a($product->owner, 'App\User') && $product->owner->id === $user->id) {
-            return true;
-        } else if (is_a($product->owner, 'App\Organization') && $user->organizations->where('id', $product->owner->id)) {
-            return true;
-        }
-
-        return false;
     }
 }

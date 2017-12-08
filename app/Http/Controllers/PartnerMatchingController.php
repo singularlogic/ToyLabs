@@ -34,7 +34,7 @@ class PartnerMatchingController extends Controller
     public function index(Request $request, string $type, int $id)
     {
         $obj      = $type === 'design' ? Design::findOrFail($id) : Prototype::findOrFail($id);
-        $is_owner = $this->canEdit(\Auth::user(), $obj->product);
+        $is_owner = \Gate::allows('edit.organization');
         $data     = [
             'product'      => $obj,
             'roles'        => OrganizationType::get(),
@@ -64,7 +64,6 @@ class PartnerMatchingController extends Controller
                 'title'       => $organization->name,
                 'description' => $organization->organizationType->name,
                 'url'         => '/' . $request->get('type') . '/' . $request->get('id') . '/collaborate/contact/' . $organization->id,
-                // 'url'         => '/contact/' . $organization->id . '/' . $request->get('type') . '/' . $request->get('id'),
             ];
         }
 
@@ -127,7 +126,7 @@ class PartnerMatchingController extends Controller
             $id = -1;
         }
         return $organizations->reject(function ($item) use ($id) {
-            return $item->id === -1; //$id;
+            return $item->id === $id;
         })->sortByDesc('score');
     }
 
@@ -140,6 +139,11 @@ class PartnerMatchingController extends Controller
             ->where('target_id', $id)
             ->where('target_type', get_class($obj))
             ->first();
+
+        // Through this route, only the design/prototype owner organization can access the contact route
+        if (\Gate::denies('view.product', $obj->product)) {
+            abort(401, 'Unauthorized access');
+        }
 
         $data = [
             'organization' => $organization,
@@ -166,6 +170,10 @@ class PartnerMatchingController extends Controller
             $target = $input['thread']['target_type']::findOrFail($input['thread']['target_id']);
         } catch (NotFoundHttpException $e) {
             abort(404);
+        }
+
+        if (\Gate::denies('edit.organization', $target->product)) {
+            abort(401, 'Unauthorized access');
         }
 
         if (isset($input['thread']['id'])) {
@@ -216,7 +224,15 @@ class PartnerMatchingController extends Controller
 
     public function feedback(Request $request, string $type, int $id)
     {
-        $obj  = $type === 'design' ? Design::findOrFail($id) : Prototype::findOrFail($id);
+        $obj = $type === 'design' ? Design::findOrFail($id) : Prototype::findOrFail($id);
+
+        if (\Gate::denies('view.product', $obj->product)) {
+            if (($type === 'design' && \Gate::denies('collaborate.design', $obj)) or
+                $type === 'prototype' && \Gate::denies('collaborate.prototype', $obj)) {
+                abort(401, 'Unauthorized access');
+            }
+        }
+
         $data = [
             'id'      => $id,
             'back'    => [
@@ -234,6 +250,13 @@ class PartnerMatchingController extends Controller
         $obj            = $type === 'design' ? Design::findOrFail($id) : Prototype::findOrFail($id);
         $collaborations = $obj->collaborations;
         $result         = [];
+
+        if (\Gate::denies('view.product', $obj->product)) {
+            if (($type === 'design' && \Gate::denies('collaborate.design', $obj)) or
+                $type === 'prototype' && \Gate::denies('collaborate.prototype', $obj)) {
+                abort(401, 'Unauthorized access');
+            }
+        }
 
         foreach ($collaborations as $collaboration) {
             $result[] = [
@@ -253,6 +276,13 @@ class PartnerMatchingController extends Controller
         $feedback = $obj->feedback;
         $result   = [];
 
+        if (\Gate::denies('view.product', $obj->product)) {
+            if (($type === 'design' && \Gate::denies('collaborate.design', $obj)) or
+                $type === 'prototype' && \Gate::denies('collaborate.prototype', $obj)) {
+                abort(401, 'Unauthorized access');
+            }
+        }
+
         foreach ($feedback as $n) {
             $org      = $n->organization;
             $result[] = [
@@ -269,6 +299,10 @@ class PartnerMatchingController extends Controller
     {
         $item = $type === 'design' ? Design::findOrFail($id) : Prototype::findOrFail($id);
         $org  = Organization::findOrFail($org_id);
+
+        if (\Gate::denies('edit.organization', $org)) {
+            abort(401, 'Unauthorized access');
+        }
 
         Collaboration::updateOrCreate([
             'organization_id'     => $org_id,
@@ -293,16 +327,5 @@ class PartnerMatchingController extends Controller
             'target_type'     => get_class($item),
             'type'            => 'feedback',
         ]);
-    }
-
-    protected function canEdit($user, $product)
-    {
-        if (is_a($product->owner, 'App\User') && $product->owner->id === $user->id) {
-            return true;
-        } else if (is_a($product->owner, 'App\Organization') && $user->organizations->where('id', $product->owner->id)) {
-            return true;
-        }
-
-        return false;
     }
 }

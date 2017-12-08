@@ -177,6 +177,10 @@ class ProfileController extends Controller
             $general = $request->only(['name', 'legal_name', 'legal_form', 'address', 'po_box', 'postal_code', 'country_id', 'twitter', 'facebook', 'instagram', 'phone', 'fax', 'website_url', 'description', 'city']);
             Organization::where('id', $id)->update($general);
 
+            if (\Gate::denies('edit.organization', $organization)) {
+                abort(401, 'Unauthorized access');
+            }
+
             // Update Facilities
             Facility::where('organization_id', $id)->delete();
             $facilities = json_decode($input['facilities'], true);

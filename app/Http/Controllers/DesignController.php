@@ -32,9 +32,14 @@ class DesignController extends Controller
 
     public function productDesigns(int $id)
     {
+        $product = Product::find($id);
+        if (\Gate::denies('edit.product', $product)) {
+            abort(401, 'Unauthorized access');
+        }
+
         $data = [
             'id'      => $id,
-            'designs' => Design::where('product_id', $id)->orderBy('updated_at', 'DESC')->get(),
+            'designs' => $product->designs()->orderBy('updated_at', 'DESC')->get(),
         ];
 
         return view('product.designs', $data);
@@ -47,6 +52,11 @@ class DesignController extends Controller
 
     public function create(Request $request, $id)
     {
+        $product = Product::find($id);
+        if (\Gate::denies('edit.product', $product)) {
+            abort(401, 'Unauthorized access');
+        }
+
         $data = [
             'title'      => 'Create Design',
             'product_id' => $id,
@@ -68,7 +78,7 @@ class DesignController extends Controller
         $files   = json_decode($input['files'], true);
         $images  = json_decode($input['images'], true);
 
-        if ($this->canEdit($user, $product)) {
+        if (\Gate::allows('edit.product', $product)) {
             $design = Design::create([
                 'title'       => $input['title'],
                 'description' => $input['description'],
@@ -96,6 +106,9 @@ class DesignController extends Controller
     public function edit(Request $request, $id)
     {
         $design = Design::find($id);
+        if (\Gate::denies('edit.product', $design->product)) {
+            abort(401, 'Unauthorized access');
+        }
 
         $data = [
             'title'      => 'Edit Design',
@@ -115,7 +128,7 @@ class DesignController extends Controller
         $images  = json_decode($input['images'], true);
         $files   = json_decode($input['files'], true);
 
-        if ($design && $this->canEdit($user, $product)) {
+        if ($design && \Gate::allows('edit.product', $design->product)) {
             Design::where('id', $id)->update([
                 'title'       => $input['title'],
                 'description' => $input['description'],
@@ -145,7 +158,7 @@ class DesignController extends Controller
         $product = Product::find($id);
         $design  = Design::find($design_id);
 
-        if ($product && $design && $this->canEdit($user, $product)) {
+        if ($product && $design && \Gate::allows('edit.product', $product)) {
             // Progress product status to the next step
             if ($product->status === 'design') {
                 $product->status = 'prototype';
@@ -170,16 +183,4 @@ class DesignController extends Controller
         \Session::flash('error', 'You are not permitted to edit this product!');
         return redirect()->route('product.designs', ['id' => $input['id']]);
     }
-
-    protected function canEdit($user, $product)
-    {
-        if (is_a($product->owner, 'App\User') && $product->owner->id === $user->id) {
-            return true;
-        } else if (is_a($product->owner, 'App\Organization') && $user->organizations->where('id', $product->owner->id)) {
-            return true;
-        }
-
-        return false;
-    }
-
 }

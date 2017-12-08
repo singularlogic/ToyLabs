@@ -44,7 +44,9 @@ class ProductController extends Controller
     public function showProduct($id)
     {
         $product = Product::with(['designs', 'prototypes', 'comments.creator', 'media'])->find($id);
-        // TODO: Return 404 if product does not exist
+        if (!$product->is_public && \Gate::denies('view.product', $product)) {
+            abort(401, 'Unauthorized access');
+        }
 
         $data = [
             'title'          => $product->title,
@@ -63,7 +65,9 @@ class ProductController extends Controller
     public function showDesign($id)
     {
         $design = Design::with(['prototypes', 'comments.creator'])->find($id);
-        // TODO: Return 404 if design does not exist
+        if (!$design->is_public && \Gate::denies('view.product', $design->product) && \Gate::denies('collaborate.design', $design)) {
+            abort(401, 'Unauthorized access');
+        }
 
         $data = [
             'title'          => $design->title,
@@ -82,7 +86,9 @@ class ProductController extends Controller
     public function showPrototype($id)
     {
         $prototype = Prototype::with(['comments.creator'])->find($id);
-        // TODO: Return 404 if prototype does not exist
+        if (!$prototype->is_public && \Gate::denies('view.product', $prototype->product) && \Gate::denies('collaborate.prototype', $prototype)) {
+            abort(401, 'Unauthorized access');
+        }
 
         $data = [
             'title'          => $prototype->title,
@@ -101,7 +107,6 @@ class ProductController extends Controller
     public function create()
     {
         $user = \Auth::user();
-
         $data = [
             'title'         => 'New Product',
             'user'          => $user,
@@ -157,6 +162,9 @@ class ProductController extends Controller
     public function edit($id)
     {
         $product = Product::with('owner')->find($id);
+        if (\Gate::denies('edit.product', $product)) {
+            abort(401, 'Unauthorized access');
+        };
 
         if (!$product) {
             return redirect('dashboard')->with('error', 'Product not found!');
@@ -187,7 +195,7 @@ class ProductController extends Controller
         $files   = json_decode($input['files'], true);
         $images  = json_decode($input['images'], true);
 
-        if ($product && $this->canEdit($user, $product)) {
+        if ($product && \Gate::allows('edit.product', $product)) {
             Product::where('id', $id)->update([
                 'title'       => $input['title'],
                 'description' => $input['description'],

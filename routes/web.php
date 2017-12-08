@@ -101,7 +101,10 @@ Route::get('/organizations', ['as' => 'organizations', 'uses' => 'ProfileControl
 Route::get('/organization/{id}', ['as' => 'organization.profile', 'uses' => 'ProfileController@organizationProfile']);
 
 // Notifications
-Route::group(['prefix' => 'notifications'], function () {
+Route::group([
+    'prefix'     => 'notifications',
+    'middleware' => 'auth',
+], function () {
     Route::get('/', ['as' => 'notifications', 'uses' => 'NotificationController@index']);
     Route::patch('/{id}/read', ['as' => 'notifications.markasread', 'uses' => 'NotificationController@markAsRead']);
     Route::post('/mark-all-read', ['as' => 'notifications.markallread', 'uses' => 'NotificationController@markAllRead']);
@@ -110,8 +113,11 @@ Route::group(['prefix' => 'notifications'], function () {
 });
 
 // Messages
-Route::get('/feed/message/{id}', ['as' => 'message.view', 'uses' => 'NotificationController@feed']);
-Route::group(['prefix' => 'messages'], function () {
+Route::get('/feed/message/{id}', ['as' => 'message.view', 'uses' => 'NotificationController@feed'])->middleware('auth');
+Route::group([
+    'prefix'     => 'messages',
+    'middleware' => 'auth',
+], function () {
     Route::get('/', ['as' => 'messages', 'uses' => 'MessagesController@index']);
     Route::get('users', ['as' => 'messages.users', 'uses' => 'MessagesController@users']);
     Route::get('unread', ['as' => 'messages.unread', 'uses' => 'MessagesController@unread']);
@@ -120,11 +126,13 @@ Route::group(['prefix' => 'messages'], function () {
     Route::put('{id}', ['as' => 'messages.update', 'uses' => 'MessagesController@update']);
 });
 
-Route::get('/user/likes', ['as' => 'user.likes', 'uses' => 'UserController@getLikes']);
-Route::put('/user/like/{type}/{id}', ['as' => 'user.like', 'uses' => 'UserController@like']);
-Route::put('/user/unlike/{type}/{id}', ['as' => 'user.like', 'uses' => 'UserController@unlike']);
-Route::post('/user/comment', ['as' => 'user.comment.post', 'uses' => 'UserController@postComment']);
-Route::delete('/user/comment/{id}', ['as' => 'user.comment.delete', 'uses' => 'UserController@deleteComment']);
+Route::group(['middleware' => 'auth'], function () {
+    Route::get('/user/likes', ['as' => 'user.likes', 'uses' => 'UserController@getLikes']);
+    Route::put('/user/like/{type}/{id}', ['as' => 'user.like', 'uses' => 'UserController@like']);
+    Route::put('/user/unlike/{type}/{id}', ['as' => 'user.like', 'uses' => 'UserController@unlike']);
+    Route::post('/user/comment', ['as' => 'user.comment.post', 'uses' => 'UserController@postComment']);
+    Route::delete('/user/comment/{id}', ['as' => 'user.comment.delete', 'uses' => 'UserController@deleteComment']);
+});
 
 // Product/Design/Prototype Details
 Route::get('/product/{id}', ['as' => 'product.details', 'uses' => 'ProductController@showProduct']);
@@ -132,5 +140,7 @@ Route::get('/design/{id}', ['as' => 'design.details', 'uses' => 'ProductControll
 Route::get('/prototype/{id}', ['as' => 'prototype.details', 'uses' => 'ProductController@showPrototype']);
 
 // API
-Route::get('/api/states/{id}', 'APIController@countryStates');
-Route::get('/api/cities/{id}', 'APIController@stateCities');
+Route::group(['middleware' => 'auth'], function () {
+    Route::get('/api/states/{id}', 'APIController@countryStates');
+    Route::get('/api/cities/{id}', 'APIController@stateCities');
+});
