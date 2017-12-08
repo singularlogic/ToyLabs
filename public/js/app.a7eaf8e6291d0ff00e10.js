@@ -4033,6 +4033,11 @@ exports.default = {
 //
 //
 //
+//
+//
+//
+//
+//
 
 /***/ }),
 
@@ -41047,7 +41052,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         _vm.hasOrganization = "false"
       }
     }
-  }), _vm._v(" "), _c('label', [_vm._v("No, I work alone")])])])]) : _vm._e(), _vm._v(" "), (_vm.hasOrganization == 'true' && _vm.isProfessional) ? _c('div', {
+  }), _vm._v(" "), _c('label', [_vm._v("No, I work alone")])])]), _vm._v(" "), _vm._m(0)]) : _vm._e(), _vm._v(" "), (_vm.hasOrganization == 'true' && _vm.isProfessional) ? _c('div', {
     staticClass: "inline fields"
   }, [_c('label', [_vm._v("Has organization already joined ToyLabs?")]), _vm._v(" "), _c('div', {
     staticClass: "field"
@@ -41173,7 +41178,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       }
     }, [_vm._v("Leave")]) : _vm._e(), _vm._v(" "), (o.owner_id == _vm.personal.user_id) ? _c('div', {
       staticClass: "ui basic green label"
-    }, [_vm._v("Owner")]) : _vm._e()]), _vm._v(" "), _c('img', {
+    }, [_vm._v("Manager")]) : _vm._e()]), _vm._v(" "), _c('img', {
       staticClass: "ui avatar image",
       attrs: {
         "src": "/images/avatar/small/elliot.jpg"
@@ -41338,7 +41343,16 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "body": "Are you sure you want to leave this organization? The owner will have to approve your request, if you decide you want to join again"
     }
   })], 1)
-},staticRenderFns: []}
+},staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    staticClass: "ui info message field",
+    staticStyle: {
+      "padding": "4px 8px"
+    }
+  }, [_c('i', {
+    staticClass: "info icon"
+  }), _vm._v("\n                    Freelancers click "), _c('strong', [_vm._v("Yes")]), _vm._v(", and then choose create an organization.\n                ")])
+}]}
 module.exports.render._withStripped = true
 if (false) {
   module.hot.accept()
