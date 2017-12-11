@@ -1964,7 +1964,11 @@ exports.default = {
             return '';
         }
     },
-    computed: _extends({}, (0, _vuex.mapGetters)(['activeThread']))
+    computed: _extends({}, (0, _vuex.mapGetters)(['activeThread']), {
+        isEmpty: function isEmpty() {
+            return this.products.length + this.activeCollaborations.length + this.archivedCollaborations.length === 0;
+        }
+    })
 };
 
 /***/ }),
@@ -3531,10 +3535,31 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 exports.default = {
     components: { ProductProgress: _ProductProgress2.default },
     props: ['products'],
-    data: function data() {
-        return {};
+    created: function created() {
+        if (this.products.length === 0 && !this.$parent.isEmpty) {
+            // Redirect to appropriate path
+            if (this.$parent.activeCollaborations.length > 0) {
+                this.$router.push({ name: 'collaborations' });
+            } else {
+                this.$router.push({ name: 'archive' });
+            }
+        }
     }
 }; //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -5219,6 +5244,11 @@ exports.default = {
     props: ['columns', 'data'],
     mounted: function mounted() {
         $('table.sortable').tablesort();
+    },
+    created: function created() {
+        if (this.data.length === 0) {
+            this.$router.push({ name: 'dashboard' });
+        }
     },
 
     methods: {
@@ -37139,13 +37169,13 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [_c('div', {
     staticClass: "ui orange pointing secondary menu"
-  }, [_c('router-link', {
+  }, [(_vm.products.length > 0) ? _c('router-link', {
     staticClass: "item",
     attrs: {
       "to": "/dashboard",
       "exact": ""
     }
-  }, [_vm._v("My Products")]), _vm._v(" "), (_vm.activeCollaborations.length > 0) ? _c('router-link', {
+  }, [_vm._v("My Products")]) : _vm._e(), _vm._v(" "), (_vm.activeCollaborations.length > 0) ? _c('router-link', {
     staticClass: "item",
     attrs: {
       "to": "/dashboard/collaborations"
@@ -40333,7 +40363,11 @@ if (false) {
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', {
+  return _c('div', [(_vm.$parent.isEmpty) ? _c('div', {
+    staticClass: "ui icon info message"
+  }, [_c('i', {
+    staticClass: "info icon"
+  }), _vm._v(" "), _vm._m(0)]) : _vm._e(), _vm._v(" "), _c('div', {
     staticClass: "ui very relaxed divided list"
   }, _vm._l((_vm.products), function(product) {
     return _c('product-progress', {
@@ -40342,8 +40376,14 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         "product": product
       }
     })
-  }))
-},staticRenderFns: []}
+  }))])
+},staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    staticClass: "content"
+  }, [_c('div', {
+    staticClass: "header"
+  }, [_vm._v("No products or collaborations found!")]), _vm._v(" "), _c('p'), _c('li', [_vm._v("Use the "), _c('strong', [_vm._v("New Product")]), _vm._v(" button to create a new product.")]), _vm._v(" "), _c('li', [_vm._v("Make sure your professional profile is complete so that you can be found by others to collaborate with.")]), _vm._v(" "), _c('p')])
+}]}
 module.exports.render._withStripped = true
 if (false) {
   module.hot.accept()

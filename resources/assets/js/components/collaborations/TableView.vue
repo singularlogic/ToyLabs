@@ -45,6 +45,11 @@ export default {
     mounted() {
         $('table.sortable').tablesort();
     },
+    created() {
+        if (this.data.length === 0) {
+            this.$router.push({ name: 'dashboard' });
+        }
+    },
     methods: {
         getIconClass(type) {
             if (type === 'design') return 'pencil';

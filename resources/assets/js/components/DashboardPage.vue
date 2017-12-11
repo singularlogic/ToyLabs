@@ -1,7 +1,7 @@
 <template>
     <div class="ui main container" id="dashboard">
         <div class="ui orange pointing secondary menu">
-            <router-link to="/dashboard" class="item" exact>My Products</router-link>
+            <router-link to="/dashboard" class="item" exact v-if="products.length > 0">My Products</router-link>
             <router-link to="/dashboard/collaborations" class="item" v-if="activeCollaborations.length > 0">Collaborations</router-link>
             <router-link to="/dashboard/archive" class="item" v-if="archivedCollaborations.length > 0">Archive</router-link>
             <router-link :to="{ name: 'threadview', params: { id: activeThread.id } }" class="item" v-if="activeThread">
@@ -59,6 +59,9 @@ export default {
         ...mapGetters([
             'activeThread',
         ]),
+        isEmpty() {
+            return this.products.length + this.activeCollaborations.length + this.archivedCollaborations.length === 0;
+        },
     },
 };
 </script>
