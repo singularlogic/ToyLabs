@@ -78,6 +78,10 @@ class MessagesController extends Controller
             return compact('error');
         }
 
+        if (\Gate::denies('view.thread', $thread)) {
+            abort(401, 'Unauthorized access');
+        }
+
         $userId   = Auth::user()->id;
         $users    = User::whereNotIn('id', $thread->participantsUserIds($userId))->get();
         $messages = Message::where('thread_id', $id)->with('user')->get();

@@ -56,7 +56,7 @@ class ProductController extends Controller
                 'id'   => $product->id,
             ],
             'files'          => $product->getMedia('files'),
-            'isCollaborator' => $this->isCollaborator(Auth::user(), $product, Product::class),
+            'isCollaborator' => \Gate::allows('edit.product', $product), // Only display files to members of the owning organization
         ];
 
         return view('product.details', $data);
@@ -77,7 +77,7 @@ class ProductController extends Controller
                 'id'   => $design->id,
             ],
             'files'          => $design->getMedia('files'),
-            'isCollaborator' => $this->isCollaborator(Auth::user(), $design, Design::class),
+            'isCollaborator' => \Gate::allows('view.product', $design->product) || \Gate::allows('collaborate.design', $design),
         ];
 
         return view('product.design', $data);
@@ -98,7 +98,7 @@ class ProductController extends Controller
                 'id'   => $prototype->id,
             ],
             'files'          => $prototype->getMedia('files'),
-            'isCollaborator' => $this->isCollaborator(Auth::user(), $prototype, Prototype::class),
+            'isCollaborator' => \Gate::allows('view.product', $prototype->product) || \Gate::allows('collaborate.prototype', $prototype),
         ];
 
         return view('product.prototype', $data);
@@ -180,7 +180,7 @@ class ProductController extends Controller
             'product'       => $product,
         ];
 
-        if ($this->canEdit($user, $product)) {
+        if (\Gate::allows('edit.product', $product)) {
             return view('product.create', $data);
         }
 
@@ -225,29 +225,5 @@ class ProductController extends Controller
         }
 
         return redirect('dashboard')->with('error', 'You are not permitted to edit this product!');
-    }
-
-    protected function canEdit($user, $product)
-    {
-        if (is_a($product->owner, 'App\User') && $product->owner->id === $user->id) {
-            return true;
-        } else if (is_a($product->owner, 'App\Organization') && $user->organizations->where('id', $product->owner->id)) {
-            return true;
-        }
-
-        return false;
-    }
-
-    protected function isCollaborator($user, $object, $type)
-    {
-        if (!$user) {
-            return false;
-        }
-
-        if ($type === Product::class) {
-            return $this->canEdit($user, $object);
-        } else {
-            return $this->canEdit($user, $object->product);
-        }
     }
 }

@@ -34,7 +34,7 @@ class PartnerMatchingController extends Controller
     public function index(Request $request, string $type, int $id)
     {
         $obj      = $type === 'design' ? Design::findOrFail($id) : Prototype::findOrFail($id);
-        $is_owner = \Gate::allows('edit.organization');
+        $is_owner = \Gate::allows('owns.product', $obj->product);
         $data     = [
             'product'      => $obj,
             'roles'        => OrganizationType::get(),
@@ -152,13 +152,13 @@ class PartnerMatchingController extends Controller
             'name'         => $obj->title,
             'target'       => $obj,
             'thread_id'    => $thread ? $thread->id : null,
-            'is_owner'     => $organization->owner_id === \Auth::id(),
+            'is_owner'     => \Gate::allows('owns.product', $obj->product),
         ];
 
         return $data;
     }
 
-    public function doContact(Request $request)
+    public function doContact(Request $request, int $org_id, string $type, int $id)
     {
         $input = $request->all();
 
@@ -166,13 +166,13 @@ class PartnerMatchingController extends Controller
         $target = null;
         try {
             // Existing Thread
-            $org    = Organization::findOrFail($input['thread']['organization_id']);
-            $target = $input['thread']['target_type']::findOrFail($input['thread']['target_id']);
+            $org = Organization::findOrFail($org_id);
+            $obj = $type === 'design' ? Design::findOrFail($id) : Prototype::findOrFail($id);
         } catch (NotFoundHttpException $e) {
             abort(404);
         }
 
-        if (\Gate::denies('edit.organization', $target->product)) {
+        if (\Gate::denies('edit.product', $obj->product)) {
             abort(401, 'Unauthorized access');
         }
 
@@ -212,7 +212,7 @@ class PartnerMatchingController extends Controller
         $thread->addParticipant($org->owner);
         // event(new NewMessage($org->owner, $thread->id));
 
-        $product_owner = $target->product->owner;
+        $product_owner = $obj->product->owner;
         if ($product_owner !== $request->user) {
             $thread->addParticipant($product_owner);
             // event(new NewMessage($product_owner, $thread->id));
@@ -300,7 +300,7 @@ class PartnerMatchingController extends Controller
         $item = $type === 'design' ? Design::findOrFail($id) : Prototype::findOrFail($id);
         $org  = Organization::findOrFail($org_id);
 
-        if (\Gate::denies('edit.organization', $org)) {
+        if (\Gate::denies('owns.product', $item->product)) {
             abort(401, 'Unauthorized access');
         }
 

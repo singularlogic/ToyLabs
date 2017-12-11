@@ -61,21 +61,30 @@ export default {
     beforeRouteEnter(to, from, next) {
         const type = typeof to.params.thread_type === 'undefined' ? '' : to.params.thread_type;
         axios.get(`/contact/${to.params.org_id}/${to.params.type}/${to.params.id}/${type}`).then((res) => {
-            next(vm => vm.setData(res));
+            if (res.status === 200) {
+                next(vm => vm.setData(res));
+            }
+
+            next(false);
         });
     },
     beforeRouteUpdate(to, from, next) {
         const type = typeof to.params.thread_type === 'undefined' ? '' : to.params.thread_type;
         axios.get(`/contact/${to.params.org_id}/${to.params.type}/${to.params.id}/${type}`).then((res) => {
-            this.setData(res);
-            next();
+            if (res.status === 200) {
+                this.setData(res);
+                next();
+            }
+
+            next(false);
         });
     },
     data() {
         return {
             organization: {},
             thread: {
-                locked: true,
+                locked: false,
+                type: 'negotiation',
             },
             target: {},
             messages: [],

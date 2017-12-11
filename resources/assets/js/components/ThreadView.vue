@@ -20,12 +20,12 @@
             paramName="file"
             v-on:vdropzone-success="fileAdded"
             v-on:vdropzone-removed-file="fileRemoved"
-            v-if="!thread.locked"
+            v-if="!thread.locked && !error"
         >
             <input type="hidden" name="_token" :value="$parent.$root.crsf" />
         </dropzone>
 
-        <form class="ui reply form" v-if="!thread.locked">
+        <form class="ui reply form" v-if="!thread.locked && !error">
             <div class="field">
                 <textarea v-model="reply"></textarea>
             </div>
@@ -59,7 +59,6 @@ export default {
         };
     },
     created() {
-        // TODO: Get messages
         const id = this.$route.params.id;
         axios.get(`/messages/${id}`).then((response) => {
             if (response.status === 200) {
@@ -74,6 +73,8 @@ export default {
             } else {
                 this.error = 'An error occured';
             }
+        }).catch(error => {
+            this.error = 'Unauthorized access';
         });
     },
     methods: {

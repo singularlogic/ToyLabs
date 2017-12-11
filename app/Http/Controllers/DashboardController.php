@@ -26,16 +26,20 @@ class DashboardController extends Controller
             'owner_type' => Organization::class,
         ])->orderBy('updated_at', 'DESC')->get();
 
-        $org = Organization::find(1);
+        $orgs    = $user->myOrganizations;
+        $active  = collect();
+        $archive = collect();
 
-        $active = $org->activeCollaborations;
-        $active = $active->sortByDesc(function ($obj, $key) {
-            return $obj->collaboratable->updated_at;
-        });
-        $archive = $org->archivedCollaborations;
-        $archive = $archive->sortByDesc(function ($obj, $key) {
-            return $obj->collaboratable->updated_at;
-        });
+        foreach ($orgs as $org) {
+            $active = $active->union($org->activeCollaborations);
+            $active = $active->sortByDesc(function ($obj, $key) {
+                return $obj->collaboratable->updated_at;
+            });
+            $archive = $archive->union($org->archivedCollaborations);
+            $archive = $archive->sortByDesc(function ($obj, $key) {
+                return $obj->collaboratable->updated_at;
+            });
+        }
 
         $data = [
             'products'    => $products,
@@ -53,8 +57,8 @@ class DashboardController extends Controller
                 'updated_at'      => $c->collaboratable->updated_at->toDateTimeString(),
                 'product_id'      => $c->collaboratable->product_id,
                 'product_name'    => $c->collaboratable->product->title,
-                'feedback_id'     => Thread::findID('feedback', $c->collaboratable, $c->collaboratable->product->owner_id),
-                'negotiations_id' => Thread::findID('negotiation', $c->collaboratable, $c->collaboratable->product->owner_id),
+                'feedback_id'     => Thread::findID('feedback', $c->collaboratable, $user->organization),
+                'negotiations_id' => Thread::findID('negotiation', $c->collaboratable, $user->organization),
             ];
         }
 
@@ -67,8 +71,8 @@ class DashboardController extends Controller
                 'updated_at'      => $c->collaboratable->updated_at->toDateTimeString(),
                 'product_id'      => $c->collaboratable->product_id,
                 'product_name'    => $c->collaboratable->product->title,
-                'feedback_id'     => Thread::findID('feedback', $c->collaboratable, $c->collaboratable->product->owner_id),
-                'negotiations_id' => Thread::findID('negotiation', $c->collaboratable, $c->collaboratable->product->owner_id),
+                'feedback_id'     => Thread::findID('feedback', $c->collaboratable, $user->organization),
+                'negotiations_id' => Thread::findID('negotiation', $c->collaboratable, $user->organization),
             ];
         }
 

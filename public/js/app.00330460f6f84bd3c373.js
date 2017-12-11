@@ -4767,7 +4767,6 @@ exports.default = {
     created: function created() {
         var _this = this;
 
-        // TODO: Get messages
         var id = this.$route.params.id;
         axios.get('/messages/' + id).then(function (response) {
             if (response.status === 200) {
@@ -4782,6 +4781,8 @@ exports.default = {
             } else {
                 _this.error = 'An error occured';
             }
+        }).catch(function (error) {
+            _this.error = 'Unauthorized access';
         });
     },
 
@@ -4920,9 +4921,13 @@ exports.default = {
     beforeRouteEnter: function beforeRouteEnter(to, from, next) {
         var type = typeof to.params.thread_type === 'undefined' ? '' : to.params.thread_type;
         axios.get('/contact/' + to.params.org_id + '/' + to.params.type + '/' + to.params.id + '/' + type).then(function (res) {
-            next(function (vm) {
-                return vm.setData(res);
-            });
+            if (res.status === 200) {
+                next(function (vm) {
+                    return vm.setData(res);
+                });
+            }
+
+            next(false);
         });
     },
     beforeRouteUpdate: function beforeRouteUpdate(to, from, next) {
@@ -4930,15 +4935,20 @@ exports.default = {
 
         var type = typeof to.params.thread_type === 'undefined' ? '' : to.params.thread_type;
         axios.get('/contact/' + to.params.org_id + '/' + to.params.type + '/' + to.params.id + '/' + type).then(function (res) {
-            _this.setData(res);
-            next();
+            if (res.status === 200) {
+                _this.setData(res);
+                next();
+            }
+
+            next(false);
         });
     },
     data: function data() {
         return {
             organization: {},
             thread: {
-                locked: true
+                locked: false,
+                type: 'negotiation'
             },
             target: {},
             messages: [],
@@ -40465,7 +40475,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         "message": m
       }
     })
-  })), _vm._v(" "), (!_vm.thread.locked) ? _c('dropzone', {
+  })), _vm._v(" "), (!_vm.thread.locked && !_vm.error) ? _c('dropzone', {
     ref: "myDropzone",
     attrs: {
       "id": "files",
@@ -40486,7 +40496,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     domProps: {
       "value": _vm.$parent.$root.crsf
     }
-  })]) : _vm._e(), _vm._v(" "), (!_vm.thread.locked) ? _c('form', {
+  })]) : _vm._e(), _vm._v(" "), (!_vm.thread.locked && !_vm.error) ? _c('form', {
     staticClass: "ui reply form"
   }, [_c('div', {
     staticClass: "field"

@@ -22,7 +22,7 @@
                 :back="{{ json_encode($back) }}"
                 :id="{{ $id }}"
                 :type="'{{ $type }}'"
-                :is-owner="'{{ $is_owner }}'"
+                :is-owner="{{ $is_owner }}"
             ></collaborations-page>
         </div>
 @endsection

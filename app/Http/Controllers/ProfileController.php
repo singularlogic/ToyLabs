@@ -133,7 +133,7 @@ class ProfileController extends Controller
     {
         $user = Auth::user();
         $org  = Organization::find($id);
-        if ($org->owner_id !== $user->id) {
+        if ($org && $org->owner_id !== $user->id) {
             return redirect()->route('organization.profile', ['id' => $id])->with('error', 'You are not the owner of this organization');
         }
 
