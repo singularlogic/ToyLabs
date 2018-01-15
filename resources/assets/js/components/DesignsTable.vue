@@ -26,9 +26,9 @@
                             <button class="ui button" data-tooltip="Create new version" data-position="top center" data-inverted>
                                 <i class="history icon"></i>
                             </button>
-                            <button class="ui button" data-tooltip="Discussions" data-position="top center" data-inverted>
+                            <a class="ui button" :href="`/design/${d.id}/feedback`" data-tooltip="Feedback" data-position="top center" data-inverted>
                                 <i class="comments outline icon"></i>
-                            </button>
+                            </a>
                             <a class="ui button" :href="`/design/${d.id}/collaborate`" data-tooltip="Collaborations" data-position="top center" data-inverted>
                                 <i class="handshake icon"></i>
                             </a>

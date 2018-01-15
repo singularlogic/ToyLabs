@@ -124,4 +124,14 @@ class Organization extends Model
             'production_scale' => $this->production_scale,
         ];
     }
+
+    public function activeCollaborations()
+    {
+        return $this->hasMany(Collaboration::class)->where('status', 'accepted')->with('collaboratable');
+    }
+
+    public function archivedCollaborations()
+    {
+        return $this->hasMany(Collaboration::class)->where('status', 'archived')->with('collaboratable');
+    }
 }

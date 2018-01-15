@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Design;
+use App\Product;
+use App\Prototype;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Storage;
@@ -14,10 +17,29 @@ class FileController extends Controller
         $media = Media::find($id);
 
         if (!$media) {
-            abort(404);
+            return response()->json([])->setStatusCode(Response::HTTP_NOT_FOUND);
         }
 
-        return response()->file($media->getPath(), ['Content-Type' => $media->mime_type]);
+        $model = $media->model;
+        if (!$model->is_public) {
+            if (is_a($model, Product::class) && \Gate::denies('view.product', $model)) {
+                return response()->json([])->setStatusCode(Response::HTTP_UNAUTHORIZED);
+            }
+
+            if (is_a($model, Design::class) && \Gate::denies('view.product', $model->product) && \Gate::denies('collaborate.design', $model)) {
+                return response()->json([])->setStatusCode(Response::HTTP_UNAUTHORIZED);
+            }
+
+            if (is_a($model, Prototype::class) && \Gate::denies('view.product', $model->product) && \Gate::denies('collaborate.prototype', $model)) {
+                return response()->json([])->setStatusCode(Response::HTTP_UNAUTHORIZED);
+            }
+        }
+
+        return response()->file($media->getPath(), [
+            'Content-Type'        => $media->mime_type,
+            'Content-Disposition' => 'attachment; filename="' . $media->name . '"',
+            'Content-Length'      => $media->size,
+        ]);
     }
 
     public function upload(Request $request)
@@ -50,8 +72,11 @@ class FileController extends Controller
     public function remove(Request $request)
     {
         $input = $request->all();
-
         $media = Media::find($input['id']);
+        if (\Gate::denies('edit.media', $media)) {
+            return response()->json([])->setStatusCode(Response::HTTP_UNAUTHORIZED);
+        }
+
         if ($media) {
             $media->delete();
             return response()->json([])->setStatusCode(Response::HTTP_OK);

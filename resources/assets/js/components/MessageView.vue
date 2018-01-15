@@ -9,6 +9,13 @@
                 <span class="date"><timeago :since="message.created_at" :auto-update="30"></timeago></span>
             </div>
             <div class="text" v-html="formatMessage(message.body)"></div>
+            <div class="files" v-if="message.files.length">
+                <div class="ui divider"></div>
+                <a :href="file.url" class="ui small blue label" v-for="file in message.files" download>
+                    <i class="attach icon"></i>
+                    {{ file.name }}
+                </a>
+            </div>
         </div>
     </div>
 </template>

@@ -95,7 +95,12 @@
                                 <label>No, I work alone</label>
                             </div>
                         </div>
+                        <div class="ui info message field" style="padding: 4px 8px;">
+                            <i class="info icon"></i>
+                            Freelancers click <strong>Yes</strong>, and then choose create an organization.
+                        </div>
                     </div>
+
 
                     <div class="inline fields" v-if="hasOrganization == 'true' && isProfessional">
                         <label>Has organization already joined ToyLabs?</label>
@@ -138,7 +143,7 @@
                         <div class="item" v-for="o in professional.organizations">
                             <div class="right floated content">
                                 <a class="ui negative mini button" v-if="o.owner_id != personal.user_id" @click="leaveGroup(o, false)">Leave</a>
-                                <div class="ui basic green label" v-if="o.owner_id == personal.user_id">Owner</div>
+                                <div class="ui basic green label" v-if="o.owner_id == personal.user_id">Manager</div>
                             </div>
                             <img class="ui avatar image" src="/images/avatar/small/elliot.jpg" />
                             <div class="content">

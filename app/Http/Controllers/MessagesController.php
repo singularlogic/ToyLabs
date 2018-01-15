@@ -3,11 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Events\NewMessage;
+use App\Message;
+use App\Thread;
 use App\User;
 use Carbon\Carbon;
-use Cmgmyr\Messenger\Models\Message;
 use Cmgmyr\Messenger\Models\Participant;
-use Cmgmyr\Messenger\Models\Thread;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
@@ -72,10 +72,14 @@ class MessagesController extends Controller
     public function show($id)
     {
         try {
-            $thread = Thread::findOrFail($id);
+            $thread = Thread::with('target')->findOrFail($id);
         } catch (ModelNotFoundException $e) {
             $error = 'Thread not found';
             return compact('error');
+        }
+
+        if (\Gate::denies('view.thread', $thread)) {
+            abort(401, 'Unauthorized access');
         }
 
         $userId   = Auth::user()->id;
@@ -120,11 +124,16 @@ class MessagesController extends Controller
         ]);
 
         // Message
-        Message::create([
+        $message = Message::create([
             'thread_id' => $thread->id,
             'user_id'   => Auth::user()->id,
             'body'      => $input['body'],
         ]);
+        $files = isset($input['files']) ? $input['files'] : [];
+        foreach ($files as $file) {
+            $path = storage_path('/app/' . $file['path']);
+            $message->addMedia($path)->usingName($file['name'])->toMediaCollection('files');
+        }
 
         // Sender
         Participant::create([
@@ -166,6 +175,11 @@ class MessagesController extends Controller
             'user_id'   => Auth::id(),
             'body'      => Input::get('message'),
         ]);
+        $files = Input::get('files') ?: [];
+        foreach ($files as $file) {
+            $path = storage_path('/app/' . $file['path']);
+            $message->addMedia($path)->usingName($file['name'])->toMediaCollection('files');
+        }
 
         // Add replier as a participant
         $participant = Participant::firstOrCreate([

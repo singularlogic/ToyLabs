@@ -133,7 +133,7 @@ class ProfileController extends Controller
     {
         $user = Auth::user();
         $org  = Organization::find($id);
-        if ($org->owner_id !== $user->id) {
+        if ($org && $org->owner_id !== $user->id) {
             return redirect()->route('organization.profile', ['id' => $id])->with('error', 'You are not the owner of this organization');
         }
 
@@ -176,6 +176,10 @@ class ProfileController extends Controller
             // Update General information
             $general = $request->only(['name', 'legal_name', 'legal_form', 'address', 'po_box', 'postal_code', 'country_id', 'twitter', 'facebook', 'instagram', 'phone', 'fax', 'website_url', 'description', 'city']);
             Organization::where('id', $id)->update($general);
+
+            if (\Gate::denies('edit.organization', $organization)) {
+                abort(401, 'Unauthorized access');
+            }
 
             // Update Facilities
             Facility::where('organization_id', $id)->delete();
@@ -286,5 +290,15 @@ class ProfileController extends Controller
         ];
 
         return view('profile.organizations', $data);
+    }
+
+    public function json(int $id)
+    {
+        try {
+            $org = Organization::findOrFail($id);
+            return $org;
+        } catch (ModelNotFoundException $e) {
+            abort(404);
+        }
     }
 }

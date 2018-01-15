@@ -16,8 +16,12 @@ import DesignCreate from './components/DesignCreate.vue';
 import PrototypeCreate from './components/PrototypeCreate.vue';
 import DesignsTable from './components/DesignsTable.vue';
 import PrototypesTable from './components/PrototypesTable.vue';
-import Gallery from './components/Gallery';
-import Search from './components/Search';
+import Gallery from './components/Gallery.vue';
+import Search from './components/Search.vue';
+import Contact from './components/collaborations/Contact.vue';
+import DashboardPage from './components/DashboardPage.vue';
+import CollaborationsPage from './components/collaborations/CollaborationsPage.vue';
+import FeedbackPage from './components/FeedbackPage.vue';
 
 /**
  * Navbar transition for the homepage
@@ -47,6 +51,8 @@ $(document).ready(function() {
         variation: 'very wide',
     });
     $('#orgPage .menu .item').tab();
+    $('#dashboard .menu .item').tab();
+    $('table.sortable').tablesort();
 });
 
 const router = new VueRouter({
@@ -70,7 +76,10 @@ const app = new Vue({
         Profile,
         Organization,
         NotificationArea,
+        DashboardPage,
         NotificationsPage,
+        CollaborationsPage,
+        FeedbackPage,
         ProductsGrid,
         Comments,
         Likes,
@@ -82,5 +91,6 @@ const app = new Vue({
         PrototypesTable,
         Gallery,
         Search,
+        Contact,
     }
 });

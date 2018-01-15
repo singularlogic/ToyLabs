@@ -2,15 +2,17 @@
     <div class="ui divided items">
         <div class="item" v-for="(result, index) of results">
             <div class="content">
-                <h3 class="header">{{ index + 1 }}. <a :href="`/organization/${result.id}`" target="_BLANK">{{ result.name }}</a></h3>
+                <h3 class="header">{{ parseInt(index) + 1 }}. <a :href="`/organization/${result.id}`" target="_BLANK">{{ result.name }}</a></h3>
                 <div class="meta">
                     {{ result.organization_type.name }}
                     <i class="flag" :class="flag" v-for="flag of flags(result)"></i>
                 </div>
                 <div class="description">{{ result.description | trim(500) }}</div>
                 <div class="extra">
-                    <button class="ui right floated positive mini button" type="button">Add</button>
-                    <a class="ui right floated orange mini button" :href="`/contact/${result.id}/${$parent.type}/${$parent.id}`">Contact</a>
+                    <button class="ui right floated positive mini button" type="button" @click="add(result.id)" v-if="canAdd">Add</button>
+                    <router-link :to="`/${$parent.type}/${$parent.id}/collaborate/contact/${result.id}`" class="ui right floated orange mini button">
+                        Contact
+                    </router-link>
 
                     <div class="ui tiny basic label" :class="{ red: !rule.matched, green: rule.matched }" v-for="rule of rules(result)">
                         <i class="checkmark icon" v-if="rule.matched"></i>
@@ -30,7 +32,7 @@
 import numeral from 'numeral';
 
 export default {
-    props: ['results', 'query'],
+    props: ['results', 'query', 'canAdd'],
     methods: {
         flags(org) {
             let flags = [];
@@ -63,6 +65,9 @@ export default {
         scoreColor(value) {
             const hue = (value*120).toString(10);
             return ['hsl(', hue, ',100%,50%)'].join('');
+        },
+        add(id) {
+            this.$emit('add', id);
         },
     },
     filters: {

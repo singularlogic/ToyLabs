@@ -4,29 +4,12 @@
 
 @section('content')
         <!-- Dashboard -->
-        <div class="ui main container">
-            <div class="ui clearing">
-                <h1 class="ui left floated header">Dashboard</h1>
-                <div class="ui right floated search">
-                    <div class="ui icon input">
-                        <input class="prompt" type="text" placeholder="Search..." />
-                        <i class="search icon"></i>
-                    </div>
-                    <div class="results"></div>
-                </div>
-@if($is_complete)
-                <a class="circular ui right floated icon orange button" data-tooltip="Create a new Product" data-position="left center" data-inverted href="/product/create">
-                    <i class="icon plus"></i>
-                </a>
-@endif
-            </div>
+        @include('partials.status')
 
-            <div class="ui clearing divider"></div>
-            @include('partials.status')
-
-            <product-list
-                :products="{{ json_encode($products) }}"
-            ></product-list>
-
-        </div>
+        <dashboard-page
+            :is-profile-complete="{{ $is_complete }}"
+            :products="{{ json_encode($products) }}"
+            :active-collaborations="{{ json_encode($items) }}"
+            :archived-collaborations="{{ json_encode($archive) }}"
+        ></dashboard-page>
 @endsection

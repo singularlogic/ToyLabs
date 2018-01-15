@@ -2,13 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Collaboration;
 use App\Competency;
 use App\Design;
+use App\Message;
 use App\Organization;
 use App\OrganizationType;
 use App\PaymentType;
 use App\Product;
 use App\Prototype;
+use App\Thread;
+use Carbon\Carbon;
+use Cmgmyr\Messenger\Models\Participant;
 use Illuminate\Http\Request;
 
 class PartnerMatchingController extends Controller
@@ -21,10 +26,16 @@ class PartnerMatchingController extends Controller
         'xlarge'    => 4,
     ];
 
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function index(Request $request, string $type, int $id)
     {
-        $obj  = $type === 'design' ? Design::findOrFail($id) : Prototype::findOrFail($id);
-        $data = [
+        $obj      = $type === 'design' ? Design::findOrFail($id) : Prototype::findOrFail($id);
+        $is_owner = \Gate::allows('owns.product', $obj->product);
+        $data     = [
             'product'      => $obj,
             'roles'        => OrganizationType::get(),
             'competencies' => Competency::orderBy('name', 'ASC')->get(),
@@ -36,6 +47,7 @@ class PartnerMatchingController extends Controller
             ],
             'id'           => $id,
             'type'         => $type,
+            'is_owner'     => $is_owner,
         ];
         return view('product.collaborate', $data);
     }
@@ -51,7 +63,7 @@ class PartnerMatchingController extends Controller
                 'id'          => $organization->id,
                 'title'       => $organization->name,
                 'description' => $organization->organizationType->name,
-                'url'         => '/contact/' . $organization->id . '/' . $request->get('type') . '/' . $request->get('id'),
+                'url'         => '/' . $request->get('type') . '/' . $request->get('id') . '/collaborate/contact/' . $organization->id,
             ];
         }
 
@@ -114,20 +126,206 @@ class PartnerMatchingController extends Controller
             $id = -1;
         }
         return $organizations->reject(function ($item) use ($id) {
-            return $item->id === -1; //$id;
+            return $item->id === $id;
         })->sortByDesc('score');
     }
 
-    public function contact(Request $request, int $org_id, string $type, int $id)
+    public function contact(Request $request, int $org_id, string $type, int $id, string $thread_type = 'negotiation')
     {
         $organization = Organization::findOrFail($org_id);
         $obj          = $type === 'design' ? Design::findOrFail($id) : Prototype::findOrFail($id);
-        $data         = [
+        $thread       = Thread::where('type', $thread_type)
+            ->where('organization_id', $org_id)
+            ->where('target_id', $id)
+            ->where('target_type', get_class($obj))
+            ->first();
+
+        // Through this route, only the design/prototype owner organization can access the contact route
+        if (\Gate::denies('view.product', $obj->product)) {
+            abort(401, 'Unauthorized access');
+        }
+
+        $data = [
             'organization' => $organization,
+            'id'           => $id,
             'type'         => $type,
             'name'         => $obj->title,
+            'target'       => $obj,
+            'thread_id'    => $thread ? $thread->id : null,
+            'is_owner'     => \Gate::allows('owns.product', $obj->product),
         ];
 
-        return view('collaborations.contact', $data);
+        return $data;
+    }
+
+    public function doContact(Request $request, int $org_id, string $type, int $id)
+    {
+        $input = $request->all();
+
+        $org    = null;
+        $target = null;
+        try {
+            // Existing Thread
+            $org = Organization::findOrFail($org_id);
+            $obj = $type === 'design' ? Design::findOrFail($id) : Prototype::findOrFail($id);
+        } catch (NotFoundHttpException $e) {
+            abort(404);
+        }
+
+        if (\Gate::denies('edit.product', $obj->product)) {
+            abort(401, 'Unauthorized access');
+        }
+
+        if (isset($input['thread']['id'])) {
+            try {
+                $thread = Thread::findOrFail($input['thread']['id']);
+            } catch (NotFoundHttpException $e) {
+                abort(404);
+            }
+            $thread->activateAllParticipants();
+        } else {
+            // New Thread
+            $thread = Thread::create($input['thread']);
+        }
+
+        // Message
+        $message = Message::create([
+            'thread_id' => $thread->id,
+            'user_id'   => \Auth::user()->id,
+            'body'      => $input['message'],
+        ]);
+        $files = isset($input['files']) ? $input['files'] : [];
+        foreach ($files as $file) {
+            $path = storage_path('/app/' . $file['path']);
+            $message->addMedia($path)->usingName($file['name'])->toMediaCollection('files');
+        }
+
+        // Sender
+        $participant = Participant::firstOrCreate([
+            'thread_id' => $thread->id,
+            'user_id'   => \Auth::user()->id,
+        ]);
+        $participant->last_read = new Carbon;
+        $participant->save();
+
+        // Recipients are the Owner of the Organization and the Owner of my Organization (if not myself)
+        $thread->addParticipant($org->owner);
+        // event(new NewMessage($org->owner, $thread->id));
+
+        $product_owner = $obj->product->owner;
+        if ($product_owner !== $request->user) {
+            $thread->addParticipant($product_owner);
+            // event(new NewMessage($product_owner, $thread->id));
+        }
+
+        $message['user'] = \Auth::user();
+        return compact('message', 'thread');
+    }
+
+    public function feedback(Request $request, string $type, int $id)
+    {
+        $obj = $type === 'design' ? Design::findOrFail($id) : Prototype::findOrFail($id);
+
+        if (\Gate::denies('view.product', $obj->product)) {
+            if (($type === 'design' && \Gate::denies('collaborate.design', $obj)) or
+                $type === 'prototype' && \Gate::denies('collaborate.prototype', $obj)) {
+                abort(401, 'Unauthorized access');
+            }
+        }
+
+        $data = [
+            'id'      => $id,
+            'back'    => [
+                'id'   => $obj->product->id,
+                'type' => $type,
+                'name' => ucfirst($type . 's'),
+            ],
+            'product' => $obj,
+        ];
+        return view('collaborations.feedback', $data);
+    }
+
+    public function negotiations(Request $request, string $type, int $id)
+    {
+        $obj            = $type === 'design' ? Design::findOrFail($id) : Prototype::findOrFail($id);
+        $collaborations = $obj->collaborations;
+        $result         = [];
+
+        if (\Gate::denies('view.product', $obj->product)) {
+            if (($type === 'design' && \Gate::denies('collaborate.design', $obj)) or
+                $type === 'prototype' && \Gate::denies('collaborate.prototype', $obj)) {
+                abort(401, 'Unauthorized access');
+            }
+        }
+
+        foreach ($collaborations as $collaboration) {
+            $result[] = [
+                'org_id'       => $collaboration->organization_id,
+                'organization' => $collaboration->organization->name,
+                'status'       => ucfirst($collaboration->status),
+                'updated_at'   => $collaboration->updated_at->toDateTimeString(),
+            ];
+        }
+
+        return $result;
+    }
+
+    public function discussions(Request $request, string $type, int $id)
+    {
+        $obj      = $type === 'design' ? Design::findOrFail($id) : Prototype::findOrFail($id);
+        $feedback = $obj->feedback;
+        $result   = [];
+
+        if (\Gate::denies('view.product', $obj->product)) {
+            if (($type === 'design' && \Gate::denies('collaborate.design', $obj)) or
+                $type === 'prototype' && \Gate::denies('collaborate.prototype', $obj)) {
+                abort(401, 'Unauthorized access');
+            }
+        }
+
+        foreach ($feedback as $n) {
+            $org      = $n->organization;
+            $result[] = [
+                'org_id'       => $org->id,
+                'organization' => $org->name,
+                'updated_at'   => $n->updated_at->toDateTimeString(),
+            ];
+        }
+
+        return $result;
+    }
+
+    public function addPartner(Request $request, string $type, int $id, int $org_id)
+    {
+        $item = $type === 'design' ? Design::findOrFail($id) : Prototype::findOrFail($id);
+        $org  = Organization::findOrFail($org_id);
+
+        if (\Gate::denies('owns.product', $item->product)) {
+            abort(401, 'Unauthorized access');
+        }
+
+        Collaboration::updateOrCreate([
+            'organization_id'     => $org_id,
+            'collaboratable_id'   => $item->id,
+            'collaboratable_type' => get_class($item),
+        ], [
+            'status' => 'accepted',
+        ]);
+
+        // Lock negotiations thread
+        Thread::where('organization_id', $org_id)
+            ->where('target_id', $item->id)
+            ->where('target_type', get_class($item))
+            ->where('type', 'negotiation')
+            ->update(['locked' => true]);
+
+        // Open feedback thread
+        Thread::create([
+            'subject'         => '[' . ucfirst($item->type) . ': ' . $item->title . '] Feedback from ' . $org->name,
+            'organization_id' => $org_id,
+            'target_id'       => $item->id,
+            'target_type'     => get_class($item),
+            'type'            => 'feedback',
+        ]);
     }
 }

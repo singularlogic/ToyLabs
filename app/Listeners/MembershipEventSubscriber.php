@@ -13,13 +13,17 @@ class MembershipEventSubscriber implements ShouldQueue
     public function sent($sender, $recipient)
     {
         $owner = User::find($recipient->owner_id);
-        $owner->notify(new UserWantsToJoinOrganization($sender, $recipient));
+        if ($recipient->owner_id !== $sender->id) {
+            $owner->notify(new UserWantsToJoinOrganization($sender, $recipient));
+        }
     }
 
     public function accepted($sender, $recipient)
     {
         $sender->users()->save($recipient);
-        $recipient->notify(new UserJoinedOrganization($sender, $recipient));
+        if ($sender->owner_id !== $recipient->id) {
+            $recipient->notify(new UserJoinedOrganization($sender, $recipient));
+        }
     }
 
     public function denied($sender, $recipient)
