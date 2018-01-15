@@ -4061,8 +4061,6 @@ exports.default = {
 //
 //
 //
-//
-//
 
 /***/ }),
 
@@ -41203,9 +41201,9 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticStyle: {
       "margin-top": "20px"
     }
-  }, [_vm._v("\n                Professional\n                "), _c('span', {
+  }, [_vm._v("\n                Professional\n                "), (_vm.isProfessional) ? _c('span', {
     staticClass: "ui basic blue label"
-  }, [_vm._v(_vm._s(_vm.myRole))])]), _vm._v(" "), _c('div', {
+  }, [_vm._v(_vm._s(_vm.myRole))]) : _vm._e()]), _vm._v(" "), _c('div', {
     staticClass: "ui divider"
   }), _vm._v(" "), _c('h4', {
     staticClass: "ui header"
@@ -41228,17 +41226,18 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       }
     }, [_vm._v("Leave")]) : _vm._e(), _vm._v(" "), (o.owner_id == _vm.personal.user_id) ? _c('div', {
       staticClass: "ui basic green label"
-    }, [_vm._v("Manager")]) : _vm._e()]), _vm._v(" "), _c('img', {
-      staticClass: "ui avatar image",
-      attrs: {
-        "src": "/images/avatar/small/elliot.jpg"
-      }
-    }), _vm._v(" "), _c('div', {
+    }, [_vm._v("Manager")]) : _vm._e()]), _vm._v(" "), _c('div', {
       staticClass: "content"
     }, [(o.owner_id !== _vm.personal.user_id) ? _c('div', {
-      staticClass: "header"
+      staticClass: "header",
+      staticStyle: {
+        "padding-top": "8px"
+      }
     }, [_vm._v(_vm._s(o.name))]) : _vm._e(), _vm._v(" "), (o.owner_id == _vm.personal.user_id) ? _c('a', {
       staticClass: "header",
+      staticStyle: {
+        "padding-top": "8px"
+      },
       attrs: {
         "href": ("/organization/" + (o.id) + "/edit")
       }
@@ -41257,17 +41256,18 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
           _vm.leaveGroup(o, true)
         }
       }
-    }, [_vm._v("Cancel")]) : _vm._e()]), _vm._v(" "), _c('img', {
-      staticClass: "ui avatar image",
-      attrs: {
-        "src": "/images/avatar/small/elliot.jpg"
-      }
-    }), _vm._v(" "), _c('div', {
+    }, [_vm._v("Cancel")]) : _vm._e()]), _vm._v(" "), _c('div', {
       staticClass: "content"
     }, [(o.owner_id !== _vm.personal.user_id) ? _c('div', {
-      staticClass: "header"
+      staticClass: "header",
+      staticStyle: {
+        "padding-top": "8px"
+      }
     }, [_vm._v(_vm._s(o.name))]) : _vm._e(), _vm._v(" "), (o.owner_id == _vm.personal.user_id) ? _c('a', {
       staticClass: "header",
+      staticStyle: {
+        "padding-top": "8px"
+      },
       attrs: {
         "href": ("/organization/" + (o.id) + "/edit")
       }

@@ -134,7 +134,7 @@
                 <div v-if="!personal.isNew">
                     <h3 class="ui header" style="margin-top: 20px;">
                         Professional
-                        <span class="ui basic blue label">{{ myRole }}</span>
+                        <span class="ui basic blue label" v-if="isProfessional">{{ myRole }}</span>
                     </h3>
                     <div class="ui divider"></div>
 
@@ -145,10 +145,9 @@
                                 <a class="ui negative mini button" v-if="o.owner_id != personal.user_id" @click="leaveGroup(o, false)">Leave</a>
                                 <div class="ui basic green label" v-if="o.owner_id == personal.user_id">Manager</div>
                             </div>
-                            <img class="ui avatar image" src="/images/avatar/small/elliot.jpg" />
                             <div class="content">
-                                <div class="header" v-if="o.owner_id !== personal.user_id">{{ o.name }}</div>
-                                <a class="header" v-if="o.owner_id == personal.user_id" :href="`/organization/${o.id}/edit`">{{ o.name }}</a>
+                                <div class="header" v-if="o.owner_id !== personal.user_id" style="padding-top: 8px;">{{ o.name }}</div>
+                                <a class="header" v-if="o.owner_id == personal.user_id" :href="`/organization/${o.id}/edit`" style="padding-top: 8px;">{{ o.name }}</a>
                             </div>
                         </div>
                         <div class="item" v-for="o in professional.pending">
@@ -156,10 +155,9 @@
                                 <div class="ui basic black label">Pending</div>
                                 <a class="ui negative mini button" v-if="o.owner_id != personal.user_id" @click="leaveGroup(o, true)">Cancel</a>
                             </div>
-                            <img class="ui avatar image" src="/images/avatar/small/elliot.jpg" />
                             <div class="content">
-                                <div class="header" v-if="o.owner_id !== personal.user_id">{{ o.name }}</div>
-                                <a class="header" v-if="o.owner_id == personal.user_id" :href="`/organization/${o.id}/edit`">{{ o.name }}</a>
+                                <div class="header" v-if="o.owner_id !== personal.user_id" style="padding-top: 8px;">{{ o.name }}</div>
+                                <a class="header" v-if="o.owner_id == personal.user_id" :href="`/organization/${o.id}/edit`" style="padding-top: 8px;">{{ o.name }}</a>
                             </div>
                         </div>
                         <div class="item" style="margin-top: 20px;" v-if="orgCount == 0">
