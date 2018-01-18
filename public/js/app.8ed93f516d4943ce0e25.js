@@ -37160,7 +37160,7 @@ if (false) {
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', {
+  return (_vm.isProfileComplete) ? _c('div', {
     staticClass: "ui main container",
     attrs: {
       "id": "dashboard"
@@ -37203,7 +37203,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticStyle: {
       "padding-right": "6px"
     }
-  }, [_vm._m(0)]) : _vm._e(), _vm._v(" "), _vm._m(1)])], 1), _vm._v(" "), _c('router-view')], 1)
+  }, [_vm._m(0)]) : _vm._e(), _vm._v(" "), _vm._m(1)])], 1), _vm._v(" "), _c('router-view')], 1) : _vm._e()
 },staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('a', {
     staticClass: "ui labeled orange mini icon button",

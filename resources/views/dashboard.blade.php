@@ -4,7 +4,9 @@
 
 @section('content')
         <!-- Dashboard -->
-        @include('partials.status')
+        <div class="ui main container">
+@include('partials.status')
+        </div>
 
         <dashboard-page
             :is-profile-complete="{{ $is_complete }}"

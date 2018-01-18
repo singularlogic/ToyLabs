@@ -107,7 +107,7 @@ class PrototypeController extends Controller
     public function edit(Request $request, $id)
     {
         $prototype = Prototype::find($id);
-        if (\Gate::denies('edit.product', $product)) {
+        if (\Gate::denies('edit.product', $prototype->product)) {
             abort(401, 'Unauthorized access');
         }
 

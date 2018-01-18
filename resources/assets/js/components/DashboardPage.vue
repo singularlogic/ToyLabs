@@ -1,5 +1,5 @@
 <template>
-    <div class="ui main container" id="dashboard">
+    <div class="ui main container" id="dashboard" v-if="isProfileComplete">
         <div class="ui orange pointing secondary menu">
             <router-link to="/dashboard" class="item" exact v-if="products.length > 0">My Products</router-link>
             <router-link to="/dashboard/collaborations" class="item" v-if="activeCollaborations.length > 0">Collaborations</router-link>

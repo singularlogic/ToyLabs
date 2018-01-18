@@ -137,6 +137,10 @@ class ProfileController extends Controller
             return redirect()->route('organization.profile', ['id' => $id])->with('error', 'You are not the owner of this organization');
         }
 
+        if ($user->roles()->pluck('id')[0] == 6) {
+            return redirect('dashboard')->with('error', 'Only professional users can create/join an organization');
+        }
+
         $data = [
             'countries'          => Country::orderBy('name', 'ASC')->get(),
             'legalForms'         => $this->legalForms,
