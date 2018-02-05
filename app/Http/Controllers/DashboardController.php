@@ -43,7 +43,7 @@ class DashboardController extends Controller
 
         $data = [
             'products'    => $products,
-            'is_complete' => !!$user->profile,
+            'is_complete' => !!$user->profile ? "true" : "false",
             'items'       => [],
             'archive'     => [],
         ];
