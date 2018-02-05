@@ -140,7 +140,7 @@ class AuthServiceProvider extends ServiceProvider
     public function registerOrganizationPolicies()
     {
         Gate::define('edit.organization', function ($user, Organization $organization) {
-            return $user->id === $org->owner_id;
+            return $user->id === $organization->owner_id;
         });
     }
 

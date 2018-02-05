@@ -178,8 +178,9 @@ class ProfileController extends Controller
 
         if ($id > 0) {
             // Update General information
-            $general = $request->only(['name', 'legal_name', 'legal_form', 'address', 'po_box', 'postal_code', 'country_id', 'twitter', 'facebook', 'instagram', 'phone', 'fax', 'website_url', 'description', 'city']);
-            Organization::where('id', $id)->update($general);
+            $organization = Organization::find($id);
+            $general      = $request->only(['name', 'legal_name', 'legal_form', 'address', 'po_box', 'postal_code', 'country_id', 'twitter', 'facebook', 'instagram', 'phone', 'fax', 'website_url', 'description', 'city']);
+            Organization::where('id', $id);
 
             if (\Gate::denies('edit.organization', $organization)) {
                 abort(401, 'Unauthorized access');
