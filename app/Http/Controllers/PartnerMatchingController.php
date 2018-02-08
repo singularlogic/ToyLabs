@@ -47,7 +47,7 @@ class PartnerMatchingController extends Controller
             ],
             'id'           => $id,
             'type'         => $type,
-            'is_owner'     => $is_owner,
+            'is_owner'     => $is_owner ? "true" : "false",
         ];
         return view('product.collaborate', $data);
     }
