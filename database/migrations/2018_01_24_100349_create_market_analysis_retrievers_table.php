@@ -18,7 +18,7 @@ class CreateMarketAnalysisRetrieversTable extends Migration
             $table->string('name');
             $table->integer('anlzer_retriever_id')->unsigned();
             $table->integer('organization_id')->nullable();
-            $table->json('anlzer_data')->nullable();
+            $table->text('anlzer_data')->nullable();
             $table->timestamps();
         });
     }

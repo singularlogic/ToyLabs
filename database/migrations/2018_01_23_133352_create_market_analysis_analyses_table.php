@@ -20,9 +20,9 @@ class CreateMarketAnalysisAnalysesTable extends Migration
                     $table->integer('anlzer_analysis_id')->unsigned();
                     $table->integer('anlzer_project_id')->unsigned();
                     $table->integer('product_id')->unsigned();
-                    $table->json('anlzer_data')->nullable();
-                    $table->json('data')->nullable();
-                    $table->json('settings')->nullable();
+                    $table->text('anlzer_data')->nullable();
+                    $table->text('data')->nullable();
+                    $table->text('settings')->nullable();
                     $table->boolean('is_public')->default(false);
                     $table->timestamps();
                 });

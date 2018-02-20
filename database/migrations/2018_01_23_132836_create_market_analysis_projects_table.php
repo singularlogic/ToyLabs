@@ -17,7 +17,7 @@ class CreateMarketAnalysisProjectsTable extends Migration
             $table->increments('id');
             $table->string('name');
             $table->integer('anlzer_project_id')->unsigned();
-            $table->json('anlzer_data')->nullable();
+            $table->text('anlzer_data')->nullable();
             $table->boolean('is_public')->default(false);
             $table->integer('product_id')->unsigned();
             $table->timestamps();

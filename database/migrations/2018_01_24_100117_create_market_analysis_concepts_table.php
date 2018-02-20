@@ -18,7 +18,7 @@ class CreateMarketAnalysisConceptsTable extends Migration
             $table->string('name');
             $table->integer('anlzer_concept_id')->unsigned();
             $table->integer('anlzer_project_id')->unsigned();
-            $table->json('anlzer_data')->nullable();
+            $table->text('anlzer_data')->nullable();
             $table->timestamps();
         });
     }
