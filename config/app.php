@@ -177,6 +177,7 @@ return [
         App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+        App\Providers\Anlzer\AnlzerServiceProvider::class,
 
         // 3rd Party Providers
         Cmgmyr\Messenger\MessengerServiceProvider::class,

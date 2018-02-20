@@ -60,6 +60,13 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/product/{id}/edit', ['as' => 'product.edit.post', 'uses' => 'ProductController@doEdit']);
 
     Route::get('/product/{id}/marketanalysis', ['as' => 'product.analysis', 'uses' => 'MarketAnalysisController@index']);
+    Route::post('/product/{id}/marketanalysis', ['as' => 'product.analysis.create', 'uses' => 'MarketAnalysisController@create']);
+    Route::get('/product/{id}/marketanalysis/trend', ['as' => 'product.analysis.trend', 'uses' => 'MarketAnalysisController@trend']);
+    Route::post('/product/{id}/marketanalysis/trend', ['as' => 'product.analysis.trend.post', 'uses' => 'MarketAnalysisController@saveAnalysis']);
+    Route::get('/analysis/{id}/edit', ['as' => 'product.analysis.edit', 'uses' => 'MarketAnalysisController@editAnalysis']);
+    Route::post('/analysis/{id}/edit', ['as' => 'product.analysis.edit.post', 'uses' => 'MarketAnalysisController@saveAnalysis']);
+
+
     Route::get('/product/{id}/designs', ['as' => 'product.designs', 'uses' => 'DesignController@productDesigns']);
     Route::get('/product/{id}/prototypes', ['as' => 'product.prototypes', 'uses' => 'PrototypeController@productPrototypes']);
 
@@ -138,6 +145,7 @@ Route::group(['middleware' => 'auth'], function () {
 Route::get('/product/{id}', ['as' => 'product.details', 'uses' => 'ProductController@showProduct']);
 Route::get('/design/{id}', ['as' => 'design.details', 'uses' => 'ProductController@showDesign']);
 Route::get('/prototype/{id}', ['as' => 'prototype.details', 'uses' => 'ProductController@showPrototype']);
+Route::get('/analysis/{id}', ['as' => 'analysis.details', 'uses' => 'MarketAnalysisController@showAnalysis']);
 
 // API
 Route::group(['middleware' => 'auth'], function () {

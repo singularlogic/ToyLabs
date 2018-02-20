@@ -1,5 +1,6 @@
 const { mix } = require('laravel-mix');
 let webpack = require('webpack');
+let CopyWebpackPlugin = require('copy-webpack-plugin');
 
 /*
  |--------------------------------------------------------------------------
@@ -14,7 +15,8 @@ let webpack = require('webpack');
 
 mix.webpackConfig({
     plugins: [
-        new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/)
+        new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+        new CopyWebpackPlugin([{ from: 'node_modules/amcharts3/amcharts/images', to: 'images/amcharts/images' }])
     ]
 });
 

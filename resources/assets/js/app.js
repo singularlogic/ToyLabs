@@ -22,6 +22,12 @@ import Contact from './components/collaborations/Contact.vue';
 import DashboardPage from './components/DashboardPage.vue';
 import CollaborationsPage from './components/collaborations/CollaborationsPage.vue';
 import FeedbackPage from './components/FeedbackPage.vue';
+import MarketAnalysis from './components/MarketAnalysis.vue';
+import MarketAnalysisTrend from './components/MarketAnalysisTrend.vue';
+import Analysis from './components/Analysis.vue';
+import AmCharts from 'amcharts3'
+import AmSerial from 'amcharts3/amcharts/serial'
+import AmPie from 'amcharts3/amcharts/pie'
 
 /**
  * Navbar transition for the homepage
@@ -92,5 +98,8 @@ const app = new Vue({
         Gallery,
         Search,
         Contact,
+        MarketAnalysis,
+        MarketAnalysisTrend,
+        Analysis
     }
 });
