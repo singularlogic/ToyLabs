@@ -13,7 +13,7 @@
                          <h1 class="ui inverted header">
                             <img class="ui image" src="/images/toylabs_logo_big_flat.svg" />
                             <div class="content">Welcome to ToyLabs</div>
-                            <div class="sub header">New methodology to accelerate innovation in the player sector</div>
+                            <div class="sub header">New methodology to accelerate innovation in the toy sector</div>
                         </h1>
                     </div>
                 </div>
