@@ -551,9 +551,9 @@ class MarketAnalysisController extends Controller
         $anlzerAnalysis->start_date = $input['start_date'];
         $anlzerAnalysis->end_date = $input['end_date'];
         $anlzerAnalysis->concepts = $conceptIds;
-        $anlzerAnalysis->influencers_mode = $input['influencers_mode'] || false;
+        $anlzerAnalysis->influencers_mode = ($input['influencers_mode']) ? $input['influencers_mode'] : false;
         $anlzerAnalysis->sources = json_decode($input['sources']);
-        $anlzerAnalysis->languages = ($input['languages'])? json_decode($input['languages']) : ["en"];
+        $anlzerAnalysis->languages = ($input['languages']) ? json_decode($input['languages']) : ["en"];
 
         switch($input['action']) {
             case 'create':
