@@ -66,7 +66,6 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/analysis/{id}/edit', ['as' => 'product.analysis.edit', 'uses' => 'MarketAnalysisController@editAnalysis']);
     Route::post('/analysis/{id}/edit', ['as' => 'product.analysis.edit.post', 'uses' => 'MarketAnalysisController@saveAnalysis']);
 
-
     Route::get('/product/{id}/designs', ['as' => 'product.designs', 'uses' => 'DesignController@productDesigns']);
     Route::get('/product/{id}/prototypes', ['as' => 'product.prototypes', 'uses' => 'PrototypeController@productPrototypes']);
 
@@ -96,6 +95,13 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/partner/search', ['as' => 'collaborate.search', 'uses' => 'PartnerMatchingController@search']);
     Route::get('/contact/{org_id}/{type}/{id}/{thread_type?}', ['as' => 'collaborate.contact', 'uses' => 'PartnerMatchingController@contact'])->where('type', 'design|prototype')->where('thread_type', 'feedback|negotiation');
     Route::post('/contact/{org_id}/{type}/{id}/{thread_type}', ['as' => 'collaborate.contact.post', 'uses' => 'PartnerMatchingController@doContact'])->where('type', 'design|prototype')->where('thread_type', 'feedback|negotiation');
+
+    // Augmented Reality
+    Route::get('/{type}/{id}/ar', 'AugmentedRealityController@index');
+    Route::post('/{type}/{id}/ar', 'AugmentedRealityController@create');
+    Route::get('/{type}/{id}/ar/{ar_id}', 'AugmentedRealityController@show');
+    Route::put('/{type}/{id}/ar/{ar_id}', 'AugmentedRealityController@update');
+    Route::delete('/{type}/{id}/ar/{ar_id}', 'AugmentedRealityController@delete');
 
     // Files
     Route::post('/file/upload', ['as' => 'file.upload', 'uses' => 'FileController@upload']);
