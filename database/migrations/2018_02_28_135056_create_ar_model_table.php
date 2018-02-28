@@ -17,7 +17,7 @@ class CreateArModelTable extends Migration
             $table->increments('id');
             $table->string('title');
             $table->text('description')->nullable();
-            $table->boolean('is_public')->default(false);
+            $table->integer('downloads')->unsigned()->default(0);
             $table->morphs('parent');
             $table->timestamps();
         });

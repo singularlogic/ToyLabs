@@ -11,7 +11,7 @@ class ARModel extends Model
     use HasMediaTrait, HasComments;
 
     protected $table    = 'ar_models';
-    protected $fillable = ['title', 'description', 'is_public', 'parent_id', 'parent_type'];
+    protected $fillable = ['title', 'description', 'downloads', 'parent_id', 'parent_type'];
 
     public function parent()
     {

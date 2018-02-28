@@ -97,4 +97,9 @@ class Design extends Model implements HasMedia
     {
         return $this->morphMany(Collaboration::class, 'collaboratable');
     }
+
+    public function armodels()
+    {
+        return $this->morphMany(ARModel::class, 'parent');
+    }
 }

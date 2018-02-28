@@ -97,11 +97,13 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/contact/{org_id}/{type}/{id}/{thread_type}', ['as' => 'collaborate.contact.post', 'uses' => 'PartnerMatchingController@doContact'])->where('type', 'design|prototype')->where('thread_type', 'feedback|negotiation');
 
     // Augmented Reality
-    Route::get('/{type}/{id}/ar', 'AugmentedRealityController@index');
-    Route::post('/{type}/{id}/ar', 'AugmentedRealityController@create');
-    Route::get('/{type}/{id}/ar/{ar_id}', 'AugmentedRealityController@show');
-    Route::put('/{type}/{id}/ar/{ar_id}', 'AugmentedRealityController@update');
-    Route::delete('/{type}/{id}/ar/{ar_id}', 'AugmentedRealityController@delete');
+    Route::get('/{type}/{id}/ar-models', 'AugmentedRealityController@index');
+    Route::get('/{type}/{id}/ar-models/create', 'AugmentedRealityController@create');
+    Route::post('/{type}/{id}/ar-models/create', 'AugmentedRealityController@doCreate');
+    Route::get('/ar-model/{ar_id}', 'AugmentedRealityController@show');
+    Route::get('/ar-model/{ar_id}/edit', 'AugmentedRealityController@update');
+    Route::post('/ar-model/{ar_id}/edit', 'AugmentedRealityController@doUpdate');
+    Route::delete('/ar-model/{ar_id}', 'AugmentedRealityController@delete');
 
     // Files
     Route::post('/file/upload', ['as' => 'file.upload', 'uses' => 'FileController@upload']);
