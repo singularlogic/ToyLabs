@@ -1,7 +1,5 @@
 <?php
 
-use Illuminate\Http\Request;
-
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -11,8 +9,17 @@ use Illuminate\Http\Request;
 | routes are loaded by the RouteServiceProvider within a group which
 | is assigned the "api" middleware group. Enjoy building your API!
 |
-*/
+ */
+Route::group([
+    'prefix' => 'v1',
+], function () {
+    Route::post('login', 'API\PassportController@login');
+    Route::post('social/{provider}', 'SocialAuthController@passportCallback');
+});
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+Route::group([
+    'prefix'     => 'v1',
+    'middleware' => 'auth:api',
+], function () {
+    Route::post('user', 'API\PassportController@getDetails');
 });
