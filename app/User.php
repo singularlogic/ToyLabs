@@ -9,11 +9,12 @@ use Hootlex\Friendships\Status;
 use Hootlex\Friendships\Traits\Friendable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Passport\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
-    use HasRoles, Notifiable, Messagable, Friendable;
+    use HasRoles, Notifiable, Messagable, Friendable, HasApiTokens;
 
     /**
      * The attributes that are mass assignable.
