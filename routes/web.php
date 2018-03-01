@@ -97,7 +97,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/contact/{org_id}/{type}/{id}/{thread_type}', ['as' => 'collaborate.contact.post', 'uses' => 'PartnerMatchingController@doContact'])->where('type', 'design|prototype')->where('thread_type', 'feedback|negotiation');
 
     // Augmented Reality
-    Route::get('/{type}/{id}/ar-models', 'AugmentedRealityController@index');
+    Route::get('/{type}/{id}/ar-models', 'AugmentedRealityController@index')->name('ar-models');
     Route::get('/{type}/{id}/ar-models/create', 'AugmentedRealityController@create');
     Route::post('/{type}/{id}/ar-models/create', 'AugmentedRealityController@doCreate');
     Route::get('/ar-model/{ar_id}', 'AugmentedRealityController@show');

@@ -14,6 +14,7 @@ import ProductList from './components/ProductList.vue';
 import ProductCreate from './components/ProductCreate.vue';
 import DesignCreate from './components/DesignCreate.vue';
 import PrototypeCreate from './components/PrototypeCreate.vue';
+import ARModelCreate from './components/ARModelCreate.vue';
 import DesignsTable from './components/DesignsTable.vue';
 import PrototypesTable from './components/PrototypesTable.vue';
 import Gallery from './components/Gallery.vue';
@@ -94,6 +95,7 @@ const app = new Vue({
         ProductCreate,
         DesignCreate,
         PrototypeCreate,
+        ARModelCreate,
         DesignsTable,
         PrototypesTable,
         Gallery,

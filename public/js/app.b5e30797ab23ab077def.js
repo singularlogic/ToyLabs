@@ -2167,6 +2167,179 @@ module.exports = {
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js?cacheDirectory!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/ARModelCreate.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _ConfirmDialog = __webpack_require__("./resources/assets/js/components/ConfirmDialog.vue");
+
+var _ConfirmDialog2 = _interopRequireDefault(_ConfirmDialog);
+
+var _vue2Dropzone = __webpack_require__("./node_modules/vue2-dropzone/dist/vue2-dropzone.js");
+
+var _vue2Dropzone2 = _interopRequireDefault(_vue2Dropzone);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+exports.default = {
+    name: 'ARModelCreate',
+    props: ['_model', '_parent_id', '_parent_type'],
+    components: { ConfirmDialog: _ConfirmDialog2.default, Dropzone: _vue2Dropzone2.default },
+    data: function data() {
+        return {
+            submitText: this._model.id ? 'Update' : 'Create',
+            model: this._model,
+            uploadedFiles: [],
+            error: ''
+        };
+    },
+
+    computed: {
+        files: function files() {
+            return this.model.media ? this.model.media.filter(function (obj) {
+                return obj.collection_name === 'files';
+            }) : [];
+        },
+        filesArray: function filesArray() {
+            return JSON.stringify(this.uploadedFiles);
+        },
+        questionsArray: function questionsArray() {
+            return JSON.stringify(this.model.questions);
+        },
+        canSubmit: function canSubmit() {
+            return this.uploadedFiles.length > 0;
+        }
+    },
+    methods: {
+        fileAdded: function fileAdded(file) {
+            this.uploadedFiles.push({
+                name: file.name,
+                path: JSON.parse(file.xhr.response).path
+            });
+        },
+        fileRemoved: function fileRemoved(file, error, xhr) {
+            var _this = this;
+
+            var path = JSON.parse(file.xhr.response).path;
+            var f = this.uploadedFiles.find(function (o) {
+                return o.path === path;
+            });
+            var idx = this.uploadedFiles.indexOf(f);
+            if (~idx) {
+                axios.delete('/file/delete', {
+                    data: { path: path }
+                }).then(function (response) {
+                    _this.uploadedFiles.splice(idx, 1);
+                });
+            }
+        },
+        deleteMedia: function deleteMedia(id) {
+            var _this2 = this;
+
+            $('#imageDelete').modal({
+                closable: false,
+                onApprove: function onApprove() {
+                    var media = _this2.model.media.find(function (o) {
+                        return o.id == id;
+                    });
+                    var idx = _this2.model.media.indexOf(media);
+                    if (~idx) {
+                        axios.delete('/attachment/remove', {
+                            data: { id: id }
+                        }).then(function (response) {
+                            if (response.status === 200) {
+                                _this2.model.media.splice(idx, 1);
+                            }
+                        });
+                    }
+                }
+            }).modal('show');
+        }
+    }
+};
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js?cacheDirectory!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/ARModelsTable.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -2176,6 +2349,25 @@ module.exports = {
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+
+var _ConfirmDialog = __webpack_require__("./resources/assets/js/components/ConfirmDialog.vue");
+
+var _ConfirmDialog2 = _interopRequireDefault(_ConfirmDialog);
+
+var _numeral = __webpack_require__("./node_modules/numeral/numeral.js");
+
+var _numeral2 = _interopRequireDefault(_numeral);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } } //
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -2225,10 +2417,39 @@ Object.defineProperty(exports, "__esModule", {
 
 exports.default = {
     name: 'ARModelsTable',
-    props: ['_type', '_id', 'models'],
+    props: ['_type', '_id', '_models'],
+    components: { ConfirmDialog: _ConfirmDialog2.default },
+    data: function data() {
+        return {
+            models: [].concat(_toConsumableArray(this._models))
+        };
+    },
+
     methods: {
         deleteModel: function deleteModel(id) {
-            console.log('NYI - deleteARModel ' + id);
+            var _this = this;
+
+            $('#modelDelete').modal({
+                closable: false,
+                onApprove: function onApprove() {
+                    var model = _this.models.find(function (o) {
+                        return o.id == id;
+                    });
+                    var idx = _this.models.indexOf(model);
+                    if (~idx) {
+                        axios.delete('/ar-model/' + id).then(function (res) {
+                            if (res.status === 200) {
+                                _this.models.splice(idx, 1);
+                            }
+                        });
+                    }
+                }
+            }).modal('show');
+        }
+    },
+    filters: {
+        formatNumber: function formatNumber(value) {
+            return (0, _numeral2.default)(value).format('0.00');
         }
     }
 };
@@ -44391,6 +44612,201 @@ if (false) {
 
 /***/ }),
 
+/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-ce636850\"}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/ARModelCreate.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('form', {
+    staticClass: "ui form",
+    attrs: {
+      "method": "POST"
+    }
+  }, [_c('input', {
+    attrs: {
+      "type": "hidden",
+      "name": "_token"
+    },
+    domProps: {
+      "value": _vm.$parent.crsf
+    }
+  }), _vm._v(" "), _c('div', {
+    staticClass: "field"
+  }, [_c('label', [_vm._v("Title")]), _vm._v(" "), _c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.model.title),
+      expression: "model.title"
+    }],
+    attrs: {
+      "type": "text",
+      "name": "title",
+      "placeholder": "Enter a descriptive title for your AR model",
+      "required": ""
+    },
+    domProps: {
+      "value": (_vm.model.title)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.model.title = $event.target.value
+      }
+    }
+  })]), _vm._v(" "), _c('div', {
+    staticClass: "field"
+  }, [_c('label', [_vm._v("Description")]), _vm._v(" "), _c('textarea', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.model.description),
+      expression: "model.description"
+    }],
+    attrs: {
+      "name": "description"
+    },
+    domProps: {
+      "value": (_vm.model.description)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.model.description = $event.target.value
+      }
+    }
+  })]), _vm._v(" "), _vm._m(0), _vm._v(" "), (_vm.files) ? _c('div', {
+    staticClass: "ui relaxed horizontal divided list",
+    staticStyle: {
+      "margin-bottom": "10px"
+    }
+  }, _vm._l((_vm.files), function(file) {
+    return _c('div', {
+      staticClass: "item"
+    }, [_c('div', {
+      staticClass: "content"
+    }, [_c('span', {
+      staticClass: "header"
+    }, [_vm._v("\n                    " + _vm._s(file.name) + "\n                    "), _c('a', {
+      attrs: {
+        "href": "javascript:void(0)"
+      },
+      on: {
+        "click": function($event) {
+          _vm.deleteMedia(file.id)
+        }
+      }
+    }, [_c('i', {
+      staticClass: "grey delete icon"
+    })])])])])
+  })) : _vm._e(), _vm._v(" "), _c('dropzone', {
+    attrs: {
+      "id": "files",
+      "url": "/file/upload",
+      "useFontAwesome": true,
+      "showRemoveLink": true,
+      "paramName": "file"
+    },
+    on: {
+      "vdropzone-success": _vm.fileAdded,
+      "vdropzone-removed-file": _vm.fileRemoved
+    }
+  }, [_c('input', {
+    attrs: {
+      "type": "hidden",
+      "name": "_token"
+    },
+    domProps: {
+      "value": _vm.$parent.crsf
+    }
+  })]), _vm._v(" "), (_vm.error) ? _c('div', {
+    staticClass: "ui attached negative message"
+  }, [_c('p', [_c('strong', [_vm._v("Error!")]), _vm._v(" " + _vm._s(_vm.error))])]) : _vm._e(), _vm._v(" "), _vm._m(1), _vm._v(" "), _vm._l((_vm.model.questions), function(question, idx) {
+    return _c('div', {
+      key: idx,
+      staticClass: "ui labeled fluid input",
+      staticStyle: {
+        "padding-bottom": "8px"
+      }
+    }, [_c('div', {
+      staticClass: "ui label"
+    }, [_vm._v("Question " + _vm._s(idx + 1))]), _vm._v(" "), _c('input', {
+      directives: [{
+        name: "model",
+        rawName: "v-model",
+        value: (question.text),
+        expression: "question.text"
+      }],
+      attrs: {
+        "type": "text",
+        "required": ""
+      },
+      domProps: {
+        "value": (question.text)
+      },
+      on: {
+        "input": function($event) {
+          if ($event.target.composing) { return; }
+          question.text = $event.target.value
+        }
+      }
+    })])
+  }), _vm._v(" "), _c('div', {
+    staticClass: "ui divider"
+  }), _vm._v(" "), _c('button', {
+    ref: "submitButton",
+    staticClass: "ui orange submit right floated labeled icon button",
+    attrs: {
+      "type": "submit"
+    }
+  }, [_c('i', {
+    staticClass: "edit icon"
+  }), _vm._v(" " + _vm._s(_vm.submitText) + "\n    ")]), _vm._v(" "), _c('confirm-dialog', {
+    attrs: {
+      "id": "imageDelete",
+      "icon": "trash",
+      "title": "Delete file?",
+      "body": "Are you sure you want to delete this file? This action cannot be undone!"
+    }
+  }), _vm._v(" "), _c('input', {
+    attrs: {
+      "type": "hidden",
+      "name": "files"
+    },
+    domProps: {
+      "value": _vm.filesArray
+    }
+  }), _vm._v(" "), _c('input', {
+    attrs: {
+      "type": "hidden",
+      "name": "questions"
+    },
+    domProps: {
+      "value": _vm.questionsArray
+    }
+  })], 2)
+},staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('h3', {
+    staticClass: "ui dividing header"
+  }, [_vm._v("\n        Files\n        "), _c('div', {
+    staticClass: "sub header"
+  })])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('h3', {
+    staticClass: "ui dividing header"
+  }, [_vm._v("\n        Questions\n        "), _c('div', {
+    staticClass: "sub header"
+  }, [_vm._v("\n            Users that download your AR model will be asked to rate it based on a number of criteria (change to suit your specific needs). Rating will be done using a scale of 1-5.\n        ")])])
+}]}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-ce636850", module.exports)
+  }
+}
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-d406bcd6\"}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/MessageThread.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -45101,7 +45517,7 @@ if (false) {
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('table', {
+  return _c('div', [_c('table', {
     staticClass: "ui celled table"
   }, [_vm._m(0), _vm._v(" "), _c('tbody', [(_vm.models.length == 0) ? _c('tr', [_c('td', {
     staticClass: "center aligned",
@@ -45115,11 +45531,11 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       }
     }, [_vm._v(_vm._s(ar.title))])]), _vm._v(" "), _c('td', {
       staticClass: "center aligned"
-    }, [_vm._v(_vm._s(ar.views))]), _vm._v(" "), _c('td', {
+    }, [_vm._v(_vm._s(ar.downloads))]), _vm._v(" "), _c('td', {
       staticClass: "center aligned"
-    }, [_vm._v(_vm._s(ar.comments))]), _vm._v(" "), _c('td', {
+    }, [_vm._v(_vm._s(ar.totalComments))]), _vm._v(" "), _c('td', {
       staticClass: "center aligned"
-    }, [_vm._v("\n                " + _vm._s(ar.rating) + " / 5.0\n            ")]), _vm._v(" "), _c('td', [_c('div', {
+    }, [_vm._v("\n                    " + _vm._s(_vm._f("formatNumber")(ar.averageRating)) + "\n                ")]), _vm._v(" "), _c('td', [_c('div', {
       staticClass: "ui tiny basic icon buttons"
     }, [_c('a', {
       staticClass: "ui button",
@@ -45157,7 +45573,14 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [_c('i', {
     staticClass: "plus icon"
-  }), _vm._v(" Add AR Model\n            ")])])])], 1)
+  }), _vm._v(" Add AR Model\n                ")])])])], 1), _vm._v(" "), _c('confirm-dialog', {
+    attrs: {
+      "id": "modelDelete",
+      "icon": "trash",
+      "title": "Delete AR model?",
+      "body": "Are you sure you want to delete this AR model? All questions, answers and comments will be deleted as well. This action cannot be undone!"
+    }
+  })], 1)
 },staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('thead', {
     staticClass: "full-width"
@@ -59197,6 +59620,10 @@ var _PrototypeCreate = __webpack_require__("./resources/assets/js/components/Pro
 
 var _PrototypeCreate2 = _interopRequireDefault(_PrototypeCreate);
 
+var _ARModelCreate = __webpack_require__("./resources/assets/js/components/ARModelCreate.vue");
+
+var _ARModelCreate2 = _interopRequireDefault(_ARModelCreate);
+
 var _DesignsTable = __webpack_require__("./resources/assets/js/components/DesignsTable.vue");
 
 var _DesignsTable2 = _interopRequireDefault(_DesignsTable);
@@ -59262,9 +59689,6 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 /**
  * Navbar transition for the homepage
  */
-
-
-// Import VueJS Components
 $(document).ready(function () {
     // fix menu when passed
     $('.masthead').visibility({
@@ -59293,6 +59717,9 @@ $(document).ready(function () {
     $('#dashboard .menu .item').tab();
     $('table.sortable').tablesort();
 });
+
+// Import VueJS Components
+
 
 var router = new VueRouter({
     mode: 'history',
@@ -59327,6 +59754,7 @@ var app = new _vue2.default({
         ProductCreate: _ProductCreate2.default,
         DesignCreate: _DesignCreate2.default,
         PrototypeCreate: _PrototypeCreate2.default,
+        ARModelCreate: _ARModelCreate2.default,
         DesignsTable: _DesignsTable2.default,
         PrototypesTable: _PrototypesTable2.default,
         Gallery: _Gallery2.default,
@@ -59406,6 +59834,41 @@ if (key) {
 }
 
 window.axios = _axios2.default;
+
+/***/ }),
+
+/***/ "./resources/assets/js/components/ARModelCreate.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var Component = __webpack_require__("./node_modules/vue-loader/lib/component-normalizer.js")(
+  /* script */
+  __webpack_require__("./node_modules/babel-loader/lib/index.js?cacheDirectory!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/ARModelCreate.vue"),
+  /* template */
+  __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-ce636850\"}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/ARModelCreate.vue"),
+  /* scopeId */
+  null,
+  /* cssModules */
+  null
+)
+Component.options.__file = "/Users/finik/Sites/toylabs/resources/assets/js/components/ARModelCreate.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] ARModelCreate.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-ce636850", Component.options)
+  } else {
+    hotAPI.reload("data-v-ce636850", Component.options)
+  }
+})()}
+
+module.exports = Component.exports
+
 
 /***/ }),
 

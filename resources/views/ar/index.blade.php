@@ -17,7 +17,7 @@
             <a-r-models-table
                 :_type="'{{ $back['type'] }}'"
                 :_id="{{ $product->id }}"
-                :models="{{ json_encode($models) }}"
+                :_models="{{ json_encode($models) }}"
             ></a-r-models-table>
         </div>
 @endsection
