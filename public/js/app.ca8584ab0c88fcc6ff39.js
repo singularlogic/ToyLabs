@@ -2260,6 +2260,16 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 exports.default = {
     name: 'ARModelCreate',
@@ -2902,7 +2912,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 exports.default = {
     name: 'comment',
     components: { ReplyForm: _ReplyForm2.default },
-    props: ['comments', 'comment', 'model'],
+    props: ['comments', 'comment', 'model', 'readOnly'],
     data: function data() {
         return {
             newComment: {
@@ -2997,6 +3007,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 //
 //
 //
+//
 
 var _Comment = __webpack_require__("./resources/assets/js/components/Comment.vue");
 
@@ -3031,7 +3042,11 @@ exports.default = {
                 return c.parent_id === null;
             });
         }
-    }, (0, _vuex.mapGetters)(['isLogged'])),
+    }, (0, _vuex.mapGetters)(['isLogged']), {
+        showReply: function showReply() {
+            return this.model.type !== 'App\\ARModel';
+        }
+    }),
     methods: {
         addComment: function addComment(comment) {
             this.saveComment(comment);
@@ -39954,7 +39969,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   })], 1), _vm._v(" "), _c('div', {
     staticClass: "text"
-  }, [_vm._v(_vm._s(_vm.comment.body))]), _vm._v(" "), _c('div', {
+  }, [_vm._v(_vm._s(_vm.comment.body))]), _vm._v(" "), (!_vm.readOnly) ? _c('div', {
     staticClass: "actions"
   }, [(_vm.isLogged) ? _c('a', {
     staticClass: "reply",
@@ -39968,7 +39983,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         _vm.deleteComment(_vm.comment)
       }
     }
-  }, [_vm._v("Delete")]) : _vm._e()]), _vm._v(" "), (_vm.showReply) ? _c('reply-form', {
+  }, [_vm._v("Delete")]) : _vm._e()]) : _vm._e(), _vm._v(" "), (_vm.showReply) ? _c('reply-form', {
     attrs: {
       "comment": _vm.newComment
     },
@@ -41008,7 +41023,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       attrs: {
         "model": _vm.model,
         "comments": _vm.localComments,
-        "comment": c
+        "comment": c,
+        "read-only": true
       },
       on: {
         "reply": _vm.addComment,
@@ -41017,7 +41033,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     })
   })), _vm._v(" "), _c('div', {
     staticClass: "ui clearing hidden divider"
-  }), _vm._v(" "), (_vm.isLogged) ? _c('form', {
+  }), _vm._v(" "), (_vm.isLogged && _vm.showReply) ? _c('form', {
     staticClass: "ui reply form"
   }, [_c('div', {
     staticClass: "field"
@@ -44674,7 +44690,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         _vm.model.description = $event.target.value
       }
     }
-  })]), _vm._v(" "), _vm._m(0), _vm._v(" "), (_vm.files) ? _c('div', {
+  }), _vm._v(" "), _vm._m(0)]), _vm._v(" "), _vm._m(1), _vm._v(" "), (_vm.files) ? _c('div', {
     staticClass: "ui relaxed horizontal divided list",
     staticStyle: {
       "margin-bottom": "10px"
@@ -44720,7 +44736,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   })]), _vm._v(" "), (_vm.error) ? _c('div', {
     staticClass: "ui attached negative message"
-  }, [_c('p', [_c('strong', [_vm._v("Error!")]), _vm._v(" " + _vm._s(_vm.error))])]) : _vm._e(), _vm._v(" "), _vm._m(1), _vm._v(" "), _vm._l((_vm.model.questions), function(question, idx) {
+  }, [_c('p', [_c('strong', [_vm._v("Error!")]), _vm._v(" " + _vm._s(_vm.error))])]) : _vm._e(), _vm._v(" "), _vm._m(2), _vm._v(" "), _vm._l((_vm.model.questions), function(question, idx) {
     return _c('div', {
       key: idx,
       staticClass: "ui labeled fluid input",
@@ -44785,6 +44801,10 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   })], 2)
 },staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    staticClass: "ui info message"
+  }, [_vm._v("\n            Use this field to explain to users:\n            "), _c('ul', [_c('li', [_vm._v("what to expect,")]), _vm._v(" "), _c('li', [_vm._v("how to use the model,")]), _vm._v(" "), _c('li', [_vm._v("possible shortcomings,")]), _vm._v(" "), _c('li', [_vm._v("what to test,")]), _vm._v(" "), _c('li', [_vm._v("whatever you think is necessary to know before they use the model.")])])])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('h3', {
     staticClass: "ui dividing header"
   }, [_vm._v("\n        Files\n        "), _c('div', {
@@ -59706,7 +59726,9 @@ $(document).ready(function () {
     $('.message .close').on('click', function () {
         $(this).closest('.message').transition('fade');
     });
-    $('.ui.rating').rating();
+    $('.ui.rating').rating({
+        interactive: false
+    });
     $('#notificationsIcon').popup({
         popup: $('#notificationsPopup'),
         on: 'click',

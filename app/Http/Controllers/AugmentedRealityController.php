@@ -87,10 +87,25 @@ class AugmentedRealityController extends Controller
 
     public function show(Request $request, int $id)
     {
-        $model = ARModel::findOrFail($id);
+        $model = ARModel::with(['comments.creator', 'questions'])->findOrFail($id);
         if (\Gate::denies('edit.product', $model->parent->product)) {
             abort(401, 'Unauthorized access');
         }
+
+        $data = [
+            'title'  => $model->title,
+            'model'  => $model,
+            'back'   => [
+                'id'   => $model->parent->id,
+                'type' => $model->parent->type,
+            ],
+            '_model' => [
+                'id'   => $model->id,
+                'type' => ARModel::class,
+            ],
+        ];
+
+        return view('ar.show', $data);
     }
 
     public function update(Request $request, int $id)

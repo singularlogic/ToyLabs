@@ -9,7 +9,7 @@
                 <timeago class="date" :since="comment.created_at" :auto-update="30"></timeago>
             </div>
             <div class="text">{{ comment.body }}</div>
-            <div class="actions">
+            <div class="actions" v-if="!readOnly">
                 <a class="reply" @click="reply" v-if="isLogged">Reply</a>
                 <a class="delete" @click="deleteComment(comment)" v-if="comment.creator_id === userID">Delete</a>
             </div>
@@ -40,7 +40,7 @@ import { mapGetters } from 'vuex';
 export default {
     name: 'comment',
     components: { ReplyForm },
-    props: ['comments', 'comment', 'model'],
+    props: ['comments', 'comment', 'model', 'readOnly'],
     data() {
         return {
             newComment: {

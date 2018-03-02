@@ -9,6 +9,16 @@
         <div class="field">
             <label>Description</label>
             <textarea v-model="model.description" name="description"></textarea>
+            <div class="ui info message">
+                Use this field to explain to users:
+                <ul>
+                    <li>what to expect,</li>
+                    <li>how to use the model,</li>
+                    <li>possible shortcomings,</li>
+                    <li>what to test,</li>
+                    <li>whatever you think is necessary to know before they use the model.</li>
+                </ul>
+            </div>
         </div>
 
         <h3 class="ui dividing header">
