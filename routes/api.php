@@ -21,5 +21,11 @@ Route::group([
     'prefix'     => 'v1',
     'middleware' => 'auth:api',
 ], function () {
+    Route::post('logout', 'API\PassportController@logout');
     Route::post('user', 'API\PassportController@getDetails');
+
+    Route::get('ar-models', 'API\PassportController@getModels');
+    Route::get('ar-model/{id}/download', 'API\PassportController@downloadModel');
+    Route::get('ar-model/{id}/questions', 'API\PassportController@getQuestions');
+    Route::post('ar-model/{id}/feedback', 'API\PassportController@postFeedback');
 });

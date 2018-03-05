@@ -9,7 +9,6 @@ class ARQuestion extends Model
 {
     protected $table    = 'ar_questions';
     protected $fillable = ['text', 'armodel_id'];
-    protected $appends  = ['averageRating', 'detailedRating'];
     protected $casts    = [
         'detailedRating' => 'array',
     ];

@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class ARQuestionAnswer extends Model
 {
+    public $timestamps  = false;
     protected $table    = 'ar_question_answers';
     protected $fillable = ['ar_question_id', 'user_id', 'value'];
 
