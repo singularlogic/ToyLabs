@@ -121,7 +121,7 @@ class AugmentedRealityController extends Controller
                 'id'   => $model->parent->id,
                 'type' => $model->parent->type,
             ],
-            'model' => $model->append('files'),
+            'model' => $model->makeVisible(['questions'])->append('files'),
         ];
 
         return view('ar.create', $data);

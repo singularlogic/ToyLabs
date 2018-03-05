@@ -23,7 +23,7 @@ Route::group([
     'middleware' => 'auth:api',
 ], function () {
     Route::post('logout', 'API\PassportController@logout');
-    Route::post('user', 'API\PassportController@getDetails');
+    Route::get('user', 'API\PassportController@getDetails');
 
     Route::get('ar-models', 'API\PassportController@getModels');
     Route::get('ar-model/{id}/download', 'API\PassportController@downloadModel');
