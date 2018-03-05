@@ -4,7 +4,12 @@ namespace App\Http\Controllers\API;
 
 use App\ARModel;
 use App\ARQuestionAnswer;
+use App\Design;
 use App\Http\Controllers\Controller;
+use App\Organization;
+use App\Product;
+use App\Prototype;
+use App\User;
 use Illuminate\Http\Request;
 use ZipArchive;
 
@@ -47,7 +52,46 @@ class PassportController extends Controller
 
     public function getModels(Request $request)
     {
-        // TODO: Get all the models the logged user has access to
+        $user = $request->user();
+
+        // Get models from public Products, Designs and Prototypes
+        $products   = Product::where('is_public', true)->get();
+        $designs    = Design::where('is_public', true)->get();
+        $prototypes = Prototype::where('is_public', true)->get();
+
+        // Get models from your own (or your organization's) products
+        $myProducts = Product::with('owner')->where([
+            'owner_id'   => $user->id,
+            'owner_type' => User::class,
+        ])->orWhere([
+            'owner_id'   => $user->organization,
+            'owner_type' => Organization::class,
+        ])->get();
+
+        $products = $products->merge($prototypes);
+        $products = $products->merge($designs);
+        $products = $products->merge($myProducts);
+
+        // Retrieve my collaborations
+        $orgs   = $user->myOrganizations;
+        $active = collect();
+        foreach ($orgs as $org) {
+            $active = $active->union($org->activeCollaborations);
+        }
+
+        // Add the Designs/Prototypes I am collaborating for to the list
+        foreach ($active as $collaboration) {
+            $products->add($collaboration->collaboratable);
+        }
+
+        // Retrieve the AR models from all the Products/Designs/Prototypes
+        $models = collect();
+        foreach ($products as $product) {
+            $models = $models->merge($product->armodels);
+        }
+
+        // Return a list of unique models
+        return response()->json($models->unique(), 200);
     }
 
     public function downloadModel(Request $request, int $id)

@@ -13,8 +13,9 @@ class ARModel extends Model implements HasMedia
 
     protected $table    = 'ar_models';
     protected $fillable = ['title', 'description', 'downloads', 'parent_id', 'parent_type'];
-    protected $appends  = ['totalComments', 'averageRating'];
+    protected $appends  = ['totalComments', 'averageRating', 'filename', 'thumbnail'];
     protected $with     = ['questions'];
+    protected $hidden   = ['questions', 'comments', 'parent'];
 
     public function parent()
     {
@@ -32,11 +33,6 @@ class ARModel extends Model implements HasMedia
         return $result;
     }
 
-    public function getModelFilesAttribute()
-    {
-        // TODO: Return zipped AR model
-    }
-
     public function questions()
     {
         return $this->hasMany(ARQuestion::class, 'ar_model_id');
@@ -50,5 +46,15 @@ class ARModel extends Model implements HasMedia
     public function getAverageRatingAttribute()
     {
         return $this->questions->sum('averageRating') / $this->questions->count();
+    }
+
+    public function getThumbnailAttribute()
+    {
+        return $this->parent->image;
+    }
+
+    public function getFilenameAttribute()
+    {
+        return $this->id . '.zip';
     }
 }
