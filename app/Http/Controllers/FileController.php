@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\ARModel;
 use App\Design;
 use App\Product;
 use App\Prototype;
@@ -78,6 +79,9 @@ class FileController extends Controller
         }
 
         if ($media) {
+            if ($media->model_type === ARModel::class) {
+                unlink(public_path("tmp/$media->model_id.zip"));
+            }
             $media->delete();
             return response()->json([])->setStatusCode(Response::HTTP_OK);
         }

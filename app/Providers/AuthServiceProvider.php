@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\ARModel;
 use App\Design;
 use App\Organization;
 use App\Product;
@@ -134,6 +135,10 @@ class AuthServiceProvider extends ServiceProvider
 
             if (is_a($model, Design::class) or is_a($model, Prototype::class)) {
                 return Gate::allows('edit.product', $model->product);
+            }
+
+            if (is_a($model, ARModel::class)) {
+                return Gate::allows('edit.product', $model->parent->product);
             }
 
             return false;

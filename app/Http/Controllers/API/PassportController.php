@@ -6,6 +6,7 @@ use App\ARModel;
 use App\ARQuestionAnswer;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use ZipArchive;
 
 class PassportController extends Controller
 {
@@ -51,7 +52,30 @@ class PassportController extends Controller
 
     public function downloadModel(Request $request, int $id)
     {
-        // TODO: Zip model files for the specific model, and return it
+        $user   = $request->user();
+        $model  = ARModel::findOrFail($id);
+        $parent = $model->parent;
+
+        if (!$parent->is_public && \Gate::denies('view.product', $parent->product) && \Gate::denies('collaborate.' . $parent->type, $design)) {
+            return abort(401);
+        }
+
+        $path = public_path("tmp/$model->id.zip");
+        $zip  = new ZipArchive;
+
+        // If file does not exist, create it
+        if (!file_exists($path)) {
+            if ($zip->open($path, ZipArchive::CREATE) === true) {
+                foreach ($model->getMedia('files') as $file) {
+                    $zip->addFile($file->getPath(), $file->name);
+                }
+                $zip->close();
+            }
+        }
+
+        return response()->download($path, "$model->id.zip", [
+            'Content-Type' => 'application/octet-stream',
+        ]);
     }
 
     public function getQuestions(Request $request, int $id)

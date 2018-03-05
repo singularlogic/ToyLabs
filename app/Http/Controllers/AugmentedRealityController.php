@@ -153,6 +153,10 @@ class AugmentedRealityController extends Controller
             $model->addMedia($path)->usingName($file['name'])->toMediaCollection('files');
         }
 
+        // Delete zip file if exists
+        $file = public_path("tmp/$model->id.zip");
+        unlink($file);
+
         \Session::flash('success', 'AR Model updated successfully.');
         return redirect()->route('ar-models', ['type' => $model->parent->type, 'id' => $model->parent->id]);
     }
