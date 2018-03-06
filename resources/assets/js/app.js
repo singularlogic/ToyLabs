@@ -59,6 +59,7 @@ $(document).ready(function() {
     $('#orgPage .menu .item').tab();
     $('#dashboard .menu .item').tab();
     $('table.sortable').tablesort();
+    $('h1.header img').popup();
 });
 
 const router = new VueRouter({

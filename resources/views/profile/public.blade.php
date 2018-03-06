@@ -8,7 +8,12 @@
         <!-- Profile/Public -->
         <div class="ui main container" id="orgPage">
             @include('partials.status')
-            <h1 class="ui header">{{ $pagetitle or 'Organization Profile' }}</h1>
+            <h1 class="ui header">
+                {{ $pagetitle or 'Organization Profile' }}
+@if ($organization->is_verified)
+                <img src="/images/verified.png" alt="Verified" style="height: 2.2rem; width: 2.2rem; vertical-align: bottom; margin-left: 5px;" data-content="Verified Organization" data-position="right center" data-inverted="true" />
+@endif
+            </h1>
 
 @if($organization->publicProducts->count() + $organization->publicDesigns->count() + $organization->publicPrototypes->count() > 0)
             <div class="ui pointing secondary menu">
