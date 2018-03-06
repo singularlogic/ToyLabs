@@ -20,6 +20,9 @@
 @endif
                         <div class="content">
                             <div class="header">
+@if ($organization->is_verified)
+                                <i class="green check circle icon"></i>
+@endif
                                 <a href="/organization/{{ $organization->id }}">{{ $organization->name }}</a>
                                 ({{ $organization->organizationType->name }})
                             </div>
