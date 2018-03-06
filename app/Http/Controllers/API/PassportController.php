@@ -132,6 +132,15 @@ class PassportController extends Controller
             return abort(401);
         }
 
+        $questions = $model->questions()->pluck('id');
+        $answers   = ARQuestionAnswer::where('user_id', $user->id)->whereIn('ar_question_id', $questions)->get();
+
+        if (sizeof($answers) > 0) {
+            return response()->json([
+                'questions' => [],
+            ], 200);
+        }
+
         return response()->json([
             'questions' => $model->questions()->get(['id', 'text']),
         ], 200);
