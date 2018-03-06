@@ -180,9 +180,11 @@ class PassportController extends Controller
             ]);
         }
 
-        $model->comment([
-            'body' => $input['comment'],
-        ], $user);
+        if (isset($input['comment']) && $input['comment'] !== '') {
+            $model->comment([
+                'body' => $input['comment'],
+            ], $user);
+        }
 
         return response()->json([
             'success' => 'Feedback accepted',
