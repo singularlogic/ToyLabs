@@ -5905,6 +5905,7 @@ exports.default = {
 //
 //
 //
+//
 
 /***/ }),
 
@@ -45016,14 +45017,16 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       staticClass: "content"
     }, [_c('h3', {
       staticClass: "header"
-    }, [_vm._v(_vm._s(parseInt(index) + 1) + ". "), _c('a', {
+    }, [_vm._v(_vm._s(parseInt(index)) + ". "), _c('a', {
       attrs: {
         "href": ("/organization/" + (result.id)),
         "target": "_BLANK"
       }
     }, [_vm._v(_vm._s(result.name))])]), _vm._v(" "), _c('div', {
       staticClass: "meta"
-    }, [_vm._v("\n                " + _vm._s(result.organization_type.name) + "\n                "), _vm._l((_vm.flags(result)), function(flag) {
+    }, [(result.is_verified) ? _c('i', {
+      staticClass: "green check circle icon"
+    }) : _vm._e(), _vm._v("\n                " + _vm._s(result.organization_type.name) + "\n                "), _vm._l((_vm.flags(result)), function(flag) {
       return _c('i', {
         staticClass: "flag",
         class: flag

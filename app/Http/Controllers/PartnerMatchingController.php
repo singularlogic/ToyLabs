@@ -59,10 +59,11 @@ class PartnerMatchingController extends Controller
 
         $results = [];
         foreach ($organizations as $organization) {
+            $verified  = $organization->is_verified ? '<i class="green check circle icon"></i> ' : '';
             $results[] = [
                 'id'          => $organization->id,
                 'title'       => $organization->name,
-                'description' => $organization->organizationType->name,
+                'description' => $verified . $organization->organizationType->name,
                 'url'         => '/' . $request->get('type') . '/' . $request->get('id') . '/collaborate/contact/' . $organization->id,
             ];
         }
