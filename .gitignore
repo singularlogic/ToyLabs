@@ -12,3 +12,4 @@ npm-debug.log
 *.sublime-workspace
 .DS_Store
 /deploy.php
+/public/tmp

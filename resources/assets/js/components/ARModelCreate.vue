@@ -41,6 +41,7 @@
             url="/file/upload"
             :useFontAwesome="true"
             :showRemoveLink="true"
+            maxFileSizeInMB="64"
             paramName="file"
             v-on:vdropzone-success="fileAdded"
             v-on:vdropzone-removed-file="fileRemoved"

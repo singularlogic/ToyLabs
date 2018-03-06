@@ -2270,6 +2270,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 //
 //
 //
+//
 
 exports.default = {
     name: 'ARModelCreate',
@@ -4894,6 +4895,15 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 exports.default = {
     components: { Dropzone: _vue2Dropzone2.default, ConfirmDialog: _ConfirmDialog2.default },
@@ -5302,7 +5312,7 @@ exports.default = {
                     axios.put('/organization/' + _this3.joinOrg + '/join').then(function (response) {
                         if (response.status === 200) {
                             var org = _this3._organizations.find(function (org) {
-                                return org.id = _this3.joinOrg;
+                                return org.id === _this3.joinOrg;
                             });
                             _this3.professional.pending.push(org);
                             _this3.joinOrg = null;
@@ -5322,11 +5332,11 @@ exports.default = {
                 onApprove: function onApprove() {
                     var idx = -1;
                     if (pending) {
-                        idx = _this4.professional.pending.find(function (o) {
+                        idx = _this4.professional.pending.findIndex(function (o) {
                             return o.id == org.id;
                         });
                     } else {
-                        idx = _this4.professional.organizations.find(function (o) {
+                        idx = _this4.professional.organizations.findIndex(function (o) {
                             return o.id == org.id;
                         });
                     }
@@ -41363,9 +41373,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       }
     }
   })]), _vm._v(" "), _c('div', {
-    staticClass: "fields"
-  }, [_c('div', {
-    staticClass: "ten wide field"
+    staticClass: "field"
   }, [_c('label', [_vm._v("Category")]), _vm._v(" "), _c('select', {
     directives: [{
       name: "model",
@@ -41397,8 +41405,10 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       domProps: {
         "value": c.id
       }
-    }, [_vm._v(_vm._s(c.title))])
+    }, [_c('strong', [_vm._v(_vm._s(c.title))]), _vm._v(" "), (c.description) ? _c('span', [_vm._v("("), _c('em', [_vm._v(_vm._s(c.description))]), _vm._v(")")]) : _vm._e()])
   })], 2)]), _vm._v(" "), _c('div', {
+    staticClass: "fields"
+  }, [_c('div', {
     staticClass: "three wide field",
     attrs: {
       "required": ""
@@ -41472,7 +41482,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         "value": a.value
       }
     }, [_vm._v(_vm._s(a.name))])
-  })], 2)])]), _vm._v(" "), (_vm.editLegal) ? _c('div', [_c('h4', {
+  })], 2)]), _vm._v(" "), _vm._m(0)]), _vm._v(" "), (_vm.editLegal) ? _c('div', [_c('h4', {
     staticClass: "ui dividing header"
   }, [_vm._v("Legal")]), _vm._v(" "), _c('div', {
     staticClass: "inline fields"
@@ -41543,7 +41553,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [_vm._v("\n                        My Organization\n                        "), (_vm._organizations.length > 0) ? _c('span', [_vm._v("("), _c('em', [_vm._v(_vm._s(_vm._organizations[0].name))]), _vm._v(")")]) : _vm._e()])])])]), _vm._v(" "), _c('div', {
     staticClass: "inline fields"
-  }, [_vm._m(0), _vm._v(" "), _c('div', {
+  }, [_vm._m(1), _vm._v(" "), _c('div', {
     staticClass: "field"
   }, [_c('div', {
     staticClass: "ui radio checkbox"
@@ -41601,7 +41611,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "for": "true"
     }
-  }, [_vm._v("Yes")])])])])]) : _vm._e(), _vm._v(" "), _vm._m(1), _vm._v(" "), (_vm.images) ? _c('div', {
+  }, [_vm._v("Yes")])])])])]) : _vm._e(), _vm._v(" "), _vm._m(2), _vm._v(" "), (_vm.images) ? _c('div', {
     staticClass: "ui relaxed horizontal divided list",
     staticStyle: {
       "margin-bottom": "10px"
@@ -41651,7 +41661,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     domProps: {
       "value": _vm.$parent.crsf
     }
-  })]), _vm._v(" "), _vm._m(2), _vm._v(" "), (_vm.files) ? _c('div', {
+  })]), _vm._v(" "), _vm._m(3), _vm._v(" "), (_vm.files) ? _c('div', {
     staticClass: "ui relaxed horizontal divided list",
     staticStyle: {
       "margin-bottom": "10px"
@@ -41760,6 +41770,18 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   })], 1)
 },staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    staticClass: "ui ten wide field"
+  }, [_c('div', {
+    staticClass: "ui info message field",
+    staticStyle: {
+      "padding": "10px 8px",
+      "margin-top": "23px"
+    }
+  }, [_c('i', {
+    staticClass: "info icon"
+  }), _vm._v("\n                Tentative ages. You can change the age group later, if needed.\n            ")])])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('label', {
     attrs: {
       "for": "public"
@@ -44720,6 +44742,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "url": "/file/upload",
       "useFontAwesome": true,
       "showRemoveLink": true,
+      "maxFileSizeInMB": "64",
       "paramName": "file"
     },
     on: {
