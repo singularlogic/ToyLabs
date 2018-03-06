@@ -15,7 +15,8 @@ Route::group([
 ], function () {
     Route::post('login', 'API\PassportController@login');
     Route::post('social/{provider}', 'SocialAuthController@passportCallback');
-    Route::get('file/{id}', ['as' => 'file', 'uses' => 'FileController@get']);
+    Route::get('file/{id}/', ['as' => 'file', 'uses' => 'FileController@get']);
+    Route::get('thumb/{id}.jpg', ['as' => 'file', 'uses' => 'FileController@getThumb']);
 });
 
 Route::group([

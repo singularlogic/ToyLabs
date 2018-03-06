@@ -166,7 +166,7 @@ class PassportController extends Controller
         foreach ($input['questions'] as $question) {
             ARQuestionAnswer::create([
                 'ar_question_id' => $question['id'],
-                'user_id'        => $input['user_id'],
+                'user_id'        => $user->id,
                 'value'          => $question['value'],
             ]);
         }

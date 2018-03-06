@@ -50,7 +50,7 @@ class ARModel extends Model implements HasMedia
 
     public function getThumbnailAttribute()
     {
-        return $this->parent->image;
+        return str_replace('file', 'thumb', $this->parent->image) . '.jpg';
     }
 
     public function getFilenameAttribute()
