@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\CollaborationRating;
 use App\Design;
 use App\Organization;
 use App\Product;
@@ -163,6 +164,29 @@ class DesignController extends Controller
             if ($product->status === 'design') {
                 $product->status = 'prototype';
                 $product->save();
+            }
+
+            // Ask collaborators to rate each other
+            foreach ($design->collaborations as $collaboration) {
+                if (CollaborationRating::where('collaboration_id', $collaboration->id)) {
+                    // Ask myself to rate my collaborator
+                    CollaborationRating::create([
+                        'collaboration_id'  => $collaboration->id,
+                        'collaborator_id'   => $product->owner_id,
+                        'collaborator_type' => $product->owner_type,
+                        'organization_id'   => $collaboration->organization_id,
+                    ]);
+
+                    // Ask collaborator to rate my company (if I am a company)
+                    if ($product->owner_type === Organization::class) {
+                        CollaborationRating::create([
+                            'collaboration_id'  => $collaboration_id,
+                            'collaborator_id'   => $collaboration->organization_id,
+                            'collaborator_type' => Organization::class,
+                            'organization_id'   => $product->owner_id,
+                        ]);
+                    }
+                }
             }
 
             // Create a new prototype based on the design

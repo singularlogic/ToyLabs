@@ -12,7 +12,7 @@ class RatingController extends Controller
         $user          = $request->user();
         $organizations = $user->organizations()->get();
 
-        $pendingRatings = collect();
+        $pendingRatings = $user->pendingRatings()->with(['organization', 'collaboration.collaboratable'])->get();
         foreach ($organizations as $org) {
             $pendingRatings = $pendingRatings
                 ->merge(
