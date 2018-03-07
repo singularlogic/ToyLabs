@@ -9,6 +9,10 @@
                 <i class="icon mail"></i> Messages
                 <div class="ui orange label" v-if="unreadMessages > 0">{{ unreadMessages }}</div>
             </router-link>
+            <router-link to="/feed/rate-collaborators" class="item">
+                <i class="star outline icon"></i> Rate Collaborators
+                <div class="ui orange label" v-if="numberOfPendingRatings > 0">{{ numberOfPendingRatings }}</div>
+            </router-link>
             <router-link :to="{ name: 'messageview', params: { id: activeThread.id } }" class="item" v-if="activeThread">
                 <i class="icon mail outline"></i> {{ activeThread.subject }}
             </router-link>
@@ -22,6 +26,7 @@
 import NotificationsTab from './NotificationsTab.vue';
 import MessagesTab from './MessagesTab.vue';
 import RequestsTab from './RequestsTab.vue';
+import RateCollaboratorsTab from './RateCollaboratorsTab.vue';
 import ThreadView from './ThreadView.vue';
 import { mapGetters } from 'vuex';
 
@@ -32,6 +37,7 @@ export default {
             { name: 'feed', path: '/feed', beforeEnter: (to, from, next) => next('/feed/notifications') },
             { name: 'notifications', path: '/feed/notifications', component: NotificationsTab },
             { name: 'messages', path: '/feed/messages', component: MessagesTab },
+            { name: 'ratings', path: '/feed/rate-collaborators', component: RateCollaboratorsTab },
             { name: 'messageview', path: '/feed/message/:id', component: ThreadView },
         ];
         this.$router.addRoutes(routes);
@@ -40,6 +46,7 @@ export default {
         ...mapGetters([
             'totalNotifications',
             'unreadMessages',
+            'numberOfPendingRatings',
             'activeThread',
         ]),
         ...mapGetters({

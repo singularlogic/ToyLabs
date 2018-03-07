@@ -20,6 +20,20 @@ export const fetchMessages = ({ commit }) => {
     });
 };
 
+export const fetchPendingRatings = ({ commit }) => {
+    axios.get('/ratings').then(response => {
+        commit('loadPendingRatings', { list: response.data });
+    });
+};
+
+export const submitFeedback = ({ commit }, feedback) => {
+    axios.post(`/rateCollaboration/${feedback.id}`, feedback).then(res => {
+        if (res.status === 200) {
+            commit('feedbackSubmitted', { id: feedback.id });
+        }
+    });
+};
+
 export const markNotificationAsRead = ({ commit }, notification) => {
     axios.patch(`/notifications/${notification.id}/read`);
     commit('removeNotification', { notificationId: notification.id });

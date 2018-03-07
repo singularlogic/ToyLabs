@@ -38,3 +38,15 @@ export const setActiveThread = (state, { thread }) => {
 export const setOrganization = (state, { organization }) => {
     state.activePartner = organization;
 };
+
+export const loadPendingRatings = (state, { list }) => {
+    state.pendingRatings.splice(0);
+    state.pendingRatings.push(...list);
+};
+
+export const feedbackSubmitted = (state, { id }) => {
+    const index = state.pendingRatings.findIndex(pr => pr.id === id);
+    if (~index) {
+        state.pendingRatings.splice(index, 1);
+    }
+};

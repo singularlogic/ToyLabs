@@ -66,7 +66,6 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/analysis/{id}/edit', ['as' => 'product.analysis.edit', 'uses' => 'MarketAnalysisController@editAnalysis']);
     Route::post('/analysis/{id}/edit', ['as' => 'product.analysis.edit.post', 'uses' => 'MarketAnalysisController@saveAnalysis']);
 
-
     Route::get('/product/{id}/designs', ['as' => 'product.designs', 'uses' => 'DesignController@productDesigns']);
     Route::get('/product/{id}/prototypes', ['as' => 'product.prototypes', 'uses' => 'PrototypeController@productPrototypes']);
 
@@ -132,6 +131,9 @@ Route::group([
     Route::get('{id}', ['as' => 'messages.show', 'uses' => 'MessagesController@show']);
     Route::put('{id}', ['as' => 'messages.update', 'uses' => 'MessagesController@update']);
 });
+
+Route::get('/ratings', 'RatingController@index')->middleware('auth');
+Route::post('/rateCollaboration/{id}', 'RatingController@rateCollaboration')->middleware('auth');
 
 Route::group(['middleware' => 'auth'], function () {
     Route::get('/user/likes', ['as' => 'user.likes', 'uses' => 'UserController@getLikes']);

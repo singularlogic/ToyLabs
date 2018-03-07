@@ -14,3 +14,6 @@ export const totalMessages = (state) => state.messages.length;
 
 export const activeThread = (state) => state.activeThread;
 export const activePartner = (state) => state.activePartner;
+
+export const numberOfPendingRatings = (state) => state.pendingRatings.length;
+export const pendingRatings = (state) => state.pendingRatings;

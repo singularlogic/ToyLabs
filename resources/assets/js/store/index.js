@@ -8,6 +8,7 @@ const state = {
     user: window.Laravel.user,
     messages: [],
     notifications: [],
+    pendingRatings: [],
     unreadMessagesCounter: 0,
     activeThread: null,
     activePartner: null,

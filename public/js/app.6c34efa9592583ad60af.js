@@ -4063,6 +4063,10 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 //
 //
 //
+//
+//
+//
+//
 
 var _NotificationsTab = __webpack_require__("./resources/assets/js/components/NotificationsTab.vue");
 
@@ -4075,6 +4079,10 @@ var _MessagesTab2 = _interopRequireDefault(_MessagesTab);
 var _RequestsTab = __webpack_require__("./resources/assets/js/components/RequestsTab.vue");
 
 var _RequestsTab2 = _interopRequireDefault(_RequestsTab);
+
+var _RateCollaboratorsTab = __webpack_require__("./resources/assets/js/components/RateCollaboratorsTab.vue");
+
+var _RateCollaboratorsTab2 = _interopRequireDefault(_RateCollaboratorsTab);
 
 var _ThreadView = __webpack_require__("./resources/assets/js/components/ThreadView.vue");
 
@@ -4089,11 +4097,11 @@ exports.default = {
         // Initialize router
         var routes = [{ name: 'feed', path: '/feed', beforeEnter: function beforeEnter(to, from, next) {
                 return next('/feed/notifications');
-            } }, { name: 'notifications', path: '/feed/notifications', component: _NotificationsTab2.default }, { name: 'messages', path: '/feed/messages', component: _MessagesTab2.default }, { name: 'messageview', path: '/feed/message/:id', component: _ThreadView2.default }];
+            } }, { name: 'notifications', path: '/feed/notifications', component: _NotificationsTab2.default }, { name: 'messages', path: '/feed/messages', component: _MessagesTab2.default }, { name: 'ratings', path: '/feed/rate-collaborators', component: _RateCollaboratorsTab2.default }, { name: 'messageview', path: '/feed/message/:id', component: _ThreadView2.default }];
         this.$router.addRoutes(routes);
     },
 
-    computed: _extends({}, (0, _vuex.mapGetters)(['totalNotifications', 'unreadMessages', 'activeThread']), (0, _vuex.mapGetters)({
+    computed: _extends({}, (0, _vuex.mapGetters)(['totalNotifications', 'unreadMessages', 'numberOfPendingRatings', 'activeThread']), (0, _vuex.mapGetters)({
         notifications: 'notificationsArray',
         popupNotifications: 'latestNotifications'
     }))
@@ -5566,6 +5574,134 @@ exports.default = {
 //
 //
 //
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?cacheDirectory!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/RateCollaboratorsTab.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+var _vuex = __webpack_require__("./node_modules/vuex/dist/vuex.esm.js");
+
+exports.default = {
+    data: function data() {
+        return {
+            activeRating: null,
+            rating_1: 0,
+            rating_2: 0,
+            rating_3: 0
+        };
+    },
+
+    computed: _extends({}, (0, _vuex.mapGetters)(['numberOfPendingRatings', 'pendingRatings'])),
+    methods: {
+        showRatingPopup: function showRatingPopup(rating) {
+            var _this = this;
+
+            this.activeRating = rating;
+            this.$nextTick(function () {
+                $('#rating_1').rating({
+                    onRate: function onRate(rating) {
+                        _this.rating_1 = rating;
+                    }
+                });
+                $('#rating_2').rating({
+                    onRate: function onRate(rating) {
+                        _this.rating_2 = rating;
+                    }
+                });
+                $('#rating_3').rating({
+                    onRate: function onRate(rating) {
+                        _this.rating_3 = rating;
+                    }
+                });
+                $('#ratingModal').modal({
+                    closable: false,
+                    onApprove: function onApprove() {
+                        _this.$store.dispatch('submitFeedback', {
+                            id: _this.activeRating.id,
+                            rating_1: _this.rating_1,
+                            rating_2: _this.rating_2,
+                            rating_3: _this.rating_3
+                        });
+                    },
+                    onDeny: function onDeny() {
+                        _this.activeRating = null;
+                        _this.rating_1 = 0;
+                        _this.rating_2 = 0;
+                        _this.rating_3 = 0;
+                    }
+                }).modal('show');
+            });
+        }
+    }
+};
 
 /***/ }),
 
@@ -44157,6 +44293,101 @@ if (false) {
 
 /***/ }),
 
+/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-b4b26298\"}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/RateCollaboratorsTab.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', [(_vm.numberOfPendingRatings == 0) ? _c('div', {
+    staticClass: "ui info message"
+  }, [_c('p', [_vm._v("You have no collaborations to be rated!")])]) : _c('div', {
+    staticClass: "ui middle aligned divided list"
+  }, _vm._l((_vm.pendingRatings), function(rating) {
+    return _c('div', {
+      key: rating.id,
+      staticClass: "item"
+    }, [_c('div', {
+      staticClass: "right floated content"
+    }, [_c('button', {
+      staticClass: "ui small basic blue button",
+      on: {
+        "click": function($event) {
+          _vm.showRatingPopup(rating)
+        }
+      }
+    }, [_vm._v("Rate")])]), _vm._v(" "), _c('div', {
+      staticClass: "content"
+    }, [_c('strong', [_vm._v(_vm._s(rating.organization.name))]), _vm._v(" "), _c('div', {
+      staticClass: "description"
+    }, [_c('em', [_vm._v("For")]), _vm._v(" " + _vm._s(rating.collaboration.collaboratable.type) + ": " + _vm._s(rating.collaboration.collaboratable.title) + "\n                ")])])])
+  })), _vm._v(" "), (_vm.activeRating) ? _c('div', {
+    staticClass: "ui small modal",
+    attrs: {
+      "id": "ratingModal"
+    }
+  }, [_c('div', {
+    staticClass: "header"
+  }, [_vm._v("Feedback for " + _vm._s(_vm.activeRating.organization.name))]), _vm._v(" "), _c('div', {
+    staticClass: "content"
+  }, [_c('p', [_vm._v("Please rate your collaboration with "), _c('strong', [_vm._v(_vm._s(_vm.activeRating.organization.name))]), _vm._v(" on " + _vm._s(_vm.activeRating.collaboration.collaboratable.type) + " "), _c('strong', [_vm._v(_vm._s(_vm.activeRating.collaboration.collaboratable.title))]), _vm._v(".")]), _vm._v(" "), _vm._m(0)]), _vm._v(" "), _vm._m(1)]) : _vm._e()])
+},staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    staticClass: "ui middle aligned divided list"
+  }, [_c('div', {
+    staticClass: "item"
+  }, [_c('div', {
+    staticClass: "right floated content"
+  }, [_c('div', {
+    staticClass: "ui huge star rating",
+    attrs: {
+      "data-max-rating": "5",
+      "id": "rating_1"
+    }
+  })]), _vm._v(" "), _c('div', {
+    staticClass: "content"
+  }, [_c('h3', [_vm._v("Quality")])])]), _vm._v(" "), _c('div', {
+    staticClass: "item"
+  }, [_c('div', {
+    staticClass: "right floated content"
+  }, [_c('div', {
+    staticClass: "ui huge star rating",
+    attrs: {
+      "data-max-rating": "5",
+      "id": "rating_2"
+    }
+  })]), _vm._v(" "), _c('div', {
+    staticClass: "content"
+  }, [_c('h3', [_vm._v("Cooperation")])])]), _vm._v(" "), _c('div', {
+    staticClass: "item"
+  }, [_c('div', {
+    staticClass: "right floated content"
+  }, [_c('div', {
+    staticClass: "ui huge star rating",
+    attrs: {
+      "data-max-rating": "5",
+      "id": "rating_3"
+    }
+  })]), _vm._v(" "), _c('div', {
+    staticClass: "content"
+  }, [_c('h3', [_vm._v("Communication")])])])])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    staticClass: "actions"
+  }, [_c('div', {
+    staticClass: "ui cancel basic button"
+  }, [_vm._v("Cancel")]), _vm._v(" "), _c('div', {
+    staticClass: "ui approve green button"
+  }, [_vm._v("Submit")])])
+}]}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-b4b26298", module.exports)
+  }
+}
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-c0b4518a\"}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/NotificationsPage.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -44185,7 +44416,16 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "icon mail"
   }), _vm._v(" Messages\n            "), (_vm.unreadMessages > 0) ? _c('div', {
     staticClass: "ui orange label"
-  }, [_vm._v(_vm._s(_vm.unreadMessages))]) : _vm._e()]), _vm._v(" "), (_vm.activeThread) ? _c('router-link', {
+  }, [_vm._v(_vm._s(_vm.unreadMessages))]) : _vm._e()]), _vm._v(" "), _c('router-link', {
+    staticClass: "item",
+    attrs: {
+      "to": "/feed/rate-collaborators"
+    }
+  }, [_c('i', {
+    staticClass: "star outline icon"
+  }), _vm._v(" Rate Collaborators\n            "), (_vm.numberOfPendingRatings > 0) ? _c('div', {
+    staticClass: "ui orange label"
+  }, [_vm._v(_vm._s(_vm.numberOfPendingRatings))]) : _vm._e()]), _vm._v(" "), (_vm.activeThread) ? _c('router-link', {
     staticClass: "item",
     attrs: {
       "to": {
@@ -60275,6 +60515,41 @@ module.exports = Component.exports
 
 /***/ }),
 
+/***/ "./resources/assets/js/components/RateCollaboratorsTab.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var Component = __webpack_require__("./node_modules/vue-loader/lib/component-normalizer.js")(
+  /* script */
+  __webpack_require__("./node_modules/babel-loader/lib/index.js?cacheDirectory!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/RateCollaboratorsTab.vue"),
+  /* template */
+  __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-b4b26298\"}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/RateCollaboratorsTab.vue"),
+  /* scopeId */
+  null,
+  /* cssModules */
+  null
+)
+Component.options.__file = "/Users/finik/Sites/toylabs/resources/assets/js/components/RateCollaboratorsTab.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] RateCollaboratorsTab.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-b4b26298", Component.options)
+  } else {
+    hotAPI.reload("data-v-b4b26298", Component.options)
+  }
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+
 /***/ "./resources/assets/js/components/ReplyForm.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -60992,6 +61267,10 @@ exports.default = {
             if (this.$store.state.messages.length === 0) {
                 this.$store.dispatch('fetchMessages');
             }
+
+            if (this.$store.state.pendingRatings.length === 0) {
+                this.$store.dispatch('fetchPendingRatings');
+            }
         },
         listen: function listen() {
             var _this = this;
@@ -61081,22 +61360,40 @@ var fetchMessages = exports.fetchMessages = function fetchMessages(_ref3) {
     });
 };
 
-var markNotificationAsRead = exports.markNotificationAsRead = function markNotificationAsRead(_ref4, notification) {
+var fetchPendingRatings = exports.fetchPendingRatings = function fetchPendingRatings(_ref4) {
     var commit = _ref4.commit;
+
+    axios.get('/ratings').then(function (response) {
+        commit('loadPendingRatings', { list: response.data });
+    });
+};
+
+var submitFeedback = exports.submitFeedback = function submitFeedback(_ref5, feedback) {
+    var commit = _ref5.commit;
+
+    axios.post('/rateCollaboration/' + feedback.id, feedback).then(function (res) {
+        if (res.status === 200) {
+            commit('feedbackSubmitted', { id: feedback.id });
+        }
+    });
+};
+
+var markNotificationAsRead = exports.markNotificationAsRead = function markNotificationAsRead(_ref6, notification) {
+    var commit = _ref6.commit;
 
     axios.patch('/notifications/' + notification.id + '/read');
     commit('removeNotification', { notificationId: notification.id });
 };
 
-var acceptRequest = exports.acceptRequest = function acceptRequest(_ref5, notification) {
-    var commit = _ref5.commit;
+var acceptRequest = exports.acceptRequest = function acceptRequest(_ref7, notification) {
+    var commit = _ref7.commit;
 
     axios.patch('/notifications/' + notification.id + '/accept');
     commit('removeNotification', { notificationId: notification.id });
 };
 
-var declineRequest = exports.declineRequest = function declineRequest(_ref6, notification) {
-    var commit = _ref6.commit;
+var declineRequest = exports.declineRequest = function declineRequest(_ref8, notification) {
+    var commit = _ref8.commit;
 
     axios.patch('/notifications/' + notification.id + '/decline');
     commit('removeNotification', { notificationId: notification.id });
@@ -61152,6 +61449,13 @@ var activePartner = exports.activePartner = function activePartner(state) {
   return state.activePartner;
 };
 
+var numberOfPendingRatings = exports.numberOfPendingRatings = function numberOfPendingRatings(state) {
+  return state.pendingRatings.length;
+};
+var pendingRatings = exports.pendingRatings = function pendingRatings(state) {
+  return state.pendingRatings;
+};
+
 /***/ }),
 
 /***/ "./resources/assets/js/store/index.js":
@@ -61192,6 +61496,7 @@ var state = {
     user: window.Laravel.user,
     messages: [],
     notifications: [],
+    pendingRatings: [],
     unreadMessagesCounter: 0,
     activeThread: null,
     activePartner: null
@@ -61278,6 +61583,26 @@ var setOrganization = exports.setOrganization = function setOrganization(state, 
     var organization = _ref6.organization;
 
     state.activePartner = organization;
+};
+
+var loadPendingRatings = exports.loadPendingRatings = function loadPendingRatings(state, _ref7) {
+    var _state$pendingRatings;
+
+    var list = _ref7.list;
+
+    state.pendingRatings.splice(0);
+    (_state$pendingRatings = state.pendingRatings).push.apply(_state$pendingRatings, _toConsumableArray(list));
+};
+
+var feedbackSubmitted = exports.feedbackSubmitted = function feedbackSubmitted(state, _ref8) {
+    var id = _ref8.id;
+
+    var index = state.pendingRatings.findIndex(function (pr) {
+        return pr.id === id;
+    });
+    if (~index) {
+        state.pendingRatings.splice(index, 1);
+    }
 };
 
 /***/ }),

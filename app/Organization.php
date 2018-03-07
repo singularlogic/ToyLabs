@@ -16,7 +16,7 @@ class Organization extends Model
         'phone', 'fax', 'website_url', 'description', 'owner_id', 'organization_type_id', 'legal_form', 'city',
         'production_scale', 'payment_in',
     ];
-    protected $appends = ['typeSlug'];
+    protected $appends = ['typeSlug', 'rating1', 'rating2', 'rating3'];
 
     public function owner()
     {
@@ -133,5 +133,30 @@ class Organization extends Model
     public function archivedCollaborations()
     {
         return $this->hasMany(Collaboration::class)->where('status', 'archived')->with('collaboratable');
+    }
+
+    public function pendingRatings()
+    {
+        return $this->morphMany(CollaborationRating::class, 'collaborator')->where('is_pending', true);
+    }
+
+    public function ratings()
+    {
+        return $this->hasMany(CollaborationRating::class, 'organization_id')->where('is_pending', false);
+    }
+
+    public function getRating1Attribute()
+    {
+        return $this->ratings()->avg('rating_1');
+    }
+
+    public function getRating2Attribute()
+    {
+        return $this->ratings()->avg('rating_2');
+    }
+
+    public function getRating3Attribute()
+    {
+        return $this->ratings()->avg('rating_3');
     }
 }
