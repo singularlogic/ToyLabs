@@ -5,17 +5,24 @@
         <table class="ui celled table">
             <thead class="full-width">
                 <tr>
-                    <th class="twelve wide">Name</th>
+                    <th class="ten wide">Name</th>
+                    <th class="two wide">Status</th>
                     <th class="three wide">Date</th>
                     <th class="one wide"></th>
                 </tr>
             </thead>
             <tbody>
                 <tr v-if="certifications.length == 0">
-                    <td colspan="5" class="center aligned">No certifications added</td>
+                    <td colspan="4" class="center aligned">No certifications added</td>
                 </tr>
                 <tr v-for="certification in certifications">
-                    <td>{{ certification.name }}</td>
+                    <td>{{ certification.name }} {{ certification.description ? `- ${certification.description}` : '' }}</td>
+                    <td>
+                        <span class="ui right floated small yellow label" v-if="certification.pivot.is_verified">Verified</span>
+                        <div v-else>
+                            Not Verified
+                        </div>
+                    </td>
                     <td>{{ certification.pivot.certified_at | formatDate }}</td>
                     <td class="collapsing">
                         <button type="button" class="ui mini red icon button" @click="removeCertification(certification)">
@@ -25,7 +32,7 @@
                 </tr>
             </tbody>
             <tfoot v-if="!insertCertificationMode">
-                <th colspan="5">
+                <th colspan="4">
                     <div class="ui right floated small primary labeled icon button" @click="addCertification()">
                         <i class="marker icon"></i> Add Certification
                     </div>
@@ -33,7 +40,7 @@
             </tfoot>
             <tfoot v-if="insertCertificationMode">
                 <tr>
-                    <th>
+                    <th colspan="2">
                         <select class="ui search dropdown" name="country_id" v-model="newCertification">
                             <option value="">Select Certification...</option>
                             <option v-for="c in certificationTypes" v-bind:value="c">{{ c.name }}</option>

@@ -7518,6 +7518,13 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 
 exports.default = {
     props: ['certifications', 'awards', 'certificationTypes', 'awardTypes'],
@@ -42187,10 +42194,12 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_vm._m(0), _vm._v(" "), _c('tbody', [(_vm.certifications.length == 0) ? _c('tr', [_c('td', {
     staticClass: "center aligned",
     attrs: {
-      "colspan": "5"
+      "colspan": "4"
     }
   }, [_vm._v("No certifications added")])]) : _vm._e(), _vm._v(" "), _vm._l((_vm.certifications), function(certification) {
-    return _c('tr', [_c('td', [_vm._v(_vm._s(certification.name))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm._f("formatDate")(certification.pivot.certified_at)))]), _vm._v(" "), _c('td', {
+    return _c('tr', [_c('td', [_vm._v(_vm._s(certification.name) + " " + _vm._s(certification.description ? ("- " + (certification.description)) : ''))]), _vm._v(" "), _c('td', [(certification.pivot.is_verified) ? _c('span', {
+      staticClass: "ui right floated small yellow label"
+    }, [_vm._v("Verified")]) : _c('div', [_vm._v("\n                        Not Verified\n                    ")])]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm._f("formatDate")(certification.pivot.certified_at)))]), _vm._v(" "), _c('td', {
       staticClass: "collapsing"
     }, [_c('button', {
       staticClass: "ui mini red icon button",
@@ -42207,7 +42216,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     })])])])
   })], 2), _vm._v(" "), (!_vm.insertCertificationMode) ? _c('tfoot', [_c('th', {
     attrs: {
-      "colspan": "5"
+      "colspan": "4"
     }
   }, [_c('div', {
     staticClass: "ui right floated small primary labeled icon button",
@@ -42218,7 +42227,11 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [_c('i', {
     staticClass: "marker icon"
-  }), _vm._v(" Add Certification\n                ")])])]) : _vm._e(), _vm._v(" "), (_vm.insertCertificationMode) ? _c('tfoot', [_c('tr', [_c('th', [_c('select', {
+  }), _vm._v(" Add Certification\n                ")])])]) : _vm._e(), _vm._v(" "), (_vm.insertCertificationMode) ? _c('tfoot', [_c('tr', [_c('th', {
+    attrs: {
+      "colspan": "2"
+    }
+  }, [_c('select', {
     directives: [{
       name: "model",
       rawName: "v-model",
@@ -42395,8 +42408,10 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   return _c('thead', {
     staticClass: "full-width"
   }, [_c('tr', [_c('th', {
-    staticClass: "twelve wide"
+    staticClass: "ten wide"
   }, [_vm._v("Name")]), _vm._v(" "), _c('th', {
+    staticClass: "two wide"
+  }, [_vm._v("Status")]), _vm._v(" "), _c('th', {
     staticClass: "three wide"
   }, [_vm._v("Date")]), _vm._v(" "), _c('th', {
     staticClass: "one wide"
