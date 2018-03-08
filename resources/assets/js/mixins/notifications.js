@@ -8,6 +8,10 @@ export default {
             if (this.$store.state.messages.length === 0) {
                 this.$store.dispatch('fetchMessages');
             }
+
+            if (this.$store.state.pendingRatings.length === 0) {
+                this.$store.dispatch('fetchPendingRatings');
+            }
         },
         listen() {
             window.Echo.private(`App.User.${window.Laravel.user.id}`)

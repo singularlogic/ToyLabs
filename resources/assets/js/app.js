@@ -54,6 +54,9 @@ $(document).ready(function() {
     $('.ui.rating').rating({
         interactive: false,
     });
+    $('.ui.rating.interactive').rating({
+        interactive: true,
+    });
     $('#notificationsIcon').popup({
         popup: $('#notificationsPopup'),
         on: 'click',
@@ -63,6 +66,7 @@ $(document).ready(function() {
     $('#orgPage .menu .item').tab();
     $('#dashboard .menu .item').tab();
     $('table.sortable').tablesort();
+    $('h1.header img').popup();
 });
 
 const router = new VueRouter({

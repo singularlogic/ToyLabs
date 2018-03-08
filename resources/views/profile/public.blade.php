@@ -8,7 +8,12 @@
         <!-- Profile/Public -->
         <div class="ui main container" id="orgPage">
             @include('partials.status')
-            <h1 class="ui header">{{ $pagetitle or 'Organization Profile' }}</h1>
+            <h1 class="ui header">
+                {{ $pagetitle or 'Organization Profile' }}
+@if ($organization->is_verified)
+                <img src="/images/verified.png" alt="Verified" style="height: 2.2rem; width: 2.2rem; vertical-align: bottom; margin-left: 5px;" data-content="Verified Organization" data-position="right center" data-inverted="true" />
+@endif
+            </h1>
 
 @if($organization->publicProducts->count() + $organization->publicDesigns->count() + $organization->publicPrototypes->count() > 0)
             <div class="ui pointing secondary menu">
@@ -85,12 +90,38 @@
                                         </a>
                                     </div>
 @endif
+@if ($organization->rating_1 > 0)
+                                    <h4 class="ui dividing header">Collaboration Ratings</h4>
+                                    <div class="item">
+                                        <div class="right floated">
+                                            <div class="ui star rating" data-rating="{{ round($organization->rating_1) }}" data-max-rating="5" data-interactive="false"></div>
+                                            ({{ number_format($organization->rating_1, 2) }})
+                                        </div>
+                                        <strong>Quality</strong>
+                                    </div>
+                                    <div class="item">
+                                        <div class="right floated">
+                                            <div class="ui star rating" data-rating="{{ round($organization->rating_2) }}" data-max-rating="5" data-interactive="false"></div>
+                                            ({{ number_format($organization->rating_2, 2) }})
+                                        </div>
+                                        <strong>Cooperation</strong>
+                                    </div>
+                                    <div class="item">
+                                        <div class="right floated">
+                                            <div class="ui star rating" data-rating="{{ round($organization->rating_3) }}" data-max-rating="5" data-interactive="false"></div>
+                                            ({{ number_format($organization->rating_3, 2) }})
+                                        </div>
+                                        <strong>Communication</strong>
+                                    </div>
+                                    <div class="ui divider hidden"></div>
+@endif
                                 </div>
                             </div>
                         </div>
                         <div class="eleven wide column">
                             {!! nl2br(e($organization->description)) !!}
 
+@if (count($organization->competencies) > 0)
                             <h3 class="ui dividing header">Competencies</h3>
 
                             <div class="ui two column stackable grid basic segment">
@@ -102,6 +133,7 @@
                                 @endif
 @endforeach
                             </div>
+@endif
 
 @if(count($organization->certifications) > 0)
                             <h3 class="ui dividing header">Certifications</h3>
@@ -109,7 +141,13 @@
 @foreach($organization->certifications as $certification)
                                 <div class="item">
                                     <i class="certificate icon"></i>
-                                    <div class="content">{{ $certification->name }}</div>
+                                    <div class="content">
+                                        {{ $certification->name }}
+                                        @if($certification->description)- {{ $certification->description }}@endif
+                                        @if($certification->pivot->is_verified)
+                                        <div class="ui yellow mini label">Verified</div>
+                                        @endif
+                                    </div>
                                 </div>
 @endforeach
                             </div>

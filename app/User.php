@@ -116,4 +116,10 @@ class User extends Authenticatable
 
         return $products;
     }
+
+    public function pendingRatings()
+    {
+        return $this->morphMany(CollaborationRating::class, 'collaborator')->where('is_pending', true);
+    }
+
 }
