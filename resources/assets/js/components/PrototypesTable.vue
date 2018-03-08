@@ -3,7 +3,7 @@
         <table class="ui celled table">
             <thead class="full-width">
                 <tr>
-                    <th class="twelve wide">Title</th>
+                    <th class="ten wide">Title</th>
                     <th class="two center aligned">Last Modified</th>
                     <th class="collapsing">Actions</th>
                 </tr>
@@ -33,6 +33,9 @@
                             </a>
                             <button class="ui button" data-tooltip="Archive prototype" data-position="top center" data-inverted @click="archivePrototype(p.id)">
                                 <i class="archive icon"></i>
+                            </button>
+                            <button class="ui button" data-tooltip="Move to Production" data-position="top center" data-inverted @click="toProduction(p.id)">
+                                <i class="factory icon"></i>
                             </button>
                         </div>
                     </td>
@@ -99,6 +102,14 @@ export default {
                     });
                 },
             }).modal('show');
-        },    }
+        },
+        toProduction(id) {
+            axios.put(`/prototype/${id}/production`).then(res => {
+                if (res.status === 200) {
+                    console.log('Moved to production');
+                }
+            });
+        },
+    },
 }
 </script>

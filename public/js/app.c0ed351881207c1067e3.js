@@ -5988,6 +5988,9 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 //
 //
 //
+//
+//
+//
 
 exports.default = {
     props: ['_prototypes', '_product_id'],
@@ -6018,6 +6021,13 @@ exports.default = {
                     });
                 }
             }).modal('show');
+        },
+        toProduction: function toProduction(id) {
+            axios.put('/prototype/' + id + '/production').then(function (res) {
+                if (res.status === 200) {
+                    console.log('Moved to production');
+                }
+            });
         }
     }
 };
@@ -43148,6 +43158,20 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       }
     }, [_c('i', {
       staticClass: "archive icon"
+    })]), _vm._v(" "), _c('button', {
+      staticClass: "ui button",
+      attrs: {
+        "data-tooltip": "Move to Production",
+        "data-position": "top center",
+        "data-inverted": ""
+      },
+      on: {
+        "click": function($event) {
+          _vm.toProduction(p.id)
+        }
+      }
+    }, [_c('i', {
+      staticClass: "factory icon"
     })])])])])
   }), _vm._v(" "), _vm._l((_vm.archived), function(p) {
     return _c('tr', [_c('td', [_c('i', {
@@ -43204,7 +43228,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   return _c('thead', {
     staticClass: "full-width"
   }, [_c('tr', [_c('th', {
-    staticClass: "twelve wide"
+    staticClass: "ten wide"
   }, [_vm._v("Title")]), _vm._v(" "), _c('th', {
     staticClass: "two center aligned"
   }, [_vm._v("Last Modified")]), _vm._v(" "), _c('th', {

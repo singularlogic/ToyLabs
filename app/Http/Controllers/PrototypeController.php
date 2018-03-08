@@ -176,7 +176,29 @@ class PrototypeController extends Controller
         return response()->json([
             'success' => 'Archived',
         ], 200);
-
     }
 
+    public function toProduction(Request $request, $id)
+    {
+        try {
+            $prototype = Prototype::findOrFail($id);
+
+            if (\Gate::allows('edit.product', $prototype->product)) {
+                $prototype->product->status = 'production';
+                $prototype->product->save();
+            } else {
+                return response()->json([
+                    'error' => 'You are not allowed to edit this prototype.',
+                ], 401);
+            }
+        } catch (Exception $e) {
+            return response()->json([
+                'error' => 'Prototype not found!',
+            ], 404);
+        }
+
+        return response()->json([
+            'success' => 'OK',
+        ], 200);
+    }
 }

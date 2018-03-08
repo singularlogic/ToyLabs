@@ -83,6 +83,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/prototype/{id}/edit', ['as' => 'prototype.edit', 'uses' => 'PrototypeController@edit']);
     Route::post('/prototype/{id}/edit', ['as' => 'prototype.edit.post', 'uses' => 'PrototypeController@doEdit']);
     Route::put('/prototype/{id}/archive', 'PrototypeController@archivePrototype');
+    Route::put('/prototype/{id}/production', 'PrototypeController@toProduction');
 
     // Partner Matching
     Route::get('/organizations/search', ['as' => 'organization.search', 'uses' => 'PartnerMatchingController@organizationSearch']);
