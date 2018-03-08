@@ -97,4 +97,37 @@ class Design extends Model implements HasMedia
     {
         return $this->morphMany(Collaboration::class, 'collaboratable');
     }
+
+    public function archive()
+    {
+        $this->is_archived = true;
+        $this->save();
+    }
+
+    public function askFeedback()
+    {
+        foreach ($this->collaborations as $collaboration) {
+            if ($collaboration->status === 'accepted') {
+                // Ask myself to rate my collaborator
+                CollaborationRating::create([
+                    'collaboration_id'  => $collaboration->id,
+                    'collaborator_id'   => $this->product->owner_id,
+                    'collaborator_type' => $this->product->owner_type,
+                    'organization_id'   => $collaboration->organization_id,
+                ]);
+
+                // Ask collaborator to rate my company (if I am a company)
+                if ($this->product->owner_type === Organization::class) {
+                    CollaborationRating::create([
+                        'collaboration_id'  => $collaboration->id,
+                        'collaborator_id'   => $collaboration->organization_id,
+                        'collaborator_type' => Organization::class,
+                        'organization_id'   => $this->product->owner_id,
+                    ]);
+                }
+
+                $collaboration->archive();
+            }
+        }
+    }
 }

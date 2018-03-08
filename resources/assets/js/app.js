@@ -49,7 +49,12 @@ $(document).ready(function() {
     $('.message .close').on('click', function() {
         $(this).closest('.message').transition('fade');
     });
-    $('.ui.rating').rating();
+    $('.ui.rating').rating({
+        interactive: false,
+    });
+    $('.ui.rating.interactive').rating({
+        interactive: true,
+    });
     $('#notificationsIcon').popup({
         popup: $('#notificationsPopup'),
         on: 'click',

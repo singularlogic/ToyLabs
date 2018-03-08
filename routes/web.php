@@ -73,6 +73,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/product/{id}/designs/create', ['as' => 'design.create.post', 'uses' => 'DesignController@doCreate']);
     Route::get('/design/{id}/edit', ['as' => 'design.edit', 'uses' => 'DesignController@edit']);
     Route::post('/design/{id}/edit', ['as' => 'design.edit.post', 'uses' => 'DesignController@doEdit']);
+    Route::put('/design/{id}/revision', 'DesignController@createRevision');
+    Route::put('/design/{id}/archive', 'DesignController@archiveDesign');
 
     Route::get('/product/{id}/prototypes/create/{design_id}', ['as' => 'prototype.makeprototype', 'uses' => 'DesignController@makePrototype']);
     Route::post('/product/{id}/prototypes/create/{design_id}', ['as' => 'prototype.makeprototype.post', 'uses' => 'PrototypeController@doCreate']);
@@ -80,6 +82,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/product/{id}/prototypes/create', ['as' => 'prototype.create.post', 'uses' => 'PrototypeController@doCreate']);
     Route::get('/prototype/{id}/edit', ['as' => 'prototype.edit', 'uses' => 'PrototypeController@edit']);
     Route::post('/prototype/{id}/edit', ['as' => 'prototype.edit.post', 'uses' => 'PrototypeController@doEdit']);
+    Route::put('/prototype/{id}/archive', 'PrototypeController@archivePrototype');
 
     // Partner Matching
     Route::get('/organizations/search', ['as' => 'organization.search', 'uses' => 'PartnerMatchingController@organizationSearch']);

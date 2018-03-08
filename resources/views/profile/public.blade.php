@@ -90,12 +90,38 @@
                                         </a>
                                     </div>
 @endif
+@if ($organization->rating_1 > 0)
+                                    <h4 class="ui dividing header">Collaboration Ratings</h4>
+                                    <div class="item">
+                                        <div class="right floated">
+                                            <div class="ui star rating" data-rating="{{ round($organization->rating_1) }}" data-max-rating="5" data-interactive="false"></div>
+                                            ({{ number_format($organization->rating_1, 2) }})
+                                        </div>
+                                        <strong>Quality</strong>
+                                    </div>
+                                    <div class="item">
+                                        <div class="right floated">
+                                            <div class="ui star rating" data-rating="{{ round($organization->rating_2) }}" data-max-rating="5" data-interactive="false"></div>
+                                            ({{ number_format($organization->rating_2, 2) }})
+                                        </div>
+                                        <strong>Cooperation</strong>
+                                    </div>
+                                    <div class="item">
+                                        <div class="right floated">
+                                            <div class="ui star rating" data-rating="{{ round($organization->rating_3) }}" data-max-rating="5" data-interactive="false"></div>
+                                            ({{ number_format($organization->rating_3, 2) }})
+                                        </div>
+                                        <strong>Communication</strong>
+                                    </div>
+                                    <div class="ui divider hidden"></div>
+@endif
                                 </div>
                             </div>
                         </div>
                         <div class="eleven wide column">
                             {!! nl2br(e($organization->description)) !!}
 
+@if (count($organization->competencies) > 0)
                             <h3 class="ui dividing header">Competencies</h3>
 
                             <div class="ui two column stackable grid basic segment">
@@ -107,6 +133,7 @@
                                 @endif
 @endforeach
                             </div>
+@endif
 
 @if(count($organization->certifications) > 0)
                             <h3 class="ui dividing header">Certifications</h3>

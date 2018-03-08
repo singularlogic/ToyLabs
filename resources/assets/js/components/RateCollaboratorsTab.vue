@@ -25,7 +25,7 @@
                 <div class="ui middle aligned divided list">
                     <div class="item">
                         <div class="right floated content">
-                            <div class="ui huge star rating" data-max-rating="5" id="rating_1"></div>
+                            <div class="ui huge star interactive rating" data-max-rating="5" id="rating_1"></div>
                         </div>
                         <div class="content">
                             <h3>Quality</h3>
@@ -33,7 +33,7 @@
                     </div>
                     <div class="item">
                         <div class="right floated content">
-                            <div class="ui huge star rating" data-max-rating="5" id="rating_2"></div>
+                            <div class="ui huge star interactive rating" data-max-rating="5" id="rating_2"></div>
                         </div>
                         <div class="content">
                             <h3>Cooperation</h3>
@@ -41,7 +41,7 @@
                     </div>
                     <div class="item">
                         <div class="right floated content">
-                            <div class="ui huge star rating" data-max-rating="5" id="rating_3"></div>
+                            <div class="ui huge star interactive rating" data-max-rating="5" id="rating_3"></div>
                         </div>
                         <div class="content">
                             <h3>Communication</h3>
@@ -104,7 +104,7 @@ export default {
                         });
                     },
                     onDeny: () => {
-                        this.activeRating = null;
+                        // this.activeRating = null;
                         this.rating_1 = 0;
                         this.rating_2 = 0;
                         this.rating_3 = 0;

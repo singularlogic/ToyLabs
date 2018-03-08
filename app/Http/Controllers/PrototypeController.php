@@ -153,4 +153,30 @@ class PrototypeController extends Controller
 
         return redirect('dashboard')->with('error', 'You are not permitted to edit this product!');
     }
+
+    public function archivePrototype(Request $request, $id)
+    {
+        try {
+            $prototype = Prototype::findOrFail($id);
+
+            if (\Gate::allows('edit.product', $prototype->product)) {
+                $prototype->askFeedback();
+                $prototype->archive();
+            } else {
+                return response()->json([
+                    'error' => 'You are not allowed to archive this prototype.',
+                ], 401);
+            }
+        } catch (Exception $e) {
+            return response()->json([
+                'error' => 'Prototype not found!',
+            ], 404);
+        }
+
+        return response()->json([
+            'success' => 'Archived',
+        ], 200);
+
+    }
+
 }

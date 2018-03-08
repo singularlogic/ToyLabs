@@ -3155,72 +3155,145 @@ var _moment = __webpack_require__("./node_modules/moment/moment.js");
 
 var _moment2 = _interopRequireDefault(_moment);
 
+var _ConfirmDialog = __webpack_require__("./resources/assets/js/components/ConfirmDialog.vue");
+
+var _ConfirmDialog2 = _interopRequireDefault(_ConfirmDialog);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 exports.default = {
     props: ['_designs', '_product_id'],
+    components: { ConfirmDialog: _ConfirmDialog2.default },
     data: function data() {
         return {
-            designs: this._designs
+            designs: this._designs.filter(function (d) {
+                return !d.is_archived;
+            }),
+            archived: this._designs.filter(function (d) {
+                return d.is_archived;
+            }),
+            messageTitle: '',
+            messageBody: ''
         };
     },
 
     methods: {
         formatDate: function formatDate(time) {
             return (0, _moment2.default)(new Date(time)).format('DD.MM.YYYY');
+        },
+        createRevision: function createRevision(id) {
+            this.messageTitle = 'Create new version?';
+            this.messageBody = 'Are you sure you want to create a revision of this design? This version will be archived, and in case you need collaborators, you have to add them again to the new version.';
+            $('#createRevision').modal({
+                closable: false,
+                onApprove: function onApprove() {
+                    axios.put('/design/' + id + '/revision').then(function (res) {
+                        if (res.status === 200) {
+                            location.reload();
+                        }
+                    });
+                }
+            }).modal('show');
+        },
+        archiveDesign: function archiveDesign(id) {
+            this.messageTitle = 'Archive Design?';
+            this.messageBody = 'Are you sure you want to archive this design?';
+            $('#createRevision').modal({
+                closable: false,
+                onApprove: function onApprove() {
+                    axios.put('/design/' + id + '/archive').then(function (res) {
+                        if (res.status === 200) {
+                            location.reload();
+                        }
+                    });
+                }
+            }).modal('show');
         }
     }
-}; //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
+};
 
 /***/ }),
 
@@ -5516,64 +5589,115 @@ var _moment = __webpack_require__("./node_modules/moment/moment.js");
 
 var _moment2 = _interopRequireDefault(_moment);
 
+var _ConfirmDialog = __webpack_require__("./resources/assets/js/components/ConfirmDialog.vue");
+
+var _ConfirmDialog2 = _interopRequireDefault(_ConfirmDialog);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 exports.default = {
     props: ['_prototypes', '_product_id'],
+    components: { ConfirmDialog: _ConfirmDialog2.default },
     data: function data() {
         return {
-            prototypes: this._prototypes
+            prototypes: this._prototypes.filter(function (p) {
+                return !p.is_archived;
+            }),
+            archived: this._prototypes.filter(function (p) {
+                return p.is_archived;
+            })
         };
     },
 
     methods: {
         formatDate: function formatDate(time) {
             return (0, _moment2.default)(new Date(time)).format('DD.MM.YYYY');
+        },
+        archivePrototype: function archivePrototype(id) {
+            $('#archive').modal({
+                closable: false,
+                onApprove: function onApprove() {
+                    axios.put('/prototype/' + id + '/archive').then(function (res) {
+                        if (res.status === 200) {
+                            location.reload();
+                        }
+                    });
+                }
+            }).modal('show');
         }
     }
-}; //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
+};
 
 /***/ }),
 
@@ -5692,7 +5816,7 @@ exports.default = {
                         });
                     },
                     onDeny: function onDeny() {
-                        _this.activeRating = null;
+                        // this.activeRating = null;
                         _this.rating_1 = 0;
                         _this.rating_2 = 0;
                         _this.rating_3 = 0;
@@ -41873,9 +41997,9 @@ if (false) {
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('table', {
+  return _c('div', [_c('table', {
     staticClass: "ui celled table"
-  }, [_vm._m(0), _vm._v(" "), _c('tbody', [(_vm.designs.length == 0) ? _c('tr', [_c('td', {
+  }, [_vm._m(0), _vm._v(" "), _c('tbody', [(_vm.designs.length == 0 && _vm.archived.length == 0) ? _c('tr', [_c('td', {
     staticClass: "center aligned",
     attrs: {
       "colspan": "4"
@@ -41908,7 +42032,21 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       }
     }, [_c('i', {
       staticClass: "pencil icon"
-    })]), _vm._v(" "), _vm._m(1, true), _vm._v(" "), _c('a', {
+    })]), _vm._v(" "), _c('button', {
+      staticClass: "ui button",
+      attrs: {
+        "data-tooltip": "Create new version",
+        "data-position": "top center",
+        "data-inverted": ""
+      },
+      on: {
+        "click": function($event) {
+          _vm.createRevision(d.id)
+        }
+      }
+    }, [_c('i', {
+      staticClass: "history icon"
+    })]), _vm._v(" "), _c('a', {
       staticClass: "ui button",
       attrs: {
         "href": ("/design/" + (d.id) + "/feedback"),
@@ -41938,6 +42076,54 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       }
     }, [_c('i', {
       staticClass: "cubes icon"
+    })]), _vm._v(" "), _c('button', {
+      staticClass: "ui button",
+      attrs: {
+        "data-tooltip": "Archive design",
+        "data-position": "top center",
+        "data-inverted": ""
+      },
+      on: {
+        "click": function($event) {
+          _vm.archiveDesign(d.id)
+        }
+      }
+    }, [_c('i', {
+      staticClass: "archive icon"
+    })])])])])
+  }), _vm._v(" "), _vm._l((_vm.archived), function(d) {
+    return _c('tr', [_c('td', [_c('i', {
+      staticClass: "archive icon",
+      attrs: {
+        "title": "Archived"
+      }
+    }), _vm._v(" "), _c('a', {
+      attrs: {
+        "href": ("/design/" + (d.id) + "/")
+      }
+    }, [_vm._v(_vm._s(d.title))])]), _vm._v(" "), _c('td', {
+      staticClass: "center aligned"
+    }, [_vm._v(_vm._s(d.version))]), _vm._v(" "), _c('td', {
+      staticClass: "center aligned"
+    }, [_c('timeago', {
+      attrs: {
+        "since": d.updated_at,
+        "max-time": 86400 * 7,
+        "format": _vm.formatDate,
+        "auto-update": 30
+      }
+    })], 1), _vm._v(" "), _c('td', [_c('div', {
+      staticClass: "ui tiny basic icon buttons"
+    }, [_c('a', {
+      staticClass: "ui button",
+      attrs: {
+        "href": ("/design/" + (d.id) + "/feedback"),
+        "data-tooltip": "Feedback",
+        "data-position": "top center",
+        "data-inverted": ""
+      }
+    }, [_c('i', {
+      staticClass: "comments outline icon"
     })])])])])
   })], 2), _vm._v(" "), _c('tfoot', [_c('th', {
     attrs: {
@@ -41950,7 +42136,16 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [_c('i', {
     staticClass: "marker icon"
-  }), _vm._v(" Add Design\n            ")])])])], 1)
+  }), _vm._v(" Add Design\n                ")])])])], 1), _vm._v(" "), _c('table', {
+    staticClass: "ui celled table"
+  }), _vm._v(" "), _c('confirm-dialog', {
+    attrs: {
+      "id": "createRevision",
+      "icon": "warning",
+      "title": _vm.messageTitle,
+      "body": _vm.messageBody
+    }
+  })], 1)
 },staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('thead', {
     staticClass: "full-width"
@@ -41963,17 +42158,6 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_vm._v("Last Modified")]), _vm._v(" "), _c('th', {
     staticClass: "collapsing"
   }, [_vm._v("Actions")])])])
-},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('button', {
-    staticClass: "ui button",
-    attrs: {
-      "data-tooltip": "Create new version",
-      "data-position": "top center",
-      "data-inverted": ""
-    }
-  }, [_c('i', {
-    staticClass: "history icon"
-  })])
 }]}
 module.exports.render._withStripped = true
 if (false) {
@@ -42521,9 +42705,9 @@ if (false) {
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('table', {
+  return _c('div', [_c('table', {
     staticClass: "ui celled table"
-  }, [_vm._m(0), _vm._v(" "), _c('tbody', [(_vm.prototypes.length == 0) ? _c('tr', [_c('td', {
+  }, [_vm._m(0), _vm._v(" "), _c('tbody', [(_vm.prototypes.length == 0 && _vm.archived.length == 0) ? _c('tr', [_c('td', {
     staticClass: "center aligned",
     attrs: {
       "colspan": "3"
@@ -42574,6 +42758,52 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       }
     }, [_c('i', {
       staticClass: "handshake icon"
+    })]), _vm._v(" "), _c('button', {
+      staticClass: "ui button",
+      attrs: {
+        "data-tooltip": "Archive prototype",
+        "data-position": "top center",
+        "data-inverted": ""
+      },
+      on: {
+        "click": function($event) {
+          _vm.archivePrototype(p.id)
+        }
+      }
+    }, [_c('i', {
+      staticClass: "archive icon"
+    })])])])])
+  }), _vm._v(" "), _vm._l((_vm.archived), function(p) {
+    return _c('tr', [_c('td', [_c('i', {
+      staticClass: "archive icon",
+      attrs: {
+        "title": "Archived"
+      }
+    }), _vm._v(" "), _c('a', {
+      attrs: {
+        "href": ("/prototype/" + (p.id) + "/")
+      }
+    }, [_vm._v(_vm._s(p.title))])]), _vm._v(" "), _c('td', {
+      staticClass: "center aligned"
+    }, [_c('timeago', {
+      attrs: {
+        "since": p.updated_at,
+        "max-time": 86400 * 7,
+        "format": _vm.formatDate,
+        "auto-update": 30
+      }
+    })], 1), _vm._v(" "), _c('td', [_c('div', {
+      staticClass: "ui tiny basic icon buttons"
+    }, [_c('a', {
+      staticClass: "ui button",
+      attrs: {
+        "href": ("/prototype/" + (p.id) + "/feedback"),
+        "data-tooltip": "Feedback",
+        "data-position": "top center",
+        "data-inverted": ""
+      }
+    }, [_c('i', {
+      staticClass: "comments outline icon"
     })])])])])
   })], 2), _vm._v(" "), _c('tfoot', [_c('th', {
     attrs: {
@@ -42586,7 +42816,14 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [_c('i', {
     staticClass: "marker icon"
-  }), _vm._v(" Add Prototype\n            ")])])])], 1)
+  }), _vm._v(" Add Prototype\n                ")])])])], 1), _vm._v(" "), _c('confirm-dialog', {
+    attrs: {
+      "id": "archive",
+      "icon": "warning",
+      "title": "Archive Prototype?",
+      "body": "Are you sure you want to archive this prototype?"
+    }
+  })], 1)
 },staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('thead', {
     staticClass: "full-width"
@@ -44337,7 +44574,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_c('div', {
     staticClass: "right floated content"
   }, [_c('div', {
-    staticClass: "ui huge star rating",
+    staticClass: "ui huge star interactive rating",
     attrs: {
       "data-max-rating": "5",
       "id": "rating_1"
@@ -44349,7 +44586,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_c('div', {
     staticClass: "right floated content"
   }, [_c('div', {
-    staticClass: "ui huge star rating",
+    staticClass: "ui huge star interactive rating",
     attrs: {
       "data-max-rating": "5",
       "id": "rating_2"
@@ -44361,7 +44598,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_c('div', {
     staticClass: "right floated content"
   }, [_c('div', {
-    staticClass: "ui huge star rating",
+    staticClass: "ui huge star interactive rating",
     attrs: {
       "data-max-rating": "5",
       "id": "rating_3"
@@ -59338,7 +59575,12 @@ $(document).ready(function () {
     $('.message .close').on('click', function () {
         $(this).closest('.message').transition('fade');
     });
-    $('.ui.rating').rating();
+    $('.ui.rating').rating({
+        interactive: false
+    });
+    $('.ui.rating.interactive').rating({
+        interactive: true
+    });
     $('#notificationsIcon').popup({
         popup: $('#notificationsPopup'),
         on: 'click',

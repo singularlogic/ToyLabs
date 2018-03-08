@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\CollaborationRating;
 use App\Design;
 use App\Organization;
 use App\Product;
@@ -166,28 +165,9 @@ class DesignController extends Controller
                 $product->save();
             }
 
-            // Ask collaborators to rate each other
-            foreach ($design->collaborations as $collaboration) {
-                if (CollaborationRating::where('collaboration_id', $collaboration->id)) {
-                    // Ask myself to rate my collaborator
-                    CollaborationRating::create([
-                        'collaboration_id'  => $collaboration->id,
-                        'collaborator_id'   => $product->owner_id,
-                        'collaborator_type' => $product->owner_type,
-                        'organization_id'   => $collaboration->organization_id,
-                    ]);
-
-                    // Ask collaborator to rate my company (if I am a company)
-                    if ($product->owner_type === Organization::class) {
-                        CollaborationRating::create([
-                            'collaboration_id'  => $collaboration_id,
-                            'collaborator_id'   => $collaboration->organization_id,
-                            'collaborator_type' => Organization::class,
-                            'organization_id'   => $product->owner_id,
-                        ]);
-                    }
-                }
-            }
+            // Ask collaborators to rate each other and archive design
+            $design->askFeedback();
+            $design->archive();
 
             // Create a new prototype based on the design
             $data = [
@@ -206,5 +186,63 @@ class DesignController extends Controller
 
         \Session::flash('error', 'You are not permitted to edit this product!');
         return redirect()->route('product.designs', ['id' => $input['id']]);
+    }
+
+    public function createRevision(Request $request, int $id)
+    {
+        try {
+            $design = Design::findOrFail($id);
+
+            if (\Gate::allows('edit.product', $design->product)) {
+                $newDesign = Design::create([
+                    'title'       => $design->title,
+                    'description' => $design->description,
+                    'is_public'   => $design->is_public,
+                    'parent_id'   => $design->parent_id,
+                    'version'     => $design->version + 1,
+                    'product_id'  => $design->product_id,
+                ]);
+
+                $design->askFeedback();
+                $design->archive();
+            } else {
+                return response()->json([
+                    'error' => 'You are not allowed to edit this design.',
+                ], 401);
+            }
+        } catch (Exception $e) {
+            return response()->json([
+                'error' => 'Design not found!',
+            ], 404);
+        }
+
+        return response()->json([
+            'success' => 'Revision created',
+        ], 200);
+    }
+
+    public function archiveDesign(Request $request, $id)
+    {
+        try {
+            $design = Design::findOrFail($id);
+
+            if (\Gate::allows('edit.product', $design->product)) {
+                $design->askFeedback();
+                $design->archive();
+            } else {
+                return response()->json([
+                    'error' => 'You are not allowed to archive this design.',
+                ], 401);
+            }
+        } catch (Exception $e) {
+            return response()->json([
+                'error' => 'Design not found!',
+            ], 404);
+        }
+
+        return response()->json([
+            'success' => 'Archived',
+        ], 200);
+
     }
 }
