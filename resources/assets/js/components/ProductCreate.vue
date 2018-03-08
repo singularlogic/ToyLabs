@@ -11,14 +11,17 @@
             <label>Description</label>
             <textarea v-model="product.description" name="description" required></textarea>
         </div>
+        <div class="field">
+            <label>Category</label>
+            <select class="ui search dropdown" name="category_id" v-model="product.category_id">
+                <option value="">Select Product Category</option>
+                <option v-for="c of _categories" :value="c.id">
+                    <strong>{{ c.title }}</strong> <span v-if="c.description">(<em>{{ c.description }}</em>)</span>
+                </option>
+            </select>
+        </div>
+
         <div class="fields">
-            <div class="ten wide field">
-                <label>Category</label>
-                <select class="ui search dropdown" name="category_id" v-model="product.category_id">
-                    <option value="">Select Product Category</option>
-                    <option v-for="c of _categories" :value="c.id">{{ c.title }}</option>
-                </select>
-            </div>
             <div class="three wide field" required>
                 <label>Suitable for Ages From</label>
                 <select class="ui search dropdown" name="min_age" v-model="product.min_age">
@@ -32,6 +35,12 @@
                     <option value="">Select Maximum Age</option>
                     <option v-for="a of _ages" :value="a.value">{{ a.name }}</option>
                 </select>
+            </div>
+            <div class="ui ten wide field">
+                <div class="ui info message field" style="padding: 10px 8px; margin-top: 23px;">
+                    <i class="info icon"></i>
+                    Tentative ages. You can change the age group later, if needed.
+                </div>
             </div>
         </div>
 
@@ -201,7 +210,7 @@ export default {
         },
         filesArray() {
             return JSON.stringify(this.uploadedFiles);
-        }
+        },
     },
     methods: {
         fileAdded(file) {

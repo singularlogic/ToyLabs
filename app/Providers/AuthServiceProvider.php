@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\ARModel;
 use App\Design;
 use App\Organization;
 use App\Product;
@@ -9,6 +10,7 @@ use App\Prototype;
 use App\Thread;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
+use Laravel\Passport\Passport;
 use Spatie\MediaLibrary\Media;
 
 class AuthServiceProvider extends ServiceProvider
@@ -36,6 +38,8 @@ class AuthServiceProvider extends ServiceProvider
         $this->registerMediaPolicies();
         $this->registerOrganizationPolicies();
         $this->registerMessagingPolicies();
+
+        Passport::routes();
     }
 
     public function registerProductPolicies()
@@ -131,6 +135,10 @@ class AuthServiceProvider extends ServiceProvider
 
             if (is_a($model, Design::class) or is_a($model, Prototype::class)) {
                 return Gate::allows('edit.product', $model->product);
+            }
+
+            if (is_a($model, ARModel::class)) {
+                return Gate::allows('edit.product', $model->parent->product);
             }
 
             return false;

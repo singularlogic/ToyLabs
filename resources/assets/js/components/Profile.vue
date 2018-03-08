@@ -258,7 +258,7 @@ export default {
                 onApprove: () => {
                     axios.put(`/organization/${this.joinOrg}/join`).then((response) => {
                         if (response.status === 200) {
-                            const org = this._organizations.find(org => org.id = this.joinOrg);
+                            const org = this._organizations.find(org => org.id === this.joinOrg);
                             this.professional.pending.push(org);
                             this.joinOrg = null;
                         }
@@ -275,9 +275,9 @@ export default {
                 onApprove: () => {
                     let idx = -1;
                     if (pending) {
-                        idx = this.professional.pending.find(o => o.id == org.id);
+                        idx = this.professional.pending.findIndex(o => o.id == org.id);
                     } else {
-                        idx = this.professional.organizations.find(o => o.id == org.id);
+                        idx = this.professional.organizations.findIndex(o => o.id == org.id);
                     }
 
                     if (~idx) {

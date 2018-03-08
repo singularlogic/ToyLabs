@@ -6,15 +6,24 @@ use BrianFaust\Commentable\HasComments;
 use Conner\Likeable\LikeableTrait;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
-use Spatie\MediaLibrary\HasMedia\Interfaces\HasMedia;
+use Spatie\MediaLibrary\HasMedia\Interfaces\HasMediaConversions;
 
-class Prototype extends Model implements HasMedia
+class Prototype extends Model implements HasMediaConversions
 {
     use HasMediaTrait, HasComments, LikeableTrait;
 
     protected $fillable = ['title', 'description', 'is_public', 'design_id', 'product_id'];
     protected $appends  = ['image', 'type', 'likeCount', 'commentCount', 'liked'];
     protected $touches  = ['product'];
+
+    public function registerMediaConversions()
+    {
+        $this->addMediaConversion('thumb')
+            ->width(200)
+            ->height(200)
+            ->sharpen(10)
+            ->optimize();
+    }
 
     public function design()
     {
@@ -88,4 +97,8 @@ class Prototype extends Model implements HasMedia
         return $this->morphMany(Collaboration::class, 'collaboratable');
     }
 
+    public function armodels()
+    {
+        return $this->morphMany(ARModel::class, 'parent');
+    }
 }

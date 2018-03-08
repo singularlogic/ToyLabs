@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\ARModel;
 use App\Design;
 use App\Product;
 use App\Prototype;
@@ -36,9 +37,38 @@ class FileController extends Controller
         }
 
         return response()->file($media->getPath(), [
-            'Content-Type'        => $media->mime_type,
-            'Content-Disposition' => 'attachment; filename="' . $media->name . '"',
-            'Content-Length'      => $media->size,
+            'Content-Type'   => $media->mime_type,
+            'Content-Length' => $media->size,
+        ]);
+    }
+
+    public function getThumb($id)
+    {
+        $media = Media::find($id);
+
+        if (!$media) {
+            return response()->json([])->setStatusCode(Response::HTTP_NOT_FOUND);
+        }
+
+        $model = $media->model;
+        if (!$model->is_public) {
+            if (is_a($model, Product::class) && \Gate::denies('view.product', $model)) {
+                return response()->json([])->setStatusCode(Response::HTTP_UNAUTHORIZED);
+            }
+
+            if (is_a($model, Design::class) && \Gate::denies('view.product', $model->product) && \Gate::denies('collaborate.design', $model)) {
+                return response()->json([])->setStatusCode(Response::HTTP_UNAUTHORIZED);
+            }
+
+            if (is_a($model, Prototype::class) && \Gate::denies('view.product', $model->product) && \Gate::denies('collaborate.prototype', $model)) {
+                return response()->json([])->setStatusCode(Response::HTTP_UNAUTHORIZED);
+            }
+        }
+
+        $path = str_replace($media->file_name, 'conversions/thumb.jpg', $media->getPath());
+
+        return response()->file($path, [
+            'Content-Type' => 'image/jpeg',
         ]);
     }
 
@@ -78,6 +108,9 @@ class FileController extends Controller
         }
 
         if ($media) {
+            if ($media->model_type === ARModel::class) {
+                unlink(public_path("tmp/$media->model_id.zip"));
+            }
             $media->delete();
             return response()->json([])->setStatusCode(Response::HTTP_OK);
         }

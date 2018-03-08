@@ -185,6 +185,7 @@ return [
         Creativeorange\Gravatar\GravatarServiceProvider::class,
         Hootlex\Friendships\FriendshipsServiceProvider::class,
         Laravel\Socialite\SocialiteServiceProvider::class,
+        Laravel\Passport\PassportServiceProvider::class,
         Spatie\MediaLibrary\MediaLibraryServiceProvider::class,
         Spatie\Permission\PermissionServiceProvider::class,
         TomLingham\Searchy\SearchyServiceProvider::class,

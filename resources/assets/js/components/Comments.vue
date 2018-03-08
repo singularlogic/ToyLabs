@@ -9,6 +9,7 @@
                 :key="c.id"
                 :comments="localComments"
                 :comment="c"
+                :read-only='true'
                 v-on:reply="addComment"
                 v-on:delete="deleteComment"
             ></comment>
@@ -16,7 +17,7 @@
 
         <div class="ui clearing hidden divider"></div>
 
-        <form class="ui reply form" v-if="isLogged">
+        <form class="ui reply form" v-if="isLogged && showReply">
             <div class="field">
                 <textarea rows="5" v-model="newComment.body"></textarea>
             </div>
@@ -61,6 +62,9 @@ export default {
         ...mapGetters([
             'isLogged'
         ]),
+        showReply() {
+            return this.model.type !== 'App\\ARModel';
+        },
     },
     methods: {
         addComment(comment) {

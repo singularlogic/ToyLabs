@@ -69,4 +69,20 @@ class SocialAuthController extends Controller
 
         return redirect()->to('/dashboard');
     }
+
+    public function passportCallback(Request $request, $provider)
+    {
+        if (!$request->has('code') || $request->has('denied')) {
+            return response()->json([
+                'error' => 'Unauthorized',
+            ], 401);
+        } else {
+            $user = $this->getOrCreateUser($provider, Socialite::driver($provider)->user());
+            auth()->login($user);
+            $success['token'] = $user->createToken('Toylabs')->accessToken;
+            return response()->json([
+                'success' => $success,
+            ], 200);
+        }
+    }
 }

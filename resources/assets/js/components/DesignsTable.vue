@@ -23,6 +23,9 @@
                             <a class="ui button" :href="`/design/${d.id}/edit`" data-tooltip="Edit Design" data-position="top center" data-inverted>
                                 <i class="pencil icon"></i>
                             </a>
+                            <a class="ui button" :href="`/design/${d.id}/ar-models`" data-tooltip="AR Models" data-position="top center" data-inverted>
+                                <i class="eye icon"></i>
+                            </a>
                             <button class="ui button" data-tooltip="Create new version" data-position="top center" data-inverted>
                                 <i class="history icon"></i>
                             </button>
@@ -42,7 +45,7 @@
             <tfoot>
                 <th colspan="4">
                     <a class="ui right floated small primary labeled icon button" :href="`/product/${_product_id}/designs/create`">
-                        <i class="marker icon"></i> Add Design
+                        <i class="plus icon"></i> Add Design
                     </a>
                 </th>
             </tfoot>

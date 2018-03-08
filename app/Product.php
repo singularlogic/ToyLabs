@@ -5,6 +5,7 @@ namespace App;
 use BrianFaust\Commentable\HasComments;
 use Conner\Likeable\LikeableTrait;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
 use Spatie\MediaLibrary\HasMedia\Interfaces\HasMedia;
 
@@ -112,5 +113,19 @@ class Product extends Model implements HasMedia
         }
 
         return $result;
+    }
+
+    public function getArmodelsAttribute()
+    {
+        $models = new Collection();
+        foreach ($this->designs as $design) {
+            $models = $models->merge($design->armodels);
+        }
+
+        foreach ($this->prototypes as $prototype) {
+            $models = $models->merge($prototype->armodels);
+        }
+
+        return $models;
     }
 }
