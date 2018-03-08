@@ -2271,6 +2271,9 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 //
 //
 //
+//
+//
+//
 
 exports.default = {
     name: 'ARModelCreate',
@@ -44742,8 +44745,9 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "url": "/file/upload",
       "useFontAwesome": true,
       "showRemoveLink": true,
-      "maxFileSizeInMB": "64",
-      "paramName": "file"
+      "maxFileSizeInMB": 64,
+      "paramName": "file",
+      "acceptedFileTypes": "image/*,.fbx,.obj,.3ds,.stl,.scn,.dae"
     },
     on: {
       "vdropzone-success": _vm.fileAdded,
@@ -44832,7 +44836,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "ui dividing header"
   }, [_vm._v("\n        Files\n        "), _c('div', {
     staticClass: "sub header"
-  })])
+  }, [_vm._v("\n            For the model to work correctly, all the nodes of the 3D model should be under a parent node and that parent node should have the exact same name as the filename of the model. Keep in mind that, when opened in the ToyLabs app, the front of the model will be displayed, so make sure it is designed accordingly. "), _c('strong', [_vm._v("Supported file types:")]), _vm._v(" fbx, obj, 3ds, stl, dae, stl (and image files for use as textures).\n        ")])])
 },function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('h3', {
     staticClass: "ui dividing header"

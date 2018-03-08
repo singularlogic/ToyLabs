@@ -23,7 +23,9 @@
 
         <h3 class="ui dividing header">
             Files
-            <div class="sub header"></div>
+            <div class="sub header">
+                For the model to work correctly, all the nodes of the 3D model should be under a parent node and that parent node should have the exact same name as the filename of the model. Keep in mind that, when opened in the ToyLabs app, the front of the model will be displayed, so make sure it is designed accordingly. <strong>Supported file types:</strong> fbx, obj, 3ds, stl, dae, stl (and image files for use as textures).
+            </div>
         </h3>
 
         <div class="ui relaxed horizontal divided list" v-if="files" style="margin-bottom: 10px;">
@@ -41,8 +43,9 @@
             url="/file/upload"
             :useFontAwesome="true"
             :showRemoveLink="true"
-            maxFileSizeInMB="64"
+            :maxFileSizeInMB="64"
             paramName="file"
+            acceptedFileTypes="image/*,.fbx,.obj,.3ds,.stl,.scn,.dae"
             v-on:vdropzone-success="fileAdded"
             v-on:vdropzone-removed-file="fileRemoved"
         >
