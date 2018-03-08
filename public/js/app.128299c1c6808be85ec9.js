@@ -6166,6 +6166,11 @@ exports.default = {
 //
 //
 //
+//
+//
+//
+//
+//
 
 /***/ }),
 
@@ -45494,12 +45499,19 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       staticClass: "content"
     }, [_c('h3', {
       staticClass: "header"
-    }, [_vm._v(_vm._s(parseInt(index)) + ". "), _c('a', {
+    }, [_vm._v("\n                    " + _vm._s(index + 1) + ". "), _c('a', {
       attrs: {
         "href": ("/organization/" + (result.id)),
         "target": "_BLANK"
       }
-    }, [_vm._v(_vm._s(result.name))])]), _vm._v(" "), _c('div', {
+    }, [_vm._v(_vm._s(result.name))])]), _vm._v(" "), _vm._l((result.certifications), function(cert) {
+      return _c('div', {
+        staticClass: "ui right floated tiny blue label",
+        class: {
+          basic: !cert.pivot.is_verified
+        }
+      }, [_vm._v("\n                " + _vm._s(cert.name) + "\n            ")])
+    }), _vm._v(" "), _c('div', {
       staticClass: "meta"
     }, [(result.is_verified) ? _c('i', {
       staticClass: "green check circle icon"
@@ -45538,7 +45550,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       }) : _vm._e(), _vm._v(" "), (!rule.matched) ? _c('i', {
         staticClass: "remove icon"
       }) : _vm._e(), _vm._v("\n                    " + _vm._s(rule.name) + "\n                ")])
-    })], 2)])])
+    })], 2)], 2)])
   }), _vm._v(" "), (_vm.results.length == 0) ? _c('div', {
     staticClass: "ui warning message"
   }, [_vm._v("\n        No results found. Change your search and try again.\n    ")]) : _vm._e()], 2)

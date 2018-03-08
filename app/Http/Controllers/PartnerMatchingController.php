@@ -80,9 +80,11 @@ class PartnerMatchingController extends Controller
 
         // If the user selected a role, we ensure that only organizations with that role are returned
         if ($input['role']) {
-            $organizations = Organization::where('organization_type_id', $input['role'])->with(['facilities', 'country'])->get();
+            $organizations = Organization::where('organization_type_id', $input['role'])
+                ->with(['facilities', 'country', 'certifications'])
+                ->get();
         } else {
-            $organizations = Organization::with(['facilities', 'country'])->get();
+            $organizations = Organization::with(['facilities', 'country', 'certifications'])->get();
         }
 
         // Then, for each organization we calculate a score based on the filters
@@ -126,9 +128,9 @@ class PartnerMatchingController extends Controller
         } else {
             $id = -1;
         }
-        return $organizations->reject(function ($item) use ($id) {
+        return response()->json($organizations->reject(function ($item) use ($id) {
             return $item->id === $id;
-        })->sortByDesc('score');
+        })->sortByDesc('score'), 200);
     }
 
     public function contact(Request $request, int $org_id, string $type, int $id, string $thread_type = 'negotiation')

@@ -141,7 +141,13 @@
 @foreach($organization->certifications as $certification)
                                 <div class="item">
                                     <i class="certificate icon"></i>
-                                    <div class="content">{{ $certification->name }}</div>
+                                    <div class="content">
+                                        {{ $certification->name }}
+                                        @if($certification->description)- {{ $certification->description }}@endif
+                                        @if($certification->pivot->is_verified)
+                                        <div class="ui yellow mini label">Verified</div>
+                                        @endif
+                                    </div>
                                 </div>
 @endforeach
                             </div>

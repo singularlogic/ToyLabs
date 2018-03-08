@@ -2,7 +2,12 @@
     <div class="ui divided items">
         <div class="item" v-for="(result, index) of results">
             <div class="content">
-                <h3 class="header">{{ parseInt(index) }}. <a :href="`/organization/${result.id}`" target="_BLANK">{{ result.name }}</a></h3>
+                <h3 class="header">
+                        {{ index + 1 }}. <a :href="`/organization/${result.id}`" target="_BLANK">{{ result.name }}</a>
+                </h3>
+                <div class="ui right floated tiny blue label" v-for="cert in result.certifications" :class="{ basic: !cert.pivot.is_verified }">
+                    {{ cert.name }}
+                </div>
                 <div class="meta">
                     <i class="green check circle icon" v-if="result.is_verified"></i>
                     {{ result.organization_type.name }}

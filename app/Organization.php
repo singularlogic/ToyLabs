@@ -90,7 +90,7 @@ class Organization extends Model
 
     public function certifications()
     {
-        return $this->belongsToMany(Certification::class, 'certification_organization')->withPivot('certified_at');
+        return $this->belongsToMany(Certification::class, 'certification_organization')->withPivot('certified_at', 'is_verified');
     }
 
     public function country()
