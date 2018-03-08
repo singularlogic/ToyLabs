@@ -116,6 +116,8 @@ class PassportController extends Controller
                 $zip->close();
             }
         }
+        $model->downloads += 1;
+        $model->save();
 
         return response()->download($path, "$model->id.zip", [
             'Content-Type' => 'application/octet-stream',
