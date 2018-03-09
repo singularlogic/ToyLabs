@@ -3,18 +3,19 @@
 namespace App;
 
 use App\OrganizationType;
+use Backpack\CRUD\CrudTrait;
 use Hootlex\Friendships\Traits\Friendable;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
 
 class Organization extends Model
 {
-    use HasMediaTrait, Friendable;
+    use HasMediaTrait, Friendable, CrudTrait;
 
     protected $fillable = [
         'name', 'legal_name', 'address', 'po_box', 'postal_code', 'country_id', 'twitter', 'facebook', 'instagram',
         'phone', 'fax', 'website_url', 'description', 'owner_id', 'organization_type_id', 'legal_form', 'city',
-        'production_scale', 'payment_in',
+        'production_scale', 'payment_in', 'is_verified',
     ];
     protected $appends = ['typeSlug', 'rating1', 'rating2', 'rating3'];
 

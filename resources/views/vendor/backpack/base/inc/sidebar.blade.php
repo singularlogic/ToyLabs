@@ -29,14 +29,14 @@
           <li class="header">VERIFICATION</li>
 
           <li>
-            <a href="{{ url(config('backpack.base.route_prefix', 'admin').'/organizations') }}">
+            <a href="{{ url(config('backpack.base.route_prefix', 'admin').'/organization') }}">
               <i class="fa fa-check-square-o"></i>
               <span>Organizations</span>
             </a>
           </li>
 
           <li>
-            <a href="{{ url(config('backpack.base.route_prefix', 'admin').'/certifications') }}">
+            <a href="{{ url(config('backpack.base.route_prefix', 'admin').'/certification') }}">
               <i class="fa fa-certificate"></i>
               <span>Certifications</span>
             </a>
@@ -45,7 +45,7 @@
           <li class="header">MODERATION</li>
 
           <li>
-            <a href="{{ url(config('backpack.base.route_prefix', 'admin').'/comments') }}">
+            <a href="{{ url(config('backpack.base.route_prefix', 'admin').'/comment') }}">
               <i class="fa fa-comments-o"></i>
               <span>Comments</span>
             </a>

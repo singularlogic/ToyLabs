@@ -167,3 +167,12 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/api/states/{id}', 'APIController@countryStates');
     Route::get('/api/cities/{id}', 'APIController@stateCities');
 });
+
+// Admin
+Route::group([
+    'prefix'     => 'admin',
+    'middleware' => 'admin',
+    'namespace'  => 'Admin',
+], function () {
+    CRUD::resource('organization', 'OrganizationCrudController');
+});
