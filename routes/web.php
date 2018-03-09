@@ -177,4 +177,5 @@ Route::group([
     CRUD::resource('organization', 'OrganizationCrudController');
     CRUD::resource('certification', 'CertificationCrudController');
     CRUD::resource('award', 'AwardCrudController');
+    CRUD::resource('verify/certification', 'VerifyCertificationCrudController');
 });

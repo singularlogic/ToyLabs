@@ -25,41 +25,18 @@
               <span>{{ trans('backpack::base.dashboard') }}</span>
             </a>
           </li>
+
           <li>
             <a href="{{ url(config('backpack.base.route_prefix', 'admin').'/certification') }}">
               <i class="fa fa-certificate"></i>
               <span>Certifications</span>
             </a>
           </li>
+
           <li>
             <a href="{{ url(config('backpack.base.route_prefix', 'admin').'/award') }}">
               <i class="fa fa-trophy"></i>
               <span>Awards</span>
-            </a>
-          </li>
-
-          <li class="header">VERIFICATION</li>
-
-          <li>
-            <a href="{{ url(config('backpack.base.route_prefix', 'admin').'/organization') }}">
-              <i class="fa fa-check-square-o"></i>
-              <span>Verify Organizations</span>
-            </a>
-          </li>
-
-          <li>
-            <a href="{{ url(config('backpack.base.route_prefix', 'admin').'/verifycertification') }}">
-              <i class="fa fa-certificate"></i>
-              <span>Verify Certifications</span>
-            </a>
-          </li>
-
-          <li class="header">MODERATION</li>
-
-          <li>
-            <a href="{{ url(config('backpack.base.route_prefix', 'admin').'/comment') }}">
-              <i class="fa fa-comments-o"></i>
-              <span>Comments</span>
             </a>
           </li>
 
@@ -70,6 +47,29 @@
             </a>
           </li>
 
+
+          <li class="header">VERIFICATION & MODERATION</li>
+
+          <li>
+            <a href="{{ url(config('backpack.base.route_prefix', 'admin').'/organization') }}">
+              <i class="fa fa-check-square-o"></i>
+              <span>Verify Organizations</span>
+            </a>
+          </li>
+
+          <li>
+            <a href="{{ url(config('backpack.base.route_prefix', 'admin').'/verify/certification') }}">
+              <i class="fa fa-certificate"></i>
+              <span>Verify Certifications</span>
+            </a>
+          </li>
+
+          <li>
+            <a href="{{ url(config('backpack.base.route_prefix', 'admin').'/verify/comment') }}">
+              <i class="fa fa-comments-o"></i>
+              <span>Moderate Comments</span>
+            </a>
+          </li>
 
           <!-- ======================================= -->
           <li class="header">{{ trans('backpack::base.user') }}</li>
