@@ -12,6 +12,9 @@
             <div class="actions" v-if="!readOnly">
                 <a class="reply" @click="reply" v-if="isLogged">Reply</a>
                 <a class="delete" @click="deleteComment(comment)" v-if="comment.creator_id === userID">Delete</a>
+
+                <a class="report" @click="report(comment)" v-if="isLogged && !comment.is_reported && comment.creator_id != userID">Report</a>
+                <span class="report" style="color: #cb3b33;" v-if="isLogged && comment.is_reported">Reported</span>
             </div>
             <reply-form
                 :comment.sync="newComment"
@@ -28,6 +31,7 @@
                 :comment="c"
                 v-on:reply="sendReply"
                 v-on:delete="deleteComment"
+                v-on:report="report"
             ></comment>
         </div>
     </div>
@@ -68,6 +72,10 @@ export default {
         },
         reply() {
             this.showReply = true;
+        },
+        report(comment) {
+            this.comment.is_reported = true;
+            this.$emit('report', comment);
         },
         deleteComment(comment) {
             this.$emit('delete', comment);

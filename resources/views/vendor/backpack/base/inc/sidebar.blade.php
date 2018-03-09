@@ -51,7 +51,7 @@
           <li class="header">VERIFICATION & MODERATION</li>
 
           <li>
-            <a href="{{ url(config('backpack.base.route_prefix', 'admin').'/organization') }}">
+            <a href="{{ url(config('backpack.base.route_prefix', 'admin').'/verify/organization') }}">
               <i class="fa fa-check-square-o"></i>
               <span>Verify Organizations</span>
             </a>

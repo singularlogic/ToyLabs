@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Requests\OrganizationRequest as StoreRequest;
-
-// VALIDATION: change the requests to match your own file names if you need form validation
-use App\Http\Requests\OrganizationRequest as UpdateRequest;
+use App\Http\Requests\ReportedCommentRequest as StoreRequest;
+use App\Http\Requests\ReportedCommentRequest as UpdateRequest;
+use App\Models\ReportedComment;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 
-class OrganizationCrudController extends CrudController
+class ReportedCommentCrudController extends CrudController
 {
     public function setup()
     {
@@ -18,9 +17,9 @@ class OrganizationCrudController extends CrudController
         | BASIC CRUD INFORMATION
         |--------------------------------------------------------------------------
          */
-        $this->crud->setModel('App\Organization');
-        $this->crud->setRoute(config('backpack.base.route_prefix') . '/verify/organization');
-        $this->crud->setEntityNameStrings('organization', 'organizations');
+        $this->crud->setModel('App\Models\ReportedComment');
+        $this->crud->setRoute(config('backpack.base.route_prefix') . '/verify/comment');
+        $this->crud->setEntityNameStrings('reported comment', 'reported comments');
 
         /*
         |--------------------------------------------------------------------------
@@ -28,41 +27,33 @@ class OrganizationCrudController extends CrudController
         |--------------------------------------------------------------------------
          */
 
-        $this->crud->addColumn([
-            'name'  => 'id',
-            'label' => 'ID',
-        ]);
-
-        $this->crud->addColumn([
-            'name'  => 'name',
-            'label' => 'Name',
-        ]);
-        $this->crud->addColumn([
-            'label'     => 'Type',
-            'type'      => 'select',
-            'name'      => 'organization_type_id',
-            'entity'    => 'organizationtype',
-            'attribute' => 'name',
-            'model'     => "App\OrganizationType",
-        ]);
-        $this->crud->addColumn([
-            'label'   => 'Status',
-            'type'    => 'boolean',
-            'name'    => 'is_verified',
-            'options' => [
-                0 => 'Not Verified',
-                1 => 'Verified',
-            ],
-        ]);
-
         // $this->crud->setFromDb();
 
-        // ------ CRUD FIELDS
-        $this->crud->addField([
-            'label' => 'Is Verified?',
-            'name'  => 'is_verified',
-            'type'  => 'checkbox',
+        $this->crud->addColumn([
+            'label'     => 'Comment',
+            'type'      => 'select',
+            'name'      => 'comment_id',
+            'entity'    => 'comment',
+            'attribute' => 'body',
+            'model'     => "BrianFaust\Commentable\Comment",
         ]);
+
+        $this->crud->addColumn([
+            'label'         => 'Author',
+            'type'          => 'model_function',
+            'function_name' => 'getCreatorAttribute',
+        ]);
+
+        $this->crud->addColumn([
+            'label'     => 'Reported by',
+            'type'      => 'select',
+            'name'      => 'user_id',
+            'entity'    => 'user',
+            'attribute' => 'name',
+            'model'     => "App\User",
+        ]);
+
+        // ------ CRUD FIELDS
         // $this->crud->addField($options, 'update/create/both');
         // $this->crud->addFields($array_of_arrays, 'update/create/both');
         // $this->crud->removeField('name', 'update/create/both');
@@ -77,6 +68,8 @@ class OrganizationCrudController extends CrudController
         // $this->crud->setColumnsDetails(['column_1', 'column_2'], ['attribute' => 'value']);
 
         // ------ CRUD BUTTONS
+
+        $this->crud->addButtonFromModelFunction('line', 'ignore', 'ignoreReport', 'Ignore', 'beginning');
         // possible positions: 'beginning' and 'end'; defaults to 'beginning' for the 'line' stack, 'end' for the others;
         // $this->crud->addButton($stack, $name, $type, $content, $position); // add a button; possible types are: view, model_function
         // $this->crud->addButtonFromModelFunction($stack, $name, $model_function_name, $position); // add a button whose HTML is returned by a method in the CRUD model
@@ -87,8 +80,8 @@ class OrganizationCrudController extends CrudController
         // $this->crud->removeAllButtonsFromStack('line');
 
         // ------ CRUD ACCESS
-        $this->crud->allowAccess(['list', 'update', 'reorder']);
-        $this->crud->denyAccess(['create', 'delete']);
+        $this->crud->allowAccess(['list', 'reorder', 'delete']);
+        $this->crud->denyAccess(['create', 'update']);
 
         // ------ CRUD REORDER
         // $this->crud->enableReorder('label_name', MAX_TREE_LEVEL);
@@ -133,11 +126,38 @@ class OrganizationCrudController extends CrudController
 
     public function store(StoreRequest $request)
     {
-        return parent::storeCrud($request);
+        // your additional operations before save here
+        $redirect_location = parent::storeCrud($request);
+        // your additional operations after save here
+        // use $this->data['entry'] or $this->crud->entry
+        return $redirect_location;
     }
 
     public function update(UpdateRequest $request)
     {
-        return parent::updateCrud($request);
+        // your additional operations before save here
+        $redirect_location = parent::updateCrud($request);
+        // your additional operations after save here
+        // use $this->data['entry'] or $this->crud->entry
+        return $redirect_location;
+    }
+
+    public function destroy($id)
+    {
+        $rc      = ReportedComment::find($id);
+        $comment = $rc->comment;
+        $comment->deleteComment($comment->id);
+
+        return parent::destroy($id);
+    }
+
+    public function ignore($id)
+    {
+        $rc                   = ReportedComment::find($id);
+        $comment              = $rc->comment;
+        $comment->is_reported = false;
+        $comment->save();
+
+        return parent::destroy($id);
     }
 }

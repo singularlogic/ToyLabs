@@ -2904,6 +2904,10 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 //
 //
 //
+//
+//
+//
+//
 
 var _ReplyForm = __webpack_require__("./resources/assets/js/components/ReplyForm.vue");
 
@@ -2948,6 +2952,10 @@ exports.default = {
         },
         reply: function reply() {
             this.showReply = true;
+        },
+        report: function report(comment) {
+            this.comment.is_reported = true;
+            this.$emit('report', comment);
         },
         deleteComment: function deleteComment(comment) {
             this.$emit('delete', comment);
@@ -3095,6 +3103,12 @@ exports.default = {
                     });
                 }
             }).modal('show');
+        },
+        reportComment: function reportComment(comment) {
+            console.log(comment);
+            axios.put('/user/comment/' + comment.id + '/report').then(function (response) {
+                // TODO: mark as reported
+            });
         }
     }
 };
@@ -40279,7 +40293,19 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         _vm.deleteComment(_vm.comment)
       }
     }
-  }, [_vm._v("Delete")]) : _vm._e()]) : _vm._e(), _vm._v(" "), (_vm.showReply) ? _c('reply-form', {
+  }, [_vm._v("Delete")]) : _vm._e(), _vm._v(" "), (_vm.isLogged && !_vm.comment.is_reported && _vm.comment.creator_id != _vm.userID) ? _c('a', {
+    staticClass: "report",
+    on: {
+      "click": function($event) {
+        _vm.report(_vm.comment)
+      }
+    }
+  }, [_vm._v("Report")]) : _vm._e(), _vm._v(" "), (_vm.isLogged && _vm.comment.is_reported) ? _c('span', {
+    staticClass: "report",
+    staticStyle: {
+      "color": "#cb3b33"
+    }
+  }, [_vm._v("Reported")]) : _vm._e()]) : _vm._e(), _vm._v(" "), (_vm.showReply) ? _c('reply-form', {
     attrs: {
       "comment": _vm.newComment
     },
@@ -40302,7 +40328,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       },
       on: {
         "reply": _vm.sendReply,
-        "delete": _vm.deleteComment
+        "delete": _vm.deleteComment,
+        "report": _vm.report
       }
     })
   })) : _vm._e()])
@@ -41319,12 +41346,12 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       attrs: {
         "model": _vm.model,
         "comments": _vm.localComments,
-        "comment": c,
-        "read-only": true
+        "comment": c
       },
       on: {
         "reply": _vm.addComment,
-        "delete": _vm.deleteComment
+        "delete": _vm.deleteComment,
+        "report": _vm.reportComment
       }
     })
   })), _vm._v(" "), _c('div', {
