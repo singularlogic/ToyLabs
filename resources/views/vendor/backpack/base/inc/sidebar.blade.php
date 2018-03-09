@@ -25,20 +25,32 @@
               <span>{{ trans('backpack::base.dashboard') }}</span>
             </a>
           </li>
+          <li>
+            <a href="{{ url(config('backpack.base.route_prefix', 'admin').'/certification') }}">
+              <i class="fa fa-certificate"></i>
+              <span>Certifications</span>
+            </a>
+          </li>
+          <li>
+            <a href="{{ url(config('backpack.base.route_prefix', 'admin').'/award') }}">
+              <i class="fa fa-trophy"></i>
+              <span>Awards</span>
+            </a>
+          </li>
 
           <li class="header">VERIFICATION</li>
 
           <li>
             <a href="{{ url(config('backpack.base.route_prefix', 'admin').'/organization') }}">
               <i class="fa fa-check-square-o"></i>
-              <span>Organizations</span>
+              <span>Verify Organizations</span>
             </a>
           </li>
 
           <li>
-            <a href="{{ url(config('backpack.base.route_prefix', 'admin').'/certification') }}">
+            <a href="{{ url(config('backpack.base.route_prefix', 'admin').'/verifycertification') }}">
               <i class="fa fa-certificate"></i>
-              <span>Certifications</span>
+              <span>Verify Certifications</span>
             </a>
           </li>
 
