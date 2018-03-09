@@ -11,6 +11,7 @@ use App\Product;
 use App\Prototype;
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use ZipArchive;
 
 class PassportController extends Controller
@@ -85,13 +86,13 @@ class PassportController extends Controller
         }
 
         // Retrieve the AR models from all the Products/Designs/Prototypes
-        $models = collect();
+        $models = new Collection();
         foreach ($products as $product) {
             $models = $models->merge($product->armodels);
         }
 
         // Return a list of unique models
-        return response()->json($models->unique(), 200);
+        return response()->json($models->unique()->flatten(), 200);
     }
 
     public function downloadModel(Request $request, int $id)

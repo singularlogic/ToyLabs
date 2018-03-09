@@ -42,7 +42,7 @@ class FileController extends Controller
         ]);
     }
 
-    public function getThumb($id)
+    public function getThumb(Request $request, int $id)
     {
         $media = Media::find($id);
 
@@ -53,15 +53,21 @@ class FileController extends Controller
         $model = $media->model;
         if (!$model->is_public) {
             if (is_a($model, Product::class) && \Gate::denies('view.product', $model)) {
-                return response()->json([])->setStatusCode(Response::HTTP_UNAUTHORIZED);
+                return response()->json([
+                    'error' => 'No access to model',
+                ])->setStatusCode(Response::HTTP_UNAUTHORIZED);
             }
 
-            if (is_a($model, Design::class) && \Gate::denies('view.product', $model->product) && \Gate::denies('collaborate.design', $model)) {
-                return response()->json([])->setStatusCode(Response::HTTP_UNAUTHORIZED);
+            if (is_a($model, Design::class) && \Gate::denies('view.product', $model->product)) {
+                return response()->json([
+                    'error' => 'No access to design',
+                ])->setStatusCode(Response::HTTP_UNAUTHORIZED);
             }
 
-            if (is_a($model, Prototype::class) && \Gate::denies('view.product', $model->product) && \Gate::denies('collaborate.prototype', $model)) {
-                return response()->json([])->setStatusCode(Response::HTTP_UNAUTHORIZED);
+            if (is_a($model, Prototype::class) && \Gate::denies('view.product', $model->product)) {
+                return response()->json([
+                    'error' => 'No access to prototype',
+                ])->setStatusCode(Response::HTTP_UNAUTHORIZED);
             }
         }
 
