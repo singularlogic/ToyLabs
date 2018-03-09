@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Organization;
+use Backpack\CRUD\CrudTrait;
 use Cmgmyr\Messenger\Traits\Messagable;
 use Creativeorange\Gravatar\Facades\Gravatar;
 use Hootlex\Friendships\Status;
@@ -14,7 +15,7 @@ use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
-    use HasRoles, Notifiable, Messagable, Friendable, HasApiTokens;
+    use HasRoles, Notifiable, Messagable, Friendable, HasApiTokens, CrudTrait;
 
     /**
      * The attributes that are mass assignable.

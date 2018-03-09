@@ -41,7 +41,7 @@
           </li>
 
           <li>
-            <a href="{{ url(config('backpack.base.route_prefix', 'admin').'/users') }}">
+            <a href="{{ url(config('backpack.base.route_prefix', 'admin').'/user') }}">
               <i class="fa fa-users"></i>
               <span>Users</span>
             </a>
