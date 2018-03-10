@@ -3568,6 +3568,9 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 //
 //
 //
+//
+//
+//
 
 exports.default = {
     props: ['_designs', '_product_id'],
@@ -5929,6 +5932,9 @@ var _ConfirmDialog2 = _interopRequireDefault(_ConfirmDialog);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+//
+//
+//
 //
 //
 //
@@ -42512,6 +42518,16 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }, [_c('a', {
       staticClass: "ui button",
       attrs: {
+        "href": ("/design/" + (d.id) + "/ar-models"),
+        "data-tooltip": "AR Models",
+        "data-position": "top center",
+        "data-inverted": ""
+      }
+    }, [_c('i', {
+      staticClass: "eye icon"
+    })]), _vm._v(" "), _c('a', {
+      staticClass: "ui button",
+      attrs: {
         "href": ("/design/" + (d.id) + "/feedback"),
         "data-tooltip": "Feedback",
         "data-position": "top center",
@@ -43222,6 +43238,16 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     })], 1), _vm._v(" "), _c('td', [_c('div', {
       staticClass: "ui tiny basic icon buttons"
     }, [_c('a', {
+      staticClass: "ui button",
+      attrs: {
+        "href": ("/prototype/" + (p.id) + "/ar-models"),
+        "data-tooltip": "AR Models",
+        "data-position": "top center",
+        "data-inverted": ""
+      }
+    }, [_c('i', {
+      staticClass: "eye icon"
+    })]), _vm._v(" "), _c('a', {
       staticClass: "ui button",
       attrs: {
         "href": ("/prototype/" + (p.id) + "/feedback"),

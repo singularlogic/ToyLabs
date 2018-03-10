@@ -54,6 +54,9 @@
                     <td class="center aligned"><timeago :since="d.updated_at" :max-time="86400 * 7" :format="formatDate" :auto-update="30"></timeago></td>
                     <td>
                         <div class="ui tiny basic icon buttons">
+                            <a class="ui button" :href="`/design/${d.id}/ar-models`" data-tooltip="AR Models" data-position="top center" data-inverted>
+                                <i class="eye icon"></i>
+                            </a>
                             <a class="ui button" :href="`/design/${d.id}/feedback`" data-tooltip="Feedback" data-position="top center" data-inverted>
                                 <i class="comments outline icon"></i>
                             </a>
