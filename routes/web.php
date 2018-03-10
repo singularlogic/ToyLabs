@@ -176,6 +176,7 @@ Route::group([
     'namespace'  => 'Admin',
 ], function () {
     CRUD::resource('certification', 'CertificationCrudController');
+    CRUD::resource('toycategory', 'ToyCategoryCrudController');
     CRUD::resource('award', 'AwardCrudController');
     CRUD::resource('user', 'UserCrudController');
     CRUD::resource('verify/organization', 'OrganizationCrudController');

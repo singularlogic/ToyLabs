@@ -27,6 +27,13 @@
           </li>
 
           <li>
+            <a href="{{ url(config('backpack.base.route_prefix', 'admin').'/toycategory') }}">
+              <i class="fa fa-list"></i>
+              <span>Toy Categories</span>
+            </a>
+          </li>
+
+          <li>
             <a href="{{ url(config('backpack.base.route_prefix', 'admin').'/certification') }}">
               <i class="fa fa-certificate"></i>
               <span>Certifications</span>

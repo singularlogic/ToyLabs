@@ -2,10 +2,13 @@
 
 namespace App;
 
+use Backpack\CRUD\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
 
 class ToyCategory extends Model
 {
+    use CrudTrait;
+
     protected $fillable = ['title', 'description'];
 
     public function products()
