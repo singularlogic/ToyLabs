@@ -24,7 +24,7 @@
         <h3 class="ui dividing header">
             Files
             <div class="sub header">
-                For the model to work correctly, all the nodes of the 3D model should be under a parent node and that parent node should have the exact same name as the filename of the model. Keep in mind that, when opened in the ToyLabs app, the front of the model will be displayed, so make sure it is designed accordingly. <strong>Supported file types:</strong> fbx, obj, 3ds, stl, dae, stl (and image files for use as textures).
+                For the model to work correctly, all the nodes of the 3D model should be under a parent node and that parent node should have the exact same name as the filename of the model. Keep in mind that, when opened in the ToyLabs app, the front of the model will be displayed, so make sure it is designed accordingly. <strong>Supported file types:</strong> fbx, obj, 3ds, stl, dae, scn (and image files for use as textures).
             </div>
         </h3>
 

@@ -45411,7 +45411,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "ui dividing header"
   }, [_vm._v("\n        Files\n        "), _c('div', {
     staticClass: "sub header"
-  }, [_vm._v("\n            For the model to work correctly, all the nodes of the 3D model should be under a parent node and that parent node should have the exact same name as the filename of the model. Keep in mind that, when opened in the ToyLabs app, the front of the model will be displayed, so make sure it is designed accordingly. "), _c('strong', [_vm._v("Supported file types:")]), _vm._v(" fbx, obj, 3ds, stl, dae, stl (and image files for use as textures).\n        ")])])
+  }, [_vm._v("\n            For the model to work correctly, all the nodes of the 3D model should be under a parent node and that parent node should have the exact same name as the filename of the model. Keep in mind that, when opened in the ToyLabs app, the front of the model will be displayed, so make sure it is designed accordingly. "), _c('strong', [_vm._v("Supported file types:")]), _vm._v(" fbx, obj, 3ds, stl, dae, scn (and image files for use as textures).\n        ")])])
 },function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('h3', {
     staticClass: "ui dividing header"

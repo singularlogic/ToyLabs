@@ -48,7 +48,7 @@ class AugmentedRealityController extends Controller
                 'questions'   => [
                     ['text' => 'Design'],
                     ['text' => 'Features'],
-                    ['text' => 'Novelity'],
+                    ['text' => 'Novelty'],
                 ],
                 'parent_id'   => $id,
                 'parent_type' => $type,
