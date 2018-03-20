@@ -9,9 +9,9 @@
                 :key="c.id"
                 :comments="localComments"
                 :comment="c"
-                :read-only='true'
                 v-on:reply="addComment"
                 v-on:delete="deleteComment"
+                v-on:report='reportComment'
             ></comment>
         </div>
 
@@ -106,7 +106,13 @@ export default {
                     });
                 },
             }).modal('show');
-        }
+        },
+        reportComment(comment) {
+            console.log(comment);
+            axios.put(`/user/comment/${comment.id}/report`).then(response => {
+                // TODO: mark as reported
+            });
+        },
     }
 }
 </script>

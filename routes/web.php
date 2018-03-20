@@ -153,6 +153,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::put('/user/like/{type}/{id}', ['as' => 'user.like', 'uses' => 'UserController@like']);
     Route::put('/user/unlike/{type}/{id}', ['as' => 'user.like', 'uses' => 'UserController@unlike']);
     Route::post('/user/comment', ['as' => 'user.comment.post', 'uses' => 'UserController@postComment']);
+    Route::put('/user/comment/{id}/report', 'UserController@reportComment');
     Route::delete('/user/comment/{id}', ['as' => 'user.comment.delete', 'uses' => 'UserController@deleteComment']);
 });
 
@@ -166,4 +167,20 @@ Route::get('/analysis/{id}', ['as' => 'analysis.details', 'uses' => 'MarketAnaly
 Route::group(['middleware' => 'auth'], function () {
     Route::get('/api/states/{id}', 'APIController@countryStates');
     Route::get('/api/cities/{id}', 'APIController@stateCities');
+});
+
+// Admin
+Route::group([
+    'prefix'     => 'admin',
+    'middleware' => 'admin',
+    'namespace'  => 'Admin',
+], function () {
+    CRUD::resource('certification', 'CertificationCrudController');
+    CRUD::resource('toycategory', 'ToyCategoryCrudController');
+    CRUD::resource('award', 'AwardCrudController');
+    CRUD::resource('user', 'UserCrudController');
+    CRUD::resource('verify/organization', 'OrganizationCrudController');
+    CRUD::resource('verify/certification', 'VerifyCertificationCrudController');
+    CRUD::resource('verify/comment', 'ReportedCommentCrudController');
+    Route::put('verify/comment/{id}/ignore', 'ReportedCommentCrudController@ignore');
 });

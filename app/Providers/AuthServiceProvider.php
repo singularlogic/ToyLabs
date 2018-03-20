@@ -50,13 +50,12 @@ class AuthServiceProvider extends ServiceProvider
                 if ($product->owner_id === $user->id) {
                     return true;
                 }
-
             }
 
             // Belongs to the organization that owns this product
             if ($product->owner_type === 'App\\Organization') {
-
-                if ($user->organizations->where('id', $product->owner_id)->count() > 0 or $user->myOrganizations->where('id', $product->owner_id)->count() > 0) {
+                return true;
+                if ($user->organizations()->where('id', $product->owner_id)->count() > 0 or $user->myOrganizations()->where('id', $product->owner_id)->count() > 0) {
                     return true;
                 }
             }

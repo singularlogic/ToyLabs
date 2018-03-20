@@ -2,10 +2,13 @@
 
 namespace App;
 
+use Backpack\CRUD\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
 
 class Award extends Model
 {
+    use CrudTrait;
+
     protected $fillable = ['name', 'url'];
 
     public function organizations()

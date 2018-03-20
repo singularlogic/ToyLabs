@@ -48,7 +48,7 @@ class AugmentedRealityController extends Controller
                 'questions'   => [
                     ['text' => 'Design'],
                     ['text' => 'Features'],
-                    ['text' => 'Novelity'],
+                    ['text' => 'Novelty'],
                 ],
                 'parent_id'   => $id,
                 'parent_type' => $type,
@@ -155,7 +155,9 @@ class AugmentedRealityController extends Controller
 
         // Delete zip file if exists
         $file = public_path("tmp/$model->id.zip");
-        unlink($file);
+        if (file_exists($file)) {
+            unlink($file);
+        }
 
         \Session::flash('success', 'AR Model updated successfully.');
         return redirect()->route('ar-models', ['type' => $model->parent->type, 'id' => $model->parent->id]);

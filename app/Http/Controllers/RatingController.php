@@ -10,7 +10,7 @@ class RatingController extends Controller
     public function index(Request $request)
     {
         $user          = $request->user();
-        $organizations = $user->organizations()->get();
+        $organizations = $user->myOrganizations()->get();
 
         $pendingRatings = $user->pendingRatings()->with(['organization', 'collaboration.collaboratable'])->get();
         foreach ($organizations as $org) {

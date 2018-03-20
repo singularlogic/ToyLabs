@@ -180,6 +180,8 @@ return [
         App\Providers\Anlzer\AnlzerServiceProvider::class,
 
         // 3rd Party Providers
+        Backpack\Base\BaseServiceProvider::class,
+        Backpack\CRUD\CrudServiceProvider::class,
         Cmgmyr\Messenger\MessengerServiceProvider::class,
         Conner\Likeable\LikeableServiceProvider::class,
         Creativeorange\Gravatar\GravatarServiceProvider::class,

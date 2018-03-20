@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Design;
+use App\Models\ReportedComment;
 use App\Product;
 use App\Prototype;
 use BrianFaust\Commentable\Comment;
@@ -105,5 +106,22 @@ class UserController extends Controller
     {
         $comment = Comment::find($id);
         $comment->deleteComment($id);
+    }
+
+    public function reportComment(Request $request, int $id)
+    {
+        $user     = $request->user();
+        $comment  = Comment::find($id);
+        $reported = ReportedComment::where('comment_id', $id)->count();
+
+        if ($comment && $reported === 0) {
+            ReportedComment::create([
+                'user_id'    => $user->id,
+                'comment_id' => $id,
+            ]);
+
+            $comment->is_reported = true;
+            $comment->save();
+        }
     }
 }

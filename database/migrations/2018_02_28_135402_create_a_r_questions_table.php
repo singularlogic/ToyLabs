@@ -28,7 +28,7 @@ class CreateARQuestionsTable extends Migration
             $table->integer('ar_question_id')->unsigned();
             $table->integer('value')->default(3);
 
-            $table->index(['user_id', 'question_id']);
+            $table->index(['user_id', 'ar_question_id']);
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('ar_question_id')->references('id')->on('ar_questions')->onDelete('cascade');
         });
