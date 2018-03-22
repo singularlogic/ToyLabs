@@ -15,7 +15,7 @@ class ARModel extends Model implements HasMedia
     protected $fillable = ['title', 'description', 'downloads', 'parent_id', 'parent_type'];
     protected $appends  = ['totalComments', 'averageRating', 'filename', 'thumbnail'];
     protected $with     = ['questions'];
-    protected $hidden   = ['questions', 'comments', 'parent'];
+    protected $hidden   = ['questions', 'comments', 'parent', 'parent_id', 'parent_type'];
 
     public function parent()
     {

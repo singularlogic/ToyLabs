@@ -154,7 +154,7 @@ class AugmentedRealityController extends Controller
         }
 
         // Delete zip file if exists
-        $file = public_path("tmp/$model->id.zip");
+        $file = public_path("storage/tmp/$model->id.zip");
         if (file_exists($file)) {
             unlink($file);
         }

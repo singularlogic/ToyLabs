@@ -105,7 +105,7 @@ class PassportController extends Controller
             return abort(401);
         }
 
-        $path = public_path("tmp/$model->id.zip");
+        $path = public_path("storage/tmp/$model->id.zip");
         $zip  = new ZipArchive;
 
         // If file does not exist, create it
