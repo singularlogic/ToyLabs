@@ -6,12 +6,14 @@ use App\ARModel;
 use App\ARQuestionAnswer;
 use App\Design;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\SocialAuthController;
 use App\Organization;
 use App\Product;
 use App\Prototype;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use Laravel\Socialite\Facades\Socialite;
 use ZipArchive;
 
 class PassportController extends Controller
@@ -32,6 +34,28 @@ class PassportController extends Controller
                 'error' => 'Unauthorized',
             ], 401);
         }
+    }
+
+    public function socialCallback(Request $request, $provider)
+    {
+        if (!$request->has('code')) {
+            return response()->json([
+                'error' => 'Missing authorization code',
+            ], 400);
+        }
+
+        if ($request->has('denied')) {
+            return response()->json([
+                'error' => 'Access denied',
+            ], 401);
+        }
+
+        $user = SocialAuthController::getOrCreateUser($provider, Socialite::driver($provider)->stateless()->user());
+        // auth()->login($user);
+        $success['token'] = $user->createToken('Toylabs')->accessToken;
+        return response()->json([
+            'success' => $success,
+        ], 200);
     }
 
     public function logout(Request $request)

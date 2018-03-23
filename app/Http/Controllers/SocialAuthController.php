@@ -11,7 +11,7 @@ use Laravel\Socialite\Facades\Socialite;
 class SocialAuthController extends Controller
 {
 
-    public function getOrCreateUser($provider, ProviderUser $providerUser)
+    public static function getOrCreateUser($provider, ProviderUser $providerUser)
     {
         $account = SocialAccount::whereProvider($provider)
             ->whereProviderUserId($providerUser->getId())
@@ -64,7 +64,7 @@ class SocialAuthController extends Controller
             return redirect('/login');
         }
 
-        $user = $this->getOrCreateUser($provider, Socialite::driver($provider)->user());
+        $user = SocialAuthController::getOrCreateUser($provider, Socialite::driver($provider)->user());
         auth()->login($user);
 
         return redirect()->to('/dashboard');
@@ -77,7 +77,7 @@ class SocialAuthController extends Controller
                 'error' => 'Unauthorized',
             ], 401);
         } else {
-            $user = $this->getOrCreateUser($provider, Socialite::driver($provider)->user());
+            $user = SocialAuthController::getOrCreateUser($provider, Socialite::driver($provider)->user());
             auth()->login($user);
             $success['token'] = $user->createToken('Toylabs')->accessToken;
             return response()->json([

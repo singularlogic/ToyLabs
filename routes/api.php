@@ -14,7 +14,7 @@ Route::group([
     'prefix' => 'v1',
 ], function () {
     Route::post('login', 'API\PassportController@login');
-    Route::post('social/{provider}', 'SocialAuthController@passportCallback');
+    Route::post('social/{provider}', 'API\PassportController@socialCallback');
 });
 
 Route::group([
