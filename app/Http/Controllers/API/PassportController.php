@@ -50,8 +50,7 @@ class PassportController extends Controller
             ], 401);
         }
 
-        $user = SocialAuthController::getOrCreateUser($provider, Socialite::driver($provider)->stateless()->user());
-        // auth()->login($user);
+        $user             = SocialAuthController::getOrCreateUser($provider, Socialite::driver($provider)->userFromToken($request->get('code')));
         $success['token'] = $user->createToken('Toylabs')->accessToken;
         return response()->json([
             'success' => $success,
