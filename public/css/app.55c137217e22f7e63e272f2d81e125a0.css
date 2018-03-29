@@ -171,3 +171,7 @@ body > .grid {
 .thread .dropzone .dz-message {
   margin: 1em 0;
 }
+.field .helper {
+  color: rgba(0, 0, 0, 0.6);
+  display: block;
+}
