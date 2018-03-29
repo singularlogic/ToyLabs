@@ -32,6 +32,10 @@
 
         <h4 class="ui dividing header">Settings-based analytics</h4>
 
+        <div class="ui orange message" v-show="chart_data.concept_timelines.data.length == 0 && chart_data.two_word_phrases.data.length == 0 && chart_data.conceptParametersFacets.length == 0">
+            There are no charts available in this section. Are there any Concepts' Settings defined for this analysis?
+        </div>
+
         <div class="ui stackable two column grid">
             <div class="column" v-for="d in chart_data.two_word_phrases.meta.labels" v-if="chart_data.two_word_phrases.data[d.index].length">
                 <div class="ui segment" style="height: 100%;">
@@ -40,7 +44,7 @@
                 </div>
             </div>
 
-            <div class="column">
+            <div class="column" v-show="chart_data.concept_timelines.data.length > 0">
                 <div class="ui segment" style="height: 100%;">
                     <h5 class="ui sub">Daily timeline per concept</h5>
                     <div id="chart_concept_timeline" style="height: 230px;"></div>
