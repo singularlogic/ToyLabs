@@ -18,6 +18,18 @@
                     <keywords-field
                         v-model="keyphrases_settings"
                     ></keywords-field>
+                    <small class="helper">
+                        Enter the words, phrases and hashtags to be used as search terms. Single keywords are separated with commas.
+                        Use ‘ for exact phrases and ! to exclude a term/phrase.
+                    </small>
+                    <div class="ui info message">
+                        For example by pressing <strong>toy, cube, ‘puzzle toy, !sphere</strong> the tool will search in social media for posts that
+                        include the words “toy” and “cube”, the exact phrase “puzzle toy” and exclude results that include the word
+                        “sphere”. In other words this search will return results relevant to puzzle toys that are shaped like cubes but not like spheres.
+                        <br/><br/>
+                        In another example the user could be searching for toys that are shaped like cubes or spheres but are not puzzle toys.
+                        In this case the search would look like so: <strong>toy, cube, sphere, !puzzle toy</strong>
+                    </div>
                     <input type="hidden" name="keyphrases_settings" ref="keyphrases_settings" />
                 </div>
                 <div class="field">
@@ -30,6 +42,10 @@
                         <input type="checkbox" value="facebook" v-model="sources">
                         <label>Facebook</label>
                     </div>
+
+                    <small class="helper">
+                        The data sources to be used for the analysis. Choose one or more among Facebook and Twitter.
+                    </small>
                     <input type="hidden" name="sources" ref="sources" />
 
                 </div>
@@ -41,6 +57,10 @@
                         <label>Only influencers</label>
                         <input type="hidden" name="influencers_mode" v-bind:value="analysis.influencers_mode" />
                     </div>
+
+                    <small class="helper">
+                        Select this option to activate influencer mode. If influencer mode is activated only designated influencer data sources will be used.
+                    </small>
                 </div>
 
             </div>
@@ -75,6 +95,17 @@
             </div>
 
             <div class="ui bottom attached tab" data-tab="conceptsettings">
+                <div class="ui info message">
+                    Provide specific meaningful <strong>concepts of interest</strong> (e.g. baby dolls) and <strong>parameters</strong> (e.g. colour, material)
+                    that will be presented and formulate the visualisations accordingly in order to be provided with useful
+                    and meaningful information customized to your needs.
+                    <br/><br/>
+                    The <strong>concepts of interest</strong> are terms/ideas that you want to monitor and understand crowd perception and
+                    market trends spinning around these terms. The value format follows the same logic as the keywords in the Custom Settings tab.
+                    <br/><br/>
+                    The <strong>parameters</strong> you need to specify are features on which the concepts of interest will be analysed
+                    and compared (e.g. a baby doll made of wood or plastic. The parameter name here is the "material" and the values "wood, plastic"). The value format is comma separated values.
+                </div>
                 <div class="field">
                     <label>Concepts</label>
                     <concepts-table
