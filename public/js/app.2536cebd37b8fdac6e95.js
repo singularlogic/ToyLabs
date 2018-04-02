@@ -3827,9 +3827,7 @@ exports.default = {
             project: this._project,
             analyses: this._analyses || []
         };
-    },
-
-    methods: {}
+    }
 };
 
 /***/ }),
@@ -45201,9 +45199,6 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "ui form",
     attrs: {
       "method": "POST"
-    },
-    on: {
-      "submit": _vm.submit
     }
   }, [_c('input', {
     attrs: {
