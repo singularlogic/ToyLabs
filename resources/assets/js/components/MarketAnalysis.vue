@@ -11,7 +11,7 @@
             ></analyses-table>
         </div>
         <div class="ui bottom attached tab" data-tab="configuration"  v-bind:class="[ project.id ? '' : 'active']">
-            <form class="ui form" method="POST" ref="marketAnalysisForm" v-on:submit="submit">
+            <form class="ui form" method="POST" ref="marketAnalysisForm">
                 <input type="hidden" name="_token" :value="$parent.crsf" />
 
                 <div class="field">
@@ -48,9 +48,6 @@
                 project: this._project,
                 analyses: this._analyses || [],
             };
-        },
-        methods: {
-
         }
     }
 </script>
