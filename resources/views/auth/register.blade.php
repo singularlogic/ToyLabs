@@ -47,7 +47,7 @@
                             <div class="field" style="text-align: right;">
                                 <div class="ui checkbox">
                                     <input type="checkbox" />
-                                    <label>I agree to the Terms and Conditions</label>
+                                    <label>I agree to the <a href="/terms" target="_BLANK">Terms and Conditions</a></label>
                                 </div>
                             </div>
                             <div class="ui divider clearing"></div>

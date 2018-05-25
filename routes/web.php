@@ -12,7 +12,9 @@
  */
 
 Route::get('/', 'HomeController@index')->name('home');
-Route::get('/about', function () {return view('about');})->name('about');
+Route::get('/about', function () {
+    return view('about');
+})->name('about');
 
 // Login/Register & Social Logins
 Route::get('/login', ['as' => 'login', 'uses' => 'Auth\\LoginController@showLoginForm']);
@@ -21,6 +23,9 @@ Route::get('/logout', ['as' => 'logout', 'uses' => 'Auth\\LoginController@logout
 
 Route::get('/register', ['as' => 'register', 'uses' => 'Auth\\RegisterController@showRegistrationForm']);
 Route::post('/register', ['as' => 'register.post', 'uses' => 'Auth\\RegisterController@register']);
+Route::get('/terms', function () {
+    return view('terms');
+})->name('terms');
 
 Route::post('/password/email', ['as' => 'password.email', 'uses' => 'Auth\\ForgotPasswordController@sendResetLinkEmail']);
 Route::get('/password/reset', ['as' => 'password.request', 'uses' => 'Auth\\ForgotPasswordController@showLinkRequestForm']);

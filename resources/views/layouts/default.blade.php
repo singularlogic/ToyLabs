@@ -22,14 +22,29 @@
     </head>
     <body>
         <div id="app" v-cloak>
-        @include('partials.hidden-menu', ['class' => $class])
+            @include('partials.hidden-menu', ['class' => $class])
 
-        @include('partials.sidebar-menu')
+            @include('partials.sidebar-menu')
 
-        @yield('content')
+            <div class="pusher">
+                @yield('content')
+            </div>
 
-        <div class="ui hidden clearing divider"></div>
+            <div class="ui hidden clearing divider"></div>
 
+            <div class="ui inverted vertical footer segment">
+                <div class="ui container">
+                    <div class="ui stackable inverted divided equal height stackable grid">
+                        <div class="eight wide middle aligned column">
+                            <span>Copyright &copy; 2017-2018 &nbsp; <a href="http://toylabs.eu/node/62" target="_BLANK">ToyLabs Consortium</a></span>
+                        </div>
+                        <div class="eight wide middle aligned column">
+                            <img class="ui left floated tiny image" src="/images/eu.png" />
+                            <span>The ToyLabs project has received funding from the European Union’s Horizon 2020 research and innovation programme under grant agreement No 732559.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </body>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>

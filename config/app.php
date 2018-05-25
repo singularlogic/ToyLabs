@@ -183,6 +183,7 @@ return [
         Backpack\Base\BaseServiceProvider::class,
         Backpack\CRUD\CrudServiceProvider::class,
         Cmgmyr\Messenger\MessengerServiceProvider::class,
+        Collective\Html\HtmlServiceProvider::class,
         Conner\Likeable\LikeableServiceProvider::class,
         Creativeorange\Gravatar\GravatarServiceProvider::class,
         Hootlex\Friendships\FriendshipsServiceProvider::class,
