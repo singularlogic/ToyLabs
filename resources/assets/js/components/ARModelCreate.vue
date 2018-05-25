@@ -45,7 +45,7 @@
             :showRemoveLink="true"
             :maxFileSizeInMB="64"
             paramName="file"
-            acceptedFileTypes="image/*,.fbx,.obj,.3ds,.stl,.scn,.dae"
+            acceptedFileTypes="image/*,.fbx,.obj,.3ds,.stl,.scn,.dae,.mtl"
             v-on:vdropzone-success="fileAdded"
             v-on:vdropzone-removed-file="fileRemoved"
         >
