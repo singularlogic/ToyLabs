@@ -46,7 +46,7 @@ export default {
         truncate(text, l) {
             const length = l || 200;
 
-            if (text.length <= length) {
+            if (text === null || text.length <= length) {
                 return text;
             }
 
