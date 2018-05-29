@@ -177,7 +177,7 @@ Route::group(['middleware' => 'auth'], function () {
 // Admin
 Route::group([
     'prefix'     => 'admin',
-    'middleware' => 'admin',
+    'middleware' => 'administrator',
     'namespace'  => 'Admin',
 ], function () {
     CRUD::resource('certification', 'CertificationCrudController');
