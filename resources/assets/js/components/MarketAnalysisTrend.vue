@@ -4,7 +4,7 @@
             <input type="hidden" name="_token" :value="$parent.crsf" />
 
             <div class="ui pointing secondary menu">
-                <a class="item orange" data-tab="configuration">Custom Settings</a>
+                <a class="item orange active" data-tab="configuration">Custom Settings</a>
                 <a class="item orange" data-tab="timesettings">Time Settings</a>
                 <a class="item orange" data-tab="conceptsettings">Concepts' Settings</a>
             </div>
