@@ -11,7 +11,7 @@
             <tr v-if="entries.length == 0">
                 <td colspan="3" class="center aligned">No concepts selected yet</td>
             </tr>
-            <tr v-for="entry in entries">
+            <tr v-for="entry in entries" :key="entry">
                 <td>{{ entry.name }}</td>
                 <td><keywords-field
                         v-model="entry.values"

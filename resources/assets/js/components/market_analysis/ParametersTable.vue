@@ -12,7 +12,7 @@
             <tr v-if="entries.length == 0">
                 <td colspan="4" class="center aligned">No parameters defined yet</td>
             </tr>
-            <tr v-for="entry in entries">
+            <tr v-for="entry in entries" :key="entry">
                 <td>{{ entry.name }}</td>
                 <td>{{ entry.values }}</td>
                 <td class="center aligned">
