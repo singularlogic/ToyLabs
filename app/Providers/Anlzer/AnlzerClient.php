@@ -6,6 +6,9 @@ use App\Providers\Anlzer\Api\Projects;
 use App\Providers\Anlzer\Api\Analyses;
 use App\Providers\Anlzer\Api\Concepts;
 use App\Providers\Anlzer\Api\Parameters;
+use App\Providers\Anlzer\Api\Feedbacks;
+use App\Providers\Anlzer\Api\Brands;
+use App\Providers\Anlzer\Api\Products;
 use App\Providers\Anlzer\Api\Retrievers;
 use GuzzleHttp\ClientInterface;
 
@@ -43,6 +46,21 @@ class AnlzerClient
     public function Parameters()
     {
         return new Parameters($this->httpClient, $this->getBaseURL());
+    }
+
+    public function Feedbacks()
+    {
+        return new Feedbacks($this->httpClient, $this->getBaseURL());
+    }
+
+    public function Brands()
+    {
+        return new Brands($this->httpClient, $this->getBaseURL());
+    }
+
+    public function Products()
+    {
+        return new Products($this->httpClient, $this->getBaseURL());
     }
 
     public function Retrievers()

@@ -68,8 +68,12 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/product/{id}/marketanalysis', ['as' => 'product.analysis.create', 'uses' => 'MarketAnalysisController@create']);
     Route::get('/product/{id}/marketanalysis/trend', ['as' => 'product.analysis.trend', 'uses' => 'MarketAnalysisController@trend']);
     Route::post('/product/{id}/marketanalysis/trend', ['as' => 'product.analysis.trend.post', 'uses' => 'MarketAnalysisController@saveAnalysis']);
+    Route::get('/product/{id}/marketanalysis/social', ['as' => 'product.analysis.social', 'uses' => 'MarketAnalysisController@social']);
+    Route::post('/product/{id}/marketanalysis/social', ['as' => 'product.analysis.social.post', 'uses' => 'MarketAnalysisController@saveFeedback']);
     Route::get('/analysis/{id}/edit', ['as' => 'product.analysis.edit', 'uses' => 'MarketAnalysisController@editAnalysis']);
     Route::post('/analysis/{id}/edit', ['as' => 'product.analysis.edit.post', 'uses' => 'MarketAnalysisController@saveAnalysis']);
+    Route::get('/social/{id}/edit', ['as' => 'product.social.edit', 'uses' => 'MarketAnalysisController@editFeedback']);
+    Route::post('/social/{id}/edit', ['as' => 'product.social.edit.post', 'uses' => 'MarketAnalysisController@saveFeedback']);
 
     Route::get('/product/{id}/designs', ['as' => 'product.designs', 'uses' => 'DesignController@productDesigns']);
     Route::get('/product/{id}/prototypes', ['as' => 'product.prototypes', 'uses' => 'PrototypeController@productPrototypes']);
@@ -167,6 +171,7 @@ Route::get('/product/{id}', ['as' => 'product.details', 'uses' => 'ProductContro
 Route::get('/design/{id}', ['as' => 'design.details', 'uses' => 'ProductController@showDesign']);
 Route::get('/prototype/{id}', ['as' => 'prototype.details', 'uses' => 'ProductController@showPrototype']);
 Route::get('/analysis/{id}', ['as' => 'analysis.details', 'uses' => 'MarketAnalysisController@showAnalysis']);
+Route::get('/social/{id}', ['as' => 'social.details', 'uses' => 'MarketAnalysisController@showFeedback']);
 
 // API
 Route::group(['middleware' => 'auth'], function () {

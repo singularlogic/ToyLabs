@@ -57,7 +57,6 @@ class MarketAnalysisController extends Controller
 //        echo $anlzer->Projects()->create();
         return view('product.market', $data);
     }
-
     private function parseAnlzerProject($anlzer_data)
     {
         if (is_string($anlzer_data)) {
@@ -72,7 +71,6 @@ class MarketAnalysisController extends Controller
             $project->retriever = $anlzer_data->retriever;
         return $project;
     }
-
     private function getProjectAnalyses($project_id)
     {
         $analyses = [];
@@ -82,6 +80,7 @@ class MarketAnalysisController extends Controller
                 $ana = new AnlzerProjectAnalysis();
                 $ana->id = $model['anlzer_analysis_id'];
                 $ana->name = $model['name'];
+                $ana->type = (ANALYSIS_TYPE::SOCIAL === $model['type']) ? ANALYSIS_TYPE::SOCIAL : ANALYSIS_TYPE::TREND;
                 array_push($analyses, $ana);
                 unset($ana);
             }
@@ -101,6 +100,25 @@ class MarketAnalysisController extends Controller
                 $ana = new AnlzerProjectAnalysis();
                 $ana->id = $anlzerProjectAnalysis->id;
                 $ana->name = $anlzerProjectAnalysis->name;
+                $ana->type = ANALYSIS_TYPE::TREND;
+                array_push($analyses, $ana);
+                unset($ana);
+            }
+            $anlzerProjectAnalyses = $this->anlzerClient->Projects()->listFeedbacksById($project_id);
+            foreach ($anlzerProjectAnalyses as $anlzerProjectAnalysis){
+                $anlzerAnalysis = $this->anlzerClient->Feedbacks()->getById($anlzerProjectAnalysis->id);
+                MarketAnalysisAnalysis::create([
+                    "name" => $anlzerAnalysis->name,
+                    "type" => ANALYSIS_TYPE::SOCIAL,
+                    "anlzer_analysis_id" => $anlzerProjectAnalysis->id,
+                    "anlzer_project_id" => $anlzerAnalysis->project,
+                    "product_id" => $product_id,
+                    "anlzer_data" => json_encode($anlzerAnalysis)
+                ]);
+                $ana = new AnlzerProjectAnalysis();
+                $ana->id = $anlzerProjectAnalysis->id;
+                $ana->name = $anlzerProjectAnalysis->name;
+                $ana->type = ANALYSIS_TYPE::SOCIAL;
                 array_push($analyses, $ana);
                 unset($ana);
             }
@@ -186,6 +204,8 @@ class MarketAnalysisController extends Controller
 //        }
 //
         $data = [
+            'title' => 'Market Trend Analysis',
+            'analysis_type' => ANALYSIS_TYPE::TREND,
             'product_id' => $product_id,
             'analysis' => []
         ];
@@ -195,7 +215,17 @@ class MarketAnalysisController extends Controller
 //        echo $anlzer->Projects()->getById(58);
 //        echo $anlzer->Projects()->create();
 //        echo "'".$id."'";
-        return view('product.markettrend', $data);
+        return view('product.marketanalysisform', $data);
+    }
+    public function social(Request $request, int $product_id, AnlzerClient $anlzerClient)
+    {
+        $data = [
+            'title' => 'Social Feedback Analysis',
+            'analysis_type' => ANALYSIS_TYPE::SOCIAL,
+            'product_id' => $product_id,
+            'analysis' => []
+        ];
+        return view('product.marketanalysisform', $data);
     }
 
     private function getAnalysisConceptParametersFacets($analysisId)
@@ -349,7 +379,7 @@ class MarketAnalysisController extends Controller
     private function getAnalysis($analysis_id, &$model = null)
     {
         if ($model === null) {
-            $model = MarketAnalysisAnalysis::where('anlzer_analysis_id', $analysis_id)->first();
+            $model = MarketAnalysisAnalysis::where([['anlzer_analysis_id', $analysis_id], ['type', ANALYSIS_TYPE::TREND]])->first();
         }
         if ($model !== null) {
             if ($model['settings'] !== null) {
@@ -397,7 +427,6 @@ class MarketAnalysisController extends Controller
             abort(404);
         }
     }
-
     private function getConceptById(int $concept_id)
     {
         $concept = new AnlzerConcept();
@@ -432,11 +461,10 @@ class MarketAnalysisController extends Controller
         }
         return $concept;
     }
-
     private function getAnalysisChartData($analysis_id, &$model = null)
     {
         if ($model === null) {
-            $model = MarketAnalysisAnalysis::where('anlzer_analysis_id', $analysis_id)->first();
+            $model = MarketAnalysisAnalysis::where([['anlzer_analysis_id', $analysis_id], ['type', ANALYSIS_TYPE::TREND]])->first();
         }
         if ($model !== null) {
             if ($model['data'] !== null) {
@@ -463,13 +491,14 @@ class MarketAnalysisController extends Controller
     }
     public function showAnalysis($analysis_id)
     {
-        $model = MarketAnalysisAnalysis::where('anlzer_analysis_id', $analysis_id)->first();
+        $model = MarketAnalysisAnalysis::where([['anlzer_analysis_id', $analysis_id], ['type', ANALYSIS_TYPE::TREND]])->first();
         if ($model !== null) {
             $analysis = $this->getAnalysis($analysis_id, $model);
             $chart_data = $this->getAnalysisChartData($analysis_id, $model);
 
             $data = [
                 'title'  => $analysis->name,
+                'analysis_type' => ANALYSIS_TYPE::TREND,
                 'analysis_id' => $analysis->id,
                 'product_id' => $model['product_id'],
                 'analysis' => $analysis,
@@ -490,21 +519,21 @@ class MarketAnalysisController extends Controller
             abort(404);
         }
     }
-
     public function editAnalysis($analysis_id)
     {
-        $model = MarketAnalysisAnalysis::where('anlzer_analysis_id', $analysis_id)->first();
+        $model = MarketAnalysisAnalysis::where([['anlzer_analysis_id', $analysis_id], ['type', ANALYSIS_TYPE::TREND]])->first();
         if ($model !== null) {
             $analysis = $this->getAnalysis($analysis_id, $model);
 
             $data = [
                 'title'  => $analysis->name,
                 'analysis_id' => $analysis->id,
+                'analysis_type' => $analysis->type,
                 'product_id' => $model['product_id'],
                 'analysis' => $analysis
             ];
 
-            return view('product.markettrend', $data);
+            return view('product.marketanalysisform', $data);
 
         } else {
             abort(404);
@@ -559,10 +588,7 @@ class MarketAnalysisController extends Controller
             case 'create':
             case 'copy':
                 $anlzer_data = $this->anlzerClient->Analyses()->create($anlzerAnalysis);
-                if (preg_match("/\/analyses\/(\d+)\//", $anlzer_data->url, $matches)) {
-                    $anlzer_data->id = $matches[1];
-                    $analysis_id = $anlzer_data->id;
-                }
+                $analysis_id = $anlzer_data->id;
                 MarketAnalysisAnalysis::create([
                     "name" => $anlzer_data->name,
                     "type" => ANALYSIS_TYPE::TREND,
@@ -575,11 +601,8 @@ class MarketAnalysisController extends Controller
             case 'save':
                 $anlzerAnalysis->id = $analysis_id;
                 $anlzer_data = $this->anlzerClient->Analyses()->update($analysis_id, $anlzerAnalysis);
-                if (preg_match("/\/analyses\/(\d+)\//", $anlzer_data->url, $matches)) {
-                    $anlzer_data->id = $matches[1];
-                    $analysis_id = $anlzer_data->id;
-                }
-                MarketAnalysisAnalysis::where('anlzer_analysis_id', $analysis_id)->update([
+                $analysis_id = $anlzer_data->id;
+                MarketAnalysisAnalysis::where([['anlzer_analysis_id', $analysis_id], ['type', ANALYSIS_TYPE::TREND]])->update([
                     "name" => $anlzer_data->name,
                     "type" => ANALYSIS_TYPE::TREND,
                     "anlzer_analysis_id" => $anlzer_data->id,
@@ -619,6 +642,346 @@ class MarketAnalysisController extends Controller
 
         return redirect()->route('product.analysis', [$product_id]);
     }
+
+    private function getFeedbackTimelines($analysisId)
+    {
+        $timelines =  $this->anlzerClient->Feedbacks()->getTimelinesById($analysisId)->timelines;
+        $dataTmp = [];
+        $labelsTmp = [];
+        $index = 0;
+        foreach ($timelines as $key => $timeline){
+            $labelsTmp[] = [
+                'index' => $index,
+                'label' => $key
+            ];
+            foreach ($timeline->timeline->buckets as $bucket){
+                if (!array_key_exists($bucket->key, $dataTmp)) {
+                    $dataTmp[$bucket->key] = [];
+                }
+                $dataTmp[$bucket->key]['key']=$bucket->key;
+                $dataTmp[$bucket->key]['key_as_string']=$bucket->key_as_string;
+                $dataTmp[$bucket->key]['doc_count_'.$index]=$bucket->doc_count;
+            }
+
+            $index++;
+        }
+        ksort($dataTmp);
+        $timelines = [
+            "meta" => [
+                "graphs" => $index,
+                "valueFieldPrefix" => 'doc_count_',
+                "labels" => $labelsTmp
+            ],
+            "data" => array_values($dataTmp)
+        ];
+        unset($dataTmp);
+        unset($labelsTmp);
+        unset($index);
+
+        return $timelines;
+    }
+    private function getFeedbackBrandTimelines($analysisId)
+    {
+        $timelines =  $this->anlzerClient->Feedbacks()->getBrandTimelinesById($analysisId)->timelines;
+        $dataTmp = [];
+        $labelsTmp = [];
+        $index = 0;
+        foreach ($timelines as $key => $timeline){
+            $labelsTmp[] = [
+                'index' => $index,
+                'label' => $key
+            ];
+            foreach ($timeline->timeline->buckets as $bucket){
+                if (!array_key_exists($bucket->key, $dataTmp)) {
+                    $dataTmp[$bucket->key] = [];
+                }
+                $dataTmp[$bucket->key]['key']=$bucket->key;
+                $dataTmp[$bucket->key]['key_as_string']=$bucket->key_as_string;
+                $dataTmp[$bucket->key]['doc_count_'.$index]=$bucket->doc_count;
+            }
+
+            $index++;
+        }
+        ksort($dataTmp);
+        $timelines = [
+            "meta" => [
+                "graphs" => $index,
+                "valueFieldPrefix" => 'doc_count_',
+                "labels" => $labelsTmp
+            ],
+            "data" => array_values($dataTmp)
+        ];
+        unset($dataTmp);
+        unset($labelsTmp);
+        unset($index);
+
+        return $timelines;
+    }
+    private function getFeedbackProductTimelines($analysisId)
+    {
+        $timelines =  $this->anlzerClient->Feedbacks()->getProductTimelinesById($analysisId)->timelines;
+        $dataTmp = [];
+        $labelsTmp = [];
+        $index = 0;
+        foreach ($timelines as $key => $timeline){
+            $labelsTmp[] = [
+                'index' => $index,
+                'label' => $key
+            ];
+            foreach ($timeline->timeline->buckets as $bucket){
+                if (!array_key_exists($bucket->key, $dataTmp)) {
+                    $dataTmp[$bucket->key] = [];
+                }
+                $dataTmp[$bucket->key]['key']=$bucket->key;
+                $dataTmp[$bucket->key]['key_as_string']=$bucket->key_as_string;
+                $dataTmp[$bucket->key]['doc_count_'.$index]=$bucket->doc_count;
+            }
+
+            $index++;
+        }
+        ksort($dataTmp);
+        $timelines = [
+            "meta" => [
+                "graphs" => $index,
+                "valueFieldPrefix" => 'doc_count_',
+                "labels" => $labelsTmp
+            ],
+            "data" => array_values($dataTmp)
+        ];
+        unset($dataTmp);
+        unset($labelsTmp);
+        unset($index);
+
+        return $timelines;
+    }
+
+    private function getFeedbackWordPhrases($analysisId, $words=WORD_PHRASE_WORDS::THREE, $type=WORD_PHRASE_TYPE::BRAND)
+    {
+        switch ($words){
+            case WORD_PHRASE_WORDS::ONE:
+                $_words = WORD_PHRASE_WORDS::ONE;
+                break;
+            case WORD_PHRASE_WORDS::TWO:
+                $_words = WORD_PHRASE_WORDS::TWO;
+                break;
+            case WORD_PHRASE_WORDS::THREE:
+            default:
+                $_words = WORD_PHRASE_WORDS::THREE;
+                break;
+        }
+        switch ($type){
+            case WORD_PHRASE_TYPE::PRODUCT:
+                $_type = WORD_PHRASE_TYPE::PRODUCT;
+                break;
+            case WORD_PHRASE_TYPE::BRAND:
+            default:
+            $_type = WORD_PHRASE_TYPE::BRAND;
+                break;
+        }
+        $_api_method = "get{$_words}WordPhrases{$_type}ById";
+        $_api_return = strtolower("{$_words}-word-phrases");
+
+        $wordPhrases =  $this->anlzerClient->Feedbacks()->$_api_method($analysisId)->$_api_return;
+        $labelsTmp = [];
+        $dataTmp = [];
+        $index = 0;
+        foreach ($wordPhrases as $key => $wordPhrase){
+            $labelsTmp[] = [
+                'index' => $index,
+                'label' => $key,
+                'doc_count' => $wordPhrase->doc_count
+            ];
+            $dataTmp[] = $wordPhrase->$_api_return->buckets;
+            $index++;
+        }
+        ksort($dataTmp);
+        $wordPhrases = [
+            "meta" => [
+                "graphs" => $index,
+                "labels" => $labelsTmp
+            ],
+            "data" => $dataTmp
+        ];
+        unset($dataTmp);
+        unset($labelsTmp);
+        unset($index);
+
+        return $wordPhrases;
+    }
+    private function getFeedbackChartData($analysis_id, &$model = null)
+    {
+        if ($model === null) {
+            $model = MarketAnalysisAnalysis::where([['anlzer_analysis_id', $analysis_id], ['type', ANALYSIS_TYPE::SOCIAL]])->first();
+        }
+        if ($model !== null) {
+            if ($model['data'] !== null) {
+                $chart_data = json_decode($model['data']);
+            } else {
+                $chart_data = [
+                    'top_hashtags' => $this->anlzerClient->Feedbacks()->getTopHashtagsById($analysis_id),
+                    'top_accounts' => $this->anlzerClient->Feedbacks()->getTopAccountsById($analysis_id),
+                    'overall_timeline' => $this->anlzerClient->Feedbacks()->getOverallTimelinesById($analysis_id),
+                    'timelines' => $this->getFeedbackTimelines($analysis_id),
+                    'brand_timelines' => $this->getFeedbackBrandTimelines($analysis_id),
+                    'product_timelines' => $this->getFeedbackProductTimelines($analysis_id),
+                    'sentiments' => $this->anlzerClient->Feedbacks()->getSentimentsById($analysis_id),
+                    'one_word_phrases_brands' => $this->getFeedbackWordPhrases($analysis_id,WORD_PHRASE_WORDS::ONE, WORD_PHRASE_TYPE::BRAND),
+                    'one_word_phrases_products' => $this->getFeedbackWordPhrases($analysis_id,WORD_PHRASE_WORDS::ONE, WORD_PHRASE_TYPE::PRODUCT),
+                    'two_word_phrases_brands' => $this->getFeedbackWordPhrases($analysis_id,WORD_PHRASE_WORDS::TWO, WORD_PHRASE_TYPE::BRAND),
+                    'two_word_phrases_products' => $this->getFeedbackWordPhrases($analysis_id,WORD_PHRASE_WORDS::TWO, WORD_PHRASE_TYPE::PRODUCT),
+                    'three_word_phrases_brands' => $this->getFeedbackWordPhrases($analysis_id,WORD_PHRASE_WORDS::THREE, WORD_PHRASE_TYPE::BRAND),
+                    'three_word_phrases_products' => $this->getFeedbackWordPhrases($analysis_id,WORD_PHRASE_WORDS::THREE, WORD_PHRASE_TYPE::PRODUCT),
+                ];
+
+                $model->update([
+                    "data" => json_encode($chart_data)
+                ]);
+            }
+            return $chart_data;
+        } else {
+            abort(404);
+        }
+    }
+    private function getFeedback($anlzer_analysis_id, &$model = null)
+    {
+        if ($model === null) {
+            $model = MarketAnalysisAnalysis::where([['anlzer_analysis_id', $anlzer_analysis_id], ['type', ANALYSIS_TYPE::SOCIAL]])->first();
+        }
+        if ($model !== null) {
+            if ($model['settings'] !== null) {
+                $analysis = json_decode($model['settings']);
+            } else {
+                $anlzerAnalysis = $this->anlzerClient->Feedbacks()->getById($anlzer_analysis_id);
+                $analysis = new AnlzerFeedback();
+                $analysis->id = $anlzer_analysis_id;
+                $analysis->name = $anlzerAnalysis->name;
+                $analysis->type = ANALYSIS_TYPE::SOCIAL;
+                $analysis->project = $anlzerAnalysis->project;
+                $analysis->keyphrases_settings = $anlzerAnalysis->keyphrases_settings;
+                $analysis->sources = $anlzerAnalysis->sources;
+                $analysis->languages = $anlzerAnalysis->languages;
+                $analysis->start_date = $anlzerAnalysis->start_date;
+                $analysis->end_date = $anlzerAnalysis->end_date;
+
+                $model->update([
+                    "name" => $analysis->name,
+                    "type" => $analysis->type,
+                    "anlzer_project_id" => $analysis->project,
+                    "anlzer_data" => json_encode($anlzerAnalysis),
+                    "settings" => json_encode($analysis)
+                ]);
+            }
+            return $analysis;
+        } else {
+            abort(404);
+        }
+    }
+    public function showFeedback($analysis_id)
+    {
+        $model = MarketAnalysisAnalysis::where([['anlzer_analysis_id', $analysis_id], ['type', ANALYSIS_TYPE::SOCIAL]])->first();
+        if ($model !== null) {
+            $analysis = $this->getFeedback($analysis_id, $model);
+            $chart_data = $this->getFeedbackChartData($analysis_id, $model);
+
+            $data = [
+                'title'  => $analysis->name,
+                'analysis_type' => ANALYSIS_TYPE::SOCIAL,
+                'analysis_id' => $analysis->id,
+                'product_id' => $model['product_id'],
+                'analysis' => $analysis,
+                'chart_data' => $chart_data,
+                'meta' => [
+                    'comments' => []
+                ],
+                'model'  => [
+                    'type' => 'analysis',
+                    'id'   => $analysis_id,
+                ],
+            ];
+
+            return view('product.analysis', $data);
+        } else {
+            abort(404);
+        }
+    }
+    public function editFeedback($analysis_id)
+    {
+        $model = MarketAnalysisAnalysis::where([['anlzer_analysis_id', $analysis_id], ['type', ANALYSIS_TYPE::SOCIAL]])->first();
+        if ($model !== null) {
+            $analysis = $this->getFeedback($analysis_id, $model);
+
+            $data = [
+                'title'  => $analysis->name,
+                'analysis_id' => $analysis->id,
+                'analysis_type' => $analysis->type,
+                'product_id' => $model['product_id'],
+                'analysis' => $analysis
+            ];
+
+            return view('product.marketanalysisform', $data);
+
+        } else {
+            abort(404);
+        }
+    }
+    public function saveFeedback(Request $request, int $anlzer_analysis_id)
+    {
+
+        $input = $request->all();
+
+        $product_id = $input['product_id'];
+        $anlzer_project_id =  MarketAnalysisProject::where('product_id', $product_id)->first(['anlzer_project_id'])['anlzer_project_id'];
+
+        $keyphrases_settings = [];
+        foreach (json_decode($input['keyphrases_settings']) as $keyphrase){
+            array_push($keyphrases_settings, [
+                "type" => $keyphrase->type,
+                "value" => $keyphrase->value
+            ]);
+        }
+
+        $anlzerAnalysis = new AnlzerFeedback();
+        $anlzerAnalysis->name = $input['name'];
+        $anlzerAnalysis->project = $anlzer_project_id;
+        $anlzerAnalysis->keyphrases_settings = $keyphrases_settings;
+        $anlzerAnalysis->start_date = $input['start_date'];
+        $anlzerAnalysis->end_date = $input['end_date'];
+        $anlzerAnalysis->sources = json_decode($input['sources']);
+        $anlzerAnalysis->languages = ($input['languages']) ? json_decode($input['languages']) : ["en"];
+
+        switch($input['action']) {
+            case 'create':
+            case 'copy':
+                $anlzer_data = $this->anlzerClient->Feedbacks()->create($anlzerAnalysis);
+                $anlzer_analysis_id = $anlzer_data->id;
+                MarketAnalysisAnalysis::create([
+                    "name" => $anlzer_data->name,
+                    "type" => ANALYSIS_TYPE::SOCIAL,
+                    "anlzer_analysis_id" => $anlzer_data->id,
+                    "anlzer_project_id" => $anlzer_data->project,
+                    "product_id" => $product_id,
+                    "anlzer_data" => json_encode($anlzer_data)
+                ]);
+                break;
+            case 'save':
+                $anlzerAnalysis->id = $anlzer_analysis_id;
+                $anlzer_data = $this->anlzerClient->Feedbacks()->update($anlzer_analysis_id, $anlzerAnalysis);
+                $anlzer_analysis_id = $anlzer_data->id;
+                MarketAnalysisAnalysis::where([['anlzer_analysis_id', $anlzer_analysis_id], ['type', ANALYSIS_TYPE::SOCIAL]])->update([
+                    "name" => $anlzer_data->name,
+                    "type" => ANALYSIS_TYPE::SOCIAL,
+                    "anlzer_analysis_id" => $anlzer_data->id,
+                    "anlzer_project_id" => $anlzer_data->project,
+                    "product_id" => $product_id,
+                    "anlzer_data" => json_encode($anlzer_data),
+                    "data" => null,
+                    "settings" => null
+                ]);
+                break;
+        }
+
+        return redirect()->route('product.analysis', [$product_id]);
+    }
 }
 
 class AnlzerProject {
@@ -643,6 +1006,16 @@ class AnlzerProjectAnalysis {
 abstract class ANALYSIS_TYPE {
     const TREND = 'trend';
     const SOCIAL = 'social';
+}
+
+abstract class WORD_PHRASE_WORDS {
+    const ONE = 'One';
+    const TWO = 'Two';
+    const THREE = 'Three';
+}
+abstract class WORD_PHRASE_TYPE {
+    const BRAND = 'br';
+    const PRODUCT = 'pr';
 }
 
 class AnlzerAnalysis {
@@ -681,4 +1054,16 @@ class AnlzerRetriever {
     public $keyphrases_list = [];
     public $languages = ["en"];
     public $accounts = [];
+}
+
+class AnlzerFeedback {
+    public $id = 0;
+    public $name = "";
+    public $type = ANALYSIS_TYPE::SOCIAL;
+    public $project = 0;
+    public $keyphrases_settings = [];
+    public $start_date = 0;
+    public $end_date = 0;
+    public $sources = [];
+    public $languages = ["en"];
 }

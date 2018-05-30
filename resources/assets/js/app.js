@@ -26,6 +26,7 @@ import FeedbackPage from './components/FeedbackPage.vue';
 import ARModelsTable from './components/ARModelsTable.vue';
 import MarketAnalysis from './components/MarketAnalysis.vue';
 import MarketAnalysisTrend from './components/MarketAnalysisTrend.vue';
+import MarketAnalysisSocial from './components/MarketAnalysisSocial.vue';
 import Analysis from './components/Analysis.vue';
 import AmCharts from 'amcharts3'
 import AmSerial from 'amcharts3/amcharts/serial';
@@ -109,6 +110,7 @@ const app = new Vue({
         Contact,
         MarketAnalysis,
         MarketAnalysisTrend,
+        MarketAnalysisSocial,
         Analysis,
         ARModelsTable
     }
