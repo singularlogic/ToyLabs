@@ -186,6 +186,9 @@ class ProfileController extends Controller
             }
 
             // Update Organization
+            if ($general['legal_name'] === null || $general['legal_name'] === '') {
+                $general['legal_name'] = $general['name'];
+            }
             Organization::where([
                 'id' => $id,
             ])->update($general);
@@ -224,6 +227,9 @@ class ProfileController extends Controller
             // Set Owner and Organization type
             $input['owner_id']             = $user->id;
             $input['organization_type_id'] = OrganizationType::whereIn('role_id', $user->roles()->pluck('id'))->first()->id;
+            if ($input['legal_name'] === null || $input['legal_name'] === '') {
+                $input['legal_name'] = $input['name'];
+            }
             unset($input['_token']);
 
             // Create Group
