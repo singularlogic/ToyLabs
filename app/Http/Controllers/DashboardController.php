@@ -26,7 +26,7 @@ class DashboardController extends Controller
             'owner_type' => Organization::class,
         ])->orderBy('updated_at', 'DESC')->get();
 
-        $orgs    = $user->myOrganizations;
+        $orgs    = $user->organizations;
         $active  = collect();
         $archive = collect();
 
