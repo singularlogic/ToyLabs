@@ -96,7 +96,7 @@ class PartnerMatchingController extends Controller
                 $score   = $score * sizeof($matched) / sizeof($input['competencies']);
             }
 
-            if ($input['scale'] && $this->scales[$input['scale']] > $this->scales[$org->production_scale]) {
+            if (isset($input['scale']) && isset($org->production_scale) && $this->scales[$input['scale']] > $this->scales[$org->production_scale]) {
                 $score = 0.8 * $score / ($this->scales[$input['scale']] - $this->scales[$org->production_scale]);
             }
 

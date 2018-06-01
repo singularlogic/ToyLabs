@@ -2,8 +2,11 @@
     <div class="ui divided items">
         <div class="item" v-for="(result, index) of results">
             <div class="content">
-                <h3 class="header">
-                        {{ index + 1 }}. <a :href="`/organization/${result.id}`" target="_BLANK">{{ result.name }}</a>
+                <h3 class="ui header">
+                    <div class="ui horizontal label" :style="{ backgroundColor: scoreColor(result.score) }">{{ result.score | percentage }}</div>
+                    <a :href="`/organization/${result.id}`" target="_BLANK">{{ result.name }}</a>
+                    <span class="rating" v-if="rating(result)">(Avg. Rating: {{ rating(result) }}/5.00)</span>
+                    <span class="rating" v-else>(Not rated yet)</span>
                 </h3>
                 <div class="ui right floated tiny blue label" v-for="cert in result.certifications" :class="{ basic: !cert.pivot.is_verified }">
                     {{ cert.name }}
@@ -15,7 +18,7 @@
                 </div>
                 <div class="description">{{ result.description | trim(500) }}</div>
                 <div class="extra">
-                    <button class="ui right floated positive mini button" type="button" @click="add(result.id)" v-if="canAdd">Add</button>
+                    <button class="ui right floated positive mini button" type="button" @click="add(result.id)" :disabled="canAdd">Add</button>
                     <router-link :to="`/${$parent.type}/${$parent.id}/collaborate/contact/${result.id}`" class="ui right floated orange mini button">
                         Contact
                     </router-link>
@@ -75,6 +78,13 @@ export default {
         add(id) {
             this.$emit('add', id);
         },
+        rating(org) {
+            if (org.rating1 !== null && org.rating2 !== null && org.rating3 !== null) {
+                return numeral((parseFloat(org.rating1) + parseFloat(org.rating2) + parseFloat(org.rating3)) / 3).format('0.00');
+            }
+
+            return false;
+        },
     },
     filters: {
         percentage(value) {
@@ -87,3 +97,10 @@ export default {
     },
 };
 </script>
+
+<style>
+.header .rating {
+    color: rgba(0, 0, 0, 0.6);
+    font-size: 1rem;
+}
+</style>
