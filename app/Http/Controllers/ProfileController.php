@@ -169,22 +169,26 @@ class ProfileController extends Controller
 
     public function saveOrganizationProfile(Request $request)
     {
-        $input                         = $request->all();
-        $id                            = $input['id'];
-        $user                          = Auth::user();
-        $input['owner_id']             = $user->id;
-        $input['organization_type_id'] = OrganizationType::where('role_id', $user->roles()->pluck('id')[0])->first()->id;
-        unset($input['_token']);
+        $input = $request->all();
+        $id    = $input['id'];
+        $user  = Auth::user();
 
         if ($id > 0) {
             // Update General information
             $organization = Organization::find($id);
-            $general      = $request->only(['name', 'legal_name', 'legal_form', 'address', 'po_box', 'postal_code', 'country_id', 'twitter', 'facebook', 'instagram', 'phone', 'fax', 'website_url', 'description', 'city']);
-            Organization::where('id', $id);
+            $general      = $request->only([
+                'name', 'legal_name', 'legal_form', 'address', 'po_box', 'postal_code', 'country_id',
+                'twitter', 'facebook', 'instagram', 'phone', 'fax', 'website_url', 'description', 'city',
+            ]);
 
-            if (\Gate::denies('edit.organization', $organization)) {
+            if (\Gate::denies('organization.owner', $organization)) {
                 abort(401, 'Unauthorized access');
             }
+
+            // Update Organization
+            Organization::where([
+                'id' => $id,
+            ])->update($general);
 
             // Update Facilities
             Facility::where('organization_id', $id)->delete();
@@ -217,6 +221,11 @@ class ProfileController extends Controller
 
             return redirect('dashboard')->with('success', 'Organization profile updated successfully');
         } else {
+            // Set Owner and Organization type
+            $input['owner_id']             = $user->id;
+            $input['organization_type_id'] = OrganizationType::whereIn('role_id', $user->roles()->pluck('id'))->first()->id;
+            unset($input['_token']);
+
             // Create Group
             $org = Organization::create($input);
 

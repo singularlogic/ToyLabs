@@ -115,7 +115,7 @@
 
         <h3 class="ui dividing header">
             Files
-            <div class="sub header">Use this field to upload designs and documents for collaboration with your partners. These remain private, even if the design is made public</div>
+            <div class="sub header">Use this field to upload documents regarding this product. These files are only visible to you, and are never shared with anyone else, regardless of the status (public or not) of this product.</div>
         </h3>
 
         <div class="ui relaxed horizontal divided list" v-if="files" style="margin-bottom: 10px;">
