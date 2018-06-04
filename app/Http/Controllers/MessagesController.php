@@ -4,11 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Events\NewMessage;
 use App\Message;
+use App\Notifications\NewMessageNotification;
 use App\Thread;
 use App\User;
 use Carbon\Carbon;
 use Cmgmyr\Messenger\Models\Participant;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
 
@@ -37,7 +39,7 @@ class MessagesController extends Controller
         foreach ($threads as $thread) {
             $tmp            = $thread;
             $tmp['creator'] = $thread->creator();
-            $tmp['replies'] = count($thread->messages());
+            $tmp['replies'] = count($thread->messages);
             $result[]       = $tmp;
         }
 
@@ -150,6 +152,7 @@ class MessagesController extends Controller
         // Notify Participants
         foreach ($input['recipients'] as $recipient) {
             event(new NewMessage($recipient, $thread->id));
+            $recipient->notify(new NewMessageNotification($recipient, $thread));
         }
     }
 
@@ -159,7 +162,7 @@ class MessagesController extends Controller
      * @param $id
      * @return mixed
      */
-    public function update($id)
+    public function update(Request $request, $id)
     {
         try {
             $thread = Thread::findOrFail($id);
@@ -192,6 +195,14 @@ class MessagesController extends Controller
         // Recipients
         if (Input::has('recipients')) {
             $thread->addParticipant(Input::get('recipients'));
+        }
+
+        foreach ($thread->participants as $participant) {
+            $user = $participant->user;
+            if ($user !== null && $user !== Auth::user()) {
+                event(new NewMessage($user->id, $thread->id));
+                $user->notify(new NewMessageNotification($user, $thread));
+            }
         }
 
         $message['user'] = Auth::user();

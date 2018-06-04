@@ -9,7 +9,8 @@
                 <div class="metadata">
                     <div class="date"><timeago :since="thread.created_at" :auto-update="30"></timeago></div>
                 </div>
-                <div class="text">{{ thread.subject }}</div>
+                <div class="text" v-if="thread.subject">{{ thread.subject }}</div>
+                <div class="text grey" v-else><em>(Empty subject)</em></div>
             </div>
         </router-link>
     </div>
@@ -41,3 +42,9 @@ export default {
     }
 }
 </script>
+
+<style>
+.text.grey {
+    color: #aaaaaa!important;
+}
+</style>

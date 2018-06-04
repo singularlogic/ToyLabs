@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Collaboration;
 use App\Competency;
 use App\Design;
+use App\Events\NewMessage;
 use App\Message;
+use App\Notifications\NewMessageNotification;
 use App\Organization;
 use App\OrganizationType;
 use App\PaymentType;
@@ -188,7 +190,14 @@ class PartnerMatchingController extends Controller
             $thread->activateAllParticipants();
         } else {
             // New Thread
-            $thread = Thread::create($input['thread']);
+            $thread = Thread::create([
+                'target_id'       => $id,
+                'target_type'     => get_class($obj),
+                'subject'         => '[' . ucfirst($type) . ": $obj->title] Negotiations with $org->name",
+                'type'            => $input['thread']['type'],
+                'locked'          => $input['thread']['locked'],
+                'organization_id' => $org_id,
+            ]);
         }
 
         // Message
@@ -213,12 +222,14 @@ class PartnerMatchingController extends Controller
 
         // Recipients are the Owner of the Organization and the Owner of my Organization (if not myself)
         $thread->addParticipant($org->owner);
-        // event(new NewMessage($org->owner, $thread->id));
+        event(new NewMessage($org->owner->id, $thread->id));
+        $org->owner->notify(new NewMessageNotification($org->owner, $thread));
 
         $product_owner = $obj->product->owner;
         if ($product_owner !== $request->user) {
             $thread->addParticipant($product_owner);
-            // event(new NewMessage($product_owner, $thread->id));
+            event(new NewMessage($product_owner->id, $thread->id));
+            $product_owner->notify(new NewMessageNotification($product_owner, $thread));
         }
 
         $message['user'] = \Auth::user();
