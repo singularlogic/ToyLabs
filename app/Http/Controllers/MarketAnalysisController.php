@@ -27,8 +27,8 @@ class MarketAnalysisController extends Controller
 
         $model = MarketAnalysisProject::where('product_id', $product_id)->first();
         if ($model !== null) {
-            if (is_string($model["anlzer_data"])) {
-                $project = $this->parseAnlzerProject($model["anlzer_data"]);
+            if (is_string($model["anlzer_data"]) && ($anlzer_data = json_decode($model["anlzer_data"]))) {
+                $project = $this->parseAnlzerProject($anlzer_data);
             } else {
                 $anlzerProject = $this->anlzerClient->Projects()->getById($model["anlzer_project_id"]);
                 $project->id = $anlzerProject->id;
@@ -233,7 +233,7 @@ class MarketAnalysisController extends Controller
         $conceptParametersFacets = [];
         $parameters = $this->anlzerClient->Analyses()->getParametersById($analysisId);
         foreach ($parameters as $parameter) {
-            $conceptFacets =  $this->anlzerClient->Analyses()->getConceptsParametersById($analysisId, $parameter->id)->concepts_facets;
+            $conceptFacets = $this->anlzerClient->Analyses()->getConceptsParametersById($analysisId, $parameter->id)->concepts_facets;
             $dataTmp = [];
             $labelsTmp = [];
             $index = 0;
@@ -276,7 +276,7 @@ class MarketAnalysisController extends Controller
     }
     private function getAnalysisTimelines($analysisId)
     {
-        $timelines =  $this->anlzerClient->Analyses()->getTimelinesById($analysisId)->timelines;
+        $timelines = $this->anlzerClient->Analyses()->getTimelinesById($analysisId)->timelines;
         $dataTmp = [];
         $labelsTmp = [];
         $index = 0;
@@ -290,7 +290,6 @@ class MarketAnalysisController extends Controller
                     $dataTmp[$bucket->key] = [];
                 }
                 $dataTmp[$bucket->key]['key']=$bucket->key;
-                $dataTmp[$bucket->key]['key_as_string']=$bucket->key_as_string;
                 $dataTmp[$bucket->key]['doc_count_'.$index]=$bucket->doc_count;
             }
 
@@ -313,7 +312,7 @@ class MarketAnalysisController extends Controller
     }
     private function getAnalysisTwoWordPhrases($analysisId)
     {
-        $twoWordPhrases =  $this->anlzerClient->Analyses()->getTwoWordPhrasesById($analysisId)->{'two-word-phrases'};
+        $twoWordPhrases = $this->anlzerClient->Analyses()->getTwoWordPhrasesById($analysisId)->{'two-word-phrases'};
         $labelsTmp = [];
         $dataTmp = [];
         $index = 0;
@@ -355,7 +354,6 @@ class MarketAnalysisController extends Controller
                     $dataTmp[$bucket->key] = [];
                 }
                 $dataTmp[$bucket->key]['key']=$bucket->key;
-                $dataTmp[$bucket->key]['key_as_string']=$bucket->key_as_string;
                 $dataTmp[$bucket->key]['doc_count_'.$index]=$bucket->doc_count;
             }
 
@@ -382,9 +380,7 @@ class MarketAnalysisController extends Controller
             $model = MarketAnalysisAnalysis::where([['anlzer_analysis_id', $analysis_id], ['type', ANALYSIS_TYPE::TREND]])->first();
         }
         if ($model !== null) {
-            if ($model['settings'] !== null) {
-                $analysis = json_decode($model['settings']);
-            } else {
+            if ($model['settings'] === null || !($analysis = json_decode($model['settings']))) {
                 $anlzerAnalysis = $this->anlzerClient->Analyses()->getById($analysis_id);
                 $parameters = [];
                 foreach ($this->anlzerClient->Analyses()->getParametersById($analysis_id) as $anlzerParameter) {
@@ -432,9 +428,7 @@ class MarketAnalysisController extends Controller
         $concept = new AnlzerConcept();
         $model = MarketAnalysisConcept::where('anlzer_concept_id', $concept_id)->first();
         if ($model !== null) {
-            if ($model['anlzer_data'] !== null) {
-                $anlzer_data = json_decode($model['anlzer_data']);
-            } else {
+            if ($model['anlzer_data'] === null || !($anlzer_data = json_decode($model['anlzer_data']))) {
                 $anlzer_data = $this->anlzerClient->Concepts()->getById($concept_id);
                 $model->update([
                     "name" => $anlzer_data->name,
@@ -467,9 +461,7 @@ class MarketAnalysisController extends Controller
             $model = MarketAnalysisAnalysis::where([['anlzer_analysis_id', $analysis_id], ['type', ANALYSIS_TYPE::TREND]])->first();
         }
         if ($model !== null) {
-            if ($model['data'] !== null) {
-                $chart_data = json_decode($model['data']);
-            } else {
+            if ($model['data'] === null || !($chart_data = json_decode($model['data']))) {
                 $chart_data = [
                     'top_hashtags' => $this->anlzerClient->Analyses()->getTopHashtagsById($analysis_id),
                     'top_accounts' => $this->anlzerClient->Analyses()->getTopAccountsById($analysis_id),
@@ -497,7 +489,7 @@ class MarketAnalysisController extends Controller
             $chart_data = $this->getAnalysisChartData($analysis_id, $model);
 
             $data = [
-                'title'  => $analysis->name,
+                'title' => $analysis->name,
                 'analysis_type' => ANALYSIS_TYPE::TREND,
                 'analysis_id' => $analysis->id,
                 'product_id' => $model['product_id'],
@@ -508,9 +500,9 @@ class MarketAnalysisController extends Controller
                     'liked' => false,
                     'comments' => []
                 ],
-                'model'  => [
+                'model' => [
                     'type' => 'analysis',
-                    'id'   => $analysis_id,
+                    'id'  => $analysis_id,
                 ],
             ];
 
@@ -526,7 +518,7 @@ class MarketAnalysisController extends Controller
             $analysis = $this->getAnalysis($analysis_id, $model);
 
             $data = [
-                'title'  => $analysis->name,
+                'title' => $analysis->name,
                 'analysis_id' => $analysis->id,
                 'analysis_type' => $analysis->type,
                 'product_id' => $model['product_id'],
@@ -545,7 +537,7 @@ class MarketAnalysisController extends Controller
         $input = $request->all();
 
         $product_id = $input['product_id'];
-        $project_id =  MarketAnalysisProject::where('product_id', $product_id)->first(['anlzer_project_id'])['anlzer_project_id'];
+        $project_id = MarketAnalysisProject::where('product_id', $product_id)->first(['anlzer_project_id'])['anlzer_project_id'];
 
         $concepts = json_decode($input['concepts']);
         $conceptIds = [];
@@ -645,7 +637,7 @@ class MarketAnalysisController extends Controller
 
     private function getFeedbackTimelines($analysisId)
     {
-        $timelines =  $this->anlzerClient->Feedbacks()->getTimelinesById($analysisId)->timelines;
+        $timelines = $this->anlzerClient->Feedbacks()->getTimelinesById($analysisId)->timelines;
         $dataTmp = [];
         $labelsTmp = [];
         $index = 0;
@@ -659,7 +651,6 @@ class MarketAnalysisController extends Controller
                     $dataTmp[$bucket->key] = [];
                 }
                 $dataTmp[$bucket->key]['key']=$bucket->key;
-                $dataTmp[$bucket->key]['key_as_string']=$bucket->key_as_string;
                 $dataTmp[$bucket->key]['doc_count_'.$index]=$bucket->doc_count;
             }
 
@@ -682,7 +673,7 @@ class MarketAnalysisController extends Controller
     }
     private function getFeedbackBrandTimelines($analysisId)
     {
-        $timelines =  $this->anlzerClient->Feedbacks()->getBrandTimelinesById($analysisId)->timelines;
+        $timelines = $this->anlzerClient->Feedbacks()->getBrandTimelinesById($analysisId)->timelines;
         $dataTmp = [];
         $labelsTmp = [];
         $index = 0;
@@ -696,7 +687,6 @@ class MarketAnalysisController extends Controller
                     $dataTmp[$bucket->key] = [];
                 }
                 $dataTmp[$bucket->key]['key']=$bucket->key;
-                $dataTmp[$bucket->key]['key_as_string']=$bucket->key_as_string;
                 $dataTmp[$bucket->key]['doc_count_'.$index]=$bucket->doc_count;
             }
 
@@ -719,7 +709,7 @@ class MarketAnalysisController extends Controller
     }
     private function getFeedbackProductTimelines($analysisId)
     {
-        $timelines =  $this->anlzerClient->Feedbacks()->getProductTimelinesById($analysisId)->timelines;
+        $timelines = $this->anlzerClient->Feedbacks()->getProductTimelinesById($analysisId)->timelines;
         $dataTmp = [];
         $labelsTmp = [];
         $index = 0;
@@ -733,7 +723,6 @@ class MarketAnalysisController extends Controller
                     $dataTmp[$bucket->key] = [];
                 }
                 $dataTmp[$bucket->key]['key']=$bucket->key;
-                $dataTmp[$bucket->key]['key_as_string']=$bucket->key_as_string;
                 $dataTmp[$bucket->key]['doc_count_'.$index]=$bucket->doc_count;
             }
 
@@ -781,7 +770,7 @@ class MarketAnalysisController extends Controller
         $_api_method = "get{$_words}WordPhrases{$_type}ById";
         $_api_return = strtolower("{$_words}-word-phrases");
 
-        $wordPhrases =  $this->anlzerClient->Feedbacks()->$_api_method($analysisId)->$_api_return;
+        $wordPhrases = $this->anlzerClient->Feedbacks()->$_api_method($analysisId)->$_api_return;
         $labelsTmp = [];
         $dataTmp = [];
         $index = 0;
@@ -814,9 +803,7 @@ class MarketAnalysisController extends Controller
             $model = MarketAnalysisAnalysis::where([['anlzer_analysis_id', $analysis_id], ['type', ANALYSIS_TYPE::SOCIAL]])->first();
         }
         if ($model !== null) {
-            if ($model['data'] !== null) {
-                $chart_data = json_decode($model['data']);
-            } else {
+            if ($model['data'] === null || !($chart_data = json_decode($model['data']))) {
                 $chart_data = [
                     'top_hashtags' => $this->anlzerClient->Feedbacks()->getTopHashtagsById($analysis_id),
                     'top_accounts' => $this->anlzerClient->Feedbacks()->getTopAccountsById($analysis_id),
@@ -848,9 +835,7 @@ class MarketAnalysisController extends Controller
             $model = MarketAnalysisAnalysis::where([['anlzer_analysis_id', $anlzer_analysis_id], ['type', ANALYSIS_TYPE::SOCIAL]])->first();
         }
         if ($model !== null) {
-            if ($model['settings'] !== null) {
-                $analysis = json_decode($model['settings']);
-            } else {
+            if ($model['settings'] === null || !($analysis = json_decode($model['settings']))) {
                 $anlzerAnalysis = $this->anlzerClient->Feedbacks()->getById($anlzer_analysis_id);
                 $analysis = new AnlzerFeedback();
                 $analysis->id = $anlzer_analysis_id;
@@ -884,7 +869,7 @@ class MarketAnalysisController extends Controller
             $chart_data = $this->getFeedbackChartData($analysis_id, $model);
 
             $data = [
-                'title'  => $analysis->name,
+                'title' => $analysis->name,
                 'analysis_type' => ANALYSIS_TYPE::SOCIAL,
                 'analysis_id' => $analysis->id,
                 'product_id' => $model['product_id'],
@@ -893,9 +878,9 @@ class MarketAnalysisController extends Controller
                 'meta' => [
                     'comments' => []
                 ],
-                'model'  => [
+                'model' => [
                     'type' => 'analysis',
-                    'id'   => $analysis_id,
+                    'id' => $analysis_id,
                 ],
             ];
 
@@ -911,7 +896,7 @@ class MarketAnalysisController extends Controller
             $analysis = $this->getFeedback($analysis_id, $model);
 
             $data = [
-                'title'  => $analysis->name,
+                'title' => $analysis->name,
                 'analysis_id' => $analysis->id,
                 'analysis_type' => $analysis->type,
                 'product_id' => $model['product_id'],
@@ -930,7 +915,7 @@ class MarketAnalysisController extends Controller
         $input = $request->all();
 
         $product_id = $input['product_id'];
-        $anlzer_project_id =  MarketAnalysisProject::where('product_id', $product_id)->first(['anlzer_project_id'])['anlzer_project_id'];
+        $anlzer_project_id = MarketAnalysisProject::where('product_id', $product_id)->first(['anlzer_project_id'])['anlzer_project_id'];
 
         $keyphrases_settings = [];
         foreach (json_decode($input['keyphrases_settings']) as $keyphrase){
