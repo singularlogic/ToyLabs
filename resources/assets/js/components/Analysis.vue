@@ -81,7 +81,7 @@
                         <div id="chart_product_timelines" style="height: 230px;"></div>
                     </div>
                 </div>
-                <div class="column" v-if="chart_data.sentiments.sentiments.length > 0">
+                <div class="column" v-if="chart_data.sentiments.length > 0">
                     <div class="ui segment" style="height: 100%;">
                         <h5 class="ui sub">Sentiment/Emotions for my brands & products</h5>
                         <div id="chart_sentiments" style="height: 230px;"></div>
@@ -625,20 +625,9 @@
                     'neutral': '#999999',
                     'positive': '#04D215'
                 };
-                var barIndex = {
-                    'negative': 0,
-                    'neutral': 1,
-                    'positive': 2
-                };
-                for (var i=0;i<chart.sentiments.length;i++) {
-                    chart.sentiments[i].color = colors[chart.sentiments[i].name];
-                    chart.sentiments[i].barIndex = barIndex[chart.sentiments[i].name];
+                for (var i=0;i<chart.length;i++) {
+                    chart[i].color = colors[chart[i].name];
                 }
-                chart.sentiments.sort( function(a, b) {
-                    if ( a.barIndex < b.barIndex )
-                        return -1;
-                    return 1;
-                });
                 graphs = [];
                 graphs.push({
                     "type": "column",
@@ -676,7 +665,7 @@
 //                            "valueZoomable":true
                         },
                         "creditsPosition": "top-right",
-                        "dataProvider": chart.sentiments
+                        "dataProvider": chart
                     }
                 );
 

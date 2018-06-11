@@ -811,7 +811,7 @@ class MarketAnalysisController extends Controller
                     'timelines' => $this->getFeedbackTimelines($analysis_id),
                     'brand_timelines' => $this->getFeedbackBrandTimelines($analysis_id),
                     'product_timelines' => $this->getFeedbackProductTimelines($analysis_id),
-                    'sentiments' => $this->anlzerClient->Feedbacks()->getSentimentsById($analysis_id),
+                    'sentiments' => $this->getFeedbackSentiments($analysis_id),
                     'one_word_phrases_brands' => $this->getFeedbackWordPhrases($analysis_id,WORD_PHRASE_WORDS::ONE, WORD_PHRASE_TYPE::BRAND),
                     'one_word_phrases_products' => $this->getFeedbackWordPhrases($analysis_id,WORD_PHRASE_WORDS::ONE, WORD_PHRASE_TYPE::PRODUCT),
                     'two_word_phrases_brands' => $this->getFeedbackWordPhrases($analysis_id,WORD_PHRASE_WORDS::TWO, WORD_PHRASE_TYPE::BRAND),
@@ -828,6 +828,47 @@ class MarketAnalysisController extends Controller
         } else {
             abort(404);
         }
+    }
+    private function getFeedbackSentiments($anlzer_analysis_id)
+    {
+        $data = [
+            [
+                "count" => 0,
+                "name" => 'negative'
+            ],
+            [
+                "count" => 0,
+                "name" => 'neutral'
+            ],
+            [
+                "count" => 0,
+                "name" => 'positive'
+            ]
+        ];
+        $sentiments = $this->anlzerClient->Feedbacks()->getSentimentsById($anlzer_analysis_id)->sentiments;
+        foreach ($sentiments as $sentiment) {
+            switch ($sentiment->name) {
+                case 'negative':
+                    $data[0] = [
+                        "count" => $sentiment->count,
+                        "name" => $sentiment->name
+                    ];
+                    break;
+                case 'neutral':
+                    $data[1] = [
+                        "count" => $sentiment->count,
+                        "name" => $sentiment->name
+                    ];
+                    break;
+                case 'positive':
+                    $data[2] = [
+                        "count" => $sentiment->count,
+                        "name" => $sentiment->name
+                    ];
+                    break;
+            }
+        }
+        return $data;
     }
     private function getFeedback($anlzer_analysis_id, &$model = null)
     {
