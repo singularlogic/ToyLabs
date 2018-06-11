@@ -66,6 +66,7 @@
 </template>
 
 <script>
+    import ColorService from '../service/colorService'
 
     export default {
         props: ['analysis', 'analysis_id', 'chart_data'],
@@ -75,110 +76,6 @@
             };
         },
         created () {
-            var hexColors = function(t) {
-                t = parseInt(t);
-                // distribute the colors evenly on
-                // the hue range (the 'H' in HSV)
-                var i = 350 / t;
-
-                // hold the generated colors
-                var r = [];
-                var sv = 70;
-                for (var x = 0; x < t; x++) {
-                    // alternate the s, v for more
-                    // contrast between the colors.
-                    sv = sv > 90 ? 70 : sv+10;
-                    var rgb = hsvToRgb(i * x, sv, sv);
-                    r.push(rgbToHex(rgb[0],rgb[1],rgb[2]));
-                }
-                return r;
-            };
-            /**
-             * HSV to RGB color conversion
-             *
-             * H runs from 0 to 360 degrees
-             * S and V run from 0 to 100
-             *
-             * Ported from the excellent java algorithm by Eugene Vishnevsky at:
-             * http://www.cs.rit.edu/~ncs/color/t_convert.html
-             */
-            var hsvToRgb = function(h, s, v) {
-                var r, g, b;
-                var i;
-                var f, p, q, t;
-
-                // Make sure our arguments stay in-range
-                h = Math.max(0, Math.min(360, h));
-                s = Math.max(0, Math.min(100, s));
-                v = Math.max(0, Math.min(100, v));
-
-                // We accept saturation and value arguments from 0 to 100 because that's
-                // how Photoshop represents those values. Internally, however, the
-                // saturation and value are calculated from a range of 0 to 1. We make
-                // That conversion here.
-                s /= 100;
-                v /= 100;
-
-                if (s == 0) {
-                    // Achromatic (grey)
-                    r = g = b = v;
-                    return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];
-                }
-
-                h /= 60; // sector 0 to 5
-                i = Math.floor(h);
-                f = h - i; // factorial part of h
-                p = v * (1 - s);
-                q = v * (1 - s * f);
-                t = v * (1 - s * (1 - f));
-
-                switch (i) {
-                    case 0:
-                        r = v;
-                        g = t;
-                        b = p;
-                        break;
-
-                    case 1:
-                        r = q;
-                        g = v;
-                        b = p;
-                        break;
-
-                    case 2:
-                        r = p;
-                        g = v;
-                        b = t;
-                        break;
-
-                    case 3:
-                        r = p;
-                        g = q;
-                        b = v;
-                        break;
-
-                    case 4:
-                        r = t;
-                        g = p;
-                        b = v;
-                        break;
-
-                    default: // case 5:
-                        r = v;
-                        g = p;
-                        b = q;
-                }
-
-                return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];
-            };
-            function componentToHex(c) {
-                var hex = c.toString(16);
-                return hex.length == 1 ? "0" + hex : hex;
-            }
-            function rgbToHex(r, g, b) {
-                return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
-            }
-
             AmCharts.makeChart("chart_overall_timeline",
                 {
                     "path": "/images/amcharts/",
@@ -224,7 +121,6 @@
                     "dataProvider": this.chart_data.overall_timeline.timeline
                 }
             );
-            var colors = hexColors(this.chart_data.timelines.meta.graphs);
             var graphs = [];
             for (var i=0;i<this.chart_data.timelines.meta.graphs;i++){
                 graphs.push({
@@ -236,7 +132,7 @@
                     "bullet": "round",
                     "hideBulletsCount": 50,
                     "bulletSize": 4,
-                    "lineColor": colors[i]
+                    "lineColor": ColorService.getColor(i, this.chart_data.timelines.meta.graphs)
                 })
             }
             AmCharts.makeChart("chart_timeline",
@@ -290,7 +186,6 @@
                     });
             }
 
-            colors = hexColors(this.chart_data.concept_timelines.meta.graphs);
             graphs = [];
             for (var i=0;i<this.chart_data.concept_timelines.meta.graphs;i++){
                 graphs.push({
@@ -302,7 +197,7 @@
                     "bullet": "round",
                     "hideBulletsCount": 50,
                     "bulletSize": 4,
-                    "lineColor": colors[i]
+                    "lineColor": ColorService.getColor(i, this.chart_data.concept_timelines.meta.graphs)
                 });
             }
             AmCharts.makeChart("chart_concept_timeline",
@@ -341,7 +236,6 @@
             );
 
             for (var j = 0; j < this.chart_data.conceptParametersFacets.length; j++) {
-                var colors = hexColors(this.chart_data.conceptParametersFacets[j].meta.graphs);
                 var graphs = [];
                 for (var i=0;i<this.chart_data.conceptParametersFacets[j].meta.graphs;i++){
                     graphs.push({
@@ -350,7 +244,7 @@
                         "valueField": this.chart_data.conceptParametersFacets[j].meta.valueFieldPrefix + i,
                         "balloonText": "[[title]]: <b>[[value]]</b>",
                         "fillAlphas": 1,
-                        "lineColor": colors[i]
+                        "lineColor": ColorService.getColor(i, this.chart_data.conceptParametersFacets[j].meta.graphs)
                     })
                 }
                 AmCharts.makeChart('chart_cpf_'+j,
@@ -388,9 +282,6 @@
                     }
                 );
             }
-        },
-        methods: {
-
         }
     }
 </script>
