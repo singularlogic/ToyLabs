@@ -23,6 +23,7 @@
                         Use ‘ for exact phrases and ! to exclude a term/phrase.
                     </small>
                     <div class="ui info message">
+                        <i class="info icon"></i>
                         For example by pressing <strong>toy, cube, ‘puzzle toy, !sphere</strong> the tool will search in social media for posts that
                         include the words “toy” and “cube”, the exact phrase “puzzle toy” and exclude results that include the word
                         “sphere”. In other words this search will return results relevant to puzzle toys that are shaped like cubes but not like spheres.
@@ -96,6 +97,7 @@
 
             <div class="ui bottom attached tab" data-tab="conceptsettings">
                 <div class="ui info message">
+                    <i class="info icon"></i>
                     Provide specific meaningful <strong>concepts of interest</strong> (e.g. baby dolls) and <strong>parameters</strong> (e.g. colour, material)
                     that will be presented and formulate the visualisations accordingly in order to be provided with useful
                     and meaningful information customized to your needs.
