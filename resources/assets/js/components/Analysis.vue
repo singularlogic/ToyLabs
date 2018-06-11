@@ -91,11 +91,13 @@
                      v-if="chart_data.one_word_phrases_brands.data[d.index].length">
                     <div class="ui segment" style="height: 100%;">
                         <h5 class="ui sub">One word related topics for brand: {{ d.label }}</h5>
-                        <div :id="'chart_owpb_'+d.index" style="min-height: 250px;" class="ui three stackable cards">
-                            <div v-for="(w,k) in chart_data.one_word_phrases_brands.data[d.index]" class="card" :data-tooltip="'No. of post: '+w.doc_count">
-                                <div class="content">{{ w.key }}</div>
-                                <div class="ui bottom attached progress">
-                                    <div class="bar" :style="{ background: getColor(k, chart_data.one_word_phrases_brands.data[d.index].length), width: w.doc_count/d.doc_count*100+'%'}"></div>
+                        <div style="min-height: 250px;">
+                            <div :id="'chart_owpb_'+d.index" class="ui three stackable cards">
+                                <div v-for="(w,k) in chart_data.one_word_phrases_brands.data[d.index]" class="card" :data-tooltip="'No. of post: '+w.doc_count">
+                                    <div class="content">{{ w.key }}</div>
+                                    <div class="ui bottom attached progress">
+                                        <div class="bar" :style="{ background: getColor(k, chart_data.one_word_phrases_brands.data[d.index].length), width: w.doc_count/d.doc_count*100+'%'}"></div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -105,11 +107,13 @@
                      v-if="chart_data.one_word_phrases_products.data[d.index].length">
                     <div class="ui segment" style="height: 100%;">
                         <h5 class="ui sub">One word related topics for product: {{ d.label }}</h5>
-                        <div :id="'chart_owpp_'+d.index" style="min-height: 250px;" class="ui three stackable cards">
-                            <div v-for="(w,k) in chart_data.one_word_phrases_products.data[d.index]" class="card" :data-tooltip="'No. of post: '+w.doc_count">
-                                <div class="content">{{ w.key }}</div>
-                                <div class="ui bottom attached progress">
-                                    <div class="bar" :style="{ background: getColor(k, chart_data.one_word_phrases_products.data[d.index].length), width: w.doc_count/d.doc_count*100+'%'}"></div>
+                        <div style="min-height: 250px;">
+                            <div :id="'chart_owpp_'+d.index" class="ui three stackable cards">
+                                <div v-for="(w,k) in chart_data.one_word_phrases_products.data[d.index]" class="card" :data-tooltip="'No. of post: '+w.doc_count">
+                                    <div class="content">{{ w.key }}</div>
+                                    <div class="ui bottom attached progress">
+                                        <div class="bar" :style="{ background: getColor(k, chart_data.one_word_phrases_products.data[d.index].length), width: w.doc_count/d.doc_count*100+'%'}"></div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -119,11 +123,13 @@
                      v-if="chart_data.two_word_phrases_brands.data[d.index].length">
                     <div class="ui segment" style="height: 100%;">
                         <h5 class="ui sub">Two word related topics for brand: {{ d.label }}</h5>
-                        <div :id="'chart_twpb_'+d.index" style="min-height: 250px;" class="ui three stackable cards">
-                            <div v-for="(w,k) in chart_data.two_word_phrases_brands.data[d.index]" class="card" :data-tooltip="'No. of post: '+w.doc_count">
-                                <div class="content">{{ w.key }}</div>
-                                <div class="ui bottom attached progress">
-                                    <div class="bar" :style="{ background: getColor(k, chart_data.two_word_phrases_brands.data[d.index].length), width: w.doc_count/d.doc_count*100+'%'}"></div>
+                        <div style="min-height: 250px;">
+                            <div :id="'chart_twpb_'+d.index" class="ui three stackable cards">
+                                <div v-for="(w,k) in chart_data.two_word_phrases_brands.data[d.index]" class="card" :data-tooltip="'No. of post: '+w.doc_count">
+                                    <div class="content">{{ w.key }}</div>
+                                    <div class="ui bottom attached progress">
+                                        <div class="bar" :style="{ background: getColor(k, chart_data.two_word_phrases_brands.data[d.index].length), width: w.doc_count/d.doc_count*100+'%'}"></div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -133,11 +139,13 @@
                      v-if="chart_data.two_word_phrases_products.data[d.index].length">
                     <div class="ui segment" style="height: 100%;">
                         <h5 class="ui sub">Two word related topics for product: {{ d.label }}</h5>
-                        <div :id="'chart_twpp_'+d.index" style="min-height: 250px;" class="ui three stackable cards">
-                            <div v-for="(w,k) in chart_data.two_word_phrases_products.data[d.index]" class="card" :data-tooltip="'No. of post: '+w.doc_count">
-                                <div class="content">{{ w.key }}</div>
-                                <div class="ui bottom attached progress">
-                                    <div class="bar" :style="{ background: getColor(k, chart_data.two_word_phrases_products.data[d.index].length), width: w.doc_count/d.doc_count*100+'%'}"></div>
+                        <div style="min-height: 250px;">
+                            <div :id="'chart_twpp_'+d.index" class="ui three stackable cards">
+                                <div v-for="(w,k) in chart_data.two_word_phrases_products.data[d.index]" class="card" :data-tooltip="'No. of post: '+w.doc_count">
+                                    <div class="content">{{ w.key }}</div>
+                                    <div class="ui bottom attached progress">
+                                        <div class="bar" :style="{ background: getColor(k, chart_data.two_word_phrases_products.data[d.index].length), width: w.doc_count/d.doc_count*100+'%'}"></div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -147,11 +155,13 @@
                      v-if="chart_data.three_word_phrases_brands.data[d.index].length">
                     <div class="ui segment" style="height: 100%;">
                         <h5 class="ui sub">Three word related topics for brand: {{ d.label }}</h5>
-                        <div :id="'chart_thwpb_'+d.index" style="min-height: 250px;" class="ui three stackable cards">
-                            <div v-for="(w,k) in chart_data.three_word_phrases_brands.data[d.index]" class="card" :data-tooltip="'No. of post: '+w.doc_count">
-                                <div class="content">{{ w.key }}</div>
-                                <div class="ui bottom attached progress">
-                                    <div class="bar" :style="{ background: getColor(k, chart_data.three_word_phrases_brands.data[d.index].length), width: w.doc_count/d.doc_count*100+'%'}"></div>
+                        <div style="min-height: 250px;">
+                            <div :id="'chart_thwpb_'+d.index" class="ui three stackable cards">
+                                <div v-for="(w,k) in chart_data.three_word_phrases_brands.data[d.index]" class="card" :data-tooltip="'No. of post: '+w.doc_count">
+                                    <div class="content">{{ w.key }}</div>
+                                    <div class="ui bottom attached progress">
+                                        <div class="bar" :style="{ background: getColor(k, chart_data.three_word_phrases_brands.data[d.index].length), width: w.doc_count/d.doc_count*100+'%'}"></div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -161,11 +171,13 @@
                      v-if="chart_data.three_word_phrases_products.data[d.index].length">
                     <div class="ui segment" style="height: 100%;">
                         <h5 class="ui sub">Three word related topics for product: {{ d.label }}</h5>
-                        <div :id="'chart_thwpp_'+d.index" style="min-height: 250px;" class="ui three stackable cards">
-                            <div v-for="(w,k) in chart_data.three_word_phrases_products.data[d.index]" class="card" :data-tooltip="'No. of post: '+w.doc_count">
-                                <div class="content">{{ w.key }}</div>
-                                <div class="ui bottom attached progress">
-                                    <div class="bar" :style="{ background: getColor(k, chart_data.three_word_phrases_products.data[d.index].length), width: w.doc_count/d.doc_count*100+'%'}"></div>
+                        <div style="min-height: 250px;">
+                            <div :id="'chart_thwpp_'+d.index" class="ui three stackable cards">
+                                <div v-for="(w,k) in chart_data.three_word_phrases_products.data[d.index]" class="card" :data-tooltip="'No. of post: '+w.doc_count">
+                                    <div class="content">{{ w.key }}</div>
+                                    <div class="ui bottom attached progress">
+                                        <div class="bar" :style="{ background: getColor(k, chart_data.three_word_phrases_products.data[d.index].length), width: w.doc_count/d.doc_count*100+'%'}"></div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
