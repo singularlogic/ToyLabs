@@ -221,15 +221,21 @@ class PartnerMatchingController extends Controller
         $participant->save();
 
         // Recipients are the Owner of the Organization and the Owner of my Organization (if not myself)
-        $thread->addParticipant($org->owner);
+        $thread->addParticipant($org->owner->id);
         event(new NewMessage($org->owner->id, $thread->id));
         $org->owner->notify(new NewMessageNotification($org->owner, $thread));
 
         $product_owner = $obj->product->owner;
-        if ($product_owner !== $request->user) {
-            $thread->addParticipant($product_owner);
-            event(new NewMessage($product_owner->id, $thread->id));
-            $product_owner->notify(new NewMessageNotification($product_owner, $thread));
+        if (get_class($product_owner) === Organization::class) {
+            $owner = $product_owner->owner;
+        } else {
+            $owner = $product_owner;
+        }
+
+        if ($owner !== $request->user) {
+            $thread->addParticipant($owner->id);
+            event(new NewMessage($owner->id, $thread->id));
+            $owner->notify(new NewMessageNotification($owner, $thread));
         }
 
         $message['user'] = \Auth::user();
