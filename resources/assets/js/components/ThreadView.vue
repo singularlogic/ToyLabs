@@ -30,7 +30,12 @@
                 <textarea v-model="reply"></textarea>
             </div>
 
-            <button class="ui orange labeled icon right floated button" type="button" @click="sendReply" :disabled="reply.length == 0">
+            <button
+                class="ui orange labeled icon right floated button"
+                :class="{ loading: isSending }"
+                type="button" @click="sendReply"
+                :disabled="reply.length == 0 || isSending"
+            >
                 <i class="icon edit"></i> Add Reply
             </button>
         </form>
@@ -56,6 +61,7 @@ export default {
             users: [],
             error: null,
             uploadedFiles: [],
+            isSending: false,
         };
     },
     created() {
@@ -90,6 +96,7 @@ export default {
             const idx = this.uploadedFiles.indexOf(f);
         },
         sendReply() {
+            this.isSending = true;
             const id = this.$route.params.id;
             axios.put(`/messages/${id}`, {
                 message: this.reply,
@@ -101,6 +108,7 @@ export default {
                     this.uploadedFiles = [];
                     this.$refs.myDropzone.removeAllFiles();
                 }
+                this.isSending = false;
             });
         }
     },

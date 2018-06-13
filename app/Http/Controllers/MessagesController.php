@@ -151,9 +151,16 @@ class MessagesController extends Controller
 
         // Notify Participants
         foreach ($input['recipients'] as $recipient) {
+            // Don't notify myself!
+            if ($recipient === Auth::user()->id) {
+                continue;
+            }
+
             event(new NewMessage($recipient, $thread->id));
             $recipient->notify(new NewMessageNotification($recipient, $thread));
         }
+
+        return compact('message');
     }
 
     /**
