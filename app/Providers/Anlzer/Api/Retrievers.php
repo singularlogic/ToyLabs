@@ -17,4 +17,10 @@ class Retrievers extends Api
         $res = $this->httpClient->request('GET', $this->getBaseURL().$id.'/');
         return json_decode($res->getBody());
     }
+
+    public function getBrandsProductsById($id)
+    {
+        $res = $this->httpClient->request('GET', $this->getBaseURL().$id.'/brands-products/');
+        return json_decode($res->getBody());
+    }
 }

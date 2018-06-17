@@ -8,6 +8,7 @@
             <analyses-table
                     :product_id="_product_id"
                     :analyses="analyses"
+                    :enabled_social="enabled_social"
             ></analyses-table>
         </div>
         <div class="ui bottom attached tab" data-tab="configuration"  v-bind:class="[ project.id ? '' : 'active']">
@@ -46,6 +47,7 @@
             return {
                 submitText: this._project.id ? 'Update' : 'Create',
                 project: this._project,
+                enabled_social: !!this._project.retriever,
                 analyses: this._analyses || [],
             };
         }

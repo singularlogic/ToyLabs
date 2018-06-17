@@ -36,9 +36,13 @@
                     <a :href="`/product/${product_id}/marketanalysis/trend`" class="ui right floated small primary labeled icon button">
                         <i class="marker icon"></i> Create Market Trend Analysis
                     </a>
-                    <a :href="`/product/${product_id}/marketanalysis/social`" class="ui right floated small primary labeled icon button">
+                    <a :href="`/product/${product_id}/marketanalysis/social`" class="ui right floated small primary labeled icon button"
+                       v-bind:class="[ enabled_social ? '' : 'disabled']">
                         <i class="marker icon"></i> Create Social Feedback Analysis
                     </a>
+                    <div v-if="!enabled_social" style="float: right" data-tooltip="Social Feedback Analysis is only available for products owned by organizations with configured Market Analysis Settings">
+                        <i class="circular info circle icon"></i>
+                    </div>
                 </th>
             </tfoot>
         </table>
@@ -48,7 +52,7 @@
 
 <script>
     export default {
-        props: ['analyses', 'product_id'],
+        props: ['analyses', 'product_id', 'enabled_social'],
         methods: {
             analysisUrl(analysis, path) {
                 path = path || '/';
@@ -80,3 +84,10 @@
         }
     }
 </script>
+
+<style>
+    [data-tooltip]:after {
+        width: 280px;
+        white-space: normal;
+    }
+</style>

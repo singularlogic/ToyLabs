@@ -24,6 +24,7 @@ import DashboardPage from './components/DashboardPage.vue';
 import CollaborationsPage from './components/collaborations/CollaborationsPage.vue';
 import FeedbackPage from './components/FeedbackPage.vue';
 import ARModelsTable from './components/ARModelsTable.vue';
+import MarketAnalysisSettings from './components/MarketAnalysisSettings.vue';
 import MarketAnalysis from './components/MarketAnalysis.vue';
 import MarketAnalysisTrend from './components/MarketAnalysisTrend.vue';
 import MarketAnalysisSocial from './components/MarketAnalysisSocial.vue';
@@ -108,6 +109,7 @@ const app = new Vue({
         Gallery,
         Search,
         Contact,
+        MarketAnalysisSettings,
         MarketAnalysis,
         MarketAnalysisTrend,
         MarketAnalysisSocial,

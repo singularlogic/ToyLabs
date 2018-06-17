@@ -28,6 +28,7 @@
 @if($organization->owner_id == Auth::user()->id)
                                     <a class="item" href="/organization/{{ $organization->id }}/edit"> Edit...</a>
 @endif
+                                    <a class="item" href="/marketsettings/{{ $organization->id }}"> Market Analysis Settings</a>
                                 </div>
                             </div>
 @endforeach

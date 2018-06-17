@@ -6,9 +6,12 @@ namespace App\Http\Controllers;
 use App\MarketAnalysisAnalysis;
 use App\MarketAnalysisConcept;
 use App\MarketAnalysisProject;
+use App\MarketAnalysisRetriever;
+use App\Organization;
 use App\Product;
 use App\Providers\Anlzer\AnlzerClient;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Psy\Util\Json;
 
 
@@ -130,12 +133,23 @@ class MarketAnalysisController extends Controller
     {
         $input = $request->all();
         $project = new AnlzerProject();
+        $retriever_id = null;
+        if ($product = Product::with('owner')->where([
+                'id'   => $product_id,
+                'owner_type' => Organization::class,
+            ])->first()) {
+            if ($retriever = MarketAnalysisRetriever::where('organization_id', $product['owner_id'])->first()) {
+                $retriever_id = $retriever['anlzer_retriever_id'];
+            }
+        }
+
         $analyses = [];
         $model = MarketAnalysisProject::where('product_id', $product_id)->first();
         if ($model !== null) {
             $project = $this->parseAnlzerProject($model["anlzer_data"]);
             $project->id = $model["anlzer_project_id"];
             $project->name = $input["name"];
+            $project->retriever = $retriever_id;
             $anlzerProject = $anlzerClient->Projects()->update($project->id, $project);
             $project->id = $anlzerProject->id;
             $project->name = $anlzerProject->name;
@@ -147,6 +161,7 @@ class MarketAnalysisController extends Controller
             $analyses = $this->getProjectAnalyses($project->id);
         } else {
             $project->name = $input["name"];
+            $project->retriever = $retriever_id;
             $anlzerProject = $anlzerClient->Projects()->create($project);
             $project->id = $anlzerProject->id;
             $project->name = $anlzerProject->name;
@@ -546,6 +561,9 @@ class MarketAnalysisController extends Controller
             $anlzerconcept->project = $project_id;
             $anlzerconcept->name = $concept->name;
             $anlzerconcept->values = $concept->values;
+            usort($anlzerconcept->values, function($a, $b) {
+                return strcasecmp($a->value, $b->value);
+            });
             if ($concept->id === 0) {
                 $anlzer_data = $this->anlzerClient->Concepts()->create($anlzerconcept);
                 array_push($conceptIds, $anlzer_data->id);
@@ -569,6 +587,9 @@ class MarketAnalysisController extends Controller
         $anlzerAnalysis->name = $input['name'];
         $anlzerAnalysis->project = $project_id;
         $anlzerAnalysis->keyphrases_settings = $keyphrases_settings;
+        usort($anlzerAnalysis->keyphrases_settings, function($a, $b) {
+            return strcasecmp($a->value, $b->value);
+        });
         $anlzerAnalysis->start_date = $input['start_date'];
         $anlzerAnalysis->end_date = $input['end_date'];
         $anlzerAnalysis->concepts = $conceptIds;
@@ -1008,6 +1029,249 @@ class MarketAnalysisController extends Controller
 
         return redirect()->route('product.analysis', [$product_id]);
     }
+
+    private function getMasterRetrieverId()
+    {
+        $model = MarketAnalysisRetriever::where('organization_id', null)->first();
+        if ($model !== null) {
+            return $model['anlzer_retriever_id'];
+        } else {
+            $apiData = $this->anlzerClient->Retrievers()->getById(0);
+            $model = MarketAnalysisRetriever::create([
+                "anlzer_retriever_id" => $apiData->id
+            ]);
+            return $apiData->id;
+        }
+    }
+    private function getRetriever($anlzer_retriever_id, &$model = null)
+    {
+        if ($model === null) {
+            $model = MarketAnalysisRetriever::where('anlzer_retriever_id', $anlzer_retriever_id)->first();
+        }
+        if ($model !== null) {
+            if ($model['anlzer_data'] === null || !($data = json_decode($model['anlzer_data']))) {
+                $apiData = $this->anlzerClient->Retrievers()->getById($anlzer_retriever_id);
+                $data = new AnlzerRetriever();
+                $data->id = $apiData->id;
+                $data->name = $apiData->name;
+                $data->keyphrases_list = $apiData->keyphrases_list;
+                $data->languages = $apiData->languages;
+                $data->accounts = [];
+                foreach ($apiData->accounts as $account){
+                    $acc = new AnlzerProjectAccount();
+                    $acc->name = $account->name;
+                    $acc->source = $account->source;
+                    $acc->is_influencer = $account->is_influencer;
+                    $data->accounts[] = $acc;
+                }
+
+                $apiData = $this->anlzerClient->Retrievers()->getBrandsProductsById($data->id);
+                foreach ($apiData as $apiDatum){
+                    $brand = new AnlzerBrand();
+                    $brand->id = $apiDatum->id;
+                    $brand->name = $apiDatum->name;
+                    $brand->retriever = $apiDatum->retriever;
+                    $brand->values = $apiDatum->values;
+
+                    foreach ($apiDatum->products as $prod){
+                        $product = new AnlzerProduct();
+                        $product->id = $prod->id;
+                        $product->name = $prod->name;
+                        $product->brand = $brand->id;
+                        $product->values = $prod->values;
+                        $brand->products[] = $product;
+                    }
+
+                    $data->brands[] = $brand;
+                }
+
+                $model->update([
+                    "name" => $data->name,
+                    "anlzer_data" => json_encode($data)
+                ]);
+            }
+            return $data;
+        } else {
+            abort(404);
+        }
+    }
+    public function editMarketSettings($organization_id)
+    {
+        $user  = Auth::user();
+        if ($user->myOrganizations[0]->id != $organization_id){
+            abort(404);
+        }
+        $organization = Organization::where('id', $organization_id)->first();
+        if ($organization === null){
+            abort(404);
+        }
+
+        $retriever_master = $this->getRetriever($this->getMasterRetrieverId());
+        $model = MarketAnalysisRetriever::where('organization_id', $organization_id)->first();
+        if ($model !== null && $model["anlzer_retriever_id"] !== null) {
+            $retriever = $this->getRetriever($model["anlzer_retriever_id"], $model);
+        } else {
+            $retriever = new AnlzerRetriever();
+            $retriever->name = $organization->name . ' retriever';
+        }
+
+        $can_edit = true;
+        $can_edit_master = false;
+        if ($user->hasRole('admin')) {
+            $can_edit_master = true;
+        }
+
+        $data = [
+            'organization_id' => $organization_id,
+            'retriever' => $retriever,
+            'retriever_master' => $retriever_master,
+            'can_edit' => $can_edit,
+            'can_edit_master' => $can_edit_master,
+        ];
+        return view('marketanalysissettings', $data);
+    }
+    private function saveRetriever(AnlzerRetriever $anlzerRetriever, $organization_id = null)
+    {
+        $anlzer_retriever_id = null;
+
+        usort($anlzerRetriever->keyphrases_list, function($a, $b) {
+            return strcasecmp($a->value, $b->value);
+        });
+        usort($anlzerRetriever->accounts, function($a, $b) {
+            return strcasecmp($a->name, $b->name);
+        });
+
+        if ($anlzerRetriever->id === 0) {
+            $anlzer_data = $this->anlzerClient->Retrievers()->create($anlzerRetriever);
+            $anlzer_retriever_id = $anlzer_data->id;
+            MarketAnalysisRetriever::create([
+                "name" => $anlzer_data->name,
+                "anlzer_retriever_id" => $anlzer_retriever_id,
+                "organization_id" => $organization_id,
+                "anlzer_data" => null
+            ]);
+            if ($organization_id !== null) {
+                $this->setOrganizationProjectsRetriever($anlzer_retriever_id, $organization_id);
+            }
+        } else {
+            $anlzer_data = $this->anlzerClient->Retrievers()->update($anlzerRetriever->id, $anlzerRetriever);
+            $anlzer_retriever_id = $anlzer_data->id;
+            MarketAnalysisRetriever::where([['anlzer_retriever_id', $anlzer_retriever_id], ['organization_id', $organization_id]])->update([
+                "name" => $anlzer_data->name,
+                "anlzer_data" => null
+            ]);
+        }
+
+        $shouldHaveBrandIds = [];
+        $shouldHaveProductIds = [];
+        foreach ($anlzerRetriever->brands as $brand) {
+            $anlzerBrand = new AnlzerBrand();
+            $anlzerBrand->id = $brand->id;
+            $anlzerBrand->name = $brand->name;
+            $anlzerBrand->retriever = $anlzer_retriever_id;
+            $anlzerBrand->values = $brand->values;
+            if ($anlzerBrand->id === 0) {
+                $anlzer_data = $this->anlzerClient->Brands()->create($anlzerBrand);
+                $anlzerBrand->id = $anlzer_data->id;
+            } else {
+                $this->anlzerClient->Brands()->update($anlzerBrand->id, $anlzerBrand);
+            }
+            $shouldHaveBrandIds[] = $anlzerBrand->id;
+            foreach ($brand->products as $product) {
+                $anlzerProduct = new AnlzerProduct();
+                $anlzerProduct->id = $product->id;
+                $anlzerProduct->name = $product->name;
+                $anlzerProduct->brand = $anlzerBrand->id;
+                $anlzerProduct->values = $product->values;
+                if ($anlzerProduct->id === 0) {
+                    $anlzer_data = $this->anlzerClient->Products()->create($anlzerProduct);
+                    $anlzerProduct->id = $anlzer_data->id;
+                } else {
+                    $this->anlzerClient->Products()->update($anlzerProduct->id, $anlzerProduct);
+                }
+                $shouldHaveProductIds[] = $anlzerProduct->id;
+            }
+        }
+
+        // Cleanup deleted products and brands
+        $brandsProducts = $this->anlzerClient->Retrievers()->getBrandsProductsById($anlzer_retriever_id);
+        foreach ($brandsProducts as $brand){
+            foreach ($brand->products as $product){
+                if (!in_array($product->id, $shouldHaveProductIds)) {
+                    $this->anlzerClient->Products()->delete($product->id);
+                }
+            }
+            if (!in_array($brand->id, $shouldHaveBrandIds)) {
+                $this->anlzerClient->Brands()->delete($brand->id);
+            }
+        }
+    }
+    public function saveMarketSettings(Request $request, int $organization_id)
+    {
+        $user  = Auth::user();
+        if ($user->organization != $organization_id){
+            abort(404);
+        }
+        $organization = Organization::where('id', $organization_id)->first();
+        if ($organization === null){
+            abort(404);
+        }
+
+        $input = $request->all();
+
+
+
+
+        $retriever = new AnlzerRetriever();
+        $model = MarketAnalysisRetriever::where('organization_id', $organization_id)->first();
+        if ($model !== null && $model["anlzer_retriever_id"] !== null) {
+            $retriever->id = $model["anlzer_retriever_id"];
+        }
+        $retriever_input = json_decode($input['retriever']);
+        $retriever->name = $retriever_input->name;
+        $retriever->keyphrases_list = $retriever_input->keyphrases_list;
+        $retriever->languages = $retriever_input->languages;
+        $retriever->accounts = $retriever_input->accounts;
+        $retriever->brands = $retriever_input->brands;
+        $this->saveRetriever($retriever, $organization_id);
+
+
+        if ($user->hasRole('admin')) {
+            $retriever_master = new AnlzerRetriever();
+            $retriever_input = json_decode($input['retriever_master']);
+            $retriever_master->id = $this->getMasterRetrieverId();
+            $retriever_master->name = $retriever_input->name;
+            $retriever_master->keyphrases_list = $retriever_input->keyphrases_list;
+            $retriever_master->languages = $retriever_input->languages;
+            $retriever_master->accounts = $retriever_input->accounts;
+            $this->saveRetriever($retriever_master);
+        }
+
+//        return redirect()->route('marketanalysis.settings.edit', ['id' => $organization_id]);
+        return redirect('dashboard')->with('success', 'Market Analysis Settings updated successfully.');
+    }
+    private function setOrganizationProjectsRetriever(int $retrieverId, int $organization_id)
+    {
+        $products = Product::with('owner')->where([
+            'owner_id'   => $organization_id,
+            'owner_type' => Organization::class,
+        ])->get();
+        foreach ($products as $product) {
+            $product_id = $product['id'];
+            $anlzerProject = new AnlzerProject();
+            $model = MarketAnalysisProject::where('product_id', $product_id)->first();
+            if ($model !== null) {
+                $anlzer_data = $this->anlzerClient->Projects()->getById($model["anlzer_project_id"]);
+                $anlzerProject->id = $anlzer_data->id;
+                $anlzerProject->name = $anlzer_data->name;
+                $anlzerProject->retriever = $retrieverId;
+                $this->anlzerClient->Projects()->update($anlzerProject->id, $anlzerProject);
+                $model->update([
+                    "anlzer_data" => null
+                ]);
+            }
+        }
+    }
 }
 
 class AnlzerProject {
@@ -1080,6 +1344,20 @@ class AnlzerRetriever {
     public $keyphrases_list = [];
     public $languages = ["en"];
     public $accounts = [];
+    public $brands = [];
+}
+class AnlzerBrand {
+    public $id = 0;
+    public $name = "";
+    public $retriever = 0;
+    public $values = [];
+    public $products = [];
+}
+class AnlzerProduct {
+    public $id = 0;
+    public $name = "";
+    public $brand = 0;
+    public $values = [];
 }
 
 class AnlzerFeedback {

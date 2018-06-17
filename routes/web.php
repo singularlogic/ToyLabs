@@ -74,6 +74,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/analysis/{id}/edit', ['as' => 'product.analysis.edit.post', 'uses' => 'MarketAnalysisController@saveAnalysis']);
     Route::get('/social/{id}/edit', ['as' => 'product.social.edit', 'uses' => 'MarketAnalysisController@editFeedback']);
     Route::post('/social/{id}/edit', ['as' => 'product.social.edit.post', 'uses' => 'MarketAnalysisController@saveFeedback']);
+    Route::get('/marketsettings/{id}', ['as' => 'marketanalysis.settings.edit', 'uses' => 'MarketAnalysisController@editMarketSettings']);
+    Route::post('/marketsettings/{id}', ['as' => 'marketanalysis.settings.edit.post', 'uses' => 'MarketAnalysisController@saveMarketSettings']);
 
     Route::get('/product/{id}/designs', ['as' => 'product.designs', 'uses' => 'DesignController@productDesigns']);
     Route::get('/product/{id}/prototypes', ['as' => 'product.prototypes', 'uses' => 'PrototypeController@productPrototypes']);
