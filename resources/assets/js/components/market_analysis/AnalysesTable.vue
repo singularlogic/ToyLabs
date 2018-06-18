@@ -40,7 +40,7 @@
                        v-bind:class="[ enabled_social ? '' : 'disabled']">
                         <i class="marker icon"></i> Create Social Feedback Analysis
                     </a>
-                    <div v-if="!enabled_social" style="float: right" data-tooltip="Social Feedback Analysis is only available for products owned by organizations with configured Market Analysis Settings">
+                    <div v-if="!enabled_social" class="longTooltip" style="float: right" data-tooltip="Social Feedback Analysis is only available for products owned by organizations with configured Market Analysis Settings">
                         <i class="circular info circle icon"></i>
                     </div>
                 </th>
@@ -84,10 +84,3 @@
         }
     }
 </script>
-
-<style>
-    [data-tooltip]:after {
-        width: 280px;
-        white-space: normal;
-    }
-</style>

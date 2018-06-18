@@ -16,7 +16,8 @@ let CopyWebpackPlugin = require('copy-webpack-plugin');
 mix.webpackConfig({
     plugins: [
         new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
-        new CopyWebpackPlugin([{ from: 'node_modules/amcharts3/amcharts/images', to: 'images/amcharts/images' }])
+        new CopyWebpackPlugin([{ from: 'node_modules/amcharts3/amcharts/images', to: 'vendor/amcharts/images' }]),
+        new CopyWebpackPlugin([{ from: 'node_modules/amcharts3/amcharts/plugins', to: 'vendor/amcharts/plugins' }])
     ]
 });
 
