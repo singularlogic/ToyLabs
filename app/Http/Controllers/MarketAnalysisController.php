@@ -588,7 +588,7 @@ class MarketAnalysisController extends Controller
         $anlzerAnalysis->project = $project_id;
         $anlzerAnalysis->keyphrases_settings = $keyphrases_settings;
         usort($anlzerAnalysis->keyphrases_settings, function($a, $b) {
-            return strcasecmp($a->value, $b->value);
+            return strcasecmp($a['value'], $b['value']);
         });
         $anlzerAnalysis->start_date = $input['start_date'];
         $anlzerAnalysis->end_date = $input['end_date'];
