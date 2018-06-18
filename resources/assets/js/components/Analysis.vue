@@ -5,183 +5,323 @@
         <div class="ui stackable equal width grid">
             <div class="column">
                 <div class="ui segment" style="height: 100%;">
-                    <!--<div class="ui horizontal tiny statistic">-->
-                        <!--<div class="value">2</div>-->
-                        <!--<div class="label">Collected posts</div>-->
-                    <!--</div>-->
-                    <h5 class="ui horizontal divider header">Top Accounts</h5>
+                    <h5 class="ui horizontal divider header">Top Accounts
+                        <span class="longTooltip" data-tooltip="10 most active accounts (based on the number of documents published by them) from the documents that are retrieved based on the analysis settings.">
+                            <i class="icon info"></i>
+                        </span>
+                    </h5>
                     <div v-for="d in chart_data.top_accounts.accounts" class="ui tiny label" :data-tooltip="'No. of post: '+d.count">{{ d.name }}</div>
-                    <h5 class="ui horizontal divider header">Top Keywords</h5>
+                    <h5 class="ui horizontal divider header">Top Keywords
+                        <span class="longTooltip" data-tooltip="10 most popular keywords/hashtags from the documents that are retrieved based on the analysis settings.">
+                            <i class="icon info"></i>
+                        </span>
+                    </h5>
                     <div v-for="d in chart_data.top_hashtags.hashtags" class="ui small label" :data-tooltip="'No. of post: '+d.count">{{ d.name }}</div>
                 </div>
             </div>
             <div class="six wide column">
                 <div class="ui segment" style="height: 100%;">
-                    <h5 class="ui sub">Timeline of all results</h5>
+                    <h5 class="ui sub">Timeline of all results
+                        <span class="longTooltip" data-tooltip="Daily number of documents that are retrieved based on the analysis settings. Use the mouse scroll wheel to zoom in and out of the chart.">
+                            <i class="icon info"></i>
+                        </span>
+                    </h5>
+                    <div id="chart_overall_timeline_export" class="chart-export"></div>
                     <div id="chart_overall_timeline" style="height: 230px;"></div>
                 </div>
             </div>
             <div class="six wide column">
                 <div class="ui segment" style="height: 100%;">
-                    <h5 class="ui sub">Timeline of mentions for Keywords/Hashtags</h5>
+                    <h5 class="ui sub">Timeline of mentions for Keywords/Hashtags
+                        <span class="longTooltip" data-tooltip="Daily number of retrieved documents for each of the keyphrases defined in the analysis. Use the mouse scroll wheel to zoom in and out of the chart.">
+                            <i class="icon info"></i>
+                        </span>
+                    </h5>
+                    <div id="chart_timeline_export" class="chart-export"></div>
                     <div id="chart_timeline" style="height: 230px;"></div>
 
                 </div>
             </div>
         </div>
+        <template  v-if="analysis_type == 'trend'">
+            <h4 class="ui dividing header">Settings-based analytics
+                <span class="longTooltip" data-tooltip="Contains a number of visualisations based on the concepts/parameters pairs defined in the settings.">
+                    <i class="icon info"></i>
+                </span>
+            </h4>
 
-        <h4 class="ui dividing header">Settings-based analytics</h4>
-
-        <div class="ui orange message" v-show="chart_data.concept_timelines.data.length == 0 && chart_data.two_word_phrases.data.length == 0 && chart_data.conceptParametersFacets.length == 0">
-            There are no charts available in this section. Are there any Concepts' Settings defined for this analysis?
-        </div>
-
-        <div class="ui stackable two column grid">
-            <div class="column" v-for="d in chart_data.two_word_phrases.meta.labels" v-if="chart_data.two_word_phrases.data[d.index].length">
-                <div class="ui segment" style="height: 100%;">
-                    <h5 class="ui sub">{{ d.label }} Concept</h5>
-                    <div :id="'chart_twp_'+d.index" style="height: 250px;"></div>
-                </div>
+            <div class="ui orange message" v-if="chart_data.concept_timelines.data.length == 0 && chart_data.two_word_phrases.data.length == 0 && chart_data.conceptParametersFacets.length == 0">
+                There are no charts available in this section. Are there any Concepts' Settings defined for this analysis?
             </div>
 
-            <div class="column" v-show="chart_data.concept_timelines.data.length > 0">
-                <div class="ui segment" style="height: 100%;">
-                    <h5 class="ui sub">Daily timeline per concept</h5>
-                    <div id="chart_concept_timeline" style="height: 230px;"></div>
+            <div class="ui stackable two column grid">
 
+                <div class="column" v-for="d in chart_data.two_word_phrases.meta.labels" v-if="chart_data.two_word_phrases.data[d.index].length">
+                    <div class="ui segment" style="height: 100%;">
+                        <h5 class="ui sub">{{ d.label }} Concept
+                            <span class="longTooltip" data-tooltip="Most popular keywords for each concept defined in the settings. The number of pie charts equals the number of concepts defined.">
+                                <i class="icon info"></i>
+                            </span>
+                        </h5>
+                        <div :id="'chart_twp_'+d.index+'_export'" class="chart-export"></div>
+                        <div :id="'chart_twp_'+d.index" style="height: 250px;"></div>
+                    </div>
+                </div>
+
+                <div class="column" v-show="chart_data.concept_timelines.data.length > 0">
+                    <div class="ui segment" style="height: 100%;">
+                        <h5 class="ui sub">Daily timeline per concept
+                            <span class="longTooltip" data-tooltip="Daily number of retrieved documents for each of the concepts used in the analysis. Use the mouse scroll wheel to zoom in and out of the chart.">
+                                <i class="icon info"></i>
+                            </span>
+                        </h5>
+                        <div id="chart_concept_timeline_export" class="chart-export"></div>
+                        <div id="chart_concept_timeline" style="height: 230px;"></div>
+
+                    </div>
+                </div>
+
+                <div class="column" v-for="(d, k) in chart_data.conceptParametersFacets">
+                    <div class="ui segment" style="height: 100%;">
+                        <h5 class="ui sub">Μentions per parameter for the concepts
+                            <span class="longTooltip" data-tooltip="For each parameter specified in the settings, show the number of results for each of the (concept,parameter value) pairs per concept.">
+                                <i class="icon info"></i>
+                            </span>
+                        </h5>
+                        <div :id="`chart_cpf_${k}_export`" class="chart-export"></div>
+                        <div :id="`chart_cpf_${k}`" style="height: 250px;"></div>
+                    </div>
                 </div>
             </div>
+        </template>
+        <template  v-if="analysis_type == 'social'">
+            <h4 class="ui dividing header">Market set-based analytics
+                <span class="longTooltip" data-tooltip="Contains a number of visualisations based on the market sets defined in the Market Analysis Settings of your organization.">
+                    <i class="icon info"></i>
+                </span>
+            </h4>
 
-            <div class="column" v-for="(d, k) in chart_data.conceptParametersFacets">
-                <div class="ui segment" style="height: 100%;">
-                    <h5 class="ui sub">Μentions per parameter for the concepts</h5>
-                    <div :id="'chart_cpf_'+k" style="height: 250px;"></div>
+            <!--<div class="ui orange message" v-if="chart_data.concept_timelines.data.length == 0 && chart_data.two_word_phrases.data.length == 0 && chart_data.conceptParametersFacets.length == 0">-->
+                <!--There are no charts available in this section. Are there any Concepts' Settings defined for this analysis?-->
+            <!--</div>-->
+
+            <div class="ui stackable two column grid">
+                <div class="column" v-if="chart_data.brand_timelines.data.length > 0">
+                    <div class="ui segment" style="height: 100%;">
+                        <h5 class="ui sub">Daily timeline per brand name
+                            <span class="longTooltip" data-tooltip="Daily number of documents that are retrieved for each brand name defined in the settings. Use the mouse scroll wheel to zoom in and out of the chart.">
+                                <i class="icon info"></i>
+                            </span>
+                        </h5>
+                        <div id="chart_brand_timelines_export" class="chart-export"></div>
+                        <div id="chart_brand_timelines" style="height: 230px;"></div>
+                    </div>
+                </div>
+                <div class="column" v-if="chart_data.product_timelines.data.length > 0">
+                    <div class="ui segment" style="height: 100%;">
+                        <h5 class="ui sub">Daily timeline per product name
+                            <span class="longTooltip" data-tooltip="Daily number of documents that are retrieved for each product defined in the settings. Use the mouse scroll wheel to zoom in and out of the chart.">
+                                <i class="icon info"></i>
+                            </span>
+                        </h5>
+                        <div id="chart_product_timelines_export" class="chart-export"></div>
+                        <div id="chart_product_timelines" style="height: 230px;"></div>
+                    </div>
+                </div>
+                <div class="column" v-if="chart_data.sentiments.length > 0">
+                    <div class="ui segment" style="height: 100%;">
+                        <h5 class="ui sub">Sentiment/Emotions for my brands & products
+                            <span class="longTooltip" data-tooltip="This chart shows the sentiments (happy, sad or neutral) expressed in the retrieved documents for the brands and products defined in the Market Set.">
+                                <i class="icon info"></i>
+                            </span>
+                        </h5>
+                        <div id="chart_sentiments_export" class="chart-export"></div>
+                        <div id="chart_sentiments" style="height: 230px;"></div>
+                    </div>
+                </div>
+                <div class="column" v-for="d in chart_data.one_word_phrases_brands.meta.labels"
+                     v-if="chart_data.one_word_phrases_brands.data[d.index].length">
+                    <div class="ui segment chart-container" style="height: 100%;">
+                        <h5 class="ui sub">One word related topics for brand: {{ d.label }}
+                            <span class="longTooltip" data-tooltip="15 most commonly found one-word phrases in the documents that are retrieved based on the analysis settings per product.">
+                                <i class="icon info"></i>
+                            </span>
+                        </h5>
+                        <div :id="'chart_owpb_'+d.index+'_export'" class="chart-export"></div>
+                        <div class="ui pointing secondary menu">
+                            <a class="item orange active" :data-tab="'chart_owpb_'+d.index+'_list'">List</a>
+                            <a class="item orange" :data-tab="'chart_owpb_'+d.index+'_chart'">Chart</a>
+                        </div>
+                        <div :id="'chart_owpb_'+d.index" style="height: 230px;" :data-tab="'chart_owpb_'+d.index+'_chart'"
+                             class="ui bottom attached tab"></div>
+                        <div :id="'chart_owpb_'+d.index+'_list'" style="min-height: 240px;" :data-tab="'chart_owpb_'+d.index+'_list'"
+                             class="ui bottom attached tab active">
+                            <div :id="'chart_owpb_'+d.index" class="ui three stackable cards">
+                                <div v-for="(w,k) in chart_data.one_word_phrases_brands.data[d.index]" class="card" :data-tooltip="'No. of post: '+w.doc_count">
+                                    <div class="content">{{ w.key }}</div>
+                                    <div class="ui bottom attached progress">
+                                        <div class="bar" :style="{ background: getColor(k, chart_data.one_word_phrases_brands.data[d.index].length), width: w.doc_count/d.doc_count*100+'%'}"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="column" v-for="d in chart_data.one_word_phrases_products.meta.labels"
+                     v-if="chart_data.one_word_phrases_products.data[d.index].length">
+                    <div class="ui segment chart-container" style="height: 100%;">
+                        <h5 class="ui sub">One word related topics for product: {{ d.label }}
+                            <span class="longTooltip" data-tooltip="15 most commonly found one-word phrases in the documents that are retrieved based on the analysis settings per product.">
+                                <i class="icon info"></i>
+                            </span>
+                        </h5>
+                        <div :id="'chart_owpp_'+d.index+'_export'" class="chart-export"></div>
+                        <div class="ui pointing secondary menu">
+                            <a class="item orange active" :data-tab="'chart_owpp_'+d.index+'_list'">List</a>
+                            <a class="item orange" :data-tab="'chart_owpp_'+d.index+'_chart'">Chart</a>
+                        </div>
+                        <div :id="'chart_owpp_'+d.index" style="height: 230px;" :data-tab="'chart_owpp_'+d.index+'_chart'"
+                             class="ui bottom attached tab"></div>
+                        <div :id="'chart_owpp_'+d.index+'_list'" style="min-height: 240px;" :data-tab="'chart_owpp_'+d.index+'_list'"
+                             class="ui bottom attached tab active">
+                            <div :id="'chart_owpp_'+d.index" class="ui three stackable cards">
+                                <div v-for="(w,k) in chart_data.one_word_phrases_products.data[d.index]" class="card" :data-tooltip="'No. of post: '+w.doc_count">
+                                    <div class="content">{{ w.key }}</div>
+                                    <div class="ui bottom attached progress">
+                                        <div class="bar" :style="{ background: getColor(k, chart_data.one_word_phrases_products.data[d.index].length), width: w.doc_count/d.doc_count*100+'%'}"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="column" v-for="d in chart_data.two_word_phrases_brands.meta.labels"
+                     v-if="chart_data.two_word_phrases_brands.data[d.index].length">
+                    <div class="ui segment chart-container" style="height: 100%;">
+                        <h5 class="ui sub">Two word related topics for brand: {{ d.label }}
+                            <span class="longTooltip" data-tooltip="15 most commonly found two-word phrases in the documents that are retrieved based on the analysis settings per brand.">
+                                <i class="icon info"></i>
+                            </span>
+                        </h5>
+                        <div :id="'chart_twpb_'+d.index+'_export'" class="chart-export"></div>
+                        <div class="ui pointing secondary menu">
+                            <a class="item orange active" :data-tab="'chart_twpb_'+d.index+'_list'">List</a>
+                            <a class="item orange" :data-tab="'chart_twpb_'+d.index+'_chart'">Chart</a>
+                        </div>
+                        <div :id="'chart_twpb_'+d.index" style="height: 230px;" :data-tab="'chart_twpb_'+d.index+'_chart'"
+                             class="ui bottom attached tab"></div>
+                        <div :id="'chart_twpb_'+d.index+'_list'" style="min-height: 240px;" :data-tab="'chart_twpb_'+d.index+'_list'"
+                             class="ui bottom attached tab active">
+                            <div :id="'chart_twpb_'+d.index" class="ui three stackable cards">
+                                <div v-for="(w,k) in chart_data.two_word_phrases_brands.data[d.index]" class="card" :data-tooltip="'No. of post: '+w.doc_count">
+                                    <div class="content">{{ w.key }}</div>
+                                    <div class="ui bottom attached progress">
+                                        <div class="bar" :style="{ background: getColor(k, chart_data.two_word_phrases_brands.data[d.index].length), width: w.doc_count/d.doc_count*100+'%'}"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="column" v-for="d in chart_data.two_word_phrases_products.meta.labels"
+                     v-if="chart_data.two_word_phrases_products.data[d.index].length">
+                    <div class="ui segment chart-container" style="height: 100%;">
+                        <h5 class="ui sub">Two word related topics for product: {{ d.label }}
+                            <span class="longTooltip" data-tooltip="15 most commonly found two-word phrases in the documents that are retrieved based on the analysis settings per product.">
+                                <i class="icon info"></i>
+                            </span>
+                        </h5>
+                        <div :id="'chart_twpp_'+d.index+'_export'" class="chart-export"></div>
+                        <div class="ui pointing secondary menu">
+                            <a class="item orange active" :data-tab="'chart_twpp_'+d.index+'_list'">List</a>
+                            <a class="item orange" :data-tab="'chart_twpp_'+d.index+'_chart'">Chart</a>
+                        </div>
+                        <div :id="'chart_twpp_'+d.index" style="height: 230px;" :data-tab="'chart_twpp_'+d.index+'_chart'"
+                             class="ui bottom attached tab"></div>
+                        <div :id="'chart_twpp_'+d.index+'_list'" style="min-height: 240px;" :data-tab="'chart_twpp_'+d.index+'_list'"
+                             class="ui bottom attached tab active">
+                            <div :id="'chart_twpp_'+d.index" class="ui three stackable cards">
+                                <div v-for="(w,k) in chart_data.two_word_phrases_products.data[d.index]" class="card" :data-tooltip="'No. of post: '+w.doc_count">
+                                    <div class="content">{{ w.key }}</div>
+                                    <div class="ui bottom attached progress">
+                                        <div class="bar" :style="{ background: getColor(k, chart_data.two_word_phrases_products.data[d.index].length), width: w.doc_count/d.doc_count*100+'%'}"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="column" v-for="d in chart_data.three_word_phrases_brands.meta.labels"
+                     v-if="chart_data.three_word_phrases_brands.data[d.index].length">
+                    <div class="ui segment chart-container" style="height: 100%;">
+                        <h5 class="ui sub">Three word related topics for brand: {{ d.label }}
+                            <span class="longTooltip" data-tooltip="15 most commonly found three-word phrases in the documents that are retrieved based on the analysis settings per brand.">
+                                <i class="icon info"></i>
+                            </span>
+                        </h5>
+                        <div :id="'chart_thwpb_'+d.index+'_export'" class="chart-export"></div>
+                        <div class="ui pointing secondary menu">
+                            <a class="item orange active" :data-tab="'chart_thwpb_'+d.index+'_list'">List</a>
+                            <a class="item orange" :data-tab="'chart_thwpb_'+d.index+'_chart'">Chart</a>
+                        </div>
+                        <div :id="'chart_thwpb_'+d.index" style="height: 230px;" :data-tab="'chart_thwpb_'+d.index+'_chart'"
+                             class="ui bottom attached tab"></div>
+                        <div :id="'chart_thwpb_'+d.index+'_list'" style="min-height: 240px;" :data-tab="'chart_thwpb_'+d.index+'_list'"
+                             class="ui bottom attached tab active">
+                            <div :id="'chart_thwpb_'+d.index" class="ui three stackable cards">
+                                <div v-for="(w,k) in chart_data.three_word_phrases_brands.data[d.index]" class="card" :data-tooltip="'No. of post: '+w.doc_count">
+                                    <div class="content">{{ w.key }}</div>
+                                    <div class="ui bottom attached progress">
+                                        <div class="bar" :style="{ background: getColor(k, chart_data.three_word_phrases_brands.data[d.index].length), width: w.doc_count/d.doc_count*100+'%'}"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="column" v-for="d in chart_data.three_word_phrases_products.meta.labels"
+                     v-if="chart_data.three_word_phrases_products.data[d.index].length">
+                    <div class="ui segment chart-container" style="height: 100%;">
+                        <h5 class="ui sub">Three word related topics for product: {{ d.label }}
+                            <span class="longTooltip" data-tooltip="15 most commonly found three-word phrases in the documents that are retrieved based on the analysis settings per product.">
+                                <i class="icon info"></i>
+                            </span>
+                        </h5>
+                        <div :id="'chart_thwpp_'+d.index+'_export'" class="chart-export"></div>
+                        <div class="ui pointing secondary menu">
+                            <a class="item orange active" :data-tab="'chart_thwpp_'+d.index+'_list'">List</a>
+                            <a class="item orange" :data-tab="'chart_thwpp_'+d.index+'_chart'">Chart</a>
+                        </div>
+                        <div :id="'chart_thwpp_'+d.index" style="height: 230px;" :data-tab="'chart_thwpp_'+d.index+'_chart'"
+                             class="ui bottom attached tab"></div>
+                        <div :id="'chart_thwpp_'+d.index+'_list'" style="min-height: 240px;" :data-tab="'chart_thwpp_'+d.index+'_list'"
+                             class="ui bottom attached tab active">
+                            <div :id="'chart_thwpp_'+d.index" class="ui three stackable cards">
+                                <div v-for="(w,k) in chart_data.three_word_phrases_products.data[d.index]" class="card" :data-tooltip="'No. of post: '+w.doc_count">
+                                    <div class="content">{{ w.key }}</div>
+                                    <div class="ui bottom attached progress">
+                                        <div class="bar" :style="{ background: getColor(k, chart_data.three_word_phrases_products.data[d.index].length), width: w.doc_count/d.doc_count*100+'%'}"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
+        </template>
     </div>
-
-
-
 </template>
 
 <script>
+    import ColorService from '../service/colorService'
 
     export default {
-        props: ['analysis', 'analysis_id', 'chart_data'],
-        data() {
-            return {
-
-            };
-        },
+        props: ['analysis', 'analysis_type', 'analysis_id', 'chart_data'],
         created () {
-            var hexColors = function(t) {
-                t = parseInt(t);
-                // distribute the colors evenly on
-                // the hue range (the 'H' in HSV)
-                var i = 350 / t;
-
-                // hold the generated colors
-                var r = [];
-                var sv = 70;
-                for (var x = 0; x < t; x++) {
-                    // alternate the s, v for more
-                    // contrast between the colors.
-                    sv = sv > 90 ? 70 : sv+10;
-                    var rgb = hsvToRgb(i * x, sv, sv);
-                    r.push(rgbToHex(rgb[0],rgb[1],rgb[2]));
-                }
-                return r;
-            };
-            /**
-             * HSV to RGB color conversion
-             *
-             * H runs from 0 to 360 degrees
-             * S and V run from 0 to 100
-             *
-             * Ported from the excellent java algorithm by Eugene Vishnevsky at:
-             * http://www.cs.rit.edu/~ncs/color/t_convert.html
-             */
-            var hsvToRgb = function(h, s, v) {
-                var r, g, b;
-                var i;
-                var f, p, q, t;
-
-                // Make sure our arguments stay in-range
-                h = Math.max(0, Math.min(360, h));
-                s = Math.max(0, Math.min(100, s));
-                v = Math.max(0, Math.min(100, v));
-
-                // We accept saturation and value arguments from 0 to 100 because that's
-                // how Photoshop represents those values. Internally, however, the
-                // saturation and value are calculated from a range of 0 to 1. We make
-                // That conversion here.
-                s /= 100;
-                v /= 100;
-
-                if (s == 0) {
-                    // Achromatic (grey)
-                    r = g = b = v;
-                    return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];
-                }
-
-                h /= 60; // sector 0 to 5
-                i = Math.floor(h);
-                f = h - i; // factorial part of h
-                p = v * (1 - s);
-                q = v * (1 - s * f);
-                t = v * (1 - s * (1 - f));
-
-                switch (i) {
-                    case 0:
-                        r = v;
-                        g = t;
-                        b = p;
-                        break;
-
-                    case 1:
-                        r = q;
-                        g = v;
-                        b = p;
-                        break;
-
-                    case 2:
-                        r = p;
-                        g = v;
-                        b = t;
-                        break;
-
-                    case 3:
-                        r = p;
-                        g = q;
-                        b = v;
-                        break;
-
-                    case 4:
-                        r = t;
-                        g = p;
-                        b = v;
-                        break;
-
-                    default: // case 5:
-                        r = v;
-                        g = p;
-                        b = q;
-                }
-
-                return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];
-            };
-            function componentToHex(c) {
-                var hex = c.toString(16);
-                return hex.length == 1 ? "0" + hex : hex;
-            }
-            function rgbToHex(r, g, b) {
-                return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
-            }
-
+            var exportFields = ["key", "doc_count"];
             AmCharts.makeChart("chart_overall_timeline",
                 {
-                    "path": "/images/amcharts/",
+                    "path": "/vendor/amcharts/",
                     "type": "serial",
                     "marginRight": 20,
                     "marginLeft": 0,
@@ -200,6 +340,7 @@
                         {
                             "type": "line",
                             "balloonText": "<b>[[value]]</b>",
+                            "title": "No. of posts",
                             "valueField": "doc_count",
                             "fillAlphas": 0.2,
                             "bullet": "round",
@@ -221,11 +362,19 @@
                         "valueLineAlpha":0.2,
                         "valueZoomable":true
                     },
-                    "dataProvider": this.chart_data.overall_timeline.timeline
+                    "creditsPosition": "top-left",
+                    "dataProvider": this.chart_data.overall_timeline.timeline,
+                    "export": {
+                        "enabled": true,
+                        "exportTitles": true,
+                        "exportFields": exportFields,
+                        "divId": "chart_overall_timeline" + "_export"
+                    }
                 }
             );
-            var colors = hexColors(this.chart_data.timelines.meta.graphs);
+
             var graphs = [];
+            exportFields = ["key"];
             for (var i=0;i<this.chart_data.timelines.meta.graphs;i++){
                 graphs.push({
                     "type": "line",
@@ -236,12 +385,13 @@
                     "bullet": "round",
                     "hideBulletsCount": 50,
                     "bulletSize": 4,
-                    "lineColor": colors[i]
-                })
+                    "lineColor":  ColorService.getColor(i, this.chart_data.timelines.meta.graphs)
+                });
+                exportFields.push(this.chart_data.timelines.meta.valueFieldPrefix + i);
             }
             AmCharts.makeChart("chart_timeline",
                 {
-                    "path": "/images/amcharts/",
+                    "path": "/vendor/amcharts/",
                     "type": "serial",
                     "marginRight": 20,
                     "marginLeft": 0,
@@ -270,99 +420,77 @@
                         "valueLineAlpha":0.2,
                         "valueZoomable":true
                     },
-                    "dataProvider": this.chart_data.timelines.data
+                    "creditsPosition": "top-left",
+                    "dataProvider": this.chart_data.timelines.data,
+                    "export": {
+                        "enabled": true,
+                        "exportTitles": true,
+                        "exportFields": exportFields,
+                        "divId": "chart_timeline" + "_export"
+                    }
                 }
             );
 
-            for (var index = 0; index < this.chart_data.two_word_phrases.meta.graphs; index++) {
-                if (this.chart_data.two_word_phrases.data[index].length === 0){
-                    continue;
+            if (this.analysis_type == 'trend') {
+                for (var index = 0; index < this.chart_data.two_word_phrases.meta.graphs; index++) {
+                    if (this.chart_data.two_word_phrases.data[index].length === 0){
+                        continue;
+                    }
+                    exportFields = ["key", "doc_count"];
+                    AmCharts.makeChart('chart_twp_' + index,
+                        {
+                            "path": "/vendor/amcharts/",
+                            "type": "pie",
+                            "valueField": "doc_count",
+                            "titleField": "key",
+//                            "labelsEnabled": false,
+//                            "hideLabelsPercent": 2,
+                            "marginBottom": 0,
+                            "marginTop": 0,
+                            "labelText": "[[title]]",
+                            "colors": ColorService.getColor(-1, this.chart_data.two_word_phrases.data[index].length),
+                            "sequencedAnimation": false,
+                            "creditsPosition": "top-right",
+                            "dataProvider": this.chart_data.two_word_phrases.data[index],
+                            "export": {
+                                "enabled": true,
+                                "exportTitles": true,
+                                "exportFields": exportFields,
+                                "columnNames": {
+                                    "key": "Concept",
+                                    "doc_count": "No. of posts"
+                                },
+                                "divId": 'chart_twp_' + index + "_export"
+                            }
+                        });
                 }
-                AmCharts.makeChart('chart_twp_' + index,
-                    {
-                        "path": "/images/amcharts/",
-                        "type": "pie",
-                        "valueField": "doc_count",
-                        "titleField": "key",
-                        "labelsEnabled": false,
-                        "sequencedAnimation": false,
-                        "dataProvider": this.chart_data.two_word_phrases.data[index]
-                    });
-            }
 
-            colors = hexColors(this.chart_data.concept_timelines.meta.graphs);
-            graphs = [];
-            for (var i=0;i<this.chart_data.concept_timelines.meta.graphs;i++){
-                graphs.push({
-                    "type": "line",
-                    "title": this.chart_data.concept_timelines.meta.labels[i].label,
-                    "valueField": this.chart_data.concept_timelines.meta.valueFieldPrefix + i,
-                    "balloonText": "[[title]]: <b>[[value]]</b>",
-                    "fillAlphas": 0.2,
-                    "bullet": "round",
-                    "hideBulletsCount": 50,
-                    "bulletSize": 4,
-                    "lineColor": colors[i]
-                });
-            }
-            AmCharts.makeChart("chart_concept_timeline",
-                {
-                    "path": "/images/amcharts/",
-                    "type": "serial",
-                    "marginRight": 20,
-                    "marginLeft": 0,
-                    "categoryField": "key",
-                    "categoryAxis": {
-                        "parseDates": true,
-                        "title": "Time",
-                        "titleBold": false
-                    },
-                    "graphs": graphs,
-                    "valueAxes": [ {
-                        "position": "left",
-                        "title": "No. of posts",
-                        "titleBold": false
-                    }],
-                    "chartScrollbar": {
-                        "oppositeAxis":false,
-                    },
-                    "mouseWheelZoomEnabled":true,
-                    "chartCursor": {
-                        "pan": true,
-                        "valueLineEnabled": true,
-                        "valueLineBalloonEnabled": true,
-                        "cursorAlpha":1,
-                        "cursorColor":"#258cbb",
-                        "valueLineAlpha":0.2,
-                        "valueZoomable":true
-                    },
-                    "dataProvider": this.chart_data.concept_timelines.data
-                }
-            );
-
-            for (var j = 0; j < this.chart_data.conceptParametersFacets.length; j++) {
-                var colors = hexColors(this.chart_data.conceptParametersFacets[j].meta.graphs);
-                var graphs = [];
-                for (var i=0;i<this.chart_data.conceptParametersFacets[j].meta.graphs;i++){
+                graphs = [];
+                exportFields = ["key"];
+                for (var i=0;i<this.chart_data.concept_timelines.meta.graphs;i++){
                     graphs.push({
-                        "type": "column",
-                        "title": this.chart_data.conceptParametersFacets[j].meta.labels[i].label,
-                        "valueField": this.chart_data.conceptParametersFacets[j].meta.valueFieldPrefix + i,
+                        "type": "line",
+                        "title": this.chart_data.concept_timelines.meta.labels[i].label,
+                        "valueField": this.chart_data.concept_timelines.meta.valueFieldPrefix + i,
                         "balloonText": "[[title]]: <b>[[value]]</b>",
-                        "fillAlphas": 1,
-                        "lineColor": colors[i]
-                    })
+                        "fillAlphas": 0.2,
+                        "bullet": "round",
+                        "hideBulletsCount": 50,
+                        "bulletSize": 4,
+                        "lineColor":  ColorService.getColor(i, this.chart_data.concept_timelines.meta.graphs)
+                    });
+                    exportFields.push(this.chart_data.concept_timelines.meta.valueFieldPrefix + i);
                 }
-                AmCharts.makeChart('chart_cpf_'+j,
+                AmCharts.makeChart("chart_concept_timeline",
                     {
-                        "path": "/images/amcharts/",
+                        "path": "/vendor/amcharts/",
                         "type": "serial",
                         "marginRight": 20,
                         "marginLeft": 0,
                         "categoryField": "key",
                         "categoryAxis": {
-                            "parseDates": false,
-                            "title": this.chart_data.conceptParametersFacets[j].meta.parameter.name,
+                            "parseDates": true,
+                            "title": "Time",
                             "titleBold": false
                         },
                         "graphs": graphs,
@@ -371,10 +499,244 @@
                             "title": "No. of posts",
                             "titleBold": false
                         }],
+                        "chartScrollbar": {
+                            "oppositeAxis":false,
+                        },
+                        "mouseWheelZoomEnabled":true,
+                        "chartCursor": {
+                            "pan": true,
+                            "valueLineEnabled": true,
+                            "valueLineBalloonEnabled": true,
+                            "cursorAlpha":1,
+                            "cursorColor":"#258cbb",
+                            "valueLineAlpha":0.2,
+                            "valueZoomable":true
+                        },
+                        "creditsPosition": "top-left",
+                        "dataProvider": this.chart_data.concept_timelines.data,
+                        "export": {
+                            "enabled": true,
+                            "exportTitles": true,
+                            "exportFields": exportFields,
+                            "divId": "chart_concept_timeline" + "_export"
+                        }
+                    }
+                );
+
+                for (var j = 0; j < this.chart_data.conceptParametersFacets.length; j++) {
+                    var graphs = [];
+                    exportFields = ["key"];
+                    for (var i=0;i<this.chart_data.conceptParametersFacets[j].meta.graphs;i++){
+                        graphs.push({
+                            "type": "column",
+                            "title": this.chart_data.conceptParametersFacets[j].meta.labels[i].label,
+                            "valueField": this.chart_data.conceptParametersFacets[j].meta.valueFieldPrefix + i,
+                            "balloonText": "[[title]]: <b>[[value]]</b>",
+                            "fillAlphas": 1,
+                            "lineColor": ColorService.getColor(i, this.chart_data.conceptParametersFacets[j].meta.graphs)
+                        });
+                        exportFields.push(this.chart_data.conceptParametersFacets[j].meta.valueFieldPrefix + i);
+                    }
+                    AmCharts.makeChart('chart_cpf_'+j,
+                        {
+                            "path": "/vendor/amcharts/",
+                            "type": "serial",
+                            "marginRight": 20,
+                            "marginLeft": 0,
+                            "categoryField": "key",
+                            "categoryAxis": {
+                                "parseDates": false,
+                                "title": this.chart_data.conceptParametersFacets[j].meta.parameter.name,
+                                "titleBold": false
+                            },
+                            "graphs": graphs,
+                            "valueAxes": [ {
+                                "position": "left",
+                                "title": "No. of posts",
+                                "titleBold": false
+                            }],
 //                        "chartScrollbar": {
 //                            "oppositeAxis":false,
 //                        },
 //                        "mouseWheelZoomEnabled":true,
+                            "chartCursor": {
+//                            "pan": true,
+                                "valueLineEnabled": true,
+                                "valueLineBalloonEnabled": true,
+                                "cursorAlpha":1,
+                                "cursorColor":"#258cbb",
+                                "valueLineAlpha":0.2,
+//                            "valueZoomable":true
+                            },
+                            "creditsPosition": "top-right",
+                            "dataProvider": this.chart_data.conceptParametersFacets[j].data,
+                            "export": {
+                                "enabled": true,
+                                "exportTitles": true,
+                                "exportFields": exportFields,
+                                "divId": 'chart_cpf_' + j + "_export"
+                            }
+                        }
+                    );
+                }
+            } else if (this.analysis_type == 'social') {
+                var chart = this.chart_data.brand_timelines;
+                graphs = [];
+                exportFields = ["key"];
+                for (var i=0;i<chart.meta.graphs;i++){
+                    graphs.push({
+                        "type": "line",
+                        "title": chart.meta.labels[i].label,
+                        "valueField": chart.meta.valueFieldPrefix + i,
+                        "balloonText": "[[title]]: <b>[[value]]</b>",
+                        "fillAlphas": 0.2,
+                        "bullet": "round",
+                        "hideBulletsCount": 50,
+                        "bulletSize": 4,
+                        "lineColor": ColorService.getColor(i, chart.meta.graphs)
+                    });
+                    exportFields.push(chart.meta.valueFieldPrefix + i);
+                }
+                AmCharts.makeChart("chart_brand_timelines",
+                    {
+                        "path": "/vendor/amcharts/",
+                        "type": "serial",
+                        "marginRight": 20,
+                        "marginLeft": 0,
+                        "categoryField": "key",
+                        "categoryAxis": {
+                            "parseDates": true,
+                            "title": "Time",
+                            "titleBold": false
+                        },
+                        "graphs": graphs,
+                        "valueAxes": [ {
+                            "position": "left",
+                            "title": "No. of posts",
+                            "titleBold": false
+                        }],
+                        "chartScrollbar": {
+                            "oppositeAxis":false,
+                        },
+                        "mouseWheelZoomEnabled":true,
+                        "chartCursor": {
+                            "pan": true,
+                            "valueLineEnabled": true,
+                            "valueLineBalloonEnabled": true,
+                            "cursorAlpha":1,
+                            "cursorColor":"#258cbb",
+                            "valueLineAlpha":0.2,
+                            "valueZoomable":true
+                        },
+                        "creditsPosition": "top-left",
+                        "dataProvider": chart.data,
+                        "export": {
+                            "enabled": true,
+                            "exportTitles": true,
+                            "exportFields": exportFields,
+                            "divId": "chart_brand_timelines" + "_export"
+                        }
+                    }
+                );
+
+                chart = this.chart_data.product_timelines;
+                graphs = [];
+                exportFields = ["key"];
+                for (var i=0;i<chart.meta.graphs;i++){
+                    graphs.push({
+                        "type": "line",
+                        "title": chart.meta.labels[i].label,
+                        "valueField": chart.meta.valueFieldPrefix + i,
+                        "balloonText": "[[title]]: <b>[[value]]</b>",
+                        "fillAlphas": 0.2,
+                        "bullet": "round",
+                        "hideBulletsCount": 50,
+                        "bulletSize": 4,
+                        "lineColor": ColorService.getColor(i, chart.meta.graphs)
+                    });
+                    exportFields.push(chart.meta.valueFieldPrefix + i);
+                }
+                AmCharts.makeChart("chart_product_timelines",
+                    {
+                        "path": "/vendor/amcharts/",
+                        "type": "serial",
+                        "marginRight": 20,
+                        "marginLeft": 0,
+                        "categoryField": "key",
+                        "categoryAxis": {
+                            "parseDates": true,
+                            "title": "Time",
+                            "titleBold": false
+                        },
+                        "graphs": graphs,
+                        "valueAxes": [ {
+                            "position": "left",
+                            "title": "No. of posts",
+                            "titleBold": false
+                        }],
+                        "chartScrollbar": {
+                            "oppositeAxis":false,
+                        },
+                        "mouseWheelZoomEnabled":true,
+                        "chartCursor": {
+                            "pan": true,
+                            "valueLineEnabled": true,
+                            "valueLineBalloonEnabled": true,
+                            "cursorAlpha":1,
+                            "cursorColor":"#258cbb",
+                            "valueLineAlpha":0.2,
+                            "valueZoomable":true
+                        },
+                        "creditsPosition": "top-left",
+                        "dataProvider": chart.data,
+                        "export": {
+                            "enabled": true,
+                            "exportTitles": true,
+                            "exportFields": exportFields,
+                            "divId": "chart_product_timelines" + "_export"
+                        }
+                    }
+                );
+
+                chart = this.chart_data.sentiments;
+                let colors = {
+                    'negative': '#cc2929',
+                    'neutral': '#999999',
+                    'positive': '#04D215'
+                };
+                for (var i=0;i<chart.length;i++) {
+                    chart[i].color = colors[chart[i].name];
+                }
+                graphs = [];
+                graphs.push({
+                    "type": "column",
+                    "valueField": 'count',
+                    "title": "No. of posts",
+                    "balloonText": "[[category]]: <b>[[value]]</b>",
+                    "fillAlphas": 1,
+                    "fillColorsField": "color",
+                    "lineColorField": "color"
+                });
+                exportFields = ["name", "count"];
+                AmCharts.makeChart("chart_sentiments",
+                    {
+                        "path": "/vendor/amcharts/",
+                        "type": "serial",
+                        "marginRight": 20,
+                        "marginLeft": 0,
+                        "categoryField": "name",
+                        "title": "Sentiment",
+                        "categoryAxis": {
+                            "parseDates": false,
+                            "title": "Sentiment",
+                            "titleBold": false
+                        },
+                        "graphs": graphs,
+                        "valueAxes": [ {
+                            "position": "left",
+                            "title": "No. of posts",
+                            "titleBold": false
+                        }],
                         "chartCursor": {
 //                            "pan": true,
                             "valueLineEnabled": true,
@@ -384,13 +746,254 @@
                             "valueLineAlpha":0.2,
 //                            "valueZoomable":true
                         },
-                        "dataProvider": this.chart_data.conceptParametersFacets[j].data
+                        "creditsPosition": "top-right",
+                        "dataProvider": chart,
+                        "export": {
+                            "enabled": true,
+                            "exportTitles": true,
+                            "exportFields": exportFields,
+                            "divId": "chart_sentiments" + "_export"
+                        }
                     }
                 );
+
+                chart = this.chart_data.one_word_phrases_brands;
+                for (var index = 0; index < chart.meta.graphs; index++) {
+                    if (chart.data[index].length === 0){
+                        continue;
+                    }
+                    exportFields = ["key", "doc_count"];
+                    AmCharts.makeChart('chart_owpb_' + index,
+                        {
+                            "path": "/vendor/amcharts/",
+                            "type": "pie",
+                            "valueField": "doc_count",
+                            "titleField": "key",
+//                            "labelsEnabled": false,
+//                            "hideLabelsPercent": 2,
+                            "marginBottom": 0,
+                            "marginTop": 0,
+                            "labelText": "[[title]]",
+                            "colors": ColorService.getColor(-1, chart.data[index].length),
+                            "sequencedAnimation": false,
+                            "creditsPosition": "top-right",
+                            "dataProvider": chart.data[index],
+                            "export": {
+                                "enabled": true,
+                                "exportTitles": true,
+                                "exportFields": exportFields,
+                                "columnNames": {
+                                    "key": "Words",
+                                    "doc_count": "No. of posts"
+                                },
+                                "divId": 'chart_owpb_' + index + "_export"
+                            }
+                        });
+                }
+                chart = this.chart_data.one_word_phrases_products;
+                for (var index = 0; index < chart.meta.graphs; index++) {
+                    if (chart.data[index].length === 0){
+                        continue;
+                    }
+                    exportFields = ["key", "doc_count"];
+                    AmCharts.makeChart('chart_owpp_' + index,
+                        {
+                            "path": "/vendor/amcharts/",
+                            "type": "pie",
+                            "valueField": "doc_count",
+                            "titleField": "key",
+//                            "labelsEnabled": false,
+//                            "hideLabelsPercent": 2,
+                            "marginBottom": 0,
+                            "marginTop": 0,
+                            "labelText": "[[title]]",
+                            "colors": ColorService.getColor(-1, chart.data[index].length),
+                            "sequencedAnimation": false,
+                            "creditsPosition": "top-right",
+                            "dataProvider": chart.data[index],
+                            "export": {
+                                "enabled": true,
+                                "exportTitles": true,
+                                "exportFields": exportFields,
+                                "columnNames": {
+                                    "key": "Words",
+                                    "doc_count": "No. of posts"
+                                },
+                                "divId": 'chart_owpp_' + index + "_export"
+                            }
+                        });
+                }
+
+                chart = this.chart_data.two_word_phrases_brands;
+                for (var index = 0; index < chart.meta.graphs; index++) {
+                    if (chart.data[index].length === 0){
+                        continue;
+                    }
+                    exportFields = ["key", "doc_count"];
+                    AmCharts.makeChart('chart_twpb_' + index,
+                        {
+                            "path": "/vendor/amcharts/",
+                            "type": "pie",
+                            "valueField": "doc_count",
+                            "titleField": "key",
+//                            "labelsEnabled": false,
+//                            "hideLabelsPercent": 2,
+                            "marginBottom": 0,
+                            "marginTop": 0,
+                            "labelText": "[[title]]",
+                            "colors": ColorService.getColor(-1, chart.data[index].length),
+                            "sequencedAnimation": false,
+                            "creditsPosition": "top-right",
+                            "dataProvider": chart.data[index],
+                            "export": {
+                                "enabled": true,
+                                "exportTitles": true,
+                                "exportFields": exportFields,
+                                "columnNames": {
+                                    "key": "Words",
+                                    "doc_count": "No. of posts"
+                                },
+                                "divId": 'chart_twpb_' + index + "_export"
+                            }
+                        });
+                }
+                chart = this.chart_data.two_word_phrases_products;
+                for (var index = 0; index < chart.meta.graphs; index++) {
+                    if (chart.data[index].length === 0){
+                        continue;
+                    }
+                    exportFields = ["key", "doc_count"];
+                    AmCharts.makeChart('chart_twpp_' + index,
+                        {
+                            "path": "/vendor/amcharts/",
+                            "type": "pie",
+                            "valueField": "doc_count",
+                            "titleField": "key",
+//                            "labelsEnabled": false,
+//                            "hideLabelsPercent": 2,
+                            "marginBottom": 0,
+                            "marginTop": 0,
+                            "labelText": "[[title]]",
+                            "colors": ColorService.getColor(-1, chart.data[index].length),
+                            "sequencedAnimation": false,
+                            "creditsPosition": "top-right",
+                            "dataProvider": chart.data[index],
+                            "export": {
+                                "enabled": true,
+                                "exportTitles": true,
+                                "exportFields": exportFields,
+                                "columnNames": {
+                                    "key": "Words",
+                                    "doc_count": "No. of posts"
+                                },
+                                "divId": 'chart_twpp_' + index + "_export"
+                            }
+                        });
+                }
+
+                chart = this.chart_data.three_word_phrases_brands;
+                for (var index = 0; index < chart.meta.graphs; index++) {
+                    if (chart.data[index].length === 0){
+                        continue;
+                    }
+                    exportFields = ["key", "doc_count"];
+                    AmCharts.makeChart('chart_thwpb_' + index,
+                        {
+                            "path": "/vendor/amcharts/",
+                            "type": "pie",
+                            "valueField": "doc_count",
+                            "titleField": "key",
+//                            "labelsEnabled": false,
+//                            "hideLabelsPercent": 2,
+                            "marginBottom": 0,
+                            "marginTop": 0,
+                            "labelText": "[[title]]",
+                            "colors": ColorService.getColor(-1, chart.data[index].length),
+                            "sequencedAnimation": false,
+                            "creditsPosition": "top-right",
+                            "dataProvider": chart.data[index],
+                            "export": {
+                                "enabled": true,
+                                "exportTitles": true,
+                                "exportFields": exportFields,
+                                "columnNames": {
+                                    "key": "Words",
+                                    "doc_count": "No. of posts"
+                                },
+                                "divId": 'chart_thwpb_' + index + "_export"
+                            }
+                        });
+                }
+                chart = this.chart_data.three_word_phrases_products;
+                for (var index = 0; index < chart.meta.graphs; index++) {
+                    if (chart.data[index].length === 0){
+                        continue;
+                    }
+                    exportFields = ["key", "doc_count"];
+                    AmCharts.makeChart('chart_thwpp_' + index,
+                        {
+                            "path": "/vendor/amcharts/",
+                            "type": "pie",
+                            "valueField": "doc_count",
+                            "titleField": "key",
+//                            "labelsEnabled": false,
+//                            "hideLabelsPercent": 2,
+                            "marginBottom": 0,
+                            "marginTop": 0,
+                            "labelText": "[[title]]",
+                            "colors": ColorService.getColor(-1, chart.data[index].length),
+                            "sequencedAnimation": false,
+                            "creditsPosition": "top-right",
+                            "dataProvider": chart.data[index],
+                            "export": {
+                                "enabled": true,
+                                "exportTitles": true,
+                                "exportFields": exportFields,
+                                "columnNames": {
+                                    "key": "Words",
+                                    "doc_count": "No. of posts"
+                                },
+                                "divId": 'chart_thwpp_' + index + "_export"
+                            }
+                        });
+                }
+
             }
         },
         methods: {
-
+            getColor: ColorService.getColor
         }
     }
 </script>
+<style>
+    .ui.container.analysis .ui.progress.attached .bar {
+        min-width: inherit;
+    }
+
+    .ui.segment .chart-export > .amcharts-export-menu,
+    .ui.segment .chart-export > .amcharts-export-menu.active {
+        opacity: 0.3;
+    }
+    .ui.segment:hover .chart-export > .amcharts-export-menu,
+    .ui.segment:hover .chart-export > .amcharts-export-menu.active {
+        opacity: 0.6;
+    }
+    .ui.segment:hover .chart-export > .amcharts-export-menu:hover,
+    .ui.segment:hover .chart-export > .amcharts-export-menu:hover.active {
+        opacity: 0.9;
+    }
+
+    .chart-container .ui.secondary.pointing.menu {
+        min-height: 0px;
+    }
+    .chart-container .ui.secondary.pointing.menu .item {
+        padding-top: 0px;
+    }
+
+    .chart-container .ui.cards>.card{
+        margin: 0.44em 1em;
+    }
+    .chart-container .ui.cards>.card>.content{
+        padding: .6em;
+    }
+</style>

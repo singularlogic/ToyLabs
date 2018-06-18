@@ -4,7 +4,7 @@
             <input type="hidden" name="_token" :value="$parent.crsf" />
 
             <div class="ui pointing secondary menu">
-                <a class="item orange" data-tab="configuration">Custom Settings</a>
+                <a class="item orange active" data-tab="configuration">Custom Settings</a>
                 <a class="item orange" data-tab="timesettings">Time Settings</a>
                 <a class="item orange" data-tab="conceptsettings">Concepts' Settings</a>
             </div>
@@ -23,6 +23,7 @@
                         Use ‘ for exact phrases and ! to exclude a term/phrase.
                     </small>
                     <div class="ui info message">
+                        <i class="info icon"></i>
                         For example by pressing <strong>toy, cube, ‘puzzle toy, !sphere</strong> the tool will search in social media for posts that
                         include the words “toy” and “cube”, the exact phrase “puzzle toy” and exclude results that include the word
                         “sphere”. In other words this search will return results relevant to puzzle toys that are shaped like cubes but not like spheres.
@@ -65,7 +66,10 @@
 
             </div>
             <div class="ui bottom attached tab" data-tab="timesettings">
-
+                <div class="ui info message">
+                    <i class="info icon"></i>
+                    Provide the time period for data retrieval of the analysis.
+                </div>
                 <div class="field">
                     <label>From date</label>
                         <datepicker
@@ -96,6 +100,7 @@
 
             <div class="ui bottom attached tab" data-tab="conceptsettings">
                 <div class="ui info message">
+                    <i class="info icon"></i>
                     Provide specific meaningful <strong>concepts of interest</strong> (e.g. baby dolls) and <strong>parameters</strong> (e.g. colour, material)
                     that will be presented and formulate the visualisations accordingly in order to be provided with useful
                     and meaningful information customized to your needs.

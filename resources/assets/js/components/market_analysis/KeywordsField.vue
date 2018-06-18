@@ -157,4 +157,7 @@
    .taginput.readonly.dropdown, .taginput.readonly.dropdown>input.search {
        cursor: inherit !important;
    }
+   .taginput.readonly.ui.selection.dropdown {
+       background-color: inherit;
+   }
 </style>

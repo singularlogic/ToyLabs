@@ -8,8 +8,9 @@
             <div class="ui clearing divider"></div>
             <analysis
                     :analysis="{{ json_encode($analysis) }}"
+                    analysis_type="{{ $analysis_type }}"
                     :chart_data="{{ json_encode($chart_data) }}"
-                    :analysis_id="{{ $analysis_id }}"
+                    analysis_id="{{ $analysis_id }}"
             ></analysis>
 
 

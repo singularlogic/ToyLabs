@@ -5,7 +5,7 @@
                 <th class="two wide">Type</th>
                 <th class="ten wide">Name</th>
                 <th class="one wide">Influencer</th>
-                <th class="two wide">Actions</th>
+                <th class="two wide" v-if="!readonly">Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -18,21 +18,21 @@
                 <td class="center aligned">
                     <i v-if="account.is_influencer" class="large green checkmark icon"></i>
                 </td>
-                <td class="collapsing">
+                <td class="collapsing" v-if="!readonly">
                     <button type="button" class="ui mini red icon button" data-tooltip="Delete Account" @click="removeAccount(account)">
                         <i class="trash icon"></i>
                     </button>
                 </td>
             </tr>
         </tbody>
-        <tfoot v-if="!insertAccountMode">
+        <tfoot v-if="!readonly && !insertAccountMode">
             <th colspan="5">
                 <div class="ui right floated small primary labeled icon button" @click="addAccount()">
                     <i class="marker icon"></i> Add Account
                 </div>
             </th>
         </tfoot>
-        <tfoot v-if="insertAccountMode">
+        <tfoot v-if="!readonly && insertAccountMode">
             <tr>
                 <th>
                     <select class="ui search dropdown" v-model="newAccount.source">
@@ -62,7 +62,10 @@
 
 <script>
     export default {
-        props: ['value'],
+        props: {
+            value: Array,
+            readonly: Boolean
+        },
         data() {
             return {
                 insertAccountMode: false,
