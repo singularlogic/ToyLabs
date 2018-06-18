@@ -512,7 +512,7 @@
                             "valueLineAlpha":0.2,
                             "valueZoomable":true
                         },
-                        "creditsPosition": "top-right",
+                        "creditsPosition": "top-left",
                         "dataProvider": this.chart_data.concept_timelines.data,
                         "export": {
                             "enabled": true,
