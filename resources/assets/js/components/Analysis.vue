@@ -141,13 +141,21 @@
                 </div>
                 <div class="column" v-for="d in chart_data.one_word_phrases_brands.meta.labels"
                      v-if="chart_data.one_word_phrases_brands.data[d.index].length">
-                    <div class="ui segment" style="height: 100%;">
+                    <div class="ui segment chart-container" style="height: 100%;">
                         <h5 class="ui sub">One word related topics for brand: {{ d.label }}
                             <span class="longTooltip" data-tooltip="15 most commonly found one-word phrases in the documents that are retrieved based on the analysis settings per product.">
                                 <i class="icon info"></i>
                             </span>
                         </h5>
-                        <div style="min-height: 250px;">
+                        <div :id="'chart_owpb_'+d.index+'_export'" class="chart-export"></div>
+                        <div class="ui pointing secondary menu">
+                            <a class="item orange active" :data-tab="'chart_owpb_'+d.index+'_list'">List</a>
+                            <a class="item orange" :data-tab="'chart_owpb_'+d.index+'_chart'">Chart</a>
+                        </div>
+                        <div :id="'chart_owpb_'+d.index" style="height: 230px;" :data-tab="'chart_owpb_'+d.index+'_chart'"
+                             class="ui bottom attached tab"></div>
+                        <div :id="'chart_owpb_'+d.index+'_list'" style="min-height: 240px;" :data-tab="'chart_owpb_'+d.index+'_list'"
+                             class="ui bottom attached tab active">
                             <div :id="'chart_owpb_'+d.index" class="ui three stackable cards">
                                 <div v-for="(w,k) in chart_data.one_word_phrases_brands.data[d.index]" class="card" :data-tooltip="'No. of post: '+w.doc_count">
                                     <div class="content">{{ w.key }}</div>
@@ -161,13 +169,21 @@
                 </div>
                 <div class="column" v-for="d in chart_data.one_word_phrases_products.meta.labels"
                      v-if="chart_data.one_word_phrases_products.data[d.index].length">
-                    <div class="ui segment" style="height: 100%;">
+                    <div class="ui segment chart-container" style="height: 100%;">
                         <h5 class="ui sub">One word related topics for product: {{ d.label }}
                             <span class="longTooltip" data-tooltip="15 most commonly found one-word phrases in the documents that are retrieved based on the analysis settings per product.">
                                 <i class="icon info"></i>
                             </span>
                         </h5>
-                        <div style="min-height: 250px;">
+                        <div :id="'chart_owpp_'+d.index+'_export'" class="chart-export"></div>
+                        <div class="ui pointing secondary menu">
+                            <a class="item orange active" :data-tab="'chart_owpp_'+d.index+'_list'">List</a>
+                            <a class="item orange" :data-tab="'chart_owpp_'+d.index+'_chart'">Chart</a>
+                        </div>
+                        <div :id="'chart_owpp_'+d.index" style="height: 230px;" :data-tab="'chart_owpp_'+d.index+'_chart'"
+                             class="ui bottom attached tab"></div>
+                        <div :id="'chart_owpp_'+d.index+'_list'" style="min-height: 240px;" :data-tab="'chart_owpp_'+d.index+'_list'"
+                             class="ui bottom attached tab active">
                             <div :id="'chart_owpp_'+d.index" class="ui three stackable cards">
                                 <div v-for="(w,k) in chart_data.one_word_phrases_products.data[d.index]" class="card" :data-tooltip="'No. of post: '+w.doc_count">
                                     <div class="content">{{ w.key }}</div>
@@ -181,13 +197,21 @@
                 </div>
                 <div class="column" v-for="d in chart_data.two_word_phrases_brands.meta.labels"
                      v-if="chart_data.two_word_phrases_brands.data[d.index].length">
-                    <div class="ui segment" style="height: 100%;">
+                    <div class="ui segment chart-container" style="height: 100%;">
                         <h5 class="ui sub">Two word related topics for brand: {{ d.label }}
                             <span class="longTooltip" data-tooltip="15 most commonly found two-word phrases in the documents that are retrieved based on the analysis settings per brand.">
                                 <i class="icon info"></i>
                             </span>
                         </h5>
-                        <div style="min-height: 250px;">
+                        <div :id="'chart_twpb_'+d.index+'_export'" class="chart-export"></div>
+                        <div class="ui pointing secondary menu">
+                            <a class="item orange active" :data-tab="'chart_twpb_'+d.index+'_list'">List</a>
+                            <a class="item orange" :data-tab="'chart_twpb_'+d.index+'_chart'">Chart</a>
+                        </div>
+                        <div :id="'chart_twpb_'+d.index" style="height: 230px;" :data-tab="'chart_twpb_'+d.index+'_chart'"
+                             class="ui bottom attached tab"></div>
+                        <div :id="'chart_twpb_'+d.index+'_list'" style="min-height: 240px;" :data-tab="'chart_twpb_'+d.index+'_list'"
+                             class="ui bottom attached tab active">
                             <div :id="'chart_twpb_'+d.index" class="ui three stackable cards">
                                 <div v-for="(w,k) in chart_data.two_word_phrases_brands.data[d.index]" class="card" :data-tooltip="'No. of post: '+w.doc_count">
                                     <div class="content">{{ w.key }}</div>
@@ -201,13 +225,21 @@
                 </div>
                 <div class="column" v-for="d in chart_data.two_word_phrases_products.meta.labels"
                      v-if="chart_data.two_word_phrases_products.data[d.index].length">
-                    <div class="ui segment" style="height: 100%;">
+                    <div class="ui segment chart-container" style="height: 100%;">
                         <h5 class="ui sub">Two word related topics for product: {{ d.label }}
                             <span class="longTooltip" data-tooltip="15 most commonly found two-word phrases in the documents that are retrieved based on the analysis settings per product.">
                                 <i class="icon info"></i>
                             </span>
                         </h5>
-                        <div style="min-height: 250px;">
+                        <div :id="'chart_twpp_'+d.index+'_export'" class="chart-export"></div>
+                        <div class="ui pointing secondary menu">
+                            <a class="item orange active" :data-tab="'chart_twpp_'+d.index+'_list'">List</a>
+                            <a class="item orange" :data-tab="'chart_twpp_'+d.index+'_chart'">Chart</a>
+                        </div>
+                        <div :id="'chart_twpp_'+d.index" style="height: 230px;" :data-tab="'chart_twpp_'+d.index+'_chart'"
+                             class="ui bottom attached tab"></div>
+                        <div :id="'chart_twpp_'+d.index+'_list'" style="min-height: 240px;" :data-tab="'chart_twpp_'+d.index+'_list'"
+                             class="ui bottom attached tab active">
                             <div :id="'chart_twpp_'+d.index" class="ui three stackable cards">
                                 <div v-for="(w,k) in chart_data.two_word_phrases_products.data[d.index]" class="card" :data-tooltip="'No. of post: '+w.doc_count">
                                     <div class="content">{{ w.key }}</div>
@@ -221,13 +253,21 @@
                 </div>
                 <div class="column" v-for="d in chart_data.three_word_phrases_brands.meta.labels"
                      v-if="chart_data.three_word_phrases_brands.data[d.index].length">
-                    <div class="ui segment" style="height: 100%;">
+                    <div class="ui segment chart-container" style="height: 100%;">
                         <h5 class="ui sub">Three word related topics for brand: {{ d.label }}
                             <span class="longTooltip" data-tooltip="15 most commonly found three-word phrases in the documents that are retrieved based on the analysis settings per brand.">
                                 <i class="icon info"></i>
                             </span>
                         </h5>
-                        <div style="min-height: 250px;">
+                        <div :id="'chart_thwpb_'+d.index+'_export'" class="chart-export"></div>
+                        <div class="ui pointing secondary menu">
+                            <a class="item orange active" :data-tab="'chart_thwpb_'+d.index+'_list'">List</a>
+                            <a class="item orange" :data-tab="'chart_thwpb_'+d.index+'_chart'">Chart</a>
+                        </div>
+                        <div :id="'chart_thwpb_'+d.index" style="height: 230px;" :data-tab="'chart_thwpb_'+d.index+'_chart'"
+                             class="ui bottom attached tab"></div>
+                        <div :id="'chart_thwpb_'+d.index+'_list'" style="min-height: 240px;" :data-tab="'chart_thwpb_'+d.index+'_list'"
+                             class="ui bottom attached tab active">
                             <div :id="'chart_thwpb_'+d.index" class="ui three stackable cards">
                                 <div v-for="(w,k) in chart_data.three_word_phrases_brands.data[d.index]" class="card" :data-tooltip="'No. of post: '+w.doc_count">
                                     <div class="content">{{ w.key }}</div>
@@ -241,13 +281,21 @@
                 </div>
                 <div class="column" v-for="d in chart_data.three_word_phrases_products.meta.labels"
                      v-if="chart_data.three_word_phrases_products.data[d.index].length">
-                    <div class="ui segment" style="height: 100%;">
+                    <div class="ui segment chart-container" style="height: 100%;">
                         <h5 class="ui sub">Three word related topics for product: {{ d.label }}
                             <span class="longTooltip" data-tooltip="15 most commonly found three-word phrases in the documents that are retrieved based on the analysis settings per product.">
                                 <i class="icon info"></i>
                             </span>
                         </h5>
-                        <div style="min-height: 250px;">
+                        <div :id="'chart_thwpp_'+d.index+'_export'" class="chart-export"></div>
+                        <div class="ui pointing secondary menu">
+                            <a class="item orange active" :data-tab="'chart_thwpp_'+d.index+'_list'">List</a>
+                            <a class="item orange" :data-tab="'chart_thwpp_'+d.index+'_chart'">Chart</a>
+                        </div>
+                        <div :id="'chart_thwpp_'+d.index" style="height: 230px;" :data-tab="'chart_thwpp_'+d.index+'_chart'"
+                             class="ui bottom attached tab"></div>
+                        <div :id="'chart_thwpp_'+d.index+'_list'" style="min-height: 240px;" :data-tab="'chart_thwpp_'+d.index+'_list'"
+                             class="ui bottom attached tab active">
                             <div :id="'chart_thwpp_'+d.index" class="ui three stackable cards">
                                 <div v-for="(w,k) in chart_data.three_word_phrases_products.data[d.index]" class="card" :data-tooltip="'No. of post: '+w.doc_count">
                                     <div class="content">{{ w.key }}</div>
@@ -709,6 +757,207 @@
                     }
                 );
 
+                chart = this.chart_data.one_word_phrases_brands;
+                for (var index = 0; index < chart.meta.graphs; index++) {
+                    if (chart.data[index].length === 0){
+                        continue;
+                    }
+                    exportFields = ["key", "doc_count"];
+                    AmCharts.makeChart('chart_owpb_' + index,
+                        {
+                            "path": "/vendor/amcharts/",
+                            "type": "pie",
+                            "valueField": "doc_count",
+                            "titleField": "key",
+//                            "labelsEnabled": false,
+//                            "hideLabelsPercent": 2,
+                            "marginBottom": 0,
+                            "marginTop": 0,
+                            "labelText": "[[title]]",
+                            "colors": ColorService.getColor(-1, chart.data[index].length),
+                            "sequencedAnimation": false,
+                            "creditsPosition": "top-right",
+                            "dataProvider": chart.data[index],
+                            "export": {
+                                "enabled": true,
+                                "exportTitles": true,
+                                "exportFields": exportFields,
+                                "columnNames": {
+                                    "key": "Words",
+                                    "doc_count": "No. of posts"
+                                },
+                                "divId": 'chart_owpb_' + index + "_export"
+                            }
+                        });
+                }
+                chart = this.chart_data.one_word_phrases_products;
+                for (var index = 0; index < chart.meta.graphs; index++) {
+                    if (chart.data[index].length === 0){
+                        continue;
+                    }
+                    exportFields = ["key", "doc_count"];
+                    AmCharts.makeChart('chart_owpp_' + index,
+                        {
+                            "path": "/vendor/amcharts/",
+                            "type": "pie",
+                            "valueField": "doc_count",
+                            "titleField": "key",
+//                            "labelsEnabled": false,
+//                            "hideLabelsPercent": 2,
+                            "marginBottom": 0,
+                            "marginTop": 0,
+                            "labelText": "[[title]]",
+                            "colors": ColorService.getColor(-1, chart.data[index].length),
+                            "sequencedAnimation": false,
+                            "creditsPosition": "top-right",
+                            "dataProvider": chart.data[index],
+                            "export": {
+                                "enabled": true,
+                                "exportTitles": true,
+                                "exportFields": exportFields,
+                                "columnNames": {
+                                    "key": "Words",
+                                    "doc_count": "No. of posts"
+                                },
+                                "divId": 'chart_owpp_' + index + "_export"
+                            }
+                        });
+                }
+
+                chart = this.chart_data.two_word_phrases_brands;
+                for (var index = 0; index < chart.meta.graphs; index++) {
+                    if (chart.data[index].length === 0){
+                        continue;
+                    }
+                    exportFields = ["key", "doc_count"];
+                    AmCharts.makeChart('chart_twpb_' + index,
+                        {
+                            "path": "/vendor/amcharts/",
+                            "type": "pie",
+                            "valueField": "doc_count",
+                            "titleField": "key",
+//                            "labelsEnabled": false,
+//                            "hideLabelsPercent": 2,
+                            "marginBottom": 0,
+                            "marginTop": 0,
+                            "labelText": "[[title]]",
+                            "colors": ColorService.getColor(-1, chart.data[index].length),
+                            "sequencedAnimation": false,
+                            "creditsPosition": "top-right",
+                            "dataProvider": chart.data[index],
+                            "export": {
+                                "enabled": true,
+                                "exportTitles": true,
+                                "exportFields": exportFields,
+                                "columnNames": {
+                                    "key": "Words",
+                                    "doc_count": "No. of posts"
+                                },
+                                "divId": 'chart_twpb_' + index + "_export"
+                            }
+                        });
+                }
+                chart = this.chart_data.two_word_phrases_products;
+                for (var index = 0; index < chart.meta.graphs; index++) {
+                    if (chart.data[index].length === 0){
+                        continue;
+                    }
+                    exportFields = ["key", "doc_count"];
+                    AmCharts.makeChart('chart_twpp_' + index,
+                        {
+                            "path": "/vendor/amcharts/",
+                            "type": "pie",
+                            "valueField": "doc_count",
+                            "titleField": "key",
+//                            "labelsEnabled": false,
+//                            "hideLabelsPercent": 2,
+                            "marginBottom": 0,
+                            "marginTop": 0,
+                            "labelText": "[[title]]",
+                            "colors": ColorService.getColor(-1, chart.data[index].length),
+                            "sequencedAnimation": false,
+                            "creditsPosition": "top-right",
+                            "dataProvider": chart.data[index],
+                            "export": {
+                                "enabled": true,
+                                "exportTitles": true,
+                                "exportFields": exportFields,
+                                "columnNames": {
+                                    "key": "Words",
+                                    "doc_count": "No. of posts"
+                                },
+                                "divId": 'chart_twpp_' + index + "_export"
+                            }
+                        });
+                }
+
+                chart = this.chart_data.three_word_phrases_brands;
+                for (var index = 0; index < chart.meta.graphs; index++) {
+                    if (chart.data[index].length === 0){
+                        continue;
+                    }
+                    exportFields = ["key", "doc_count"];
+                    AmCharts.makeChart('chart_thwpb_' + index,
+                        {
+                            "path": "/vendor/amcharts/",
+                            "type": "pie",
+                            "valueField": "doc_count",
+                            "titleField": "key",
+//                            "labelsEnabled": false,
+//                            "hideLabelsPercent": 2,
+                            "marginBottom": 0,
+                            "marginTop": 0,
+                            "labelText": "[[title]]",
+                            "colors": ColorService.getColor(-1, chart.data[index].length),
+                            "sequencedAnimation": false,
+                            "creditsPosition": "top-right",
+                            "dataProvider": chart.data[index],
+                            "export": {
+                                "enabled": true,
+                                "exportTitles": true,
+                                "exportFields": exportFields,
+                                "columnNames": {
+                                    "key": "Words",
+                                    "doc_count": "No. of posts"
+                                },
+                                "divId": 'chart_thwpb_' + index + "_export"
+                            }
+                        });
+                }
+                chart = this.chart_data.three_word_phrases_products;
+                for (var index = 0; index < chart.meta.graphs; index++) {
+                    if (chart.data[index].length === 0){
+                        continue;
+                    }
+                    exportFields = ["key", "doc_count"];
+                    AmCharts.makeChart('chart_thwpp_' + index,
+                        {
+                            "path": "/vendor/amcharts/",
+                            "type": "pie",
+                            "valueField": "doc_count",
+                            "titleField": "key",
+//                            "labelsEnabled": false,
+//                            "hideLabelsPercent": 2,
+                            "marginBottom": 0,
+                            "marginTop": 0,
+                            "labelText": "[[title]]",
+                            "colors": ColorService.getColor(-1, chart.data[index].length),
+                            "sequencedAnimation": false,
+                            "creditsPosition": "top-right",
+                            "dataProvider": chart.data[index],
+                            "export": {
+                                "enabled": true,
+                                "exportTitles": true,
+                                "exportFields": exportFields,
+                                "columnNames": {
+                                    "key": "Words",
+                                    "doc_count": "No. of posts"
+                                },
+                                "divId": 'chart_thwpp_' + index + "_export"
+                            }
+                        });
+                }
+
             }
         },
         methods: {
@@ -732,5 +981,19 @@
     .ui.segment:hover .chart-export > .amcharts-export-menu:hover,
     .ui.segment:hover .chart-export > .amcharts-export-menu:hover.active {
         opacity: 0.9;
+    }
+
+    .chart-container .ui.secondary.pointing.menu {
+        min-height: 0px;
+    }
+    .chart-container .ui.secondary.pointing.menu .item {
+        padding-top: 0px;
+    }
+
+    .chart-container .ui.cards>.card{
+        margin: 0.44em 1em;
+    }
+    .chart-container .ui.cards>.card>.content{
+        padding: .6em;
     }
 </style>
