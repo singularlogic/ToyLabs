@@ -160,6 +160,7 @@ class MessagesController extends Controller
             $recipient->notify(new NewMessageNotification($recipient, $thread));
         }
 
+        $message['user'] = \Auth::user();
         return compact('message');
     }
 

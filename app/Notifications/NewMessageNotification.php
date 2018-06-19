@@ -5,12 +5,16 @@ namespace App\Notifications;
 use App\Thread;
 use App\User;
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class NewMessageNotification extends Notification
+class NewMessageNotification extends Notification implements ShouldQueue
 {
     use Queueable;
+
+    protected $thread = null;
+    protected $user   = null;
 
     /**
      * Create a new notification instance.
