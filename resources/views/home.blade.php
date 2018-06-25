@@ -5,7 +5,7 @@
 @section('content')
         <!-- Home -->
         <div class="pusher">
-            <div class="ui inverted vertical masthead center aligned segment">
+            <div class="ui inverted vertical masthead center aligned segment" style="background-image: url('images/bg-1.jpg'); background-size: cover;">
                 <div class="ui container">
                     @include('partials.menu')
 
