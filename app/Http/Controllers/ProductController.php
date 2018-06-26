@@ -77,7 +77,7 @@ class ProductController extends Controller
                 'id'   => $design->id,
             ],
             'files'          => $design->getMedia('files'),
-            'isCollaborator' => \Gate::allows('view.product', $design->product) || \Gate::allows('collaborate.design', $design),
+            'isCollaborator' => \Gate::allows('edit.product', $design->product) || \Gate::allows('collaborate.design', $design),
         ];
 
         return view('product.design', $data);
@@ -98,7 +98,7 @@ class ProductController extends Controller
                 'id'   => $prototype->id,
             ],
             'files'          => $prototype->getMedia('files'),
-            'isCollaborator' => \Gate::allows('view.product', $prototype->product) || \Gate::allows('collaborate.prototype', $prototype),
+            'isCollaborator' => \Gate::allows('edit.product', $prototype->product) || \Gate::allows('collaborate.prototype', $prototype),
         ];
 
         return view('product.prototype', $data);
