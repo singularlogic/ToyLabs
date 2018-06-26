@@ -2,12 +2,12 @@
                         <a class="toc item">
                             <i class="sidebar icon"></i>
                         </a>
-                        <a class="item{{ Request::is('/') ? ' active' : '' }}" href="{{ route('home') }}">Home</a>
+                        <a class="shadow item{{ Request::is('/') ? ' active' : '' }}" href="{{ route('home') }}">Home</a>
 @if(Auth::check())
-                        <a class="item{{ Request::is('dashboard') ? ' active' : '' }}" href="{{ route('dashboard') }}">Dashboard</a>
+                        <a class="shadow item{{ Request::is('dashboard') ? ' active' : '' }}" href="{{ route('dashboard') }}">Dashboard</a>
 @endif
-                        <a class="item{{ Request::is('organizations') ? 'active' : '' }}" href="{{ route('organizations') }}">Members</a>
-                        <a class="item{{ Request::is('about') ? ' active' : '' }}" href="{{ route('about') }}">About</a>
+                        <a class="shadow item{{ Request::is('organizations') ? 'active' : '' }}" href="{{ route('organizations') }}">Members</a>
+                        <a class="shadow item{{ Request::is('about') ? ' active' : '' }}" href="{{ route('about') }}">About</a>
 @if(Auth::check())
                         <div class="right menu">
                             <div class="ui dropdown">
