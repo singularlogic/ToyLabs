@@ -20,7 +20,7 @@
                         <label>Country</label>
                         <select class="ui search dropdown" name="country_id" v-model="personal.country_id">
                             <option value="">Select Country</option>
-                            <option v-for="c in _countries" v-bind:value="c.id">{{ c.name }}</option>
+                            <option v-for="c in _countries" v-bind:value="c.id" :key="c.id">{{ c.name }}</option>
                         </select>
                     </div>
                     <div class="four wide field">
@@ -125,13 +125,13 @@
                         <div class="field">
                             <select class="ui search dropdown" v-model="joinOrg">
                                 <option value="" ref="selectOrg">Select Organization</option>
-                                <option v-for="o in organizations" :value="o.id">{{ o.name }}</option>
+                                <option v-for="o in organizations" :value="o.id" :key="o.id">{{ o.name }}</option>
                             </select>
                         </div>
                     </div>
                 </div>
 
-                <div v-if="!personal.isNew">
+                <div v-if="!personal.isNew && professional.role !== 'end_user'">
                     <h3 class="ui header" style="margin-top: 20px;">
                         Professional
                         <span class="ui basic blue label" v-if="isProfessional">{{ myRole }}</span>
@@ -140,7 +140,7 @@
 
                     <h4 class="ui header">Organization<span v-if="orgCount > 1">s</span>:</h4>
                     <div class="ui middle aligned divided list" style="padding-left: 50px;">
-                        <div class="item" v-for="o in professional.organizations">
+                        <div class="item" v-for="o in professional.organizations" :key="o.id">
                             <div class="right floated content">
                                 <a class="ui negative mini button" v-if="o.owner_id != personal.user_id" @click="leaveGroup(o, false)">Leave</a>
                                 <div class="ui basic green label" v-if="o.owner_id == personal.user_id">Manager</div>
@@ -150,7 +150,7 @@
                                 <a class="header" v-if="o.owner_id == personal.user_id" :href="`/organization/${o.id}/edit`" style="padding-top: 8px;">{{ o.name }}</a>
                             </div>
                         </div>
-                        <div class="item" v-for="o in professional.pending">
+                        <div class="item" v-for="o in professional.pending" :key="o.id">
                             <div class="right floated content">
                                 <div class="ui basic black label">Pending</div>
                                 <a class="ui negative mini button" v-if="o.owner_id != personal.user_id" @click="leaveGroup(o, true)">Cancel</a>
@@ -192,7 +192,7 @@
                         <input type="text" style="position: fixed; left: -10000000px;" disabled />
                         <select class="ui search dropdown" v-model="joinOrg">
                             <option value="" ref="selectOrg">Select Organization to join</option>
-                            <option v-for="o in organizations" :value="o.id">{{ o.name }}</option>
+                            <option v-for="o in organizations" :value="o.id" :key="o.id">{{ o.name }}</option>
                         </select>
                     </div>
                 </div>
