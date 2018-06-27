@@ -3,10 +3,12 @@
         <div class="field">
             <textarea v-model="comment.body"></textarea>
         </div>
-        <div class="ui primary submit labeled right floated icon button" @click="sendReply">
-            <i class="icon edit"></i> Add Reply
+        <div class="ui clearing segment basic">
+            <div class="ui primary submit labeled right floated icon button" @click="sendReply">
+                <i class="icon edit"></i> Add Reply
+            </div>
+            <div class="ui right floated button" @click="cancel">Cancel</div>
         </div>
-        <div class="ui right floated button" @click="cancel">Cancel</div>
     </form>
 </template>
 
