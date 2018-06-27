@@ -6,6 +6,7 @@ use App\Design;
 use App\Models\ReportedComment;
 use App\Product;
 use App\Prototype;
+use App\MarketAnalysisAnalysis;
 use BrianFaust\Commentable\Comment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -89,6 +90,12 @@ class UserController extends Controller
                 break;
             case 'prototype':
                 $model = Prototype::find($input['model']['id']);
+                break;
+            case 'analysis.'.ANALYSIS_TYPE::SOCIAL:
+                $model = MarketAnalysisAnalysis::where([['anlzer_analysis_id', $input['model']['id']], ['type', ANALYSIS_TYPE::SOCIAL]])->first();
+                break;
+            case 'analysis.'.ANALYSIS_TYPE::TREND:
+                $model = MarketAnalysisAnalysis::where([['anlzer_analysis_id', $input['model']['id']], ['type', ANALYSIS_TYPE::TREND]])->first();
                 break;
             default:
                 break;

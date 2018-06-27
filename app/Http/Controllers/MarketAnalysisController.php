@@ -498,7 +498,7 @@ class MarketAnalysisController extends Controller
     }
     public function showAnalysis($analysis_id)
     {
-        $model = MarketAnalysisAnalysis::where([['anlzer_analysis_id', $analysis_id], ['type', ANALYSIS_TYPE::TREND]])->first();
+        $model = MarketAnalysisAnalysis::with('comments.creator')->where([['anlzer_analysis_id', $analysis_id], ['type', ANALYSIS_TYPE::TREND]])->first();
         if ($model !== null) {
             $analysis = $this->getAnalysis($analysis_id, $model);
             $chart_data = $this->getAnalysisChartData($analysis_id, $model);
@@ -513,10 +513,10 @@ class MarketAnalysisController extends Controller
                 'meta' => [
                     'likeCount' => 0,
                     'liked' => false,
-                    'comments' => []
+                    'comments' => $model['comments']
                 ],
                 'model' => [
-                    'type' => 'analysis',
+                    'type' => 'analysis.'.ANALYSIS_TYPE::TREND,
                     'id'  => $analysis_id,
                 ],
             ];
@@ -925,7 +925,7 @@ class MarketAnalysisController extends Controller
     }
     public function showFeedback($analysis_id)
     {
-        $model = MarketAnalysisAnalysis::where([['anlzer_analysis_id', $analysis_id], ['type', ANALYSIS_TYPE::SOCIAL]])->first();
+        $model = MarketAnalysisAnalysis::with('comments.creator')->where([['anlzer_analysis_id', $analysis_id], ['type', ANALYSIS_TYPE::SOCIAL]])->first();
         if ($model !== null) {
             $analysis = $this->getFeedback($analysis_id, $model);
             $chart_data = $this->getFeedbackChartData($analysis_id, $model);
@@ -938,10 +938,10 @@ class MarketAnalysisController extends Controller
                 'analysis' => $analysis,
                 'chart_data' => $chart_data,
                 'meta' => [
-                    'comments' => []
+                    'comments' => $model['comments']
                 ],
                 'model' => [
-                    'type' => 'analysis',
+                    'type' => 'analysis.'.ANALYSIS_TYPE::SOCIAL,
                     'id' => $analysis_id,
                 ],
             ];
