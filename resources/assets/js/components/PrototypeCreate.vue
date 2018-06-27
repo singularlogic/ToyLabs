@@ -81,6 +81,7 @@
             :useFontAwesome="true"
             :showRemoveLink="true"
             :maxFileSizeInMB="64"
+            :maxNumberOfFiles=50
             paramName="file"
             v-on:vdropzone-success="fileAdded"
             v-on:vdropzone-removed-file="fileRemoved"
