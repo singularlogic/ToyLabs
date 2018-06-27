@@ -75,6 +75,12 @@
                         </div>
                         <div class="field" :class="{ disabled: !personal.isNew }">
                             <div class="ui radio checkbox">
+                                <input type="radio" name="role" id="retailer" value="retailer" v-model="professional.role" />
+                                <label for="retailer">Retailer</label>
+                            </div>
+                        </div>
+                        <div class="field" :class="{ disabled: !personal.isNew }">
+                            <div class="ui radio checkbox">
                                 <input type="radio" name="role" id="end_user" value="end_user" v-model="professional.role" />
                                 <label for="end_user">Just a User!</label>
                             </div>
