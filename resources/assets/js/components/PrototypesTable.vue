@@ -109,7 +109,7 @@ export default {
         toProduction(id) {
             axios.put(`/prototype/${id}/production`).then(res => {
                 if (res.status === 200) {
-                    console.log('Moved to production');
+                    window.location = `/product/${this._product_id}/production`;
                 }
             });
         },

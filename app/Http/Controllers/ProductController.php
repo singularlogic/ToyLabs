@@ -226,4 +226,24 @@ class ProductController extends Controller
 
         return redirect('dashboard')->with('error', 'You are not permitted to edit this product!');
     }
+
+    public function production(Request $request, $id)
+    {
+        try {
+            $product = Product::findOrFail($id);
+        } catch (NotFoundHttpException $e) {
+            abort(404);
+        }
+
+        if (\Gate::denies('edit.product', $product)) {
+            abort(401, 'Unauthorized access');
+        }
+
+        $data = [
+            'title'   => 'Production',
+            'product' => $product,
+        ];
+
+        return view('product.production', $data);
+    }
 }

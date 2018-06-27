@@ -91,6 +91,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/product/{id}/prototypes/create/{design_id}', ['as' => 'prototype.makeprototype.post', 'uses' => 'PrototypeController@doCreate']);
     Route::get('/product/{id}/prototypes/create', ['as' => 'prototype.create', 'uses' => 'PrototypeController@create']);
     Route::post('/product/{id}/prototypes/create', ['as' => 'prototype.create.post', 'uses' => 'PrototypeController@doCreate']);
+    Route::get('/product/{id}/production', ['as' => 'product.production', 'uses' => 'ProductController@production']);
     Route::get('/prototype/{id}/edit', ['as' => 'prototype.edit', 'uses' => 'PrototypeController@edit']);
     Route::post('/prototype/{id}/edit', ['as' => 'prototype.edit.post', 'uses' => 'PrototypeController@doEdit']);
     Route::put('/prototype/{id}/archive', 'PrototypeController@archivePrototype');

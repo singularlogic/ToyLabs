@@ -45,7 +45,7 @@
                         <div class="description">Testing prototypes</div>
                     </div>
                 </a>
-                <a class="step" :class="getClass('production')">
+                <a class="step" :class="getClass('production')" :href="`/product/${product.id}/production`">
                     <i class="industry icon"></i>
                     <div class="content">
                         <div class="title">Production</div>
