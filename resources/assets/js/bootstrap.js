@@ -1,4 +1,9 @@
 import './tablesort';
+
+// Polyfills required for IE
+import 'promise-polyfill/src/polyfill';
+import 'es6-object-assign/auto';
+
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import axios from 'axios';

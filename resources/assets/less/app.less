@@ -231,6 +231,18 @@ body > .grid {
     flex: 1;
     padding-bottom: 20px;
 }
+// There is a bug with flex in IE 10/11.
+@media all and (-ms-high-contrast:none) {
+    // This fixes the pusher's height so that the footer doesn't overlap the content.
+    .pusher {
+        flex: 1 0 auto;
+    }
+    // This makes the footer stick to the bottom, when the content is short.
+    body {
+        display: flex;
+        flex-direction: column;
+    }
+}
 
 
 .longTooltip[data-tooltip]:after {
