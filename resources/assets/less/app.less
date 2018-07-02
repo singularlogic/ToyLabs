@@ -262,3 +262,43 @@ body > .grid {
 .ui.secondary.inverted.pointing.menu .shadow.item {
     text-shadow: 1px 1px #333;
 }
+
+.ui.cards>.card>.image>.image-container {
+    //We need to specify height
+    height: 179px;
+    //height: 357px; //Make image square
+    border-radius: inherit;
+    position: relative;
+    overflow: hidden;
+
+    img {
+        // Center the image in available space
+        margin: auto;
+        position: absolute;
+        top: -9999px;
+        bottom: -9999px;
+        left: -9999px;
+        right: -9999px;
+
+        // Fit image in the available space keeping the ratio
+        // This is the default behavior in case the device doesn't have a mouse or is too old for our css
+        max-height: 100%;
+        max-width: 100%;
+        width: inherit;
+    }
+}
+
+// Add scale animation in case there is a hover device (aka mouse).
+// There's also a javascript part for this, in order to calculate the scale values for each image.
+// FF doesn't support hover yet so we need to rely on -moz-touch-enabled
+@media (hover: hover), (-moz-touch-enabled: 0) {
+    .ui.cards > .card > .image > .image-container img {
+        transition: transform .5s ease-in-out 0s;
+        transform: scale(var(--normal-scale)) !important;
+    }
+    // Although hover's scale value is always 1, I still made the code generic since it wouldn't be the same
+    // if we didn't have inplace the restrictions for (max-)height and (max-)width
+    .ui.cards > .card:hover > .image > .image-container img {
+        transform: scale(var(--hover-scale)) !important;
+    }
+}

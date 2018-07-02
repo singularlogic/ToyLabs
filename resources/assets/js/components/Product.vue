@@ -1,7 +1,9 @@
 <template>
     <a class="card" :href="url" :target="target">
         <div class="ui fluid image">
-            <img :src="product.image" />
+            <div class="image-container">
+                <img :src="product.image" v-on:load="imageLoaded"/>
+            </div>
             <span class="ui right ribbon label" :class="getClass" v-if="detailed">{{ product.type }}</span>
         </div>
         <div class="content">
@@ -61,6 +63,15 @@ export default {
             tcText =  tcText.slice(0, last);
 
             return tcText + '...';
+        }
+    },
+    methods: {
+        imageLoaded(event) {
+            let img = event.target;
+            let container = $(".image-container")[0];
+            let scaleX = container.offsetWidth / img.width;
+            let scaleY = container.offsetHeight / img.height;
+            img.style.cssText = `--normal-scale: ${Math.max(scaleX, scaleY)}; --hover-scale: ${Math.min(scaleX, scaleY)};`;
         }
     }
 }
