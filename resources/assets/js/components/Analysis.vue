@@ -6,13 +6,13 @@
             <div class="column">
                 <div class="ui segment" style="height: 100%;">
                     <h5 class="ui horizontal divider header">Top Accounts
-                        <span class="longTooltip" data-tooltip="10 most active accounts (based on the number of documents published by them) from the documents that are retrieved based on the analysis settings.">
+                        <span class="longTooltip" data-tooltip="10 most active accounts (based on the number of documents published by them) from the documents that are retrieved based on the analysis settings." data-position="bottom center">
                             <i class="icon info"></i>
                         </span>
                     </h5>
                     <div v-for="d in chart_data.top_accounts.accounts" class="ui tiny label" :data-tooltip="'No. of post: '+d.count">{{ d.name }}</div>
                     <h5 class="ui horizontal divider header">Top Keywords
-                        <span class="longTooltip" data-tooltip="10 most popular keywords/hashtags from the documents that are retrieved based on the analysis settings.">
+                        <span class="longTooltip" data-tooltip="10 most popular keywords/hashtags from the documents that are retrieved based on the analysis settings." data-position="bottom center">
                             <i class="icon info"></i>
                         </span>
                     </h5>
@@ -32,13 +32,13 @@
                         id="chart_timeline"
                         :chartData="chart_data.timelines"
                         chartTitle="Timeline of mentions for Keywords/Hashtags"
-                        chartInfo="Daily number of retrieved documents for each of the keyphrases defined in the analysis. Use the mouse scroll wheel to zoom in and out of the chart."
+                        chartInfo="Daily number of retrieved documents for each of the keyphrases defined in the analysis. Use the mouse scroll wheel to zoom in and out of the chart. Keywords in parentheses correspond to non-order specific matches of all words, whereas keywords in quotation marks correspond to verbatim search matches."
                 ></timeline-chart>
             </div>
         </div>
         <template  v-if="analysis_type == 'trend'">
             <h4 class="ui dividing header">Settings-based analytics
-                <span class="longTooltip" data-tooltip="Contains a number of visualisations based on the concepts/parameters pairs defined in the settings.">
+                <span class="longTooltip" data-tooltip="Contains a number of visualisations based on the concepts/parameters pairs defined in the settings." data-position="bottom center">
                     <i class="icon info"></i>
                 </span>
             </h4>
@@ -80,7 +80,7 @@
         </template>
         <template  v-if="analysis_type == 'social'">
             <h4 class="ui dividing header">Market set-based analytics
-                <span class="longTooltip" data-tooltip="Contains a number of visualisations based on the market sets defined in the Market Analysis Settings of your organization.">
+                <span class="longTooltip" data-tooltip="Contains a number of visualisations based on the market sets defined in the Market Analysis Settings of your organization." data-position="bottom center">
                     <i class="icon info"></i>
                 </span>
             </h4>
@@ -95,7 +95,7 @@
                             id="chart_brand_timelines"
                             :chartData="chart_data.brand_timelines"
                             chartTitle="Daily timeline per brand name"
-                            chartInfo="Daily number of documents that are retrieved for each brand name defined in the settings. Use the mouse scroll wheel to zoom in and out of the chart."
+                            chartInfo="Daily number of documents that are retrieved for each brand name defined in the settings. Use the mouse scroll wheel to zoom in and out of the chart. Keywords in parentheses correspond to non-order specific matches of all words, whereas keywords in quotation marks correspond to verbatim search matches."
                     ></timeline-chart>
                 </div>
                 <div class="column" v-if="chart_data.product_timelines.data.length > 0">
@@ -103,7 +103,7 @@
                             id="chart_product_timelines"
                             :chartData="chart_data.product_timelines"
                             chartTitle="Daily timeline per product name"
-                            chartInfo="Daily number of documents that are retrieved for each product defined in the settings. Use the mouse scroll wheel to zoom in and out of the chart."
+                            chartInfo="Daily number of documents that are retrieved for each product defined in the settings. Use the mouse scroll wheel to zoom in and out of the chart. Keywords in parentheses correspond to non-order specific matches of all words, whereas keywords in quotation marks correspond to verbatim search matches."
                     ></timeline-chart>
                 </div>
                 <div class="column" v-if="chart_data.sentiments.length > 0">
@@ -121,7 +121,7 @@
                             :chartData="chart_data.one_word_phrases_brands"
                             :chartDataIndex="d.index"
                             :chartTitle="`One word related topics for brand: ${d.label}`"
-                            chartInfo="15 most commonly found one-word phrases in the documents that are retrieved based on the analysis settings per product."
+                            chartInfo="15 most commonly found one-word phrases in the documents that are retrieved based on the analysis settings per brand."
                     ></word-chart>
                 </div>
                 <div class="column" v-for="d in chart_data.one_word_phrases_products.meta.labels"

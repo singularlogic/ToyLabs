@@ -1,7 +1,7 @@
 <template>
     <div class="ui segment chart-container" style="height: 100%;">
         <h5 class="ui sub">{{ chartTitle }}
-            <span class="longTooltip" :data-tooltip="chartInfo" v-if="chartInfo">
+            <span class="longTooltip" :data-tooltip="chartInfo" data-position="bottom center" v-if="chartInfo">
                 <i class="icon info"></i>
             </span>
         </h5>

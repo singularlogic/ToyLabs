@@ -7,8 +7,8 @@
                     v-bind:readonly="readonly"
             ></keywords-field>
             <small class="helper">
-                Enter the words, phrases and hashtags to be used as search terms. Single keywords are separated with commas.
-                Use ‘ for exact phrases and ! to exclude a term/phrase.
+                Enter the words, phrases and hashtags to be used as search terms. Single keywords (grey) are separated with commas.
+                Use ‘ for exact phrases (green) and ! to exclude a term/phrase (orange).
             </small>
             <div class="ui info message">
                 <i class="info icon"></i>
@@ -26,6 +26,10 @@
                     v-model="value.accounts"
                     v-bind:readonly="readonly"
             ></accounts-table>
+            <div class="ui info message">
+                <i class="info icon"></i>
+                Provide the accounts (from Twitter or Facebook) that will be monitored for the analysis. For Twitter you need to prepend @ to the account (eg. @Toy_Labs).
+            </div>
         </div>
         <div class="field" v-if="!nomarketset">
             <label>Market Set</label>
@@ -33,6 +37,12 @@
                     v-model="value.brands"
                     v-bind:readonly="readonly"
             ></marketset-table>
+            <div class="ui info message">
+                <i class="info icon"></i>
+                Create Market Sets, i.e. combinations of brands and products (that may belong to the organisation or its competitors) upon which
+                the visualisations will be built. <br/> For example a brand could be Mattel and the product could be Barbie. The visualisations will
+                return related topics for both the brands and the related products. <br/> Both brand's and product's value format follows the same logic as the keywords above.
+            </div>
         </div>
     </div>
 </template>

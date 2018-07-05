@@ -18,8 +18,8 @@
                         v-model="keyphrases_settings"
                     ></keywords-field>
                     <small class="helper">
-                        Enter the words, phrases and hashtags to be used as search terms. Single keywords are separated with commas.
-                        Use ‘ for exact phrases and ! to exclude a term/phrase.
+                        Enter the words, phrases and hashtags to be used as search terms. Single keywords (grey) are separated with commas.
+                        Use ‘ for exact phrases (green) and ! to exclude a term/phrase (orange).
                     </small>
                     <div class="ui info message">
                         <i class="info icon"></i>
@@ -44,7 +44,7 @@
                     </div>
 
                     <small class="helper">
-                        The data sources to be used for the analysis. Choose one or more among Facebook and Twitter.
+                        The data sources to be used for the analysis. Choose between Twitter and/or Facebook.
                     </small>
                     <input type="hidden" name="sources" ref="sources" />
 
