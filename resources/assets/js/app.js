@@ -29,10 +29,6 @@ import MarketAnalysis from './components/MarketAnalysis.vue';
 import MarketAnalysisTrend from './components/MarketAnalysisTrend.vue';
 import MarketAnalysisSocial from './components/MarketAnalysisSocial.vue';
 import Analysis from './components/Analysis.vue';
-import AmCharts from 'amcharts3'
-import AmSerial from 'amcharts3/amcharts/serial';
-import AmPie from 'amcharts3/amcharts/pie';
-import 'amcharts3/amcharts/plugins/export';
 
 /**
  * Navbar transition for the homepage

@@ -10,6 +10,7 @@ use App\MarketAnalysisRetriever;
 use App\Organization;
 use App\Product;
 use App\Providers\Anlzer\AnlzerClient;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Psy\Util\Json;
@@ -243,6 +244,31 @@ class MarketAnalysisController extends Controller
         return view('product.marketanalysisform', $data);
     }
 
+    private function getAnalysisOverallTimeline(int $analysisId, string $type)
+    {
+        switch ($type) {
+            case ANALYSIS_TYPE::SOCIAL:
+                $timeline = $this->anlzerClient->Feedbacks()->getOverallTimelinesById($analysisId)->timeline;
+                break;
+            case ANALYSIS_TYPE::TREND:
+                $timeline = $this->anlzerClient->Analyses()->getOverallTimelinesById($analysisId)->timeline;
+                break;
+            default:
+                throw new Exception('Unknown $type requested.');
+        }
+        $dataTmp = array_map(function($value) {
+            return [
+                'key' => $value->key,
+                'doc_count' => $value->doc_count
+            ];
+        }, $timeline);
+        $timeline = [
+            "data" => $dataTmp
+        ];
+        unset($dataTmp);
+
+        return $timeline;
+    }
     private function getAnalysisConceptParametersFacets($analysisId)
     {
         $conceptParametersFacets = [];
@@ -334,7 +360,8 @@ class MarketAnalysisController extends Controller
         foreach ($twoWordPhrases as $key => $twoWordPhrase){
             $labelsTmp[] = [
                 'index' => $index,
-                'label' => $key
+                'label' => $key,
+                'doc_count' => $twoWordPhrase->doc_count
             ];
             $dataTmp[] = $twoWordPhrase->{'two-word-phrases'}->buckets;
             $index++;
@@ -480,7 +507,7 @@ class MarketAnalysisController extends Controller
                 $chart_data = [
                     'top_hashtags' => $this->anlzerClient->Analyses()->getTopHashtagsById($analysis_id),
                     'top_accounts' => $this->anlzerClient->Analyses()->getTopAccountsById($analysis_id),
-                    'overall_timeline' => $this->anlzerClient->Analyses()->getOverallTimelinesById($analysis_id),
+                    'overall_timeline' => $this->getAnalysisOverallTimeline($analysis_id, ANALYSIS_TYPE::TREND),
                     'timelines' => $this->getAnalysisTimelines($analysis_id),
                     'two_word_phrases' => $this->getAnalysisTwoWordPhrases($analysis_id),
                     'concept_timelines' => $this->getAnalysisConceptTimelines($analysis_id),
@@ -828,7 +855,7 @@ class MarketAnalysisController extends Controller
                 $chart_data = [
                     'top_hashtags' => $this->anlzerClient->Feedbacks()->getTopHashtagsById($analysis_id),
                     'top_accounts' => $this->anlzerClient->Feedbacks()->getTopAccountsById($analysis_id),
-                    'overall_timeline' => $this->anlzerClient->Feedbacks()->getOverallTimelinesById($analysis_id),
+                    'overall_timeline' => $this->getAnalysisOverallTimeline($analysis_id, ANALYSIS_TYPE::SOCIAL),
                     'timelines' => $this->getFeedbackTimelines($analysis_id),
                     'brand_timelines' => $this->getFeedbackBrandTimelines($analysis_id),
                     'product_timelines' => $this->getFeedbackProductTimelines($analysis_id),
