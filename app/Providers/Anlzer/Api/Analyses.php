@@ -42,6 +42,12 @@ class Analyses extends Api
         return json_decode($res->getBody());
     }
 
+    public function getConceptKeywordsById($id)
+    {
+        $res = $this->httpClient->request('GET', $this->getBaseURL().$id.'/concept-keywords/');
+        return json_decode($res->getBody());
+    }
+
     public function getTwoWordPhrasesById($id)
     {
         $res = $this->httpClient->request('GET', $this->getBaseURL().$id.'/two-word-phrases/');

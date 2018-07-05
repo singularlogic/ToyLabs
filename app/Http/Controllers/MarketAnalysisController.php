@@ -351,6 +351,35 @@ class MarketAnalysisController extends Controller
 
         return $timelines;
     }
+    private function getAnalysisConceptKeywords($analysisId)
+    {
+        $keywords = $this->anlzerClient->Analyses()->getConceptKeywordsById($analysisId)->{'keywords'};
+        $labelsTmp = [];
+        $dataTmp = [];
+        $index = 0;
+        foreach ($keywords as $key => $keyword){
+            $labelsTmp[] = [
+                'index' => $index,
+                'label' => $key,
+                'doc_count' => $keyword->doc_count
+            ];
+            $dataTmp[] = $keyword->{'top-keywords'}->buckets;
+            $index++;
+        }
+        ksort($dataTmp);
+        $keywords = [
+            "meta" => [
+                "graphs" => $index,
+                "labels" => $labelsTmp
+            ],
+            "data" => $dataTmp
+        ];
+        unset($dataTmp);
+        unset($labelsTmp);
+        unset($index);
+
+        return $keywords;
+    }
     private function getAnalysisTwoWordPhrases($analysisId)
     {
         $twoWordPhrases = $this->anlzerClient->Analyses()->getTwoWordPhrasesById($analysisId)->{'two-word-phrases'};
@@ -509,6 +538,7 @@ class MarketAnalysisController extends Controller
                     'top_accounts' => $this->anlzerClient->Analyses()->getTopAccountsById($analysis_id),
                     'overall_timeline' => $this->getAnalysisOverallTimeline($analysis_id, ANALYSIS_TYPE::TREND),
                     'timelines' => $this->getAnalysisTimelines($analysis_id),
+                    'top_keywords' => $this->getAnalysisConceptKeywords($analysis_id),
                     'two_word_phrases' => $this->getAnalysisTwoWordPhrases($analysis_id),
                     'concept_timelines' => $this->getAnalysisConceptTimelines($analysis_id),
                     'conceptParametersFacets' => $this->getAnalysisConceptParametersFacets($analysis_id)

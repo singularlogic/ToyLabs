@@ -49,6 +49,16 @@
 
             <div class="ui stackable two column grid">
 
+                <div class="column" v-for="d in chart_data.top_keywords.meta.labels" v-if="chart_data.top_keywords.data[d.index].length">
+                    <word-chart
+                            :id="'chart_tw_'+d.index"
+                            :chartData="chart_data.top_keywords"
+                            :chartDataIndex="d.index"
+                            :chartTitle="`One word related topics for concept: ${d.label}`"
+                            chartInfo="Most popular keywords for each concept defined in the settings. The number of pie charts equals the number of concepts defined."
+                    ></word-chart>
+                </div>
+
                 <div class="column" v-for="d in chart_data.two_word_phrases.meta.labels" v-if="chart_data.two_word_phrases.data[d.index].length">
                     <word-chart
                             :id="'chart_twp_'+d.index"
