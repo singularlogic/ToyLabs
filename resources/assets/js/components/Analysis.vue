@@ -72,6 +72,7 @@
                     <column-chart
                             :id="`chart_cpf_${k}`"
                             :chartData="chart_data.conceptParametersFacets[k]"
+                            chartType="stacked"
                             chartTitle="Μentions per parameter for the concepts"
                             chartInfo="For each parameter specified in the settings, show the number of results for each of the (concept, parameter value) pairs per concept."
                     ></column-chart>

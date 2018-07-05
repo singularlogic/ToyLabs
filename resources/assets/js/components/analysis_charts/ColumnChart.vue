@@ -29,6 +29,28 @@
             id: {
                 type: String,
                 required: true
+            },
+            chartType: {
+                type: String,
+                default: 'bar'
+            }
+        },
+        data() {
+            let stackType = 'none';
+            switch (this.chartType.toLowerCase()){
+                case 'stacked':
+                    stackType = 'regular';
+                    break;
+                case 'stackedfull':
+                    stackType = '100%';
+                    break;
+                case 'bar':
+                default:
+                    stackType = 'none';
+                    break;
+            }
+            return {
+                stackType: stackType
             }
         },
         mounted() {
@@ -41,7 +63,7 @@
                     "title": this.chartData.meta.labels[i].label,
                     "valueField": this.chartData.meta.valueFieldPrefix + i,
                     "balloonText": "[[title]]: <b>[[value]]</b>",
-                    "fillAlphas": 1,
+                    "fillAlphas": 0.8,
                     "lineColor":  ColorService.getColor(i, this.chartData.meta.graphs)
                 });
                 exportFields.push(this.chartData.meta.valueFieldPrefix + i);
@@ -63,7 +85,8 @@
                     "valueAxes": [ {
                         "position": "left",
                         "title": "No. of posts",
-                        "titleBold": false
+                        "titleBold": false,
+                        "stackType": this.stackType
                     }],
                     "chartCursor": {
                         "valueLineEnabled": true,
