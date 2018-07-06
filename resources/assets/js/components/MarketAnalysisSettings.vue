@@ -25,6 +25,8 @@
 
             <div class="ui divider"></div>
 
+            <div class="ui error message" ref="errorList"></div>
+
             <button type="submit" class="ui orange submit right floated button" ref="submitButton">
                 Update
             </button>
@@ -57,10 +59,43 @@
             };
         },
         methods: {
-            submit() {
+            submit(event) {
+                if (!this.isValid()){
+                    event.preventDefault();
+                    return false;
+                }
                 this.$refs.retriever.value = JSON.stringify(this.retriever);
                 this.$refs.retriever_master.value = JSON.stringify(this.retriever_master);
                 this.$refs.form.submit();
+            },
+            isValid() {
+                let $form = $(this.$refs.form);
+                $form.removeClass("error");
+                let errors = [];
+                this.validateFields(errors);
+                if (!!errors.length) {
+                    $(this.$refs.errorList).html($.fn.form.settings.templates.error(errors));
+                    $form.addClass("error");
+                }
+                return !errors.length;
+            },
+            validateFields(errors) {
+                errors = errors || [];
+                for (var i = 0; i < this.$children.length; i++) {
+                    if (this.$children[i].hasOwnProperty('validateFields')) {
+                        this.$children[i].validateFields(errors);
+                    }
+                }
+                //v(this.$refs.retriever, "ErrorMsg", ()=>false);
+                function v(selector, error, rule) {
+                    let $g = $(selector).closest(".field");
+                    $g.removeClass("error");
+                    if (!rule()) {
+                        errors.push(error);
+                        $g.addClass("error");
+                    }
+                }
+                return !errors.length;
             }
         }
     }

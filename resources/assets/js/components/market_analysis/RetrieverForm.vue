@@ -21,10 +21,11 @@
             </div>
         </div>
         <div class="field">
-            <label>Accounts</label>
+            <label ref="accounts">Accounts</label>
             <accounts-table
                     v-model="value.accounts"
                     v-bind:readonly="readonly"
+                    ref="accountsComp"
             ></accounts-table>
             <div class="ui info message">
                 <i class="info icon"></i>
@@ -32,10 +33,11 @@
             </div>
         </div>
         <div class="field" v-if="!nomarketset">
-            <label>Market Set</label>
+            <label ref="marketsets">Market Sets</label>
             <marketset-table
                     v-model="value.brands"
                     v-bind:readonly="readonly"
+                    ref="marketsetsComp"
             ></marketset-table>
             <div class="ui info message">
                 <i class="info icon"></i>
@@ -68,7 +70,30 @@
             };
         },
         methods: {
-
+            validateFields(errors) {
+                errors = errors || [];
+                for (var i = 0; i < this.$children.length; i++) {
+                    if (this.$children[i].hasOwnProperty('validateFields')) {
+                        this.$children[i].validateFields(errors);
+                    }
+                }
+                //v(this.$refs.retriever, "ErrorMsg", ()=>false);
+                v(this.$refs.accounts, "You have an unsaved Account", () => {
+                    return !this.$refs.accountsComp || this.$refs.accountsComp.isEditMode();
+                });
+                v(this.$refs.marketsets, "You have an unsaved Market Set", () => {
+                    return !this.$refs.marketsetsComp || this.$refs.marketsetsComp.isEditMode();
+                });
+                function v(selector, error, rule) {
+                    let $g = $(selector).closest(".field");
+                    $g.removeClass("error");
+                    if (!rule()) {
+                        errors.push(error);
+                        $g.addClass("error");
+                    }
+                }
+                return !errors.length;
+            }
         }
     }
 </script>

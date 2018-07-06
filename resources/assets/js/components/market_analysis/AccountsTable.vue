@@ -83,6 +83,9 @@
             }
         },
         methods: {
+            isEditMode() {
+                return !this.insertAccountMode
+            },
             addAccount() {
                 this.newAccount = {
                     name: '',

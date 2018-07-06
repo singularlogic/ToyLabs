@@ -86,7 +86,7 @@
                                     this.attr('data-tooltip', 'Exact: '+(''+n).substr(1));
                                     break;
                                 default:
-//                            this.addClass('green');
+//                                    this.addClass('grey');
                                     this.attr('data-tooltip', 'Any of: '+(''+n));
                                     break;
                             }
@@ -143,6 +143,15 @@
 </script>
 
 <style>
+    .taginput>.label {
+        background-color: #e8e8e8 !important;
+        color: rgba(0,0,0,.6) !important;
+    }
+    .taginput>.label:hover {
+        background-color: #E0E0E0 !important;
+        border-color: #E0E0E0 !important;
+        color: rgba(0, 0, 0, .8) !important;
+    }
    .taginput.readonly {
        pointer-events: inherit !important;
    }
@@ -157,7 +166,11 @@
    .taginput.readonly.dropdown, .taginput.readonly.dropdown>input.search {
        cursor: inherit !important;
    }
-   .taginput.readonly.ui.selection.dropdown {
-       background-color: inherit;
+   .taginput.readonly.ui.selection.dropdown,
+   .taginput.readonly.ui.selection.dropdown:hover,
+   .field.error .taginput.readonly.ui.selection.dropdown,
+   .field.error .taginput.readonly.ui.selection.dropdown:hover{
+       background-color: inherit !important;
+       border: 1px solid rgba(34,36,38,.15) !important;
    }
 </style>

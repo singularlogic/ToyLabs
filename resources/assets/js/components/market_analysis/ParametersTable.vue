@@ -73,6 +73,9 @@
             }
         },
         methods: {
+            isEditMode() {
+                return !this.insertMode
+            },
             addEntry() {
                 this.newEntry = {
                     id: 0,

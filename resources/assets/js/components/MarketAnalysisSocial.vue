@@ -10,7 +10,7 @@
             <div class="ui bottom attached tab active" data-tab="configuration">
                 <div class="field">
                     <label>Name</label>
-                    <input type="text" name="name" v-model="name" placeholder="Enter a descriptive name for your social feedback analysis" required />
+                    <input type="text" name="name" v-model="name" placeholder="Enter a descriptive name for your social feedback analysis" />
                 </div>
                 <div class="field">
                     <label>Keywords</label>
@@ -82,7 +82,9 @@
             <input type="hidden" name="languages" ref="languages" />
             <input type="hidden" name="action" v-model="action" />
 
-            <button type="submit" class="ui orange submit right floated labeled icon button" ref="submitButton">
+            <div class="ui error message"></div>
+
+            <button type="submit" class="ui orange submit right floated labeled icon button" ref="submitButton" v-on:click="action=defaultAction">
                 <i class="edit icon"></i> {{ submitText }}
             </button>
             <button v-if="analysis.id" type="submit" class="ui orange submit right floated labeled icon button" ref="submitCopyButton" v-on:click="action='copy'">
@@ -121,7 +123,8 @@
             }
 
             return {
-                action: this._analysis.id ? 'save' : 'create',
+                defaultAction: this._analysis.id ? 'save' : 'create',
+                action: this.defaultAction,
                 submitText: this._analysis.id ? 'Update' : 'Create',
                 analysis: this._analysis,
                 name: this._analysis.name || "",
@@ -133,8 +136,74 @@
 
             };
         },
+        mounted() {
+            $(this.$refs.marketAnalysisForm).form({
+                fields: {
+                    name: {
+                        identifier: 'name',
+                        rules: [
+                            {
+                                type   : 'empty',
+                                prompt : 'You must enter a Name'
+                            },
+                            {
+                                type   : 'uniqueNameRule',
+                                prompt : 'You must change the Name in order to save as copy'
+                            }
+                        ]
+                    },
+                    source: {
+                        identifier: 'sources',
+                        rules: [
+                            {
+                                type   : 'sourcesRule',
+                                prompt : 'You must select at least one Source'
+                            }
+                        ]
+                    },
+                    start_date: {
+                        identifier: 'start_date',
+                        rules: [
+                            {
+                                type   : 'startDateRule',
+                                prompt : 'You must select a From date that is earlier date than today'
+                            }
+                        ]
+                    },
+                    end_date: {
+                        identifier: 'end_date',
+                        rules: [
+                            {
+                                type   : 'dateRangeRule',
+                                prompt : 'You must select a To date that is later that the From date'
+                            }
+                        ]
+                    }
+                },
+                rules: {
+                    sourcesRule: () => {
+                        return !!this.sources.length;
+                    },
+                    uniqueNameRule: () => {
+                        if (this.action == 'copy')
+                            return this.name != this._analysis.name;
+                        return true;
+                    },
+                    startDateRule: () => {
+                        return this.start_date <= new Date();
+                    },
+                    dateRangeRule: () => {
+                        return this.start_date <= this.end_date;
+                    }
+                }
+            });
+        },
         methods: {
-            submit() {
+            submit(event) {
+                if (!$(this.$refs.marketAnalysisForm).form('is valid')){
+                    event.preventDefault();
+                    return false;
+                }
                 this.$refs.start_date.value = this.start_date.toISOString().substring(0, 10);
                 this.$refs.end_date.value = this.end_date.toISOString().substring(0, 10);
                 this.$refs.sources.value = JSON.stringify(this.sources);

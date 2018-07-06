@@ -12,15 +12,17 @@
             ></analyses-table>
         </div>
         <div class="ui bottom attached tab" data-tab="configuration"  v-bind:class="[ project.id ? '' : 'active']">
-            <form class="ui form" method="POST" ref="marketAnalysisForm">
+            <form class="ui form" method="POST" ref="form" v-on:submit="submit">
                 <input type="hidden" name="_token" :value="$parent.crsf" />
 
                 <div class="field">
                     <label>Name</label>
-                    <input type="text" name="name" :value="project.name" placeholder="Enter a descriptive name for your market analysis project" required />
+                    <input type="text" name="name" :value="project.name" placeholder="Enter a descriptive name for your market analysis project" />
                 </div>
 
                 <div class="ui divider"></div>
+
+                <div class="ui error message"></div>
 
                 <button type="submit" class="ui orange submit right floated labeled icon button" ref="submitButton">
                     <i class="edit icon"></i> {{ submitText }}
@@ -50,6 +52,30 @@
                 enabled_social: !!this._project.retriever,
                 analyses: this._analyses || [],
             };
+        },
+        mounted() {
+            $(this.$refs.form).form({
+                fields: {
+                    name: {
+                        identifier: 'name',
+                        rules: [
+                            {
+                                type   : 'empty',
+                                prompt : 'You must enter a Name'
+                            }
+                        ]
+                    }
+                }
+            });
+        },
+        methods: {
+            submit(event) {
+                if (!$(this.$refs.form).form('is valid')){
+                    event.preventDefault();
+                    return false;
+                }
+                this.$refs.form.submit();
+            }
         }
     }
 </script>
