@@ -51,7 +51,10 @@
                 </div>
             </div>
             <div class="ui bottom attached tab" data-tab="timesettings">
-
+                <div class="ui info message">
+                    <i class="info icon"></i>
+                    Provide the time period for data retrieval of the analysis.
+                </div>
                 <div class="field">
                     <label>From date</label>
                         <datepicker
