@@ -719,15 +719,7 @@ class MarketAnalysisController extends Controller
             if ($input['action'] !== "save") {
                 $parameter->id = 0;
             }
-            if ($parameter->id === 0) {
-                $anlzerparameter = new AnlzerParameter();
-                $anlzerparameter->analysis = $analysis_id;
-                $anlzerparameter->name = $parameter->name;
-                $anlzerparameter->values = $parameter->values;
-                $anlzerparameter->is_enabled = $parameter->is_enabled;
-                $anlzer_data = $this->anlzerClient->Parameters()->create($anlzerparameter);
-                array_push($parameterIds, $anlzer_data->id);
-            } else {
+            if ($parameter->id > 0) {
                 array_push($parameterIds, $parameter->id);
             }
         }
@@ -736,6 +728,16 @@ class MarketAnalysisController extends Controller
         foreach ($all_parameters as $param) {
             if (!in_array($param->id, $parameterIds)) {
                 $this->anlzerClient->Parameters()->delete($param->id);
+            }
+        }
+        foreach ($parameters as $parameter) {
+            if ($parameter->id === 0) {
+                $anlzerparameter = new AnlzerParameter();
+                $anlzerparameter->analysis = $analysis_id;
+                $anlzerparameter->name = $parameter->name;
+                $anlzerparameter->values = $parameter->values;
+                $anlzerparameter->is_enabled = $parameter->is_enabled;
+                $this->anlzerClient->Parameters()->create($anlzerparameter);
             }
         }
 

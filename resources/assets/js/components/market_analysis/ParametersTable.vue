@@ -35,7 +35,7 @@
         <tfoot v-if="insertMode">
             <tr>
                 <th>
-                    <input type="text" v-model="newEntry.name" placeholder="Enter a descriptive parameter name" required />
+                    <input type="text" v-model="newEntry.name" ref="entryName" placeholder="Enter a descriptive parameter name" required />
                 </th>
                 <th>
                     <input type="text" v-model="newEntry.values" placeholder="Enter comma separated parameter values" required />
@@ -95,6 +95,13 @@
                 }
             },
             saveEntry() {
+                if (this.entries.find(x => x.name === this.newEntry.name)){
+                    $(this.$refs.entryName).popup({
+                        on: 'focus',
+                        html: '<i class="warning icon"></i>This Parameter Name already exists for this analysis. Choose a unique name.'
+                    }).popup('show');
+                    return false;
+                }
                 this.entries.push(this.newEntry);
                 this.newEntry = {};
                 this.insertMode = false;
