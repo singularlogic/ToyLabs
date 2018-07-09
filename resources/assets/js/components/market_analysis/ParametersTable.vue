@@ -12,17 +12,17 @@
             <tr v-if="entries.length == 0">
                 <td colspan="4" class="center aligned">No parameters defined yet</td>
             </tr>
-            <tr v-for="(entry, index) in entries" :key="entry" v-if="index!=editingIndex">
+            <tr v-for="(entry, index) in entries" :key="entry" :class="index==editingIndex?'warning':''">
                 <td>{{ entry.name }}</td>
                 <td>{{ entry.values }}</td>
                 <td class="center aligned">
                     <i v-if="entry.is_enabled" class="large green checkmark icon"></i>
                 </td>
                 <td class="collapsing">
-                    <button type="button" class="ui mini icon button" data-tooltip="Edit Parameter" @click="editEntry(entry)">
+                    <button type="button" class="ui mini icon button" data-tooltip="Edit Parameter" @click="editEntry(entry)" :disabled="insertMode">
                         <i class="edit icon"></i>
                     </button>
-                    <button type="button" class="ui mini red icon button" data-tooltip="Delete Parameter" @click="removeEntry(entry)">
+                    <button type="button" class="ui mini red icon button" data-tooltip="Delete Parameter" @click="removeEntry(entry)" :disabled="insertMode">
                         <i class="trash icon"></i>
                     </button>
                 </td>

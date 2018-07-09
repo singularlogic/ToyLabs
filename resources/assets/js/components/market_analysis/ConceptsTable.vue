@@ -18,7 +18,7 @@
                         readonly
                 ></keywords-field></td>
                 <td class="collapsing">
-                    <button type="button" class="ui mini red icon button" data-tooltip="Delete Concept" @click="removeEntry(entry)">
+                    <button type="button" class="ui mini red icon button" data-tooltip="Delete Concept" @click="removeEntry(entry)" :disabled="insertMode">
                         <i class="trash icon"></i>
                     </button>
                 </td>
