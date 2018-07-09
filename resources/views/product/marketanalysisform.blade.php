@@ -12,6 +12,7 @@
             @if ($analysis_type === App\Http\Controllers\ANALYSIS_TYPE::TREND)
             <market-analysis-trend
                     :_analysis="{{ json_encode($analysis) }}"
+                    :_available_concepts="{{ json_encode($available_concepts) }}"
                     :_product_id="{{ $product_id }}"
             ></market-analysis-trend>
             @elseif ($analysis_type === App\Http\Controllers\ANALYSIS_TYPE::SOCIAL)

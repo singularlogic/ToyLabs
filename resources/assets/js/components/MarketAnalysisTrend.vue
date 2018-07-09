@@ -115,6 +115,7 @@
                     <label>Concepts</label>
                     <concepts-table
                         v-model="concepts"
+                        :_available_concepts="_available_concepts"
                         ref="conceptsComp"
                     ></concepts-table>
                     <input type="hidden" name="concepts" ref="concepts" />
@@ -157,7 +158,7 @@
     import Datepicker from 'vuejs-datepicker';
 
     export default {
-        props: ['_analysis', '_product_id'],
+        props: ['_analysis', '_available_concepts', '_product_id'],
         components: {
             ParametersTable, ConceptsTable, KeywordsField, Datepicker
         },

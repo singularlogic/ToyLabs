@@ -130,6 +130,31 @@ class MarketAnalysisController extends Controller
 
         return $analyses;
     }
+    private function getProjectConcepts($project_id)
+    {
+        $concepts = [];
+        $models = MarketAnalysisConcept::where('anlzer_project_id', $project_id)->get();
+        if ($models->count()) {
+            foreach ($models as $model){
+                $con = $this->getConceptById($model['anlzer_concept_id']);
+                array_push($concepts, $con);
+                unset($con);
+            }
+        } else {
+            $anlzerProjectConcepts = $this->anlzerClient->Projects()->listConceptsById($project_id);
+            foreach ($anlzerProjectConcepts as $anlzerProjectConcept){
+                $con = $this->getConceptById($anlzerProjectConcept->id);
+                array_push($concepts, $con);
+                unset($con);
+            }
+        }
+
+        return $concepts;
+    }
+    private function getAnlzerProjectIdByProductId($product_id)
+    {
+        return MarketAnalysisProject::where('product_id', $product_id)->first(['anlzer_project_id'])['anlzer_project_id'];
+    }
     public function create(Request $request, $product_id, AnlzerClient $anlzerClient)
     {
         $input = $request->all();
@@ -222,6 +247,7 @@ class MarketAnalysisController extends Controller
         $data = [
             'title' => 'Market Trend Analysis',
             'analysis_type' => ANALYSIS_TYPE::TREND,
+            'available_concepts' => $this->getProjectConcepts($this->getAnlzerProjectIdByProductId($product_id)),
             'product_id' => $product_id,
             'analysis' => []
         ];
@@ -593,6 +619,7 @@ class MarketAnalysisController extends Controller
                 'title' => $analysis->name,
                 'analysis_id' => $analysis->id,
                 'analysis_type' => $analysis->type,
+                'available_concepts' => $this->getProjectConcepts($model['anlzer_project_id']),
                 'product_id' => $model['product_id'],
                 'analysis' => $analysis
             ];
@@ -623,6 +650,8 @@ class MarketAnalysisController extends Controller
             });
             if ($concept->id === 0) {
                 $anlzer_data = $this->anlzerClient->Concepts()->create($anlzerconcept);
+                //retrieve created concept to store it in local cache
+                $this->getConceptById($anlzer_data->id);
                 array_push($conceptIds, $anlzer_data->id);
             } else {
                 $anlzerconcept->id = $concept->id;
