@@ -12,27 +12,30 @@
             <tr v-if="accounts.length == 0">
                 <td colspan="5" class="center aligned">No accounts added</td>
             </tr>
-            <tr v-for="account in accounts">
+            <tr v-for="(account, index) in accounts" :class="index==editingIndex?'warning':''">
                 <td>{{ account.source | capitalize }}</td>
                 <td>{{ account.name }}</td>
                 <td class="center aligned">
                     <i v-if="account.is_influencer" class="large green checkmark icon"></i>
                 </td>
                 <td class="collapsing" v-if="!readonly">
-                    <button type="button" class="ui mini red icon button" data-tooltip="Delete Account" @click="removeAccount(account)">
+                    <button type="button" class="ui mini icon button" data-tooltip="Edit Account" @click="editEntry(account)" :disabled="insertMode">
+                        <i class="edit icon"></i>
+                    </button>
+                    <button type="button" class="ui mini red icon button" data-tooltip="Delete Account" @click="removeAccount(account)" :disabled="insertMode">
                         <i class="trash icon"></i>
                     </button>
                 </td>
             </tr>
         </tbody>
-        <tfoot v-if="!readonly && !insertAccountMode">
+        <tfoot v-if="!readonly && !insertMode">
             <th colspan="5">
                 <div class="ui right floated small primary labeled icon button" @click="addAccount()">
                     <i class="marker icon"></i> Add Account
                 </div>
             </th>
         </tfoot>
-        <tfoot v-if="!readonly && insertAccountMode">
+        <tfoot v-if="!readonly && insertMode">
             <tr>
                 <th>
                     <select class="ui search dropdown" v-model="newAccount.source">
@@ -68,13 +71,14 @@
         },
         data() {
             return {
-                insertAccountMode: false,
+                insertMode: false,
                 accounts: this.value || [],
                 newAccount: {},
                 accountTypes: [
                     {value:'twitter',label:'Twitter'},
                     {value:'facebook',label:'Facebook'}
-                ]
+                ],
+                editingIndex: -1
             };
         },
         computed: {
@@ -84,18 +88,20 @@
         },
         methods: {
             isEditMode() {
-                return !this.insertAccountMode
+                return !this.insertMode
             },
             addAccount() {
+                this.editingIndex = -1;
                 this.newAccount = {
                     name: '',
                     source: '',
                     is_influencer: false
                 };
-                this.insertAccountMode = true;
+                this.insertMode = true;
             },
             cancelAccount() {
-                this.insertAccountMode = false;
+                this.editingIndex = -1;
+                this.insertMode = false;
             },
             removeAccount(account) {
                 const index = this.accounts.indexOf(account);
@@ -103,10 +109,20 @@
                     this.accounts.splice(index, 1);
                 }
             },
+            editEntry(entry) {
+                this.editingIndex = this.accounts.indexOf(entry);
+                this.newAccount = Object.assign({}, entry);
+                this.insertMode = true;
+            },
             saveAccount() {
-                this.accounts.push(this.newAccount);
+                if (this.editingIndex >= 0){
+                    this.accounts[this.editingIndex] = this.newAccount;
+                } else {
+                    this.accounts.push(this.newAccount);
+                }
+                this.editingIndex = -1;
                 this.newAccount = {};
-                this.insertAccountMode = false;
+                this.insertMode = false;
             }
         },
         filters: {
