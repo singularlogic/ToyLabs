@@ -488,11 +488,17 @@ class MarketAnalysisController extends Controller
                     $parameter->is_enabled = $anlzerParameter->is_enabled;
                     array_push($parameters, $parameter);
                 }
+                usort($parameters, function($a, $b) {
+                    return strcasecmp($a->name, $b->name);
+                });
                 $concepts = [];
                 foreach ($anlzerAnalysis->concepts as $conceptId) {
                     $concept = $this->getConceptById($conceptId);
                     array_push($concepts, $concept);
                 }
+                usort($concepts, function($a, $b) {
+                    return strcasecmp($a->name, $b->name);
+                });
                 $analysis = new AnlzerAnalysis();
                 $analysis->id = $analysis_id;
                 $analysis->name = $anlzerAnalysis->name;
@@ -639,6 +645,9 @@ class MarketAnalysisController extends Controller
         $project_id = MarketAnalysisProject::where('product_id', $product_id)->first(['anlzer_project_id'])['anlzer_project_id'];
 
         $concepts = json_decode($input['concepts']);
+        usort($concepts, function($a, $b) {
+            return strcasecmp($a->name, $b->name);
+        });
         $conceptIds = [];
         foreach ($concepts as $concept){
             $anlzerconcept = new AnlzerConcept();
@@ -714,6 +723,9 @@ class MarketAnalysisController extends Controller
                 break;
         }
         $parameters = json_decode($input['parameters']);
+        usort($parameters, function($a, $b) {
+            return strcasecmp($a->name, $b->name);
+        });
         $parameterIds = [];
         foreach ($parameters as $parameter) {
             if ($input['action'] !== "save") {
@@ -731,13 +743,16 @@ class MarketAnalysisController extends Controller
             }
         }
         foreach ($parameters as $parameter) {
+            $anlzerparameter = new AnlzerParameter();
+            $anlzerparameter->analysis = $analysis_id;
+            $anlzerparameter->name = $parameter->name;
+            $anlzerparameter->values = $parameter->values;
+            $anlzerparameter->is_enabled = $parameter->is_enabled;
             if ($parameter->id === 0) {
-                $anlzerparameter = new AnlzerParameter();
-                $anlzerparameter->analysis = $analysis_id;
-                $anlzerparameter->name = $parameter->name;
-                $anlzerparameter->values = $parameter->values;
-                $anlzerparameter->is_enabled = $parameter->is_enabled;
                 $this->anlzerClient->Parameters()->create($anlzerparameter);
+            } else {
+                $anlzerparameter->id = $parameter->id;
+                $this->anlzerClient->Parameters()->update($anlzerparameter->id, $anlzerparameter);
             }
         }
 

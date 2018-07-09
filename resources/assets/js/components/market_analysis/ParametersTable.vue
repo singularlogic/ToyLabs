@@ -12,13 +12,16 @@
             <tr v-if="entries.length == 0">
                 <td colspan="4" class="center aligned">No parameters defined yet</td>
             </tr>
-            <tr v-for="entry in entries" :key="entry">
+            <tr v-for="(entry, index) in entries" :key="entry" v-if="index!=editingIndex">
                 <td>{{ entry.name }}</td>
                 <td>{{ entry.values }}</td>
                 <td class="center aligned">
                     <i v-if="entry.is_enabled" class="large green checkmark icon"></i>
                 </td>
                 <td class="collapsing">
+                    <button type="button" class="ui mini icon button" data-tooltip="Edit Parameter" @click="editEntry(entry)">
+                        <i class="edit icon"></i>
+                    </button>
                     <button type="button" class="ui mini red icon button" data-tooltip="Delete Parameter" @click="removeEntry(entry)">
                         <i class="trash icon"></i>
                     </button>
@@ -64,7 +67,8 @@
             return {
                 insertMode: false,
                 entries: this.value || [],
-                newEntry: {}
+                newEntry: {},
+                editingIndex: -1
             };
         },
         computed: {
@@ -77,6 +81,7 @@
                 return !this.insertMode
             },
             addEntry() {
+                this.editingIndex = -1;
                 this.newEntry = {
                     id: 0,
                     name: '',
@@ -86,6 +91,7 @@
                 this.insertMode = true;
             },
             cancelEntry() {
+                this.editingIndex = -1;
                 this.insertMode = false;
             },
             removeEntry(entry) {
@@ -94,15 +100,30 @@
                     this.entries.splice(index, 1);
                 }
             },
+            editEntry(entry) {
+                this.editingIndex = this.entries.indexOf(entry);
+                this.newEntry = Object.assign({}, entry);
+                this.insertMode = true;
+            },
             saveEntry() {
-                if (this.entries.find(x => x.name === this.newEntry.name)){
+                const index = this.entries.findIndex(x => x.name === this.newEntry.name);
+                if (index >= 0 && this.editingIndex !== index){
                     $(this.$refs.entryName).popup({
                         on: 'focus',
                         html: '<i class="warning icon"></i>This Parameter Name already exists for this analysis. Choose a unique name.'
                     }).popup('show');
                     return false;
                 }
-                this.entries.push(this.newEntry);
+                if (this.editingIndex >= 0){
+                    // If the name changed, reset id so that we avoid name collision if user adds new with the old name.
+                    if (this.entries[this.editingIndex].name != this.newEntry.name){
+                        this.newEntry.id = 0;
+                    }
+                    this.entries[this.editingIndex] = this.newEntry;
+                } else {
+                    this.entries.push(this.newEntry);
+                }
+                this.editingIndex = -1;
                 this.newEntry = {};
                 this.insertMode = false;
             }
