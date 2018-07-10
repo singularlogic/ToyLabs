@@ -12,7 +12,7 @@
             <tr v-if="entries.length == 0">
                 <td colspan="4" class="center aligned">No parameters defined yet</td>
             </tr>
-            <tr v-for="(entry, index) in entries" :key="entry" :class="index==editingIndex?'warning':''">
+            <tr v-for="(entry, index) in entries" :key="entry" :class="{ warning: index==editingIndex }">
                 <td>{{ entry.name }}</td>
                 <td>{{ entry.values }}</td>
                 <td class="center aligned">

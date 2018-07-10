@@ -13,7 +13,7 @@
                 <td colspan="4" class="center aligned">No market sets defined yet</td>
             </tr>
             <template v-for="(entry, index) in entries">
-            <tr v-bind:class="{ highlight: index % 2}" :key="entry">
+            <tr v-bind:class="{ highlight: index % 2, warning: index==editingIndex }" :key="entry">
                 <td>Brand</td>
                 <td>{{ entry.name }}</td>
                 <td>
@@ -23,12 +23,15 @@
                     ></keywords-field>
                 </td>
                 <td class="collapsing" v-bind:rowspan="entry.products.length + 1" v-if="!readonly">
-                    <button type="button" class="ui mini red icon button" data-tooltip="Delete Concept" @click="removeEntry(entry)">
+                    <button type="button" class="ui mini icon button" data-tooltip="Edit Market Set" @click="editEntry(entry)" :disabled="insertMode">
+                        <i class="edit icon"></i>
+                    </button>
+                    <button type="button" class="ui mini red icon button" data-tooltip="Delete Market Set" @click="removeEntry(entry)" :disabled="insertMode">
                         <i class="trash icon"></i>
                     </button>
                 </td>
             </tr>
-            <tr v-for="prod in entry.products" :key="prod" v-bind:class="{ highlight: index % 2}">
+            <tr v-for="prod in entry.products" :key="prod" v-bind:class="{ highlight: index % 2, warning: index==editingIndex }">
                 <td>Product</td>
                 <td>{{ prod.name }}</td>
                 <td>
@@ -51,7 +54,7 @@
             <tr>
                 <th>Brand:</th>
                 <th>
-                    <input type="text" v-model="newEntry.name" placeholder="Enter a descriptive brand name" required />
+                    <input type="text" v-model="newEntry.name" ref="entryName" placeholder="Enter a descriptive brand name" required />
                 </th>
                 <th>
                     <keywords-field
@@ -98,6 +101,7 @@
                 entries: this.value || [],
                 newEntry: {},
                 newEntryProd: {},
+                editingIndex: -1
             };
         },
         computed: {
@@ -110,6 +114,7 @@
                 return !this.insertMode
             },
             addEntry() {
+                this.editingIndex = -1;
                 this.newEntry = {
                     id: 0,
                     name: '',
@@ -124,6 +129,7 @@
                 this.insertMode = true;
             },
             cancelEntry() {
+                this.editingIndex = -1;
                 this.insertMode = false;
             },
             removeEntry(entry) {
@@ -133,9 +139,28 @@
                 }
                 this.$emit('input', this.entries);
             },
+            editEntry(entry) {
+                this.editingIndex = this.entries.indexOf(entry);
+                this.newEntry = Object.assign({}, entry);
+                this.newEntryProd = Object.assign({}, entry.products[0]);
+                this.insertMode = true;
+            },
             saveEntry() {
-                this.newEntry.products.push(this.newEntryProd);
-                this.entries.push(this.newEntry);
+                const index = this.entries.findIndex(x => x.name === this.newEntry.name);
+                if (index >= 0 && this.editingIndex !== index){
+                    $(this.$refs.entryName).popup({
+                        on: 'focus',
+                        html: '<i class="warning icon"></i>This Brand Name already exists. Choose a unique name.'
+                    }).popup('show');
+                    return false;
+                }
+                this.newEntry.products = [this.newEntryProd];
+                if (this.editingIndex >= 0){
+                    this.entries[this.editingIndex] = this.newEntry;
+                } else {
+                    this.entries.push(this.newEntry);
+                }
+                this.editingIndex = -1;
                 this.newEntry = {};
                 this.newEntryProd = {};
                 this.insertMode = false;
