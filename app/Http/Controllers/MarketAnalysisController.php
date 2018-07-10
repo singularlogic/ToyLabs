@@ -1201,7 +1201,7 @@ class MarketAnalysisController extends Controller
     public function editMarketSettings($organization_id)
     {
         $user  = Auth::user();
-        if ($user->myOrganizations[0]->id != $organization_id){
+        if ($user->organization != $organization_id){
             abort(404);
         }
         $organization = Organization::where('id', $organization_id)->first();
