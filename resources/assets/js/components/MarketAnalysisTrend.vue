@@ -144,6 +144,8 @@
             <button v-if="analysis.id" type="submit" class="ui orange submit right floated labeled icon button" ref="submitCopyButton" v-on:click="action='copy'">
                 <i class="edit icon"></i> Save as copy
             </button>
+
+            <a :href="`/product/${ _product_id }/marketanalysis`" class="ui default right floated button">Cancel</a>
         </form>
     </div>
 

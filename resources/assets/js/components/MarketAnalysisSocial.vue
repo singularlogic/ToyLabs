@@ -93,6 +93,8 @@
             <button v-if="analysis.id" type="submit" class="ui orange submit right floated labeled icon button" ref="submitCopyButton" v-on:click="action='copy'">
                 <i class="edit icon"></i> Save as copy
             </button>
+
+            <a :href="`/product/${ _product_id }/marketanalysis`" class="ui default right floated button">Cancel</a>
         </form>
     </div>
 </template>
@@ -169,7 +171,7 @@
                         rules: [
                             {
                                 type   : 'startDateRule',
-                                prompt : 'You must select a From date that is earlier date than today'
+                                prompt : 'You must select at the \'From date\' field an earlier date than today'
                             }
                         ]
                     },
@@ -178,7 +180,7 @@
                         rules: [
                             {
                                 type   : 'dateRangeRule',
-                                prompt : 'You must select a To date that is later that the From date'
+                                prompt : 'You must select at the \'To date\' field a date that is later than the \'From date\' field'
                             }
                         ]
                     }

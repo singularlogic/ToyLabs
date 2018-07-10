@@ -27,6 +27,8 @@
                 <button type="submit" class="ui orange submit right floated labeled icon button" ref="submitButton">
                     <i class="edit icon"></i> {{ submitText }}
                 </button>
+
+                <a href="/dashboard" class="ui default right floated button">Cancel</a>
             </form>
         </div>
     </div>
