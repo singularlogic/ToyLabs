@@ -19,6 +19,28 @@
                 ]
             ]) !!};
         </script>
+        <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.css" />
+        <script src="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.js"></script>
+        <script>
+            window.addEventListener("load", function(){
+            window.cookieconsent.initialise({
+                "palette": {
+                    "popup": {
+                        "background": "#000000"
+                    },
+                    "button": {
+                        "background": "#e37737",
+                        "text": "#ffffff"
+                    }
+                },
+                "theme": "classic",
+                "position": "top",
+                "content": {
+                    "message": "We use cookies to ensure that we give you the best experience on our website. If you continue to use this site we will assume that you are happy with it.",
+                    "link": ""
+                }
+            })});
+        </script>
     </head>
     <body>
         <div id="app" v-cloak>
