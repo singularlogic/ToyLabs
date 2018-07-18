@@ -50,6 +50,8 @@ Route::group(['middleware' => 'auth'], function () {
     // Personal Profile
     Route::get('/profile/edit', ['as' => 'profile.edit', 'uses' => 'ProfileController@showPersonalProfile']);
     Route::post('/profile/edit', ['as' => 'profile.edit.post', 'uses' => 'ProfileController@savePersonalProfile']);
+    Route::get('/profile/delete', ['as' => 'profile.delete', 'uses' => 'ProfileController@confirmDeleteProfile']);
+    Route::delete('/profile/delete', ['as' => 'profile.delete.post', 'uses' => 'ProfileController@deleteProfile']);
 
     // Organization Profile
     Route::get('/organization/edit', ['as' => 'organization.edit.mine', 'uses' => 'ProfileController@showMyOrganizationProfile']);

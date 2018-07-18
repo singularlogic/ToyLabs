@@ -6,19 +6,24 @@ use App\Award;
 use App\Certification;
 use App\Competency;
 use App\Country;
+use App\Design;
 use App\Facility;
 use App\GeographicalMarket;
+use App\Mail\DeleteAccountRequested;
 use App\Notifications\UserLeftOrganization;
 use App\Organization;
 use App\OrganizationType;
 use App\PaymentType;
+use App\Product;
 use App\Profile;
+use App\Prototype;
 use App\ToyCategory;
 use App\User;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
 class ProfileController extends Controller
 {
@@ -39,7 +44,7 @@ class ProfileController extends Controller
                 'org_types'     => OrganizationType::orderBy('id', 'ASC')->get(),
                 'personal'      => $user->profile,
                 'professional'  => [
-                    'role'          => $user->roles()->pluck('name')[0],
+                    'role'          => $user->roles()->where('name', '!=', 'admin')->pluck('name')[0],
                     'organizations' => $user->memberships,
                     'pending'       => $user->pendingMemberships,
                 ],
@@ -320,5 +325,61 @@ class ProfileController extends Controller
         } catch (ModelNotFoundException $e) {
             abort(404);
         }
+    }
+
+    public function confirmDeleteProfile()
+    {
+        $user          = \Auth::user();
+        $organizations = $user->myOrganizations;
+
+        $public_products = Product::where([
+            'owner_id'   => $user->id,
+            'owner_type' => User::class,
+            'is_public'  => true,
+        ])->count();
+
+        $public_designs = Design::with('product')->whereHas('product', function ($q) use ($user) {
+            $q->where([
+                'owner_id'   => $user->id,
+                'owner_type' => User::class,
+            ]);
+        })->where([
+            'is_public' => true,
+        ])->count();
+
+        $public_prototypes = Prototype::with('product')->whereHas('product', function ($q) use ($user) {
+            $q->where([
+                'owner_id'   => $user->id,
+                'owner_type' => User::class,
+            ]);
+        })->where([
+            'is_public' => true,
+        ])->count();
+
+        $hasErrors = ($public_products + $public_designs + $public_prototypes + count($organizations)) > 0;
+
+        $data = [
+            'hasErrors'         => $hasErrors,
+            'has_organizations' => true,
+            'public_products'   => $public_products,
+            'public_designs'    => $public_designs,
+            'public_prototypes' => $public_prototypes,
+            'organizations'     => $organizations,
+        ];
+
+        return view('profile.delete', $data);
+    }
+
+    public function deleteProfile()
+    {
+        $user         = \Auth::user();
+        $user->status = 'suspended';
+        $user->save();
+
+        Mail::to('admin@toylabs.eu')->send(new DeleteAccountRequested($user));
+
+        \Auth::logout();
+
+        return response()->json([], 200);
     }
 }

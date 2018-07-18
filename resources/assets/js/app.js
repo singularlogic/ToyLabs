@@ -29,6 +29,7 @@ import MarketAnalysis from './components/MarketAnalysis.vue';
 import MarketAnalysisTrend from './components/MarketAnalysisTrend.vue';
 import MarketAnalysisSocial from './components/MarketAnalysisSocial.vue';
 import Analysis from './components/Analysis.vue';
+import DeleteAccount from './components/DeleteAccount.vue';
 
 /**
  * Navbar transition for the homepage
@@ -111,6 +112,7 @@ const app = new Vue({
         MarketAnalysisTrend,
         MarketAnalysisSocial,
         Analysis,
+        DeleteAccount,
         ARModelsTable
     }
 });

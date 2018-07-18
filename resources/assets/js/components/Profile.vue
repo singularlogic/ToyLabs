@@ -187,6 +187,10 @@
                 <input type="hidden" name="createOrganization" ref="createOrganization" />
                 <input type="hidden" name="joinOrg" :value="joinOrg" />
 
+                <a href="/profile/delete" class="ui negative left floated button">
+                    <i class="exclamation triangle icon" />
+                    Delete account
+                </a>
                 <button type="submit" class="ui orange submit right floated button" ref="submitButton">{{ submitText }}</button>
                 <a href="/dashboard" class="ui default right floated button">Cancel</a>
             </form>
@@ -213,8 +217,7 @@
                 icon="trash"
                 title="Leave Organization?"
                 body="Are you sure you want to leave this organization? The owner will have to approve your request, if you decide you want to join again"
-            ></confirm-dialog>
-
+            />
         </div>
 </template>
 <script>
@@ -299,7 +302,7 @@ export default {
                     }
                 },
             }).modal('show');
-        }
+        },
     },
     watch: {
         'professional.role': function(val, oldValue) {

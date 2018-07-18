@@ -44,6 +44,11 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
+    public function findForPassport($identifier)
+    {
+        return User::orWhere('email', $identifier)->where('status', 'active')->first();
+    }
+
     public function getImageAttribute()
     {
         return $this->avatar ?: Gravatar::get($this->email, ['size' => 80, 'fallback' => 'mm']);
