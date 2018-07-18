@@ -75,7 +75,7 @@ class User extends Authenticatable
         $recipients  = $friendships->pluck('recipient_id')->all();
         $senders     = $friendships->pluck('sender_id')->all();
 
-        return Organization::whereIn('id', array_merge($recipients, $senders))->get();
+        return Organization::whereIn('id', $recipients)->get();
     }
 
     public function getPendingMembershipsAttribute()
@@ -84,7 +84,7 @@ class User extends Authenticatable
         $recipients  = $friendships->pluck('recipient_id')->all();
         $senders     = $friendships->pluck('sender_id')->all();
 
-        return Organization::whereIn('id', array_merge($recipients, $senders))->get();
+        return Organization::whereIn('id', $recipients)->get();
     }
 
     public function getOrganizationAttribute()
