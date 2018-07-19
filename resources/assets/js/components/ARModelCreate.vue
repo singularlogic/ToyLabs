@@ -45,7 +45,7 @@
             :showRemoveLink="true"
             :maxFileSizeInMB="64"
             :maxNumberOfFiles=50
-            :timeout=300000
+            :timeout=1800000
             paramName="file"
             acceptedFileTypes="image/*,.fbx,.obj,.3ds,.stl,.scn,.dae,.mtl"
             v-on:vdropzone-success="fileAdded"
