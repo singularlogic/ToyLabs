@@ -31,5 +31,12 @@
             </ul>
 
             <p>Therefore, ToyLabs, through the above mentioned concept, that innovates on the value network of SMEs, and based on data analytics, AR technologies, co-creation approaches and feedback management mechanisms, decreases costs of the design and manufacturing process and time to market of new products and supports toy manufacturers reach new markets.</p>
+
+            <p>
+                <a href="/ToyLabs Platform Operation Guide-2018.06.pdf">
+                    <i class="file pdf outline icon"></i>
+                    ToyLabs Platform Operation Guide-2018.06.pdf
+                </a>
+            </p>
         </div>
 @endsection
