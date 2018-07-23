@@ -130,8 +130,9 @@ class PartnerMatchingController extends Controller
         } else {
             $id = -1;
         }
+
         return response()->json($organizations->reject(function ($item) use ($id) {
-            return $item->id === $id;
+            return $item->id === $id || $item->score <= 0;
         })->sortByDesc('score'), 200);
     }
 

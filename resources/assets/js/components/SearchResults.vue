@@ -1,6 +1,6 @@
 <template>
     <div class="ui divided items">
-        <div class="item" v-for="(result, index) of results">
+        <div class="item" v-for="(result, index) of sortedResults">
             <div class="content">
                 <h3 class="ui header">
                     <div class="ui horizontal label" :style="{ backgroundColor: scoreColor(result.score) }">{{ result.score | percentage }}</div>
@@ -95,6 +95,19 @@ export default {
             return value.substring(0, length) + '...';
         },
     },
+    computed: {
+        sortedResults() {
+            if (this.results) {
+                return Object.values(this.results).sort((a, b) => {
+                    if (a.score < b.score) return 1;
+                    if (a.score > b.score) return -1;
+
+                    return this.rating(a) < this.rating(b) ? 1 : -1;
+                });
+            }
+            return [];
+        }
+    }
 };
 </script>
 
