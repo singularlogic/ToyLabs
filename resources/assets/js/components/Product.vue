@@ -69,9 +69,25 @@ export default {
         imageLoaded(event) {
             let img = event.target;
             let container = $(".image-container")[0];
+            let parent_tab = container.closest(".ui.tab");
+            // If used in tabs and its not active, then the offsetWidth is 0 due to tab being hidden.
+            if (parent_tab !== null && container.offsetWidth === 0) {
+                parent_tab.style = "visibility:none; display:block;";
+            }
             let scaleX = container.offsetWidth / img.width;
             let scaleY = container.offsetHeight / img.height;
-            img.style.cssText = `--normal-scale: ${Math.max(scaleX, scaleY)}; --hover-scale: ${Math.min(scaleX, scaleY)};`;
+            let normalScale = Math.max(scaleX, scaleY);
+            let hoverScale = Math.min(scaleX, scaleY);
+            // The hover scale is expected to be 1. If used in hidden tabs (eg organization page), images are
+            // calculated with original size leading to smaller scales.
+            if (hoverScale < 1) {
+                normalScale = normalScale / hoverScale;
+                hoverScale = 1;
+            }
+            img.style.cssText = `--normal-scale: ${normalScale}; --hover-scale: ${hoverScale};`;
+            if (parent_tab !== null) {
+                parent_tab.style = "";
+            }
         }
     }
 }
